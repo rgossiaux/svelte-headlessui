@@ -168,6 +168,8 @@
   setContext(TRANSITION_CONTEXT_NAME, transitionBag);
 </script>
 
-<TransitionChild {...$$restProps} {unmount}>
-  <slot />
-</TransitionChild>
+{#if state === TreeStates.Visible}
+  <TransitionChild {...$$restProps} {unmount}>
+    <slot />
+  </TransitionChild>
+{/if}
