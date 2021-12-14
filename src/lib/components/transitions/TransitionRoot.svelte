@@ -114,7 +114,7 @@
   import TransitionChild from "./TransitionChild.svelte";
   import type { useId } from "$lib/hooks/use-id";
 
-  export let show: boolean;
+  export let show: boolean = null;
   export let unmount = true;
   export let appear = false;
 
