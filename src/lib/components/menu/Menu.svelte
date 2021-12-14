@@ -138,7 +138,7 @@
     if (!event.defaultPrevented) $buttonStore?.focus({ preventScroll: true });
   }
 
-  let openClosedState: Writable<State> | undefined = writable();
+  let openClosedState: Writable<State> | undefined = writable(State.Closed);
   setContext("OpenClosed", openClosedState);
 
   $: $openClosedState = match(menuState, {
