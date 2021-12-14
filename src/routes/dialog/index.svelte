@@ -130,7 +130,7 @@
                           </MenuButton>
                         </span>
 
-                        <TransitionChild
+                        <TransitionRoot
                           enter="transition duration-300 ease-out"
                           enterFrom="transform scale-95 opacity-0"
                           enterTo="transform scale-100 opacity-100"
@@ -138,63 +138,61 @@
                           leaveFrom="transform scale-100 opacity-100"
                           leaveTo="transform scale-95 opacity-0"
                         >
-                          <Portal>
-                            <MenuItems
-                              class="z-20 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none"
-                            >
-                              <div class="px-4 py-3">
-                                <p class="text-sm leading-5">Signed in as</p>
-                                <p
-                                  class="text-sm font-medium leading-5 text-gray-900 truncate"
-                                >
-                                  tom@example.com
-                                </p>
-                              </div>
+                          <MenuItems
+                            class="z-20 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none"
+                          >
+                            <div class="px-4 py-3">
+                              <p class="text-sm leading-5">Signed in as</p>
+                              <p
+                                class="text-sm font-medium leading-5 text-gray-900 truncate"
+                              >
+                                tom@example.com
+                              </p>
+                            </div>
 
-                              <div class="py-1">
-                                <MenuItem
-                                  as="a"
-                                  href="#account-settings"
-                                  class={resolveClass}
-                                >
-                                  Account settings
-                                </MenuItem>
-                                <MenuItem
-                                  as="a"
-                                  href="#support"
-                                  class={resolveClass}
-                                >
-                                  Support
-                                </MenuItem>
-                                <MenuItem
-                                  as="a"
-                                  disabled
-                                  href="#new-feature"
-                                  class={resolveClass}
-                                >
-                                  New feature (soon)
-                                </MenuItem>
-                                <MenuItem
-                                  as="a"
-                                  href="#license"
-                                  class={resolveClass}
-                                >
-                                  License
-                                </MenuItem>
-                              </div>
+                            <div class="py-1">
+                              <MenuItem
+                                as="a"
+                                href="#account-settings"
+                                class={resolveClass}
+                              >
+                                Account settings
+                              </MenuItem>
+                              <MenuItem
+                                as="a"
+                                href="#support"
+                                class={resolveClass}
+                              >
+                                Support
+                              </MenuItem>
+                              <MenuItem
+                                as="a"
+                                disabled
+                                href="#new-feature"
+                                class={resolveClass}
+                              >
+                                New feature (soon)
+                              </MenuItem>
+                              <MenuItem
+                                as="a"
+                                href="#license"
+                                class={resolveClass}
+                              >
+                                License
+                              </MenuItem>
+                            </div>
 
-                              <div class="py-1">
-                                <MenuItem
-                                  as="a"
-                                  href="#sign-out"
-                                  class={resolveClass}
-                                >
-                                  Sign out
-                                </MenuItem>
-                              </div>
-                            </MenuItems>
-                          </Portal>
-                        </TransitionChild>
+                            <div class="py-1">
+                              <MenuItem
+                                as="a"
+                                href="#sign-out"
+                                class={resolveClass}
+                              >
+                                Sign out
+                              </MenuItem>
+                            </div>
+                          </MenuItems>
+                        </TransitionRoot>
                       </Menu>
                     </div>
                   </div>
