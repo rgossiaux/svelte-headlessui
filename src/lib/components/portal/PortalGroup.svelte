@@ -1,18 +1,18 @@
 <script lang="ts" context="module">
-    import { getContext, setContext } from "svelte";
-    import { writable, Writable } from "svelte/store";
-    const PORTAL_GROUP_CONTEXT_NAME = "headlessui-portal-group-context";
+  import { getContext, setContext } from "svelte";
+  import { writable, Writable } from "svelte/store";
+  const PORTAL_GROUP_CONTEXT_NAME = "headlessui-portal-group-context";
 
-    export function usePortalGroupContext():
-        | Writable<HTMLElement | null>
-        | undefined {
-        return getContext(PORTAL_GROUP_CONTEXT_NAME);
-    }
+  export function usePortalGroupContext():
+    | Writable<HTMLElement | null>
+    | undefined {
+    return getContext(PORTAL_GROUP_CONTEXT_NAME);
+  }
 </script>
 
 <script lang="ts">
-    export let target: HTMLElement | null;
-    setContext(PORTAL_GROUP_CONTEXT_NAME, writable(target));
+  export let target: HTMLElement | null;
+  setContext(PORTAL_GROUP_CONTEXT_NAME, writable(target));
 </script>
 
 <slot />

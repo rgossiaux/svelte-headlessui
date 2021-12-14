@@ -1,8 +1,8 @@
-let id = 0
+let id = 0;
 function generateId() {
-    return ++id
+  return ++id;
 }
 
 export function useId() {
-    return generateId()
+  return generateId();
 }

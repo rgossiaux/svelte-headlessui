@@ -1,243 +1,235 @@
 <script lang="ts" context="module">
-    import {
-        getContext,
-        setContext,
-        createEventDispatcher,
-        tick,
-    } from "svelte";
-    export enum DialogStates {
-        Open,
-        Closed,
+  import { getContext, setContext, createEventDispatcher, tick } from "svelte";
+  export enum DialogStates {
+    Open,
+    Closed,
+  }
+
+  export interface StateDefinition {
+    dialogState: DialogStates;
+
+    titleId: string | null;
+
+    setTitleId(id: string | null): void;
+
+    close(): void;
+  }
+
+  const DIALOG_CONTEXT_NAME = "DialogContext";
+
+  export function useDialogContext(
+    component: string
+  ): Writable<StateDefinition | undefined> {
+    let context = getContext(DIALOG_CONTEXT_NAME) as
+      | Writable<StateDefinition | undefined>
+      | undefined;
+    if (context === undefined) {
+      throw new Error(
+        `<${component} /> is missing a parent <Dialog /> component.`
+      );
     }
-
-    export interface StateDefinition {
-        dialogState: DialogStates;
-
-        titleId: string | null;
-
-        setTitleId(id: string | null): void;
-
-        close(): void;
-    }
-
-    const DIALOG_CONTEXT_NAME = "DialogContext";
-
-    export function useDialogContext(
-        component: string
-    ): Writable<StateDefinition | undefined> {
-        let context = getContext(DIALOG_CONTEXT_NAME) as
-            | Writable<StateDefinition | undefined>
-            | undefined;
-        if (context === undefined) {
-            throw new Error(
-                `<${component} /> is missing a parent <Dialog /> component.`
-            );
-        }
-        return context;
-    }
+    return context;
+  }
 </script>
 
 <script lang="ts">
-    import { State } from "./open-closed";
-    import { writable, Writable } from "svelte/store";
-    import { match } from "./match";
-    import { useId } from "./use-id";
-    import { useInertOthers } from "./use-inert-others";
-    import { contains } from "./dom-containers";
-    import { Keys } from "./keyboard";
-    import FocusTrap from "./FocusTrap.svelte";
-    import StackContextProvider, {
-        StackMessage,
-    } from "./StackContextProvider.svelte";
-    import DescriptionProvider from "./DescriptionProvider.svelte";
-    import ForcePortalRootContext from "./ForcePortalRootContext.svelte";
-    import Portal from "./Portal.svelte";
-    import PortalGroup from "./PortalGroup.svelte";
-    export let open: Boolean | undefined = undefined;
-    export let initialFocus: HTMLElement | null = null;
+  import { State } from "$lib/internal/open-closed";
+  import { writable, Writable } from "svelte/store";
+  import { match } from "$lib/utils/match";
+  import { useId } from "$lib/hooks/use-id";
+  import { useInertOthers } from "$lib/hooks/use-inert-others";
+  import { contains } from "$lib/internal/dom-containers";
+  import { Keys } from "$lib/utils/keyboard";
+  import FocusTrap from "$lib/components/FocusTrap/FocusTrap.svelte";
+  import StackContextProvider, {
+    StackMessage,
+  } from "$lib/internal/StackContextProvider.svelte";
+  import DescriptionProvider from "./DescriptionProvider.svelte";
+  import ForcePortalRootContext from "./ForcePortalRootContext.svelte";
+  import Portal from "./Portal.svelte";
+  import PortalGroup from "./PortalGroup.svelte";
+  export let open: Boolean | undefined = undefined;
+  export let initialFocus: HTMLElement | null = null;
 
-    const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher();
 
-    let containers: Set<HTMLElement> = new Set();
-    let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
+  let containers: Set<HTMLElement> = new Set();
+  let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
 
-    $: open =
-        open === undefined && openClosedState !== undefined
-            ? match($openClosedState, {
-                  [State.Open]: true,
-                  [State.Closed]: false,
-              })
-            : open;
+  $: open =
+    open === undefined && openClosedState !== undefined
+      ? match($openClosedState, {
+          [State.Open]: true,
+          [State.Closed]: false,
+        })
+      : open;
 
-    // Validations
-    let hasOpen = open !== undefined || openClosedState !== null;
+  // Validations
+  let hasOpen = open !== undefined || openClosedState !== null;
 
-    if (!hasOpen) {
-        throw new Error(
-            `You forgot to provide an \`open\` prop to the \`Dialog\`.`
-        );
+  if (!hasOpen) {
+    throw new Error(
+      `You forgot to provide an \`open\` prop to the \`Dialog\`.`
+    );
+  }
+
+  if (typeof open !== "boolean") {
+    throw new Error(
+      `You provided an \`open\` prop to the \`Dialog\`, but the value is not a boolean. Received: ${open}`
+    );
+  }
+
+  $: dialogState = open ? DialogStates.Open : DialogStates.Closed;
+  $: visible =
+    openClosedState !== undefined
+      ? $openClosedState === State.Open
+      : dialogState === DialogStates.Open;
+
+  let internalDialogRef: HTMLDivElement | null = null;
+  $: enabled = dialogState === DialogStates.Open;
+
+  const id = `headlessui-dialog-${useId()}`;
+
+  $: _cleanup = (() => {
+    if (_cleanup) {
+      _cleanup();
     }
+    return useInertOthers(internalDialogRef, enabled);
+  })();
 
-    if (typeof open !== "boolean") {
-        throw new Error(
-            `You provided an \`open\` prop to the \`Dialog\`, but the value is not a boolean. Received: ${open}`
-        );
+  let titleId: StateDefinition["titleId"] = null;
+
+  let api: Writable<StateDefinition | undefined> = writable();
+  setContext(DIALOG_CONTEXT_NAME, api);
+  $: api.set({
+    titleId,
+    dialogState,
+    setTitleId(id: string | null) {
+      if (titleId === id) return;
+      titleId = id;
+    },
+    close() {
+      dispatch("close", false);
+    },
+  });
+
+  // Handle outside click
+  async function handleWindowMousedown(event: MouseEvent) {
+    let target = event.target as HTMLElement;
+
+    if (dialogState !== DialogStates.Open) return;
+    if (containers.size !== 1) return;
+    if (contains(containers, target)) return;
+
+    $api.close();
+    await tick();
+    target?.focus();
+  }
+
+  // Handle `Escape` to close
+  function handleWindowKeydown(event: KeyboardEvent) {
+    if (event.key !== Keys.Escape) return;
+    if (dialogState !== DialogStates.Open) return;
+    if (containers.size > 1) return; // 1 is myself, otherwise other elements in the Stack
+    event.preventDefault();
+    event.stopPropagation();
+    $api.close();
+  }
+
+  $: _cleanupScrollLock = (() => {
+    if (_cleanupScrollLock) {
+      _cleanupScrollLock();
     }
+    if (dialogState !== DialogStates.Open) return;
 
-    $: dialogState = open ? DialogStates.Open : DialogStates.Closed;
-    $: visible =
-        openClosedState !== undefined
-            ? $openClosedState === State.Open
-            : dialogState === DialogStates.Open;
+    let overflow = document.documentElement.style.overflow;
+    let paddingRight = document.documentElement.style.paddingRight;
 
-    let internalDialogRef: HTMLDivElement | null = null;
-    $: enabled = dialogState === DialogStates.Open;
+    let scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
 
-    const id = `headlessui-dialog-${useId()}`;
+    document.documentElement.style.overflow = "hidden";
+    document.documentElement.style.paddingRight = `${scrollbarWidth}px`;
 
-    $: _cleanup = (() => {
-        if (_cleanup) {
-            _cleanup();
+    return () => {
+      document.documentElement.style.overflow = overflow;
+      document.documentElement.style.paddingRight = paddingRight;
+    };
+  })();
+
+  $: _cleanupClose = () => {
+    if (_cleanupClose) {
+      _cleanupClose();
+    }
+    if (dialogState !== DialogStates.Open) return;
+    let container = internalDialogRef;
+    if (!container) return;
+
+    let observer = new IntersectionObserver((entries) => {
+      for (let entry of entries) {
+        if (
+          entry.boundingClientRect.x === 0 &&
+          entry.boundingClientRect.y === 0 &&
+          entry.boundingClientRect.width === 0 &&
+          entry.boundingClientRect.height === 0
+        ) {
+          $api.close();
         }
-        return useInertOthers(internalDialogRef, enabled);
-    })();
-
-    let titleId: StateDefinition["titleId"] = null;
-
-    let api: Writable<StateDefinition | undefined> = writable();
-    setContext(DIALOG_CONTEXT_NAME, api);
-    $: api.set({
-        titleId,
-        dialogState,
-        setTitleId(id: string | null) {
-            if (titleId === id) return;
-            titleId = id;
-        },
-        close() {
-            dispatch("close", false);
-        },
+      }
     });
 
-    // Handle outside click
-    async function handleWindowMousedown(event: MouseEvent) {
-        let target = event.target as HTMLElement;
+    observer.observe(container);
 
-        if (dialogState !== DialogStates.Open) return;
-        if (containers.size !== 1) return;
-        if (contains(containers, target)) return;
+    return () => observer.disconnect();
+  };
 
-        $api.close();
-        await tick();
-        target?.focus();
-    }
+  function handleClick(event: MouseEvent) {
+    event.stopPropagation();
+  }
 
-    // Handle `Escape` to close
-    function handleWindowKeydown(event: KeyboardEvent) {
-        if (event.key !== Keys.Escape) return;
-        if (dialogState !== DialogStates.Open) return;
-        if (containers.size > 1) return; // 1 is myself, otherwise other elements in the Stack
-        event.preventDefault();
-        event.stopPropagation();
-        $api.close();
-    }
-
-    $: _cleanupScrollLock = (() => {
-        if (_cleanupScrollLock) {
-            _cleanupScrollLock();
-        }
-        if (dialogState !== DialogStates.Open) return;
-
-        let overflow = document.documentElement.style.overflow;
-        let paddingRight = document.documentElement.style.paddingRight;
-
-        let scrollbarWidth =
-            window.innerWidth - document.documentElement.clientWidth;
-
-        document.documentElement.style.overflow = "hidden";
-        document.documentElement.style.paddingRight = `${scrollbarWidth}px`;
-
-        return () => {
-            document.documentElement.style.overflow = overflow;
-            document.documentElement.style.paddingRight = paddingRight;
-        };
-    })();
-
-    $: _cleanupClose = () => {
-        if (_cleanupClose) {
-            _cleanupClose();
-        }
-        if (dialogState !== DialogStates.Open) return;
-        let container = internalDialogRef;
-        if (!container) return;
-
-        let observer = new IntersectionObserver((entries) => {
-            for (let entry of entries) {
-                if (
-                    entry.boundingClientRect.x === 0 &&
-                    entry.boundingClientRect.y === 0 &&
-                    entry.boundingClientRect.width === 0 &&
-                    entry.boundingClientRect.height === 0
-                ) {
-                    $api.close();
-                }
-            }
-        });
-
-        observer.observe(container);
-
-        return () => observer.disconnect();
-    };
-
-    function handleClick(event: MouseEvent) {
-        event.stopPropagation();
-    }
-
-    $: propsWeControl = {
-        id,
-        role: "dialog",
-        "aria-modal": dialogState === DialogStates.Open ? true : undefined,
-        "aria-labelledby": titleId,
-    };
+  $: propsWeControl = {
+    id,
+    role: "dialog",
+    "aria-modal": dialogState === DialogStates.Open ? true : undefined,
+    "aria-labelledby": titleId,
+  };
 </script>
 
 <svelte:window
-    on:mousedown={handleWindowMousedown}
-    on:keydown={handleWindowKeydown}
+  on:mousedown={handleWindowMousedown}
+  on:keydown={handleWindowKeydown}
 />
-{#if open}
-    <FocusTrap {containers} {enabled} options={{ initialFocus }} />
-    <StackContextProvider
-        element={internalDialogRef}
-        onUpdate={(message, element) => {
-            return match(message, {
-                [StackMessage.Add]() {
-                    containers.add(element);
-                },
-                [StackMessage.Remove]() {
-                    containers.delete(element);
-                },
-            });
-        }}
-    >
-        <ForcePortalRootContext force={true}>
-            <Portal>
-                <PortalGroup target={internalDialogRef}>
-                    <ForcePortalRootContext force={false}>
-                        <DescriptionProvider
-                            name={"Dialog.Description"}
-                            let:describedby
-                        >
-                            <div
-                                {...{ ...$$restProps, ...propsWeControl }}
-                                aria-describedby={describedby}
-                                on:click={handleClick}
-                            >
-                                <slot {open} />
-                            </div>
-                        </DescriptionProvider>
-                    </ForcePortalRootContext>
-                </PortalGroup>
-            </Portal>
-        </ForcePortalRootContext>
-    </StackContextProvider>
+{#if visible}
+  <FocusTrap {containers} {enabled} options={{ initialFocus }} />
+  <StackContextProvider
+    element={internalDialogRef}
+    onUpdate={(message, element) => {
+      return match(message, {
+        [StackMessage.Add]() {
+          containers.add(element);
+        },
+        [StackMessage.Remove]() {
+          containers.delete(element);
+        },
+      });
+    }}
+  >
+    <ForcePortalRootContext force={true}>
+      <Portal>
+        <PortalGroup target={internalDialogRef}>
+          <ForcePortalRootContext force={false}>
+            <DescriptionProvider name={"Dialog.Description"} let:describedby>
+              <div
+                {...{ ...$$restProps, ...propsWeControl }}
+                aria-describedby={describedby}
+                on:click={handleClick}
+              >
+                <slot {open} />
+              </div>
+            </DescriptionProvider>
+          </ForcePortalRootContext>
+        </PortalGroup>
+      </Portal>
+    </ForcePortalRootContext>
+  </StackContextProvider>
 {/if}
