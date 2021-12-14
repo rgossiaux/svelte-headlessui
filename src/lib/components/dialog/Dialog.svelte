@@ -243,6 +243,7 @@
             <DescriptionProvider name={"Dialog.Description"} let:describedby>
               <div
                 {...{ ...$$restProps, ...propsWeControl }}
+                bind:this={internalDialogRef}
                 aria-describedby={describedby}
                 on:click={handleClick}
               >
