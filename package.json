@@ -1,5 +1,8 @@
 {
   "name": "svelte-headlessui",
+  "exports": {
+    ".": "./src/lib/index.ts"
+  },
   "version": "0.0.1",
   "scripts": {
     "dev": "svelte-kit dev",

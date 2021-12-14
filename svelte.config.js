@@ -13,6 +13,11 @@ const config = {
 
   kit: {
     adapter: adapter(),
+    package: {
+      exports: (filepath) => {
+        return filepath.endsWith("src/lib/index.ts");
+      }
+    },
 
     // hydrate the <div id="svelte"> element in src/app.html
     target: "#svelte",
