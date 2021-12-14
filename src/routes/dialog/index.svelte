@@ -10,6 +10,15 @@
   import Portal from "$lib/components/portal/Portal.svelte";
   import MenuItems from "$lib/components/menu/MenuItems.svelte";
   import MenuItem from "$lib/components/menu/MenuItem.svelte";
+  import { createPopperActions } from "svelte-popperjs";
+
+  const [popperRef, popperContent] = createPopperActions();
+  const popperOptions = {
+    placement: "bottom-end",
+    strategy: "fixed",
+    modifiers: [{ name: "offset", options: { offset: [0, 10] } }],
+  };
+
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
@@ -113,6 +122,7 @@
                       <Menu>
                         <span class="rounded-md shadow-sm">
                           <MenuButton
+                            use={[popperRef]}
                             class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800"
                           >
                             <span>Choose a reason</span>
@@ -131,67 +141,70 @@
                         </span>
 
                         <TransitionRoot
-                          enter="transition duration-300 ease-out"
+                          enter="transition duration-1000 ease-out"
                           enterFrom="transform scale-95 opacity-0"
                           enterTo="transform scale-100 opacity-100"
                           leave="transition duration-75 ease-out"
                           leaveFrom="transform scale-100 opacity-100"
                           leaveTo="transform scale-95 opacity-0"
                         >
-                          <MenuItems
-                            class="z-20 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none"
-                          >
-                            <div class="px-4 py-3">
-                              <p class="text-sm leading-5">Signed in as</p>
-                              <p
-                                class="text-sm font-medium leading-5 text-gray-900 truncate"
-                              >
-                                tom@example.com
-                              </p>
-                            </div>
+                          <Portal>
+                            <MenuItems
+                              use={[[popperContent, popperOptions]]}
+                              class="z-20 w-56 mt-2 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none"
+                            >
+                              <div class="px-4 py-3">
+                                <p class="text-sm leading-5">Signed in as</p>
+                                <p
+                                  class="text-sm font-medium leading-5 text-gray-900 truncate"
+                                >
+                                  tom@example.com
+                                </p>
+                              </div>
 
-                            <div class="py-1">
-                              <MenuItem
-                                as="a"
-                                href="#account-settings"
-                                class={resolveClass}
-                              >
-                                Account settings
-                              </MenuItem>
-                              <MenuItem
-                                as="a"
-                                href="#support"
-                                class={resolveClass}
-                              >
-                                Support
-                              </MenuItem>
-                              <MenuItem
-                                as="a"
-                                disabled
-                                href="#new-feature"
-                                class={resolveClass}
-                              >
-                                New feature (soon)
-                              </MenuItem>
-                              <MenuItem
-                                as="a"
-                                href="#license"
-                                class={resolveClass}
-                              >
-                                License
-                              </MenuItem>
-                            </div>
+                              <div class="py-1">
+                                <MenuItem
+                                  as="a"
+                                  href="#account-settings"
+                                  class={resolveClass}
+                                >
+                                  Account settings
+                                </MenuItem>
+                                <MenuItem
+                                  as="a"
+                                  href="#support"
+                                  class={resolveClass}
+                                >
+                                  Support
+                                </MenuItem>
+                                <MenuItem
+                                  as="a"
+                                  disabled={true}
+                                  href="#new-feature"
+                                  class={resolveClass}
+                                >
+                                  New feature (soon)
+                                </MenuItem>
+                                <MenuItem
+                                  as="a"
+                                  href="#license"
+                                  class={resolveClass}
+                                >
+                                  License
+                                </MenuItem>
+                              </div>
 
-                            <div class="py-1">
-                              <MenuItem
-                                as="a"
-                                href="#sign-out"
-                                class={resolveClass}
-                              >
-                                Sign out
-                              </MenuItem>
-                            </div>
-                          </MenuItems>
+                              <div class="py-1">
+                                <MenuItem
+                                  as="a"
+                                  href="#sign-out"
+                                  class={resolveClass}
+                                >
+                                  Sign out
+                                </MenuItem>
+                              </div>
+                            </MenuItems>
+                          </Portal>
                         </TransitionRoot>
                       </Menu>
                     </div>
