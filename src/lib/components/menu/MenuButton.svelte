@@ -4,6 +4,8 @@
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { tick } from "svelte";
+  import { ActionArray, useActions } from "$lib/hooks/use-actions";
+  export let use: ActionArray = [];
   export let disabled = false;
   const api = useMenuContext("MenuButton");
   const id = `headlessui-menu-button-${useId()}`;
@@ -73,6 +75,7 @@
 <button
   {...{ ...$$restProps, ...propsWeControl }}
   bind:this={$buttonStore}
+  use:useActions={use}
   on:click={handleClick}
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}

@@ -3,6 +3,8 @@
   import { useId } from "$lib/hooks/use-id";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { afterUpdate, onDestroy, onMount, tick } from "svelte";
+  import { ActionArray, useActions } from "$lib/hooks/use-actions";
+  export let use: ActionArray = [];
   export let disabled = false;
   const api = useMenuContext("MenuItem");
   const id = `headlessui-menu-item-${useId()}`;
@@ -68,6 +70,7 @@
 <div
   {...{ ...$$restProps, ...propsWeControl }}
   bind:this={elementRef}
+  use:useActions={use}
   on:click={handleClick}
   on:focus={handleFocus}
   on:pointermove={handleMove}

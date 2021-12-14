@@ -7,6 +7,8 @@
   import { State } from "$lib/internal/open-closed";
   import { getContext, tick } from "svelte";
   import type { Writable } from "svelte/store";
+  import { ActionArray, useActions } from "$lib/hooks/use-actions";
+  export let use: ActionArray = [];
   const api = useMenuContext("MenuButton");
   const id = `headlessui-menu-items-${useId()}`;
   let searchDebounce: ReturnType<typeof setTimeout> | null = null;
@@ -131,6 +133,7 @@
   <div
     {...{ ...$$restProps, ...propsWeControl }}
     bind:this={$itemsStore}
+    use:useActions={use}
     on:keydown={handleKeyDown}
     on:keyup={handleKeyUp}
   >

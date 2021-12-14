@@ -7,6 +7,7 @@
   import { writable, Writable } from "svelte/store";
   import { State } from "$lib/internal/open-closed";
   import { match } from "$lib/utils/match";
+  import { ActionArray, useActions } from "$lib/hooks/use-actions";
   export enum MenuStates {
     Open,
     Closed,
@@ -49,6 +50,7 @@
 </script>
 
 <script lang="ts">
+  export let use: ActionArray = [];
   let menuState: StateDefinition["menuState"] = MenuStates.Closed;
   let buttonStore: StateDefinition["buttonStore"] = writable(null);
   let itemsStore: StateDefinition["itemsStore"] = writable(null);
@@ -146,6 +148,6 @@
 </script>
 
 <svelte:window on:mousedown={handleWindowMousedown} />
-<div {...$$restProps}>
+<div use:useActions={use} {...$$restProps}>
   <slot />
 </div>
