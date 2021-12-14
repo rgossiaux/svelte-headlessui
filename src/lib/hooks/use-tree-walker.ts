@@ -23,11 +23,11 @@ export function treeWalker({
   let acceptNode = Object.assign((node: HTMLElement) => accept(node), {
     acceptNode: accept,
   });
-  // @ts-ignore-error Typescript bug thinks this can only have 3 args
   let walker = document.createTreeWalker(
     root,
     NodeFilter.SHOW_ELEMENT,
     acceptNode,
+    // @ts-ignore-error Typescript bug thinks this can only have 3 args
     false
   );
 

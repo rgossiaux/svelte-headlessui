@@ -3,7 +3,7 @@
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
-  import { treeWalker } from "$lib/utils/tree-walker";
+  import { treeWalker } from "$lib/hooks/use-tree-walker";
   import { State } from "$lib/internal/open-closed";
   import { getContext, tick } from "svelte";
   import type { Writable } from "svelte/store";
