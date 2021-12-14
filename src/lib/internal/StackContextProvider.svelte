@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-  import { getContext, setContext } from "svelte";
+  import { getContext, onDestroy, setContext } from "svelte";
   import { writable, Writable } from "svelte/store";
   type OnUpdate = (message: StackMessage, element: HTMLElement | null) => void;
 
@@ -34,6 +34,12 @@
     $notifyStore(StackMessage.Add, element);
     return () => $notifyStore(StackMessage.Remove, element);
   })();
+
+  onDestroy(() => {
+    if (_cleanup) {
+      _cleanup();
+    }
+  });
 </script>
 
 <slot />

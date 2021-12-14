@@ -1,5 +1,11 @@
 <script lang="ts" context="module">
-  import { getContext, setContext, createEventDispatcher, tick } from "svelte";
+  import {
+    getContext,
+    setContext,
+    createEventDispatcher,
+    tick,
+    onDestroy,
+  } from "svelte";
   export enum DialogStates {
     Open,
     Closed,
@@ -97,6 +103,12 @@
     return useInertOthers(internalDialogRef, enabled);
   })();
 
+  onDestroy(() => {
+    if (_cleanup) {
+      _cleanup();
+    }
+  });
+
   let titleId: StateDefinition["titleId"] = null;
 
   let api: Writable<StateDefinition | undefined> = writable();
@@ -156,8 +168,13 @@
       document.documentElement.style.paddingRight = paddingRight;
     };
   })();
+  onDestroy(() => {
+    if (_cleanupScrollLock) {
+      _cleanupScrollLock();
+    }
+  });
 
-  $: _cleanupClose = () => {
+  $: _cleanupClose = (() => {
     if (_cleanupClose) {
       _cleanupClose();
     }
@@ -181,7 +198,12 @@
     observer.observe(container);
 
     return () => observer.disconnect();
-  };
+  })();
+  onDestroy(() => {
+    if (_cleanupClose) {
+      _cleanupClose();
+    }
+  });
 
   function handleClick(event: MouseEvent) {
     event.stopPropagation();
