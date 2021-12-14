@@ -40,14 +40,14 @@
   import { useInertOthers } from "$lib/hooks/use-inert-others";
   import { contains } from "$lib/internal/dom-containers";
   import { Keys } from "$lib/utils/keyboard";
-  import FocusTrap from "$lib/components/FocusTrap/FocusTrap.svelte";
+  import FocusTrap from "$lib/components/focus-trap/FocusTrap.svelte";
   import StackContextProvider, {
     StackMessage,
   } from "$lib/internal/StackContextProvider.svelte";
-  import DescriptionProvider from "./DescriptionProvider.svelte";
-  import ForcePortalRootContext from "./ForcePortalRootContext.svelte";
-  import Portal from "./Portal.svelte";
-  import PortalGroup from "./PortalGroup.svelte";
+  import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
+  import ForcePortalRootContext from "$lib/internal/ForcePortalRootContext.svelte";
+  import Portal from "$lib/components/portal/Portal.svelte";
+  import PortalGroup from "$lib/components/portal/PortalGroup.svelte";
   export let open: Boolean | undefined = undefined;
   export let initialFocus: HTMLElement | null = null;
 
