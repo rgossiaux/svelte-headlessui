@@ -7,7 +7,7 @@
     FocusResult,
   } from "$lib/utils/focus-management";
   import { contains } from "$lib/internal/dom-containers";
-  import { afterUpdate, onMount, onDestroy } from "svelte";
+  import { afterUpdate, onMount, onDestroy, tick } from "svelte";
 
   export let containers: Set<HTMLElement>;
   export let enabled: boolean = true;
@@ -20,7 +20,12 @@
 
   let previousActiveElement: HTMLElement | null = null;
 
-  function handleFocus() {
+  let initial = true;
+  async function handleFocus() {
+    if (initial) {
+      await tick();
+      initial = false;
+    }
     if (!enabled) return;
     if (containers.size !== 1) return;
     let { initialFocus } = options;
@@ -71,7 +76,14 @@
 
   afterUpdate(() => (enabled ? handleFocus() : restore()));
 
-  onDestroy(restore);
+  // When this component is being destroyed, focusElement is called
+  // before handleWindowFocus is removed, so in the svelte port we add this
+  // to ignore the handler.
+  let destroying = false;
+  onDestroy(() => {
+    destroying = true;
+    restore();
+  });
 
   // Handle Tab & Shift+Tab keyboard events
   function handleWindowKeyDown(event: KeyboardEvent) {
@@ -99,6 +111,7 @@
   function handleWindowFocus(event: FocusEvent) {
     if (!enabled) return;
     if (containers.size !== 1) return;
+    if (destroying) return;
 
     let previous = previousActiveElement;
     if (!previous) return;
