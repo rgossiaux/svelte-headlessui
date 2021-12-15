@@ -12,7 +12,9 @@
 
 <script lang="ts">
   export let target: HTMLElement | null;
-  setContext(PORTAL_GROUP_CONTEXT_NAME, writable(target));
+  let targetStore = writable(target);
+  setContext(PORTAL_GROUP_CONTEXT_NAME, targetStore);
+  $: targetStore.set(target);
 </script>
 
 <slot />
