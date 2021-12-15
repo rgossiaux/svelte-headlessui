@@ -5,6 +5,7 @@
     createEventDispatcher,
     tick,
     onDestroy,
+    onMount,
   } from "svelte";
   export enum DialogStates {
     Open,
@@ -62,27 +63,29 @@
   let containers: Set<HTMLElement> = new Set();
   let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
 
-  $: open =
-    open === undefined && openClosedState !== undefined
-      ? match($openClosedState, {
-          [State.Open]: true,
-          [State.Closed]: false,
-        })
-      : open;
+  $: {
+    open =
+      open === undefined && openClosedState !== undefined
+        ? match($openClosedState, {
+            [State.Open]: true,
+            [State.Closed]: false,
+          })
+        : open;
 
-  // Validations
-  let hasOpen = open !== undefined || openClosedState !== null;
+    // Validations
+    let hasOpen = open !== undefined || openClosedState !== null;
 
-  if (!hasOpen) {
-    throw new Error(
-      `You forgot to provide an \`open\` prop to the \`Dialog\`.`
-    );
-  }
+    if (!hasOpen) {
+      throw new Error(
+        `You forgot to provide an \`open\` prop to the \`Dialog\`.`
+      );
+    }
 
-  if (typeof open !== "boolean") {
-    throw new Error(
-      `You provided an \`open\` prop to the \`Dialog\`, but the value is not a boolean. Received: ${open}`
-    );
+    if (typeof open !== "boolean") {
+      throw new Error(
+        `You provided an \`open\` prop to the \`Dialog\`, but the value is not a boolean. Received: ${open}`
+      );
+    }
   }
 
   $: dialogState = open ? DialogStates.Open : DialogStates.Closed;
@@ -148,11 +151,14 @@
     $api.close();
   }
 
+  let mounted = false;
+  onMount(() => (mounted = true));
   $: _cleanupScrollLock = (() => {
     if (_cleanupScrollLock) {
       _cleanupScrollLock();
     }
     if (dialogState !== DialogStates.Open) return;
+    if (!mounted) return;
 
     let overflow = document.documentElement.style.overflow;
     let paddingRight = document.documentElement.style.paddingRight;
