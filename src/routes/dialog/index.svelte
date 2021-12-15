@@ -19,11 +19,17 @@
     modifiers: [{ name: "offset", options: { offset: [0, 10] } }],
   };
 
-  function classNames(...classes) {
+  function classNames(...classes: unknown[]) {
     return classes.filter(Boolean).join(" ");
   }
 
-  function resolveClass({ active, disabled }) {
+  function resolveClass({
+    active,
+    disabled,
+  }: {
+    active: boolean;
+    disabled: boolean;
+  }) {
     return classNames(
       "flex justify-between w-full px-4 py-2 text-sm leading-5 text-left",
       active ? "bg-gray-100 text-gray-900" : "text-gray-700",

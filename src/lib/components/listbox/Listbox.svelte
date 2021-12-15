@@ -38,8 +38,8 @@
   const LISTBOX_CONTEXT_NAME = "ListboxContext";
   export function useListboxContext(
     component: string
-  ): Writable<StateDefinition | undefined> {
-    let context: Writable<StateDefinition | undefined> | undefined =
+  ): Writable<StateDefinition> {
+    let context: Writable<StateDefinition> | undefined =
       getContext(LISTBOX_CONTEXT_NAME);
 
     if (context === undefined) {
@@ -61,6 +61,12 @@
   import { writable, Writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
+  export let disabled = false;
+  export let horizontal = false;
+  export let value: any;
+  $: orientation = (horizontal ? "horizontal" : "vertical") as
+    | "horizontal"
+    | "vertical";
 
   const dispatch = createEventDispatcher();
 
@@ -68,41 +74,23 @@
   let labelStore = writable(null);
   setContext("labelStore", labelStore);
   $: labelRef = $labelStore;
-  let buttonStore = writable(null);
-  setContext("buttonStore", buttonStore);
-  $: buttonRef = $buttonStore;
-  let optionsStore = writable(null);
-  setContext("optionsStore", optionsStore);
-  $: optionsRef = $optionsStore;
-  let options = [];
-  let searchQuery = "";
-  let activeOptionIndex = null;
 
-  let api: Writable<StateDefinition | undefined> = writable();
-  setContext(LISTBOX_CONTEXT_NAME, api);
+  let buttonRef: Writable<StateDefinition["buttonRef"]> = writable(null);
+  setContext("buttonStore", buttonRef);
 
-  let openClosedState = writable(State.Closed);
-  useOpenClosedProvider(openClosedState);
-  $: openClosedState.set(
-    match(listboxState, {
-      [ListboxStates.Open]: State.Open,
-      [ListboxStates.Closed]: State.Closed,
-    })
-  );
+  let optionsRef: Writable<StateDefinition["optionsRef"]> = writable(null);
+  setContext("optionsStore", optionsRef);
 
-  export let disabled = false;
-  export let horizontal = false;
-  export let value: any;
+  let options: StateDefinition["options"] = [];
+  let searchQuery: StateDefinition["searchQuery"] = "";
+  let activeOptionIndex: StateDefinition["activeOptionIndex"] = null;
 
-  $: orientation = (horizontal ? "horizontal" : "vertical") as
-    | "horizontal"
-    | "vertical";
-  $: api.set({
+  let api: Writable<StateDefinition> = writable({
     listboxState,
     labelRef,
     value,
-    buttonRef,
-    optionsRef,
+    buttonRef: $buttonRef,
+    optionsRef: $optionsRef,
     options,
     searchQuery,
     activeOptionIndex,
@@ -131,7 +119,7 @@
           resolveItems: () => options,
           resolveActiveIndex: () => activeOptionIndex,
           resolveId: (option) => option.id,
-          resolveDisabled: (option) => option.disabled,
+          resolveDisabled: (option) => option.dataRef.disabled,
         }
       );
 
@@ -147,7 +135,9 @@
       searchQuery += value.toLowerCase();
 
       let match = options.findIndex(
-        (option) => !option.disabled && option.textValue.startsWith(searchQuery)
+        (option) =>
+          !option.dataRef.disabled &&
+          option.dataRef.textValue.startsWith(searchQuery)
       );
 
       if (match === -1 || match === activeOptionIndex) return;
@@ -184,18 +174,44 @@
       dispatch("updateValue", { value });
     },
   });
+  setContext(LISTBOX_CONTEXT_NAME, api);
+
+  let openClosedState = writable(State.Closed);
+  useOpenClosedProvider(openClosedState);
+  $: openClosedState.set(
+    match(listboxState, {
+      [ListboxStates.Open]: State.Open,
+      [ListboxStates.Closed]: State.Closed,
+    })
+  );
+
+  $: api.update((obj) => {
+    return {
+      ...obj,
+      listboxState,
+      labelRef,
+      value,
+      buttonRef: $buttonRef,
+      optionsRef: $optionsRef,
+      options,
+      searchQuery,
+      activeOptionIndex,
+      disabled,
+      orientation,
+    };
+  });
 
   function handleMousedown(event: MouseEvent) {
     let target = event.target as HTMLElement;
     let active = document.activeElement;
 
     if (listboxState !== ListboxStates.Open) return;
-    if (buttonRef?.contains(target)) return;
+    if ($buttonRef?.contains(target)) return;
 
-    if (!optionsRef?.contains(target)) $api.closeListbox();
+    if (!$optionsRef?.contains(target)) $api.closeListbox();
     if (active !== document.body && active?.contains(target)) return; // Keep focus on newly clicked/focused element
     if (!event.defaultPrevented) {
-      buttonRef?.focus({ preventScroll: true });
+      $buttonRef?.focus({ preventScroll: true });
     }
   }
 </script>

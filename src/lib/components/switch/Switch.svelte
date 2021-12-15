@@ -19,7 +19,6 @@
   let descriptionContext = useDescriptionContext();
   let id = `headlessui-switch-${useId()}`;
   $: switchStore = $api?.switchStore;
-  let internalSwitchRef = null;
 
   function toggle() {
     dispatch("updateValue", !checked);
@@ -63,7 +62,6 @@
 {:else}
   <button
     {...{ ...$$restProps, ...propsWeControl }}
-    bind:this={$internalSwitchRef}
     on:click={handleClick}
     on:keyup={handleKeyUp}
     on:keypress={handleKeyPress}

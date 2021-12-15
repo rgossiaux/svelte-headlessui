@@ -15,9 +15,9 @@
   export interface StateDefinition {
     dialogState: DialogStates;
 
-    titleId: string | null;
+    titleId?: string;
 
-    setTitleId(id: string | null): void;
+    setTitleId(id?: string): void;
 
     close(): void;
   }
@@ -26,9 +26,9 @@
 
   export function useDialogContext(
     component: string
-  ): Writable<StateDefinition | undefined> {
+  ): Writable<StateDefinition> {
     let context = getContext(DIALOG_CONTEXT_NAME) as
-      | Writable<StateDefinition | undefined>
+      | Writable<StateDefinition>
       | undefined;
     if (context === undefined) {
       throw new Error(
@@ -112,20 +112,26 @@
     }
   });
 
-  let titleId: StateDefinition["titleId"] = null;
+  let titleId: StateDefinition["titleId"];
 
-  let api: Writable<StateDefinition | undefined> = writable();
-  setContext(DIALOG_CONTEXT_NAME, api);
-  $: api.set({
+  let api: Writable<StateDefinition> = writable({
     titleId,
     dialogState,
-    setTitleId(id: string | null) {
+    setTitleId(id?: string) {
       if (titleId === id) return;
       titleId = id;
     },
     close() {
       dispatch("close", false);
     },
+  });
+  setContext(DIALOG_CONTEXT_NAME, api);
+  $: api.update((obj) => {
+    return {
+      ...obj,
+      titleId,
+      dialogState,
+    };
   });
 
   // Handle outside click
@@ -136,7 +142,7 @@
     if (containers.size !== 1) return;
     if (contains(containers, target)) return;
 
-    $api.close();
+    $api?.close();
     await tick();
     target?.focus();
   }
@@ -148,7 +154,7 @@
     if (containers.size > 1) return; // 1 is myself, otherwise other elements in the Stack
     event.preventDefault();
     event.stopPropagation();
-    $api.close();
+    $api?.close();
   }
 
   let mounted = false;
@@ -196,7 +202,7 @@
           entry.boundingClientRect.width === 0 &&
           entry.boundingClientRect.height === 0
         ) {
-          $api.close();
+          $api?.close();
         }
       }
     });

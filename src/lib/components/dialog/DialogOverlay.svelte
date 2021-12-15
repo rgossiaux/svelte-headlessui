@@ -7,7 +7,7 @@
     if (event.target !== event.currentTarget) return;
     event.preventDefault();
     event.stopPropagation();
-    $api.close();
+    $api?.close();
   }
   $: propsWeControl = {
     id,
@@ -16,5 +16,5 @@
 </script>
 
 <div {...{ ...$$restProps, ...propsWeControl }} on:click={handleClick}>
-  <slot open={$api.dialogState === DialogStates.Open} />
+  <slot open={$api?.dialogState === DialogStates.Open} />
 </div>

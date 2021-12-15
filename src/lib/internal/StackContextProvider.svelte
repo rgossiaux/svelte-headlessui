@@ -8,7 +8,7 @@
 <script lang="ts">
   import { getContext, onDestroy, setContext } from "svelte";
   import { writable, Writable } from "svelte/store";
-  type OnUpdate = (message: StackMessage, element: HTMLElement | null) => void;
+  type OnUpdate = (message: StackMessage, element: HTMLElement) => void;
 
   export let onUpdate: OnUpdate | undefined;
   export let element: HTMLElement | null;
@@ -31,8 +31,9 @@
       _cleanup();
     }
     if (!element) return null;
-    $notifyStore(StackMessage.Add, element);
-    return () => $notifyStore(StackMessage.Remove, element);
+    let savedElement = element;
+    $notifyStore(StackMessage.Add, savedElement);
+    return () => $notifyStore(StackMessage.Remove, savedElement);
   })();
 
   onDestroy(() => {

@@ -26,8 +26,8 @@
 
   export function useDisclosureContext(
     component: string
-  ): Writable<StateDefinition | undefined> {
-    let context: Writable<StateDefinition | undefined> | undefined = getContext(
+  ): Writable<StateDefinition> {
+    let context: Writable<StateDefinition> | undefined = getContext(
       DISCLOSURE_CONTEXT_NAME
     );
 
@@ -55,10 +55,7 @@
   let panelStore: StateDefinition["panelStore"] = writable(null);
   let buttonStore: StateDefinition["buttonStore"] = writable(null);
 
-  let api: Writable<StateDefinition | undefined> = writable();
-  setContext(DISCLOSURE_CONTEXT_NAME, api);
-
-  $: api.set({
+  let api: Writable<StateDefinition> = writable({
     buttonId,
     panelId,
     disclosureState,
@@ -86,6 +83,14 @@
 
       restoreElement?.focus();
     },
+  });
+  setContext(DISCLOSURE_CONTEXT_NAME, api);
+
+  $: api.update((obj) => {
+    return {
+      ...obj,
+      disclosureState,
+    };
   });
 
   let openClosedState: Writable<State> | undefined = writable();
