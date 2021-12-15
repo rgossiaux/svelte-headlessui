@@ -140,15 +140,17 @@
   }
 
   let _cleanup = null;
-  $: if (mounted) {
-    if (_cleanup) {
-      _cleanup();
+  $: {
+    if (mounted) {
+      if (_cleanup) {
+        _cleanup();
+      }
+      _cleanup = executeTransition(
+        $transitionContext.show,
+        $transitionContext.appear
+      );
+      initial = false;
     }
-    _cleanup = executeTransition(
-      $transitionContext.show,
-      $transitionContext.appear
-    );
-    initial = false;
   }
 
   setContext(NESTING_CONTEXT_NAME, nesting);
@@ -164,5 +166,7 @@
 </script>
 
 <div bind:this={container} {...$$restProps}>
-  <slot />
+  {#if state === TreeStates.Visible}
+    <slot />
+  {/if}
 </div>

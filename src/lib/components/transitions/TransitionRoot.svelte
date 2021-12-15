@@ -120,23 +120,36 @@
 
   let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
 
-  $: shouldShow = (() => {
+  function computeShow(
+    show: boolean,
+    openClosedState: State | undefined
+  ): boolean {
     if (show === null && openClosedState !== undefined) {
-      return match($openClosedState, {
+      return match(openClosedState, {
         [State.Open]: true,
         [State.Closed]: false,
       });
     }
 
     return show;
-  })();
-
-  $: if (shouldShow !== true && shouldShow !== false) {
-    throw new Error(
-      "A <Transition /> is used but it is missing a `show={true | false}` prop."
-    );
   }
-  $: state = shouldShow ? TreeStates.Visible : TreeStates.Hidden;
+
+  let shouldShow = computeShow(
+    show,
+    openClosedState !== undefined ? $openClosedState : undefined
+  );
+  $: {
+    shouldShow = computeShow(
+      show,
+      openClosedState !== undefined ? $openClosedState : undefined
+    );
+    if (shouldShow !== true && shouldShow !== false) {
+      throw new Error(
+        "A <Transition /> is used but it is missing a `show={true | false}` prop."
+      );
+    }
+  }
+  let state = shouldShow ? TreeStates.Visible : TreeStates.Hidden;
 
   let nestingBag: Writable<NestingContextValues> = writable();
   nestingBag.set(
