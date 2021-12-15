@@ -1,12 +1,13 @@
 <script lang="ts">
   import { getContext, tick } from "svelte";
-  import { ListboxStates, StateDefinition } from "./Listbox.svelte";
+  import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { match } from "$lib/utils/match";
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
-  let api: SvelteStore<StateDefinition> = getContext("api");
+
+  let api = useListboxContext("ListboxOptions");
   let id = `headlessui-listbox-options-${useId()}`;
   let optionsStore: SvelteStore<HTMLUListElement> = getContext("optionsStore");
 

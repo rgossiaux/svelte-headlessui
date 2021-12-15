@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { StateDefinition } from "./SwitchGroup.svelte";
+  import { useSwitchContext } from "./SwitchGroup.svelte";
   import type { LabelContext } from "$lib/components/label/LabelProvider.svelte";
   import type { DescriptionContext } from "$lib/components/description/DescriptionProvider.svelte";
   import { useId } from "$lib/hooks/use-id";
@@ -9,7 +9,7 @@
 
   const dispatch = createEventDispatcher();
   export let checked = false;
-  let api: Writable<StateDefinition> | undefined = getContext("SwitchApi");
+  let api = useSwitchContext();
   let labelContext: Writable<LabelContext> | undefined = getContext(
     "headlessui-label-context"
   );

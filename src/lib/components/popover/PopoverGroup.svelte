@@ -5,11 +5,16 @@
     isFocusWithinPopoverGroup(): boolean;
     closeOthers(buttonId: string): void;
   }
+
+  const POPOVER_GROUP_CONTEXT_NAME = "PopoverGroupContext";
+  export function usePopoverGroupContext(): PopoverGroupContext | undefined {
+    return getContext(POPOVER_GROUP_CONTEXT_NAME);
+  }
 </script>
 
 <script lang="ts">
   import type { PopoverRegisterBag } from "./Popover.svelte";
-  import { setContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   let groupRef: HTMLDivElement | undefined;
   let popovers: PopoverRegisterBag[] = [];
 
@@ -44,7 +49,7 @@
     }
   }
 
-  setContext("PopoverGroup", {
+  setContext(POPOVER_GROUP_CONTEXT_NAME, {
     unregisterPopover,
     registerPopover,
     isFocusWithinPopoverGroup,

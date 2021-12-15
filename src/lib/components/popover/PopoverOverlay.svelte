@@ -2,9 +2,9 @@
   import { State } from "$lib/internal/open-closed";
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
-  import { PopoverStates, StateDefinition } from "./Popover.svelte";
+  import { PopoverStates, usePopoverContext } from "./Popover.svelte";
 
-  let api: Writable<StateDefinition> | undefined = getContext("PopoverApi");
+  let api = usePopoverContext("PopoverOverlay");
 
   let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
 

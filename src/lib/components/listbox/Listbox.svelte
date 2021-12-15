@@ -34,6 +34,22 @@
     unregisterOption(id: string): void;
     select(value: unknown): void;
   };
+
+  const LISTBOX_CONTEXT_NAME = "ListboxContext";
+  export function useListboxContext(
+    component: string
+  ): Writable<StateDefinition | undefined> {
+    let context: Writable<StateDefinition | undefined> | undefined =
+      getContext(LISTBOX_CONTEXT_NAME);
+
+    if (context === undefined) {
+      throw new Error(
+        `<${component} /> is missing a parent <Listbox /> component.`
+      );
+    }
+
+    return context;
+  }
 </script>
 
 <script lang="ts">
@@ -41,7 +57,7 @@
     Focus,
     calculateActiveIndex,
   } from "$lib/utils/calculate-active-index";
-  import { createEventDispatcher, setContext } from "svelte";
+  import { createEventDispatcher, getContext, setContext } from "svelte";
   import { writable, Writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
@@ -63,7 +79,7 @@
   let activeOptionIndex = null;
 
   let api: Writable<StateDefinition | undefined> = writable();
-  setContext("api", api);
+  setContext(LISTBOX_CONTEXT_NAME, api);
 
   let openClosedState = writable(State.Closed);
   useOpenClosedProvider(openClosedState);

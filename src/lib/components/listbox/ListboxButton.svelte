@@ -1,10 +1,11 @@
 <script lang="ts">
   import { getContext, tick } from "svelte";
-  import { ListboxStates, StateDefinition } from "./Listbox.svelte";
+  import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
-  let api: SvelteStore<StateDefinition> = getContext("api");
+
+  let api = useListboxContext("ListboxButton");
   let id = `headlessui-listbox-button-${useId()}`;
   let buttonStore: SvelteStore<HTMLButtonElement> = getContext("buttonStore");
 

@@ -24,6 +24,21 @@
     panelId: string;
     close(): void;
   }
+
+  const POPOVER_CONTEXT_NAME = "PopoverContext";
+  export function usePopoverContext(
+    component: string
+  ): Writable<StateDefinition | undefined> {
+    let context = getContext(POPOVER_CONTEXT_NAME) as
+      | Writable<StateDefinition | undefined>
+      | undefined;
+    if (context === undefined) {
+      throw new Error(
+        `<${component} /> is missing a parent <Popover /> component.`
+      );
+    }
+    return context;
+  }
 </script>
 
 <script lang="ts">
@@ -43,7 +58,7 @@
   let popoverState: PopoverStates = PopoverStates.Closed;
 
   let api: Writable<StateDefinition | undefined> = writable();
-  setContext("PopoverApi", api);
+  setContext(POPOVER_CONTEXT_NAME, api);
 
   let openClosedState: Writable<State> | undefined = writable();
   setContext("OpenClosed", openClosedState);

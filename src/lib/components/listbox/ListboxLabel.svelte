@@ -1,8 +1,8 @@
 <script lang="ts">
   import { getContext } from "svelte";
-  import { ListboxStates, StateDefinition } from "./Listbox.svelte";
+  import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
-  let api: SvelteStore<StateDefinition> = getContext("api");
+  let api = useListboxContext("ListboxLabel");
   let id = `headlessui-listbox-label-${useId()}`;
   let labelStore: SvelteStore<HTMLLabelElement> = getContext("labelStore");
 

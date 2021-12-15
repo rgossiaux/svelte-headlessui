@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { getContext, onDestroy, onMount, tick } from "svelte";
-  import { ListboxStates, StateDefinition } from "./Listbox.svelte";
+  import { onDestroy, onMount, tick } from "svelte";
+  import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Focus } from "$lib/utils/calculate-active-index";
   export let value: any;
   export let disabled = false;
-  let api: SvelteStore<StateDefinition> = getContext("api");
+  let api = useListboxContext("ListboxOption");
   let id = `headlessui-listbox-option-${useId()}`;
 
   $: active =

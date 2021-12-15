@@ -1,5 +1,12 @@
 <script lang="ts" context="module">
   export type PopoverPanelContext = string | null;
+
+  const POPOVER_PANEL_CONTEXT_NAME = "PopoverPanelContext";
+  export function usePopoverPanelContext():
+    | StateDefinition["panelId"]
+    | undefined {
+    return getContext(POPOVER_PANEL_CONTEXT_NAME);
+  }
 </script>
 
 <script lang="ts">
@@ -13,12 +20,16 @@
   } from "$lib/utils/focus-management";
   import { getContext, setContext, onMount } from "svelte";
   import type { Writable } from "svelte/store";
-  import { PopoverStates, StateDefinition } from "./Popover.svelte";
+  import {
+    PopoverStates,
+    StateDefinition,
+    usePopoverContext,
+  } from "./Popover.svelte";
   let panelStore: SvelteStore<HTMLDivElement> = getContext("PopoverPanelRef");
   export let focus = false;
 
-  let api: Writable<StateDefinition> | undefined = getContext("PopoverApi");
-  setContext("PopoverPanelContext", $api.panelId);
+  let api = usePopoverContext("PopoverPanel");
+  setContext(POPOVER_PANEL_CONTEXT_NAME, $api.panelId);
 
   let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
 

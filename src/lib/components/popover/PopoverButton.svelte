@@ -7,19 +7,17 @@
   } from "$lib/utils/focus-management";
   import { getContext } from "svelte";
   import { writable, Writable } from "svelte/store";
-  import { PopoverStates, StateDefinition } from "./Popover.svelte";
-  import type { PopoverGroupContext } from "./PopoverGroup.svelte";
-  import type { PopoverPanelContext } from "./PopoverPanel.svelte";
+  import { PopoverStates, usePopoverContext } from "./Popover.svelte";
+  import { usePopoverGroupContext } from "./PopoverGroup.svelte";
+  import { usePopoverPanelContext } from "./PopoverPanel.svelte";
   let buttonStore: Writable<HTMLButtonElement> = getContext("PopoverButtonRef");
   export let disabled: Boolean = false;
-  let api: Writable<StateDefinition> | undefined = getContext("PopoverApi");
+  let api = usePopoverContext("PopoverButton");
 
-  const groupContext: PopoverGroupContext | undefined =
-    getContext("PopoverGroup");
-  const closeOthers = groupContext?.closeOthers;
+  let groupContext = usePopoverGroupContext();
+  let closeOthers = groupContext?.closeOthers;
 
-  let panelContext: PopoverPanelContext | undefined =
-    getContext("PopoverPanel");
+  let panelContext = usePopoverPanelContext();
   let isWithinPanel =
     panelContext === null ? false : panelContext === $api.panelId;
   if (isWithinPanel) {
