@@ -1,7 +1,10 @@
 <script lang="ts">
   import { useSwitchContext } from "./SwitchGroup.svelte";
   import type { LabelContext } from "$lib/components/label/LabelProvider.svelte";
-  import type { DescriptionContext } from "$lib/components/description/DescriptionProvider.svelte";
+  import {
+    DescriptionContext,
+    useDescriptionContext,
+  } from "$lib/components/description/DescriptionProvider.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
   import { getContext, createEventDispatcher } from "svelte";
@@ -13,9 +16,7 @@
   let labelContext: Writable<LabelContext> | undefined = getContext(
     "headlessui-label-context"
   );
-  let descriptionContext: Writable<DescriptionContext> | undefined = getContext(
-    "headlessui-description-context"
-  );
+  let descriptionContext = useDescriptionContext();
   let id = `headlessui-switch-${useId()}`;
   $: switchStore = $api?.switchStore;
   let internalSwitchRef = null;

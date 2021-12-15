@@ -5,10 +5,17 @@
     register: (value: string) => void;
     descriptionIds?: string;
   }
+
+  const DESCRIPTION_CONTEXT_NAME = "DescriptionContext";
+  export function useDescriptionContext():
+    | Writable<DescriptionContext>
+    | undefined {
+    return getContext(DESCRIPTION_CONTEXT_NAME);
+  }
 </script>
 
 <script lang="ts">
-  import { setContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   import { writable, Writable } from "svelte/store";
   export let name: string;
   let descriptionIds = [];
@@ -17,7 +24,7 @@
     register,
     props: $$restProps,
   });
-  setContext("headlessui-description-context", contextStore);
+  setContext(DESCRIPTION_CONTEXT_NAME, contextStore);
 
   $: contextStore.set({
     name,

@@ -1,13 +1,10 @@
 <script lang="ts">
   import { useId } from "$lib/hooks/use-id";
-  import { getContext, onMount } from "svelte";
-  import type { Writable } from "svelte/store";
-  import type { LabelContext } from "./LabelProvider.svelte";
+  import { onMount } from "svelte";
+  import { useLabelContext } from "./LabelProvider.svelte";
   const id = `headlessui-label-${useId()}`;
   export let passive = false;
-  let contextStore: Writable<LabelContext> | undefined = getContext(
-    "headlessui-label-context"
-  );
+  let contextStore = useLabelContext();
   if (!contextStore) {
     throw new Error(
       "You used a <Label /> component, but it is not inside a relevant parent."
