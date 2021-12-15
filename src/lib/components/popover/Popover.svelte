@@ -28,9 +28,9 @@
   const POPOVER_CONTEXT_NAME = "PopoverContext";
   export function usePopoverContext(
     component: string
-  ): Writable<StateDefinition | undefined> {
+  ): Writable<StateDefinition> {
     let context = getContext(POPOVER_CONTEXT_NAME) as
-      | Writable<StateDefinition | undefined>
+      | Writable<StateDefinition>
       | undefined;
     if (context === undefined) {
       throw new Error(
@@ -57,31 +57,18 @@
 
   let popoverState: PopoverStates = PopoverStates.Closed;
 
-  let api: Writable<StateDefinition | undefined> = writable();
-  setContext(POPOVER_CONTEXT_NAME, api);
+  let panel: Writable<StateDefinition["panel"]> = writable(null);
+  setContext("PopoverPanelRef", panel);
 
-  let openClosedState: Writable<State> | undefined = writable();
-  setContext("OpenClosed", openClosedState);
+  let button: Writable<StateDefinition["button"]> = writable(null);
+  setContext("PopoverButtonRef", button);
 
-  $: $openClosedState = match(popoverState, {
-    [PopoverStates.Open]: State.Open,
-    [PopoverStates.Closed]: State.Closed,
-  });
-
-  let panelStore = writable(null);
-  setContext("PopoverPanelRef", panelStore);
-  $: panel = $panelStore;
-
-  let buttonStore = writable(null);
-  setContext("PopoverButtonRef", buttonStore);
-  $: button = $buttonStore;
-
-  $: api.set({
+  let api: Writable<StateDefinition> = writable({
     popoverState,
     buttonId,
     panelId,
-    panel,
-    button,
+    panel: $panel,
+    button: $button,
     togglePopover() {
       popoverState = match(popoverState, {
         [PopoverStates.Open]: PopoverStates.Closed,
@@ -105,6 +92,26 @@
       restoreElement?.focus();
     },
   });
+  setContext(POPOVER_CONTEXT_NAME, api);
+
+  let openClosedState: Writable<State> | undefined = writable();
+  setContext("OpenClosed", openClosedState);
+
+  $: $openClosedState = match(popoverState, {
+    [PopoverStates.Open]: State.Open,
+    [PopoverStates.Closed]: State.Closed,
+  });
+
+  $: api.update((obj) => {
+    return {
+      ...obj,
+      popoverState,
+      buttonId,
+      panelId,
+      panel: $panel,
+      button: $button,
+    };
+  });
 
   const registerBag = {
     buttonId,
@@ -121,8 +128,8 @@
   function isFocusWithinPopoverGroup() {
     return (
       groupContext?.isFocusWithinPopoverGroup() ??
-      (button?.contains(document.activeElement) ||
-        panel?.contains(document.activeElement))
+      ($button?.contains(document.activeElement) ||
+        $panel?.contains(document.activeElement))
     );
   }
 
@@ -144,14 +151,14 @@
 
     if (popoverState !== PopoverStates.Open) return;
 
-    if (button?.contains(target)) return;
-    if (panel?.contains(target)) return;
+    if ($button?.contains(target)) return;
+    if ($panel?.contains(target)) return;
 
     $api.closePopover();
 
     if (!isFocusableElement(target, FocusableMode.Loose)) {
       event.preventDefault();
-      button?.focus();
+      $button?.focus();
     }
   }
 </script>

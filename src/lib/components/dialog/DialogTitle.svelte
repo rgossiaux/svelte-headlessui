@@ -7,7 +7,7 @@
 
   onMount(() => {
     $api.setTitleId(id);
-    return () => $api.setTitleId(null);
+    return () => $api.setTitleId(undefined);
   });
   $: propsWeControl = {
     id,

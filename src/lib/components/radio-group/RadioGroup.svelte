@@ -29,9 +29,9 @@
   const RADIO_GROUP_CONTEXT_NAME = "RadioGroupContext";
   export function useRadioGroupContext(
     component: string
-  ): Writable<StateDefinition | undefined> {
+  ): Writable<StateDefinition> {
     const context = getContext(RADIO_GROUP_CONTEXT_NAME) as
-      | Writable<StateDefinition | undefined>
+      | Writable<StateDefinition>
       | undefined;
 
     if (context === undefined) {
@@ -55,10 +55,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let api: Writable<StateDefinition | undefined> = writable();
-  setContext(RADIO_GROUP_CONTEXT_NAME, api);
-
-  $: api.set({
+  let api: Writable<StateDefinition> = writable({
     options,
     value,
     disabled,
@@ -82,6 +79,20 @@
     unregisterOption(id: Option["id"]) {
       options = options.filter((radio) => radio.id !== id);
     },
+  });
+  setContext(RADIO_GROUP_CONTEXT_NAME, api);
+
+  $: api.update((obj) => {
+    return {
+      ...obj,
+      options,
+      value,
+      disabled,
+      firstOption: options.find((option) => !option.propsRef.disabled),
+      containsCheckedOption: options.some(
+        (option) => option.propsRef.value === value
+      ),
+    };
   });
 
   $: treeWalker({

@@ -114,16 +114,16 @@
   import TransitionChild from "./TransitionChild.svelte";
   import type { useId } from "$lib/hooks/use-id";
 
-  export let show: boolean = null;
+  export let show: boolean | undefined = undefined;
   export let unmount = true;
   export let appear = false;
 
   let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
 
   function computeShow(
-    show: boolean,
+    show: boolean | undefined,
     openClosedState: State | undefined
-  ): boolean {
+  ): boolean | undefined {
     if (show === null && openClosedState !== undefined) {
       return match(openClosedState, {
         [State.Open]: true,
@@ -161,7 +161,7 @@
   let initial = true;
   let transitionBag: Writable<TransitionContextValues> = writable();
   $: transitionBag.set({
-    show: shouldShow,
+    show: !!shouldShow,
     appear: appear || !initial,
   });
 

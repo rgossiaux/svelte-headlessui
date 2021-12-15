@@ -4,9 +4,7 @@
   }
 
   const SWITCH_CONTEXT_NAME = "SwitchContext";
-  export function useSwitchContext():
-    | Writable<StateDefinition | undefined>
-    | undefined {
+  export function useSwitchContext(): Writable<StateDefinition> | undefined {
     return getContext(SWITCH_CONTEXT_NAME);
   }
 </script>
@@ -19,18 +17,16 @@
 
   let switchStore: Writable<HTMLButtonElement | null> = writable(null);
 
-  let api: Writable<StateDefinition | undefined> = writable();
-  setContext("SwitchApi", api);
+  let api: Writable<StateDefinition | undefined> = writable({
+    switchStore,
+  });
+  setContext(SWITCH_CONTEXT_NAME, api);
 
   function onClick() {
     if (!$switchStore) return;
     $switchStore.click();
     $switchStore.focus({ preventScroll: true });
   }
-
-  $: api.set({
-    switchStore,
-  });
 </script>
 
 <div {...$$restProps}>

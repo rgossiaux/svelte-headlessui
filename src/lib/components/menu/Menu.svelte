@@ -36,8 +36,8 @@
 
   export function useMenuContext(
     componentName: string
-  ): Writable<StateDefinition | undefined> {
-    let context: Writable<StateDefinition | undefined> | undefined =
+  ): Writable<StateDefinition> {
+    let context: Writable<StateDefinition> | undefined =
       getContext(MENU_CONTEXT_NAME);
 
     if (context === undefined) {
@@ -58,10 +58,7 @@
   let searchQuery: StateDefinition["searchQuery"] = "";
   let activeItemIndex: StateDefinition["activeItemIndex"] = null;
 
-  let api: Writable<StateDefinition | undefined> = writable();
-  setContext(MENU_CONTEXT_NAME, api);
-
-  $: api.set({
+  let api: Writable<StateDefinition> = writable({
     menuState,
     buttonStore,
     itemsStore: itemsStore,
@@ -124,6 +121,19 @@
         return nextItems.indexOf(currentActiveItem);
       })();
     },
+  });
+  setContext(MENU_CONTEXT_NAME, api);
+
+  $: api.update((obj) => {
+    return {
+      ...obj,
+      menuState,
+      buttonStore,
+      itemsStore: itemsStore,
+      items,
+      searchQuery,
+      activeItemIndex,
+    };
   });
 
   function handleWindowMousedown(event: MouseEvent): void {

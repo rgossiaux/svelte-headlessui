@@ -27,10 +27,8 @@
 
   const TABS_CONTEXT_NAME = "TabsContext";
 
-  export function useTabsContext(
-    component: string
-  ): Writable<StateDefinition | undefined> {
-    let context: Writable<StateDefinition | undefined> | undefined =
+  export function useTabsContext(component: string): Writable<StateDefinition> {
+    let context: Writable<StateDefinition> | undefined =
       getContext(TABS_CONTEXT_NAME);
 
     if (context === undefined) {
@@ -54,10 +52,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let api: Writable<StateDefinition | undefined> = writable();
-  setContext(TABS_CONTEXT_NAME, api);
-
-  $: api.set({
+  let api: Writable<StateDefinition> = writable({
     selectedIndex,
     orientation: vertical ? "vertical" : "horizontal",
     activation: manual ? "manual" : "auto",
@@ -80,6 +75,18 @@
     unregisterPanel(panel: typeof panels[number]) {
       panels = panels.filter((p) => p !== panel);
     },
+  });
+  setContext(TABS_CONTEXT_NAME, api);
+
+  $: api.update((obj) => {
+    return {
+      ...obj,
+      selectedIndex,
+      orientation: vertical ? "vertical" : "horizontal",
+      activation: manual ? "manual" : "auto",
+      tabs,
+      panels,
+    };
   });
 
   onMount(() => {

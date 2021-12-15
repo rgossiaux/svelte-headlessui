@@ -1,10 +1,7 @@
 <script lang="ts">
   import { useSwitchContext } from "./SwitchGroup.svelte";
   import type { LabelContext } from "$lib/components/label/LabelProvider.svelte";
-  import {
-    DescriptionContext,
-    useDescriptionContext,
-  } from "$lib/components/description/DescriptionProvider.svelte";
+  import { useDescriptionContext } from "$lib/components/description/DescriptionProvider.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
   import { getContext, createEventDispatcher } from "svelte";

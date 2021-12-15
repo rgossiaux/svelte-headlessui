@@ -154,7 +154,7 @@
   }
 
   setContext(NESTING_CONTEXT_NAME, nesting);
-  let openClosedState: Writable<State> | undefined = writable(State.Closed);
+  let openClosedState: Writable<State> = writable(State.Closed);
   setContext("OpenClosed", openClosedState);
 
   $: openClosedState.set(
