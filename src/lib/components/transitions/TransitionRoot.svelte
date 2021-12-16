@@ -124,7 +124,7 @@
     show: boolean | undefined,
     openClosedState: State | undefined
   ): boolean | undefined {
-    if (show === null && openClosedState !== undefined) {
+    if (show === undefined && openClosedState !== undefined) {
       return match(openClosedState, {
         [State.Open]: true,
         [State.Closed]: false,
