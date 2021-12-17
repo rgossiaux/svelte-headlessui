@@ -44,25 +44,35 @@
     "aria-labelledby": $labelContext?.labelIds,
     "aria-describedby": $descriptionContext?.descriptionIds,
   };
+
+  $: classStyle = $$props.class
+    ? typeof $$props.class === "function"
+      ? $$props.class({
+          checked,
+        })
+      : $$props.class
+    : "";
 </script>
 
 {#if switchStore}
   <button
     {...{ ...$$restProps, ...propsWeControl }}
     bind:this={$switchStore}
+    class={classStyle}
     on:click={handleClick}
     on:keyup={handleKeyUp}
     on:keypress={handleKeyPress}
   >
-    <slot />
+    <slot {checked} />
   </button>
 {:else}
   <button
     {...{ ...$$restProps, ...propsWeControl }}
+    class={classStyle}
     on:click={handleClick}
     on:keyup={handleKeyUp}
     on:keypress={handleKeyPress}
   >
-    <slot />
+    <slot {checked} />
   </button>
 {/if}

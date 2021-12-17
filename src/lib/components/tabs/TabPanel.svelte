@@ -5,14 +5,13 @@
 
   let api = useTabsContext("TabPanel");
   let id = `headlessui-tabs-panel-${useId()}`;
-  let panelRef = null;
 
   onMount(() => {
-    $api.registerPanel(panelRef);
-    return () => $api.unregisterPanel(panelRef);
+    $api.registerPanel(id);
+    return () => $api.unregisterPanel(id);
   });
 
-  $: myIndex = $api.panels.indexOf(panelRef);
+  $: myIndex = $api.panels.indexOf(id);
   $: selected = myIndex === $api.selectedIndex;
 
   $: propsWeControl = {
@@ -23,8 +22,8 @@
   };
 </script>
 
-<div {...{ ...$$restProps, ...propsWeControl }} bind:this={panelRef}>
-  {#if selected}
+{#if selected}
+  <div {...{ ...$$restProps, ...propsWeControl }}>
     <slot />
-  {/if}
-</div>
+  </div>
+{/if}

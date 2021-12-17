@@ -18,7 +18,7 @@
     FocusResult,
     focusIn,
   } from "$lib/utils/focus-management";
-  import { getContext, setContext, onMount } from "svelte";
+  import { getContext, setContext } from "svelte";
   import type { Writable } from "svelte/store";
   import {
     PopoverStates,

@@ -11,7 +11,7 @@
 
   let api = useTabsContext("Tab");
   let id = `headlessui-tabs-tab-${useId()}`;
-  let tabRef = null;
+  let tabRef: HTMLElement | null = null;
 
   onMount(() => {
     $api.registerTab(tabRef);
@@ -80,19 +80,28 @@
   $: propsWeControl = {
     id,
     role: "tab",
-    "aria-controls": $api.panels[myIndex]?.id,
+    "aria-controls": $api.panels[myIndex],
     "aria-selected": selected,
     tabIndex: selected ? 0 : -1,
     disabled: disabled ? true : undefined,
   };
+
+  $: classStyle = $$props.class
+    ? typeof $$props.class === "function"
+      ? $$props.class({
+          selected,
+        })
+      : $$props.class
+    : "";
 </script>
 
 <button
   {...{ ...$$restProps, ...propsWeControl }}
   bind:this={tabRef}
+  class={classStyle}
   on:keydown={handleKeyDown}
   on:click={handleSelection}
   on:focus={$api.activation === "manual" ? handleFocus : handleSelection}
 >
-  <slot />
+  <slot {selected} />
 </button>

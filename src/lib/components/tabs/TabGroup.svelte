@@ -15,14 +15,14 @@
     activation: "auto" | "manual";
 
     tabs: (HTMLElement | null)[];
-    panels: (HTMLElement | null)[];
+    panels: string[];
 
     // State mutators
     setSelectedIndex(index: number): void;
     registerTab(tab: HTMLElement | null): void;
     unregisterTab(tab: HTMLElement | null): void;
-    registerPanel(panel: HTMLElement | null): void;
-    unregisterPanel(panel: HTMLElement | null): void;
+    registerPanel(panel: string): void;
+    unregisterPanel(panel: string): void;
   };
 
   const TABS_CONTEXT_NAME = "TabsContext";
