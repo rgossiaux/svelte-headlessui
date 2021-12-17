@@ -1,16 +1,18 @@
 <script lang="ts">
   import Nested from "./Nested.svelte";
-  import TransitionRoot from "$lib/components/transitions/TransitionRoot.svelte";
-  import Dialog from "$lib/components/dialog/Dialog.svelte";
-  import TransitionChild from "$lib/components/transitions/TransitionChild.svelte";
-  import DialogOverlay from "$lib/components/dialog/DialogOverlay.svelte";
-  import DialogTitle from "$lib/components/dialog/DialogTitle.svelte";
-  import Menu from "$lib/components/menu/Menu.svelte";
-  import MenuButton from "$lib/components/menu/MenuButton.svelte";
-  import Portal from "$lib/components/portal/Portal.svelte";
-  import MenuItems from "$lib/components/menu/MenuItems.svelte";
-  import MenuItem from "$lib/components/menu/MenuItem.svelte";
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    Transition,
+    TransitionChild,
+  } from "$lib";
   import { createPopperActions } from "svelte-popperjs";
+  import Portal from "$lib/components/portal/Portal.svelte";
 
   const [popperRef, popperContent] = createPopperActions();
   const popperOptions = {
@@ -53,7 +55,7 @@
 {#if nested}
   <Nested on:close={() => (nested = false)} />
 {/if}
-<TransitionRoot show={isOpen} afterLeave={() => console.log("done")}>
+<Transition show={isOpen} afterLeave={() => console.log("done")}>
   <Dialog on:close={() => (isOpen = false)}>
     <div class="fixed z-10 inset-0 overflow-y-auto">
       <div
@@ -146,7 +148,7 @@
                           </MenuButton>
                         </span>
 
-                        <TransitionRoot
+                        <Transition
                           enter="transition duration-1000 ease-out"
                           enterFrom="transform scale-95 opacity-0"
                           enterTo="transform scale-100 opacity-100"
@@ -211,7 +213,7 @@
                               </div>
                             </MenuItems>
                           </Portal>
-                        </TransitionRoot>
+                        </Transition>
                       </Menu>
                     </div>
                   </div>
@@ -241,4 +243,4 @@
       </div>
     </div>
   </Dialog>
-</TransitionRoot>
+</Transition>
