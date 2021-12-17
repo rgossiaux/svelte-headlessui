@@ -15,6 +15,8 @@
 <script lang="ts">
   import type { PopoverRegisterBag } from "./Popover.svelte";
   import { getContext, setContext } from "svelte";
+  import { ActionArray, useActions } from "$lib/hooks/use-actions";
+  export let use: ActionArray = [];
   let groupRef: HTMLDivElement | undefined;
   let popovers: PopoverRegisterBag[] = [];
 
@@ -57,6 +59,6 @@
   });
 </script>
 
-<div {...$$restProps} bind:this={groupRef}>
+<div use:useActions={use} {...$$restProps} bind:this={groupRef}>
   <slot />
 </div>

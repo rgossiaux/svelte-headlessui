@@ -1,8 +1,11 @@
 <script lang="ts">
+  import { ActionArray, useActions } from "$lib/hooks/use-actions";
+
   import { State } from "$lib/internal/open-closed";
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
   import { PopoverStates, usePopoverContext } from "./Popover.svelte";
+  export let use: ActionArray = [];
 
   let api = usePopoverContext("PopoverOverlay");
 
@@ -19,7 +22,7 @@
 </script>
 
 {#if visible}
-  <div {...$$restProps} on:click={handleClick} aria-hidden>
+  <div use:useActions={use} {...$$restProps} on:click={handleClick} aria-hidden>
     <slot open={$api.popoverState === PopoverStates.Open} />
   </div>
 {/if}

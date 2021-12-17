@@ -10,6 +10,8 @@
   import { PopoverStates, usePopoverContext } from "./Popover.svelte";
   import { usePopoverGroupContext } from "./PopoverGroup.svelte";
   import { usePopoverPanelContext } from "./PopoverPanel.svelte";
+  import { ActionArray, useActions } from "$lib/hooks/use-actions";
+  export let use: ActionArray = [];
   let buttonStore: Writable<HTMLButtonElement> = getContext("PopoverButtonRef");
   export let disabled: Boolean = false;
   let api = usePopoverContext("PopoverButton");
@@ -166,6 +168,7 @@
 <button
   {...$$restProps}
   {...propsWeControl}
+  use:useActions={use}
   on:click={handleClick}
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}

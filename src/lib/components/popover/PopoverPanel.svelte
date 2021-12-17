@@ -25,6 +25,8 @@
     StateDefinition,
     usePopoverContext,
   } from "./Popover.svelte";
+  import { ActionArray, useActions } from "$lib/hooks/use-actions";
+  export let use: ActionArray = [];
   let panelStore: SvelteStore<HTMLDivElement> = getContext("PopoverPanelRef");
   export let focus = false;
 
@@ -119,7 +121,12 @@
   on:focus|capture={handleFocus}
 />
 {#if visible}
-  <div {...$$restProps} on:keydown={handleKeydown} bind:this={$panelStore}>
+  <div
+    use:useActions={use}
+    {...$$restProps}
+    on:keydown={handleKeydown}
+    bind:this={$panelStore}
+  >
     <slot open={$api.popoverState === PopoverStates.Open} close={$api.close} />
   </div>
 {/if}
