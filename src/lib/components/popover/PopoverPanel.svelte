@@ -40,7 +40,7 @@
       ? $openClosedState === State.Open
       : $api.popoverState === PopoverStates.Open;
 
-  onMount(() => {
+  $: (() => {
     if (!focus) return;
     if ($api.popoverState !== PopoverStates.Open) return;
     if (!$api.panel) return;
@@ -49,7 +49,7 @@
     if ($api.panel?.contains(activeElement)) return; // Already focused within Dialog
 
     focusIn($api.panel!, Focus.First);
-  });
+  })();
 
   function handleWindowKeydown(event: KeyboardEvent) {
     if ($api.popoverState !== PopoverStates.Open) return;
