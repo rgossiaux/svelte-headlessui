@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import DescriptionProvider from "./DescriptionProvider.svelte";
-  import LabelProvider from "./LabelProvider.svelte";
+  import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
+  import LabelProvider from "$lib/components/label/LabelProvider.svelte";
 
   import { useRadioGroupContext, Option } from "./RadioGroup.svelte";
   import { useId } from "$lib/hooks/use-id";

@@ -10,8 +10,8 @@
 </script>
 
 <script lang="ts">
-  import DescriptionProvider from "./DescriptionProvider.svelte";
-  import LabelProvider from "./LabelProvider.svelte";
+  import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
+  import LabelProvider from "$lib/components/label/LabelProvider.svelte";
   import { getContext, setContext } from "svelte";
   import { Writable, writable } from "svelte/store";
 
