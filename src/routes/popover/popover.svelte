@@ -35,7 +35,7 @@
   >
     <Popover as="div" class="relative">
       <Transition
-        enter="ease-out duration-1000 fixed z-20"
+        enter="ease-out duration-300 fixed z-20"
         enterFrom="opacity-0"
         enterTo="opacity-100"
         leave="ease-in duration-300 fixed z-20"
