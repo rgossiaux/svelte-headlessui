@@ -83,8 +83,6 @@
   let enterFromClasses = splitClasses(enterFrom);
   let enterToClasses = splitClasses(enterTo);
 
-  let enteredClasses = splitClasses(entered);
-
   let leaveClasses = splitClasses(leave);
   let leaveFromClasses = splitClasses(leaveFrom);
   let leaveToClasses = splitClasses(leaveTo);
@@ -111,7 +109,6 @@
           enterClasses,
           enterFromClasses,
           enterToClasses,
-          enteredClasses,
           (reason) => {
             isTransitioning = false;
             if (reason === Reason.Finished) dispatch("afterEnter");
@@ -122,7 +119,6 @@
           leaveClasses,
           leaveFromClasses,
           leaveToClasses,
-          enteredClasses,
           (reason) => {
             isTransitioning = false;
 
@@ -166,7 +162,9 @@
 
   // This is not in the base headless UI library, but is needed to prevent re-renders during the transition
   // from blowing away the transition classes
-  $: classes = isTransitioning ? container?.className : $$props.class;
+  $: classes = isTransitioning
+    ? container?.className
+    : `${$$props.class} ${entered}`;
 </script>
 
 <div bind:this={container} {...$$restProps} class={classes}>
