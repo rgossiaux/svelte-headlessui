@@ -5,7 +5,11 @@ const config = {
     extend: {},
   },
 
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/forms")({
+      strategy: "class",
+    }),
+  ],
 };
 
 module.exports = config;
