@@ -10,11 +10,23 @@
 </script>
 
 {#if !hasTransition && hasOpen}
-  <TransitionRoot {...$$props}>
+  <TransitionRoot
+    {...$$props}
+    on:afterEnter
+    on:afterLeave
+    on:beforeEnter
+    on:beforeLeave
+  >
     <slot />
   </TransitionRoot>
 {:else}
-  <TransitionChild {...$$props}>
+  <TransitionChild
+    {...$$props}
+    on:afterEnter
+    on:afterLeave
+    on:beforeEnter
+    on:beforeLeave
+  >
     <slot />
   </TransitionChild>
 {/if}

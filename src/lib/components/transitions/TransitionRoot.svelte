@@ -60,13 +60,11 @@
   export function useNesting(done?: () => void) {
     let transitionableChildren: NestingContextValues["children"] = [];
 
-    let mounted = false;
-    onMount(() => (mounted = true));
-    onDestroy(() => (mounted = false));
-
     function unregister(childId: ID, strategy = RenderStrategy.Hidden) {
       let idx = transitionableChildren.findIndex(({ id }) => id === childId);
       if (idx === -1) return;
+
+      let hadChildren = hasChildren(transitionableChildren);
 
       match(strategy, {
         [RenderStrategy.Unmount]() {
@@ -77,7 +75,7 @@
         },
       });
 
-      if (!hasChildren(transitionableChildren) && mounted) {
+      if (hadChildren && !hasChildren(transitionableChildren)) {
         done?.();
       }
     }
@@ -182,7 +180,14 @@
 </script>
 
 {#if state === TreeStates.Visible}
-  <TransitionChild {...$$restProps} {unmount}>
+  <TransitionChild
+    {...$$restProps}
+    {unmount}
+    on:afterEnter
+    on:afterLeave
+    on:beforeEnter
+    on:beforeLeave
+  >
     <slot />
   </TransitionChild>
 {/if}
