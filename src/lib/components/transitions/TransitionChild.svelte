@@ -139,7 +139,7 @@
         );
   }
 
-  let _cleanup = null;
+  let _cleanup: (() => void) | null | undefined = null;
   $: {
     if (mounted) {
       if (_cleanup) {
@@ -163,9 +163,13 @@
       [TreeStates.Hidden]: State.Closed,
     })
   );
+
+  // This is not in the base headless UI library, but is needed to prevent re-renders during the transition
+  // from blowing away the transition classes
+  $: classes = isTransitioning ? container?.className : $$props.class;
 </script>
 
-<div bind:this={container} {...$$restProps}>
+<div bind:this={container} {...$$restProps} class={classes}>
   {#if state === TreeStates.Visible}
     <slot />
   {/if}
