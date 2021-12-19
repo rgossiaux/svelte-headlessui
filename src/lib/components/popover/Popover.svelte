@@ -53,12 +53,12 @@
   import { getContext, setContext, onMount } from "svelte";
   import { writable, Writable } from "svelte/store";
   import { ActionArray, useActions } from "$lib/hooks/use-actions";
+
   export let use: ActionArray = [];
+
   const buttonId = `headlessui-popover-button-${useId()}`;
   const panelId = `headlessui-popover-panel-${useId()}`;
-
-  let popoverState: PopoverStates = PopoverStates.Closed;
-
+  let popoverState: StateDefinition["popoverState"] = PopoverStates.Closed;
   let panel: StateDefinition["panel"] = writable(null);
   let button: StateDefinition["button"] = writable(null);
 

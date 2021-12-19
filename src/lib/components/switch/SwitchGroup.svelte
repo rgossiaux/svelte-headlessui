@@ -15,9 +15,9 @@
   import { getContext, setContext } from "svelte";
   import { Writable, writable } from "svelte/store";
 
-  let switchStore: Writable<HTMLButtonElement | null> = writable(null);
+  let switchStore: StateDefinition["switchStore"] = writable(null);
 
-  let api: Writable<StateDefinition | undefined> = writable({
+  let api: Writable<StateDefinition> = writable({
     switchStore,
   });
   setContext(SWITCH_CONTEXT_NAME, api);

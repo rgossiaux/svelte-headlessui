@@ -12,7 +12,7 @@
   export type StateDefinition = {
     // State
     listboxState: ListboxStates;
-    value: any;
+    value: unknown;
     orientation: "vertical" | "horizontal";
 
     labelRef: Writable<HTMLLabelElement | null>;
@@ -63,18 +63,17 @@
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   export let disabled = false;
   export let horizontal = false;
-  export let value: any;
-  $: orientation = (horizontal ? "horizontal" : "vertical") as
-    | "horizontal"
-    | "vertical";
+  export let value: StateDefinition["value"];
+  $: orientation = (
+    horizontal ? "horizontal" : "vertical"
+  ) as StateDefinition["orientation"];
 
   const dispatch = createEventDispatcher();
 
-  let listboxState = ListboxStates.Closed;
+  let listboxState: StateDefinition["listboxState"] = ListboxStates.Closed;
   let labelRef: StateDefinition["labelRef"] = writable(null);
   let buttonRef: StateDefinition["buttonRef"] = writable(null);
   let optionsRef: StateDefinition["optionsRef"] = writable(null);
-
   let options: StateDefinition["options"] = [];
   let searchQuery: StateDefinition["searchQuery"] = "";
   let activeOptionIndex: StateDefinition["activeOptionIndex"] = null;

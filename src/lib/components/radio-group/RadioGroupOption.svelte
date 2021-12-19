@@ -11,7 +11,7 @@
     Active = 1 << 1,
   }
 
-  export let value: any;
+  export let value: unknown;
   export let disabled: boolean = false;
   let api = useRadioGroupContext("RadioGroupOption");
   let id = `headlessui-radiogroup-option-${useId()}`;

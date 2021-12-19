@@ -3,7 +3,7 @@
   import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Focus } from "$lib/utils/calculate-active-index";
-  export let value: any;
+  export let value: unknown;
   export let disabled = false;
   let api = useListboxContext("ListboxOption");
   let id = `headlessui-listbox-option-${useId()}`;

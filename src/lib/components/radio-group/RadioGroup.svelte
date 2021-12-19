@@ -47,7 +47,7 @@
 <script lang="ts">
   import { treeWalker } from "$lib/hooks/use-tree-walker";
   export let disabled = false;
-  export let value: any;
+  export let value: StateDefinition["value"];
   let radioGroupRef: HTMLElement | null = null;
   let options: StateDefinition["options"] = [];
 
