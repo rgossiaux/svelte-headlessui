@@ -9,6 +9,7 @@
   let id = `headlessui-listbox-button-${useId()}`;
   let buttonRef = $api.buttonRef;
   let optionsRef = $api.optionsRef;
+  let labelRef = $api.labelRef;
 
   async function handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
@@ -65,9 +66,7 @@
     "aria-expanded": $api.disabled
       ? undefined
       : $api?.listboxState === ListboxStates.Open,
-    "aria-labelledby": $api?.labelRef
-      ? [$api?.labelRef?.id, id].join(" ")
-      : undefined,
+    "aria-labelledby": $labelRef ? [$labelRef?.id, id].join(" ") : undefined,
     disabled: $api?.disabled === true ? true : undefined,
   };
 </script>
