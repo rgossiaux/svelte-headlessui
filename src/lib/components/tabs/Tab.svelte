@@ -22,13 +22,13 @@
   $: selected = myIndex === $api.selectedIndex;
 
   function handleKeyDown(event: KeyboardEvent) {
-    let list = $api?.tabs.filter(Boolean) as HTMLElement[];
+    let list = $api.tabs.filter(Boolean) as HTMLElement[];
 
     if (event.key === Keys.Space || event.key === Keys.Enter) {
       event.preventDefault();
       event.stopPropagation();
 
-      $api?.setSelectedIndex(myIndex);
+      $api.setSelectedIndex(myIndex);
       return;
     }
 
@@ -74,7 +74,7 @@
     if (disabled) return;
 
     tabRef?.focus();
-    $api?.setSelectedIndex(myIndex);
+    $api.setSelectedIndex(myIndex);
   }
 
   $: propsWeControl = {

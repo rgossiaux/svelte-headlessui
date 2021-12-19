@@ -20,15 +20,15 @@
   let state = OptionState.Empty;
 
   function updateOption(option: Option) {
-    $api?.unregisterOption(option.id);
-    $api?.registerOption(option);
+    $api.unregisterOption(option.id);
+    $api.registerOption(option);
   }
   $: updateOption({ id, element: optionRef, propsRef });
-  onDestroy(() => $api?.unregisterOption(id));
+  onDestroy(() => $api.unregisterOption(id));
 
-  $: isFirstOption = $api?.firstOption?.id === id;
-  $: isDisabled = $api?.disabled || disabled;
-  $: checked = $api?.value === value;
+  $: isFirstOption = $api.firstOption?.id === id;
+  $: isDisabled = $api.disabled || disabled;
+  $: checked = $api.value === value;
 
   $: tabIndex = (() => {
     if (isDisabled) return -1;

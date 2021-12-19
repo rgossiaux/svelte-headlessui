@@ -11,17 +11,17 @@
   import { useDisclosureContext, DisclosureStates } from "./Disclosure.svelte";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
   const api = useDisclosureContext("DisclosureButton");
-  $: id = $api?.panelId;
+  $: id = $api.panelId;
   let openClosedState = useOpenClosed();
 
   setContext(DISCLOSURE_PANEL_CONTEXT_NAME, id);
 
-  $: panelStore = $api?.panelStore;
+  $: panelStore = $api.panelStore;
 
   $: visible =
     $openClosedState !== null
       ? $openClosedState === State.Open
-      : $api?.disclosureState === DisclosureStates.Open;
+      : $api.disclosureState === DisclosureStates.Open;
 
   $: propsWeControl = { id };
 </script>
@@ -29,8 +29,8 @@
 {#if visible}
   <div {...{ ...$$restProps, ...propsWeControl }} bind:this={$panelStore}>
     <slot
-      open={$api?.disclosureState === DisclosureStates.Open}
-      close={$api?.close}
+      open={$api.disclosureState === DisclosureStates.Open}
+      close={$api.close}
     />
   </div>
 {/if}

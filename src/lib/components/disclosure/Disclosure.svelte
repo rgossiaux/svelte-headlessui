@@ -103,5 +103,5 @@
 </script>
 
 <div {...$$restProps}>
-  <slot open={disclosureState === DisclosureStates.Open} close={$api?.close} />
+  <slot open={disclosureState === DisclosureStates.Open} close={$api.close} />
 </div>

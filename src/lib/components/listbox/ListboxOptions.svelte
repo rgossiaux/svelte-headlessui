@@ -91,11 +91,11 @@
 
   $: propsWeControl = {
     "aria-activedescendant":
-      $api?.activeOptionIndex === null
+      $api.activeOptionIndex === null
         ? undefined
-        : $api?.options[$api.activeOptionIndex]?.id,
+        : $api.options[$api.activeOptionIndex]?.id,
     "aria-labelledby": $labelRef?.id ?? $buttonRef?.id,
-    "aria-orientation": $api?.orientation,
+    "aria-orientation": $api.orientation,
     id,
     role: "listbox",
     tabIndex: 0,
@@ -115,6 +115,6 @@
     {...$$restProps}
     {...propsWeControl}
   >
-    <slot open={$api?.listboxState === ListboxStates.Open} />
+    <slot open={$api.listboxState === ListboxStates.Open} />
   </ul>
 {/if}

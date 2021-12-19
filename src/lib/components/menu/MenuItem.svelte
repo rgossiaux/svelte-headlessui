@@ -10,11 +10,11 @@
   const id = `headlessui-menu-item-${useId()}`;
 
   $: active =
-    $api?.activeItemIndex !== null
-      ? $api?.items[$api?.activeItemIndex].id === id
+    $api.activeItemIndex !== null
+      ? $api.items[$api.activeItemIndex].id === id
       : false;
 
-  $: buttonStore = $api?.buttonStore;
+  $: buttonStore = $api.buttonStore;
 
   let elementRef: HTMLDivElement | undefined;
   $: textValue = elementRef?.textContent?.toLowerCase().trim();
@@ -22,7 +22,7 @@
 
   onMount(async () => {
     await tick();
-    $api?.registerItem(id, data);
+    $api.registerItem(id, data);
   });
 
   onDestroy(() => {

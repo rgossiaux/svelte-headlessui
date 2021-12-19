@@ -8,11 +8,11 @@
   const panelContext = usePanelContext();
   const id = `headlessui-disclosure-button-${useId()}`;
 
-  $: buttonStore = $api?.buttonStore;
-  $: panelStore = $api?.panelStore;
+  $: buttonStore = $api.buttonStore;
+  $: panelStore = $api.panelStore;
 
   $: isWithinPanel =
-    panelContext === null ? false : panelContext === $api?.panelId;
+    panelContext === null ? false : panelContext === $api.panelId;
 
   function handleClick() {
     if (disabled) return;
@@ -68,7 +68,7 @@
         "aria-expanded": disabled
           ? undefined
           : $api.disclosureState === DisclosureStates.Open,
-        "aria-controls": $panelStore ? $api?.panelId : undefined,
+        "aria-controls": $panelStore ? $api.panelId : undefined,
         disabled: disabled ? true : undefined,
       };
 </script>
@@ -80,8 +80,8 @@
     on:keydown={handleKeyDown}
   >
     <slot
-      open={$api?.disclosureState === DisclosureStates.Open}
-      close={$api?.close}
+      open={$api.disclosureState === DisclosureStates.Open}
+      close={$api.close}
     />
   </button>
 {:else}
@@ -93,8 +93,8 @@
     on:keyup={handleKeyUp}
   >
     <slot
-      open={$api?.disclosureState === DisclosureStates.Open}
-      close={$api?.close}
+      open={$api.disclosureState === DisclosureStates.Open}
+      close={$api.close}
     />
   </button>
 {/if}

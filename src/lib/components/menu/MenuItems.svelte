@@ -12,8 +12,8 @@
   const id = `headlessui-menu-items-${useId()}`;
   let searchDebounce: ReturnType<typeof setTimeout> | null = null;
 
-  $: buttonStore = $api?.buttonStore;
-  $: itemsStore = $api?.itemsStore;
+  $: buttonStore = $api.buttonStore;
+  $: itemsStore = $api.itemsStore;
 
   let openClosedState = useOpenClosed();
 
@@ -24,7 +24,7 @@
 
   $: treeWalker({
     container: $itemsStore,
-    enabled: $api?.menuState === MenuStates.Open,
+    enabled: $api.menuState === MenuStates.Open,
     accept(node) {
       if (node.getAttribute("role") === "menuitem")
         return NodeFilter.FILTER_REJECT;

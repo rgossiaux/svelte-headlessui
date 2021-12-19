@@ -10,8 +10,8 @@
   const api = useMenuContext("MenuButton");
   const id = `headlessui-menu-button-${useId()}`;
 
-  $: buttonStore = $api?.buttonStore;
-  $: itemsStore = $api?.itemsStore;
+  $: buttonStore = $api.buttonStore;
+  $: itemsStore = $api.itemsStore;
   async function handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
       // Ref: https://www.w3.org/TR/wai-aria-practices-1.2/#keyboard-interaction-13
@@ -80,5 +80,5 @@
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}
 >
-  <slot open={$api?.menuState === MenuStates.Open} />
+  <slot open={$api.menuState === MenuStates.Open} />
 </button>

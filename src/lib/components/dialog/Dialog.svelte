@@ -142,7 +142,7 @@
     if (containers.size !== 1) return;
     if (contains(containers, target)) return;
 
-    $api?.close();
+    $api.close();
     await tick();
     target?.focus();
   }
@@ -154,7 +154,7 @@
     if (containers.size > 1) return; // 1 is myself, otherwise other elements in the Stack
     event.preventDefault();
     event.stopPropagation();
-    $api?.close();
+    $api.close();
   }
 
   let mounted = false;
@@ -202,7 +202,7 @@
           entry.boundingClientRect.width === 0 &&
           entry.boundingClientRect.height === 0
         ) {
-          $api?.close();
+          $api.close();
         }
       }
     });

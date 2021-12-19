@@ -65,9 +65,9 @@
     "aria-controls": $optionsRef?.id,
     "aria-expanded": $api.disabled
       ? undefined
-      : $api?.listboxState === ListboxStates.Open,
+      : $api.listboxState === ListboxStates.Open,
     "aria-labelledby": $labelRef ? [$labelRef?.id, id].join(" ") : undefined,
-    disabled: $api?.disabled === true ? true : undefined,
+    disabled: $api.disabled === true ? true : undefined,
   };
 </script>
 

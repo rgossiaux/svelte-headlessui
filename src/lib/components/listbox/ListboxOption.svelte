@@ -11,11 +11,11 @@
   let buttonRef = $api.buttonRef;
 
   $: active =
-    $api?.activeOptionIndex !== null
-      ? $api?.options[$api.activeOptionIndex].id === id
+    $api.activeOptionIndex !== null
+      ? $api.options[$api.activeOptionIndex].id === id
       : false;
 
-  $: selected = $api?.value === value;
+  $: selected = $api.value === value;
   $: dataRef = {
     disabled,
     value,
@@ -33,7 +33,7 @@
   onMount(() => $api.registerOption(id, dataRef));
   onDestroy(() => $api.unregisterOption(id));
 
-  let oldState = $api?.listboxState;
+  let oldState = $api.listboxState;
   let oldSelected = selected;
   let oldActive = active;
   async function updateFocus(
@@ -45,7 +45,7 @@
     await tick();
     if (newState !== oldState || newSelected !== oldSelected) {
       if (newState === ListboxStates.Open && newSelected) {
-        $api?.goToOption(Focus.Specific, id);
+        $api.goToOption(Focus.Specific, id);
       }
     }
     if (newState !== oldState || newActive !== oldActive) {
@@ -57,7 +57,7 @@
     oldSelected = newSelected;
     oldActive = newActive;
   }
-  $: updateFocus($api?.listboxState, selected, active);
+  $: updateFocus($api.listboxState, selected, active);
 
   async function handleClick(event: MouseEvent) {
     if (disabled) return event.preventDefault();
