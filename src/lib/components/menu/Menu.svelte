@@ -5,7 +5,7 @@
   } from "$lib/utils/calculate-active-index";
   import { getContext, setContext } from "svelte";
   import { writable, Writable } from "svelte/store";
-  import { State } from "$lib/internal/open-closed";
+  import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { match } from "$lib/utils/match";
   import { ActionArray, useActions } from "$lib/hooks/use-actions";
   export enum MenuStates {
@@ -149,7 +149,7 @@
   }
 
   let openClosedState: Writable<State> | undefined = writable(State.Closed);
-  setContext("OpenClosed", openClosedState);
+  useOpenClosedProvider(openClosedState);
 
   $: $openClosedState = match(menuState, {
     [MenuStates.Open]: State.Open,

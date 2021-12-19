@@ -9,11 +9,10 @@
 
 <script lang="ts">
   import { useDisclosureContext, DisclosureStates } from "./Disclosure.svelte";
-  import type { Writable } from "svelte/store";
-  import { State } from "$lib/internal/open-closed";
+  import { State, useOpenClosed } from "$lib/internal/open-closed";
   const api = useDisclosureContext("DisclosureButton");
   $: id = $api?.panelId;
-  let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
+  let openClosedState = useOpenClosed();
 
   setContext(DISCLOSURE_PANEL_CONTEXT_NAME, id);
 

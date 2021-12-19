@@ -48,7 +48,7 @@
     isFocusableElement,
     FocusableMode,
   } from "$lib/utils/focus-management";
-  import { State } from "$lib/internal/open-closed";
+  import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import type { PopoverGroupContext } from "./PopoverGroup.svelte";
   import { getContext, setContext, onMount } from "svelte";
   import { writable, Writable } from "svelte/store";
@@ -97,7 +97,7 @@
   setContext(POPOVER_CONTEXT_NAME, api);
 
   let openClosedState: Writable<State> | undefined = writable();
-  setContext("OpenClosed", openClosedState);
+  useOpenClosedProvider(openClosedState);
 
   $: $openClosedState = match(popoverState, {
     [PopoverStates.Open]: State.Open,

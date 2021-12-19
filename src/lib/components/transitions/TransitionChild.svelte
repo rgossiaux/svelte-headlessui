@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable, Writable } from "svelte/store";
   import { match } from "$lib/utils/match";
-  import { State } from "$lib/internal/open-closed";
+  import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { Reason, transition } from "$lib/utils/transition";
 
   import {
@@ -151,7 +151,7 @@
 
   setContext(NESTING_CONTEXT_NAME, nesting);
   let openClosedState: Writable<State> = writable(State.Closed);
-  setContext("OpenClosed", openClosedState);
+  useOpenClosedProvider(openClosedState);
 
   $: openClosedState.set(
     match(state, {

@@ -44,7 +44,7 @@
 <script lang="ts">
   import { useId } from "$lib/hooks/use-id";
   import { match } from "$lib/utils/match";
-  import { State } from "$lib/internal/open-closed";
+  import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   export let defaultOpen = false;
   let buttonId = `headlessui-disclosure-button-${useId()}`;
   let panelId = `headlessui-disclosure-panel-${useId()}`;
@@ -94,7 +94,7 @@
   });
 
   let openClosedState: Writable<State> | undefined = writable();
-  setContext("OpenClosed", openClosedState);
+  useOpenClosedProvider(openClosedState);
 
   $: $openClosedState = match(disclosureState, {
     [DisclosureStates.Open]: State.Open,

@@ -178,6 +178,7 @@
 
   let openClosedState = writable(State.Closed);
   useOpenClosedProvider(openClosedState);
+
   $: openClosedState.set(
     match(listboxState, {
       [ListboxStates.Open]: State.Open,

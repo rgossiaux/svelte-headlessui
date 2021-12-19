@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { Keys } from "$lib/utils/keyboard";
-  import { State } from "$lib/internal/open-closed";
+  import { State, useOpenClosed } from "$lib/internal/open-closed";
   import {
     getFocusableElements,
     Focus,
@@ -19,7 +19,6 @@
     focusIn,
   } from "$lib/utils/focus-management";
   import { getContext, setContext } from "svelte";
-  import type { Writable } from "svelte/store";
   import {
     PopoverStates,
     StateDefinition,
@@ -33,7 +32,7 @@
   let api = usePopoverContext("PopoverPanel");
   setContext(POPOVER_PANEL_CONTEXT_NAME, $api.panelId);
 
-  let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
+  let openClosedState = useOpenClosed();
 
   $: visible =
     openClosedState !== undefined

@@ -4,9 +4,8 @@
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { treeWalker } from "$lib/hooks/use-tree-walker";
-  import { State } from "$lib/internal/open-closed";
-  import { getContext, tick } from "svelte";
-  import type { Writable } from "svelte/store";
+  import { State, useOpenClosed } from "$lib/internal/open-closed";
+  import { tick } from "svelte";
   import { ActionArray, useActions } from "$lib/hooks/use-actions";
   export let use: ActionArray = [];
   const api = useMenuContext("MenuButton");
@@ -16,7 +15,7 @@
   $: buttonStore = $api?.buttonStore;
   $: itemsStore = $api?.itemsStore;
 
-  let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
+  let openClosedState = useOpenClosed();
 
   $: visible =
     openClosedState !== undefined

@@ -40,7 +40,7 @@
 </script>
 
 <script lang="ts">
-  import { State } from "$lib/internal/open-closed";
+  import { State, useOpenClosed } from "$lib/internal/open-closed";
   import { writable, Writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { useId } from "$lib/hooks/use-id";
@@ -61,7 +61,7 @@
   const dispatch = createEventDispatcher();
 
   let containers: Set<HTMLElement> = new Set();
-  let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
+  let openClosedState = useOpenClosed();
 
   $: {
     open =

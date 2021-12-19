@@ -103,11 +103,11 @@
 </script>
 
 <script lang="ts">
-  import { getContext, onDestroy, onMount, setContext } from "svelte";
+  import { getContext, onMount, setContext } from "svelte";
 
   import { writable, Writable } from "svelte/store";
   import { match } from "$lib/utils/match";
-  import { State } from "$lib/internal/open-closed";
+  import { State, useOpenClosed } from "$lib/internal/open-closed";
   import { RenderStrategy } from "$lib/utils/Render.svelte";
   import TransitionChild from "./TransitionChild.svelte";
   import type { useId } from "$lib/hooks/use-id";
@@ -116,7 +116,7 @@
   export let unmount = true;
   export let appear = false;
 
-  let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
+  let openClosedState = useOpenClosed();
 
   function computeShow(
     show: boolean | undefined,

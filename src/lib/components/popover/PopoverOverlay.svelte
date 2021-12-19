@@ -1,15 +1,13 @@
 <script lang="ts">
   import { ActionArray, useActions } from "$lib/hooks/use-actions";
 
-  import { State } from "$lib/internal/open-closed";
-  import { getContext } from "svelte";
-  import type { Writable } from "svelte/store";
+  import { State, useOpenClosed } from "$lib/internal/open-closed";
   import { PopoverStates, usePopoverContext } from "./Popover.svelte";
   export let use: ActionArray = [];
 
   let api = usePopoverContext("PopoverOverlay");
 
-  let openClosedState: Writable<State> | undefined = getContext("OpenClosed");
+  let openClosedState = useOpenClosed();
 
   $: visible =
     openClosedState !== undefined
