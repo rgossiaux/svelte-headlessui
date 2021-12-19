@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   export type PopoverPanelContext = string | null;
 
-  const POPOVER_PANEL_CONTEXT_NAME = "PopoverPanelContext";
+  const POPOVER_PANEL_CONTEXT_NAME = "headlessui-popover-panel-context";
   export function usePopoverPanelContext():
     | StateDefinition["panelId"]
     | undefined {

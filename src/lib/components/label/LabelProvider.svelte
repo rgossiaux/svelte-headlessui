@@ -6,7 +6,7 @@
     labelIds?: string;
   }
 
-  const LABEL_CONTEXT_NAME = "LabelContext";
+  const LABEL_CONTEXT_NAME = "headlessui-label-context";
   export function useLabelContext(): Writable<LabelContext> | undefined {
     return getContext(LABEL_CONTEXT_NAME);
   }

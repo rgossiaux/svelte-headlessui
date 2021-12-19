@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import { getContext, setContext } from "svelte";
-  let DISCLOSURE_PANEL_CONTEXT_NAME = "DisclosurePanelContext";
+  let DISCLOSURE_PANEL_CONTEXT_NAME = "headlessui-disclosure-panel-context";
 
   export function usePanelContext(): string | undefined {
     return getContext(DISCLOSURE_PANEL_CONTEXT_NAME);

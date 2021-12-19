@@ -3,7 +3,7 @@
     switchStore: Writable<HTMLButtonElement | null>;
   }
 
-  const SWITCH_CONTEXT_NAME = "SwitchContext";
+  const SWITCH_CONTEXT_NAME = "headlessui-switch-context";
   export function useSwitchContext(): Writable<StateDefinition> | undefined {
     return getContext(SWITCH_CONTEXT_NAME);
   }

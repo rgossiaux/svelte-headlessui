@@ -26,7 +26,7 @@
     unregisterOption(id: Option["id"]): void;
   }
 
-  const RADIO_GROUP_CONTEXT_NAME = "RadioGroupContext";
+  const RADIO_GROUP_CONTEXT_NAME = "headlessui-radio-group-context";
   export function useRadioGroupContext(
     component: string
   ): Writable<StateDefinition> {

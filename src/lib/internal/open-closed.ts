@@ -6,7 +6,7 @@ export enum State {
   Closed,
 }
 
-const OPEN_CLOSED_CONTEXT_NAME = "OpenClosed";
+const OPEN_CLOSED_CONTEXT_NAME = "headlessui-open-closed-context";
 export function hasOpenClosed() {
   return useOpenClosed() !== undefined;
 }

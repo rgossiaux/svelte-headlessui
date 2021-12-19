@@ -22,7 +22,7 @@
     close(): void;
   }
 
-  const DIALOG_CONTEXT_NAME = "DialogContext";
+  const DIALOG_CONTEXT_NAME = "headlessui-dialog-context";
 
   export function useDialogContext(
     component: string

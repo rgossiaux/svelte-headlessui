@@ -17,8 +17,8 @@
     appear: boolean;
   }
 
-  const TRANSITION_CONTEXT_NAME = "TransitionContext";
-  export const NESTING_CONTEXT_NAME = "NestingContext";
+  const TRANSITION_CONTEXT_NAME = "headlessui-transition-context";
+  export const NESTING_CONTEXT_NAME = "headlessui-nesting-context";
   export function hasTransitionContext() {
     return getContext(TRANSITION_CONTEXT_NAME) !== undefined;
   }

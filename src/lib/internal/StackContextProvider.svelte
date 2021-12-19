@@ -3,6 +3,8 @@
     Add,
     Remove,
   }
+
+  const STACK_CONTEXT_NAME = "headlessui-stack-context";
 </script>
 
 <script lang="ts">
@@ -14,9 +16,9 @@
   export let element: HTMLElement | null;
 
   let parentUpdateStore: Writable<OnUpdate> | undefined =
-    getContext("StackContext");
+    getContext(STACK_CONTEXT_NAME);
   let notifyStore: Writable<OnUpdate> = writable(() => {});
-  setContext("StackContext", notifyStore);
+  setContext(STACK_CONTEXT_NAME, notifyStore);
 
   $: notifyStore.set((...args: Parameters<OnUpdate>) => {
     // Notify our layer

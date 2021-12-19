@@ -25,7 +25,7 @@
     unregisterPanel(panel: string): void;
   };
 
-  const TABS_CONTEXT_NAME = "TabsContext";
+  const TABS_CONTEXT_NAME = "headlessui-tabs-context";
 
   export function useTabsContext(component: string): Writable<StateDefinition> {
     let context: Writable<StateDefinition> | undefined =

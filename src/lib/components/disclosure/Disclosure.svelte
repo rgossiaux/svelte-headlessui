@@ -22,7 +22,7 @@
     close(focusableElement: HTMLElement | HTMLElement | null): void;
   }
 
-  let DISCLOSURE_CONTEXT_NAME = "DisclosureContext";
+  let DISCLOSURE_CONTEXT_NAME = "headlessui-disclosure-context";
 
   export function useDisclosureContext(
     component: string

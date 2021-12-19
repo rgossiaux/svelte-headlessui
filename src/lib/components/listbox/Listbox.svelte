@@ -35,7 +35,7 @@
     select(value: unknown): void;
   };
 
-  const LISTBOX_CONTEXT_NAME = "ListboxContext";
+  const LISTBOX_CONTEXT_NAME = "headlessui-listbox-context";
   export function useListboxContext(
     component: string
   ): Writable<StateDefinition> {

@@ -6,7 +6,7 @@
     closeOthers(buttonId: string): void;
   }
 
-  const POPOVER_GROUP_CONTEXT_NAME = "PopoverGroupContext";
+  const POPOVER_GROUP_CONTEXT_NAME = "headlessui-popover-group-context";
   export function usePopoverGroupContext(): PopoverGroupContext | undefined {
     return getContext(POPOVER_GROUP_CONTEXT_NAME);
   }

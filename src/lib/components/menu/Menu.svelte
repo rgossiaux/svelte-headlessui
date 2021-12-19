@@ -32,7 +32,7 @@
     unregisterItem(id: string): void;
   };
 
-  const MENU_CONTEXT_NAME = "MenuContext";
+  const MENU_CONTEXT_NAME = "headlessui-menu-context";
 
   export function useMenuContext(
     componentName: string

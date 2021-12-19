@@ -25,7 +25,7 @@
     close(): void;
   }
 
-  const POPOVER_CONTEXT_NAME = "PopoverContext";
+  const POPOVER_CONTEXT_NAME = "headlessui-popover-context";
   export function usePopoverContext(
     component: string
   ): Writable<StateDefinition> {

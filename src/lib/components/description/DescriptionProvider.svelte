@@ -6,7 +6,7 @@
     descriptionIds?: string;
   }
 
-  const DESCRIPTION_CONTEXT_NAME = "DescriptionContext";
+  const DESCRIPTION_CONTEXT_NAME = "headlessui-description-context";
   export function useDescriptionContext():
     | Writable<DescriptionContext>
     | undefined {
