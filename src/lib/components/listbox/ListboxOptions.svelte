@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getContext, tick } from "svelte";
+  import { tick } from "svelte";
   import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { match } from "$lib/utils/match";
@@ -9,7 +9,9 @@
 
   let api = useListboxContext("ListboxOptions");
   let id = `headlessui-listbox-options-${useId()}`;
-  let optionsStore: SvelteStore<HTMLUListElement> = getContext("optionsStore");
+  let optionsRef = $api.optionsRef;
+  let buttonRef = $api.buttonRef;
+  let labelRef = $api.labelRef;
 
   let searchDebounce: ReturnType<typeof setTimeout> | null = null;
   async function handleKeyDown(event: KeyboardEvent) {
@@ -34,7 +36,7 @@
         }
         $api.closeListbox();
         await tick();
-        $api.buttonRef?.focus({ preventScroll: true });
+        $buttonRef?.focus({ preventScroll: true });
         break;
 
       case match($api.orientation, {
@@ -70,7 +72,7 @@
         event.stopPropagation();
         $api.closeListbox();
         await tick();
-        $api.buttonRef?.focus({ preventScroll: true });
+        $buttonRef?.focus({ preventScroll: true });
         break;
 
       case Keys.Tab:
@@ -92,7 +94,7 @@
       $api?.activeOptionIndex === null
         ? undefined
         : $api?.options[$api.activeOptionIndex]?.id,
-    "aria-labelledby": $api?.labelRef?.id ?? $api?.buttonRef?.id,
+    "aria-labelledby": $labelRef?.id ?? $buttonRef?.id,
     "aria-orientation": $api?.orientation,
     id,
     role: "listbox",
@@ -108,7 +110,7 @@
 
 {#if visible}
   <ul
-    bind:this={$optionsStore}
+    bind:this={$optionsRef}
     on:keydown={handleKeyDown}
     {...$$restProps}
     {...propsWeControl}

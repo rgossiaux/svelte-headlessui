@@ -8,6 +8,8 @@
   let api = useListboxContext("ListboxOption");
   let id = `headlessui-listbox-option-${useId()}`;
 
+  let buttonRef = $api.buttonRef;
+
   $: active =
     $api?.activeOptionIndex !== null
       ? $api?.options[$api.activeOptionIndex].id === id
@@ -62,7 +64,7 @@
     $api.select(value);
     $api.closeListbox();
     await tick();
-    $api.buttonRef?.focus({ preventScroll: true });
+    $buttonRef?.focus({ preventScroll: true });
   }
 
   function handleFocus() {

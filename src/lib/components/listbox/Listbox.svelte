@@ -15,9 +15,9 @@
     value: any;
     orientation: "vertical" | "horizontal";
 
-    labelRef: HTMLLabelElement | null;
-    buttonRef: HTMLButtonElement | null;
-    optionsRef: HTMLDivElement | null;
+    labelRef: Writable<HTMLLabelElement | null>;
+    buttonRef: Writable<HTMLButtonElement | null>;
+    optionsRef: Writable<HTMLElement | null>;
 
     disabled: boolean;
     options: { id: string; dataRef: ListboxOptionDataRef }[];
@@ -71,15 +71,9 @@
   const dispatch = createEventDispatcher();
 
   let listboxState = ListboxStates.Closed;
-  let labelStore = writable(null);
-  setContext("labelStore", labelStore);
-  $: labelRef = $labelStore;
-
-  let buttonRef: Writable<StateDefinition["buttonRef"]> = writable(null);
-  setContext("buttonStore", buttonRef);
-
-  let optionsRef: Writable<StateDefinition["optionsRef"]> = writable(null);
-  setContext("optionsStore", optionsRef);
+  let labelRef: StateDefinition["labelRef"] = writable(null);
+  let buttonRef: StateDefinition["buttonRef"] = writable(null);
+  let optionsRef: StateDefinition["optionsRef"] = writable(null);
 
   let options: StateDefinition["options"] = [];
   let searchQuery: StateDefinition["searchQuery"] = "";
@@ -87,10 +81,10 @@
 
   let api: Writable<StateDefinition> = writable({
     listboxState,
-    labelRef,
     value,
-    buttonRef: $buttonRef,
-    optionsRef: $optionsRef,
+    labelRef,
+    buttonRef,
+    optionsRef,
     options,
     searchQuery,
     activeOptionIndex,
@@ -190,10 +184,7 @@
     return {
       ...obj,
       listboxState,
-      labelRef,
       value,
-      buttonRef: $buttonRef,
-      optionsRef: $optionsRef,
       options,
       searchQuery,
       activeOptionIndex,

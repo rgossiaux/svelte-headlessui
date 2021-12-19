@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getContext, tick } from "svelte";
+  import { tick } from "svelte";
   import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
@@ -7,7 +7,8 @@
 
   let api = useListboxContext("ListboxButton");
   let id = `headlessui-listbox-button-${useId()}`;
-  let buttonStore: SvelteStore<HTMLButtonElement> = getContext("buttonStore");
+  let buttonRef = $api.buttonRef;
+  let optionsRef = $api.optionsRef;
 
   async function handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
@@ -18,7 +19,7 @@
         event.preventDefault();
         $api.openListbox();
         await tick();
-        $api.optionsRef?.focus({ preventScroll: true });
+        $optionsRef?.focus({ preventScroll: true });
         if (!$api.value) $api.goToOption(Focus.First);
         break;
 
@@ -26,7 +27,7 @@
         event.preventDefault();
         $api.openListbox();
         await tick();
-        $api.optionsRef?.focus({ preventScroll: true });
+        $optionsRef?.focus({ preventScroll: true });
         if (!$api.value) $api.goToOption(Focus.Last);
         break;
     }
@@ -48,20 +49,20 @@
     if ($api.listboxState === ListboxStates.Open) {
       $api.closeListbox();
       await tick();
-      $api.buttonRef?.focus({ preventScroll: true });
+      $buttonRef?.focus({ preventScroll: true });
     } else {
       event.preventDefault();
       $api.openListbox();
       await tick();
-      $api.optionsRef?.focus({ preventScroll: true });
+      $optionsRef?.focus({ preventScroll: true });
     }
   }
 
   $: propsWeControl = {
     id,
     "aria-haspopup": true,
-    "aria-controls": $api?.optionsRef?.id,
-    "aria-expanded": $api?.disabled
+    "aria-controls": $optionsRef?.id,
+    "aria-expanded": $api.disabled
       ? undefined
       : $api?.listboxState === ListboxStates.Open,
     "aria-labelledby": $api?.labelRef
@@ -74,7 +75,7 @@
 <button
   {...$$restProps}
   {...propsWeControl}
-  bind:this={$buttonStore}
+  bind:this={$buttonRef}
   on:click={handleClick}
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}
