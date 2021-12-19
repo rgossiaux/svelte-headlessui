@@ -11,9 +11,9 @@
     );
   }
 
-  onMount(() => $contextStore.register(id));
+  onMount(() => $contextStore!.register(id));
 
-  let allProps = { ...$$restProps, ...$contextStore.props, id };
+  let allProps = { ...$$restProps, ...$contextStore!.props, id } as any;
   if (passive) delete allProps["onClick"];
 </script>
 

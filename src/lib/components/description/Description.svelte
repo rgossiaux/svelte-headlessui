@@ -10,7 +10,7 @@
     );
   }
 
-  onMount(() => $contextStore.register(id));
+  onMount(() => $contextStore?.register(id));
 </script>
 
 <p {...$$restProps} {...$contextStore?.props} {id}>

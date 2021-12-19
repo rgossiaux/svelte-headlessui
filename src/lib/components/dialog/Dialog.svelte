@@ -66,7 +66,7 @@
   $: {
     open =
       open === undefined && openClosedState !== undefined
-        ? match($openClosedState, {
+        ? match($openClosedState!, {
             [State.Open]: true,
             [State.Closed]: false,
           })
