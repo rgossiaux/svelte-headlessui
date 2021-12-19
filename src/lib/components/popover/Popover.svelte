@@ -6,9 +6,9 @@
   export interface StateDefinition {
     // State
     popoverState: PopoverStates;
-    button: HTMLElement | null;
+    button: Writable<HTMLElement | null>;
     buttonId: string;
-    panel: HTMLElement | null;
+    panel: Writable<HTMLElement | null>;
     panelId: string;
 
     // State mutators
@@ -49,7 +49,7 @@
     FocusableMode,
   } from "$lib/utils/focus-management";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
-  import type { PopoverGroupContext } from "./PopoverGroup.svelte";
+  import { usePopoverGroupContext } from "./PopoverGroup.svelte";
   import { getContext, setContext, onMount } from "svelte";
   import { writable, Writable } from "svelte/store";
   import { ActionArray, useActions } from "$lib/hooks/use-actions";
@@ -59,18 +59,15 @@
 
   let popoverState: PopoverStates = PopoverStates.Closed;
 
-  let panel: Writable<StateDefinition["panel"]> = writable(null);
-  setContext("PopoverPanelRef", panel);
-
-  let button: Writable<StateDefinition["button"]> = writable(null);
-  setContext("PopoverButtonRef", button);
+  let panel: StateDefinition["panel"] = writable(null);
+  let button: StateDefinition["button"] = writable(null);
 
   let api: Writable<StateDefinition> = writable({
     popoverState,
     buttonId,
     panelId,
-    panel: $panel,
-    button: $button,
+    panel,
+    button,
     togglePopover() {
       popoverState = match(popoverState, {
         [PopoverStates.Open]: PopoverStates.Closed,
@@ -85,10 +82,10 @@
       $api.closePopover();
 
       let restoreElement = (() => {
-        if (!focusableElement) return $api.button;
+        if (!focusableElement) return $button;
         if (focusableElement instanceof HTMLElement) return focusableElement;
 
-        return $api.button;
+        return $button;
       })();
 
       restoreElement?.focus();
@@ -108,10 +105,6 @@
     return {
       ...obj,
       popoverState,
-      buttonId,
-      panelId,
-      panel: $panel,
-      button: $button,
     };
   });
 
@@ -123,8 +116,7 @@
     },
   };
 
-  const groupContext: PopoverGroupContext | undefined =
-    getContext("PopoverGroup");
+  const groupContext = usePopoverGroupContext();
   const registerPopover = groupContext?.registerPopover;
 
   function isFocusWithinPopoverGroup() {

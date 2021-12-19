@@ -26,11 +26,13 @@
   } from "./Popover.svelte";
   import { ActionArray, useActions } from "$lib/hooks/use-actions";
   export let use: ActionArray = [];
-  let panelStore: SvelteStore<HTMLDivElement> = getContext("PopoverPanelRef");
   export let focus = false;
 
   let api = usePopoverContext("PopoverPanel");
   setContext(POPOVER_PANEL_CONTEXT_NAME, $api.panelId);
+
+  let panelStore = $api.panel;
+  let apiButton = $api.button;
 
   let openClosedState = useOpenClosed();
 
@@ -42,21 +44,21 @@
   $: (() => {
     if (!focus) return;
     if ($api.popoverState !== PopoverStates.Open) return;
-    if (!$api.panel) return;
+    if (!$panelStore) return;
 
     let activeElement = document.activeElement as HTMLElement;
-    if ($api.panel?.contains(activeElement)) return; // Already focused within Dialog
+    if ($panelStore.contains(activeElement)) return; // Already focused within Dialog
 
-    focusIn($api.panel!, Focus.First);
+    focusIn($panelStore, Focus.First);
   })();
 
   function handleWindowKeydown(event: KeyboardEvent) {
     if ($api.popoverState !== PopoverStates.Open) return;
-    if (!$api.panel) return;
+    if (!$panelStore) return;
 
     if (event.key !== Keys.Tab) return;
     if (!document.activeElement) return;
-    if (!$api.panel?.contains(document.activeElement)) return;
+    if (!$panelStore?.contains(document.activeElement)) return;
 
     // We will take-over the default tab behaviour so that we have a bit
     // control over what is focused next. It will behave exactly the same,
@@ -65,21 +67,21 @@
     event.preventDefault();
 
     let result = focusIn(
-      $api.panel!,
+      $panelStore,
       event.shiftKey ? Focus.Previous : Focus.Next
     );
 
     if (result === FocusResult.Underflow) {
-      return $api.button?.focus();
+      return $apiButton?.focus();
     } else if (result === FocusResult.Overflow) {
-      if (!$api.button) return;
+      if (!$apiButton) return;
 
       let elements = getFocusableElements();
-      let buttonIdx = elements.indexOf($api.button!);
+      let buttonIdx = elements.indexOf($apiButton!);
 
       let nextElements = elements
         .splice(buttonIdx + 1) // Elements after button
-        .filter((element) => !$api.panel?.contains(element)); // Ignore items in panel
+        .filter((element) => !$panelStore?.contains(element)); // Ignore items in panel
 
       // Try to focus the next element, however it could fail if we are in a
       // Portal that happens to be the very last one in the DOM. In that
@@ -95,8 +97,8 @@
   function handleFocus() {
     if (!focus) return;
     if ($api.popoverState !== PopoverStates.Open) return;
-    if (!$api.panel) return;
-    if ($api.panel?.contains(document.activeElement as HTMLElement)) return;
+    if (!$panelStore) return;
+    if ($panelStore.contains(document.activeElement as HTMLElement)) return;
     $api.closePopover();
   }
 
@@ -104,12 +106,12 @@
     switch (event.key) {
       case Keys.Escape:
         if ($api.popoverState !== PopoverStates.Open) return;
-        if (!$api.panel) return;
-        if (!$api.panel?.contains(document.activeElement)) return;
+        if (!$panelStore) return;
+        if (!$panelStore.contains(document.activeElement)) return;
         event.preventDefault();
         event.stopPropagation();
         $api.closePopover();
-        $api.button?.focus();
+        $apiButton?.focus();
         break;
     }
   }
