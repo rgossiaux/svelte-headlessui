@@ -1,5 +1,5 @@
 import { getContext, setContext } from "svelte";
-import type { Writable } from "svelte/store";
+import type { Readable, Writable } from "svelte/store";
 
 export enum State {
   Open,
@@ -11,7 +11,7 @@ export function hasOpenClosed() {
   return useOpenClosed() !== undefined;
 }
 
-export function useOpenClosed(): Writable<State> | undefined {
+export function useOpenClosed(): Readable<State> | undefined {
   return getContext(OPEN_CLOSED_CONTEXT_NAME);
 }
 

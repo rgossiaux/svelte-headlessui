@@ -1,18 +1,15 @@
 <script lang="ts">
   import { useSwitchContext } from "./SwitchGroup.svelte";
-  import type { LabelContext } from "$lib/components/label/LabelProvider.svelte";
+  import { useLabelContext } from "$lib/components/label/LabelProvider.svelte";
   import { useDescriptionContext } from "$lib/components/description/DescriptionProvider.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
-  import { getContext, createEventDispatcher } from "svelte";
-  import type { Writable } from "svelte/store";
+  import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
   export let checked = false;
   let api = useSwitchContext();
-  let labelContext: Writable<LabelContext> | undefined = getContext(
-    "headlessui-label-context"
-  );
+  let labelContext = useLabelContext();
   let descriptionContext = useDescriptionContext();
   let id = `headlessui-switch-${useId()}`;
   $: switchStore = $api?.switchStore;

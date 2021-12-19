@@ -39,8 +39,7 @@
 
   let isTransitioning = false;
 
-  let nesting: Writable<NestingContextValues> = writable();
-  nesting.set(
+  let nesting: Writable<NestingContextValues> = writable(
     useNesting(() => {
       // When all children have been unmounted we can only hide ourselves if and only if we are not
       // transitioning ourselves. Otherwise we would unmount before the transitions are finished.

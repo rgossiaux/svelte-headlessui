@@ -9,13 +9,13 @@
 
 <script lang="ts">
   import { getContext, onDestroy, setContext } from "svelte";
-  import { writable, Writable } from "svelte/store";
+  import { Readable, writable, Writable } from "svelte/store";
   type OnUpdate = (message: StackMessage, element: HTMLElement) => void;
 
   export let onUpdate: OnUpdate | undefined;
   export let element: HTMLElement | null;
 
-  let parentUpdateStore: Writable<OnUpdate> | undefined =
+  let parentUpdateStore: Readable<OnUpdate> | undefined =
     getContext(STACK_CONTEXT_NAME);
   let notifyStore: Writable<OnUpdate> = writable(() => {});
   setContext(STACK_CONTEXT_NAME, notifyStore);

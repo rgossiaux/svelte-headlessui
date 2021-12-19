@@ -26,7 +26,7 @@
 
   export function useDialogContext(
     component: string
-  ): Writable<StateDefinition> {
+  ): Readable<StateDefinition> {
     let context = getContext(DIALOG_CONTEXT_NAME) as
       | Writable<StateDefinition>
       | undefined;
@@ -41,7 +41,7 @@
 
 <script lang="ts">
   import { State, useOpenClosed } from "$lib/internal/open-closed";
-  import { writable, Writable } from "svelte/store";
+  import { Readable, writable, Writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { useId } from "$lib/hooks/use-id";
   import { useInertOthers } from "$lib/hooks/use-inert-others";

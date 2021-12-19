@@ -8,7 +8,7 @@
 
   const DESCRIPTION_CONTEXT_NAME = "headlessui-description-context";
   export function useDescriptionContext():
-    | Writable<DescriptionContext>
+    | Readable<DescriptionContext>
     | undefined {
     return getContext(DESCRIPTION_CONTEXT_NAME);
   }
@@ -16,7 +16,7 @@
 
 <script lang="ts">
   import { getContext, setContext } from "svelte";
-  import { writable, Writable } from "svelte/store";
+  import { Readable, writable, Writable } from "svelte/store";
   export let name: string;
   let descriptionIds: string[] = [];
   let contextStore: Writable<DescriptionContext> = writable({

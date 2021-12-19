@@ -28,7 +28,7 @@
   const POPOVER_CONTEXT_NAME = "headlessui-popover-context";
   export function usePopoverContext(
     component: string
-  ): Writable<StateDefinition> {
+  ): Readable<StateDefinition> {
     let context = getContext(POPOVER_CONTEXT_NAME) as
       | Writable<StateDefinition>
       | undefined;
@@ -51,7 +51,7 @@
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { usePopoverGroupContext } from "./PopoverGroup.svelte";
   import { getContext, setContext, onMount } from "svelte";
-  import { writable, Writable } from "svelte/store";
+  import { Readable, writable, Writable } from "svelte/store";
   import { ActionArray, useActions } from "$lib/hooks/use-actions";
 
   export let use: ActionArray = [];
@@ -93,7 +93,7 @@
   });
   setContext(POPOVER_CONTEXT_NAME, api);
 
-  let openClosedState: Writable<State> | undefined = writable();
+  let openClosedState: Writable<State> = writable(State.Closed);
   useOpenClosedProvider(openClosedState);
 
   $: $openClosedState = match(popoverState, {

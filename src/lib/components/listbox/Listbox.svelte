@@ -38,7 +38,7 @@
   const LISTBOX_CONTEXT_NAME = "headlessui-listbox-context";
   export function useListboxContext(
     component: string
-  ): Writable<StateDefinition> {
+  ): Readable<StateDefinition> {
     let context: Writable<StateDefinition> | undefined =
       getContext(LISTBOX_CONTEXT_NAME);
 
@@ -58,7 +58,7 @@
     calculateActiveIndex,
   } from "$lib/utils/calculate-active-index";
   import { createEventDispatcher, getContext, setContext } from "svelte";
-  import { writable, Writable } from "svelte/store";
+  import { Readable, writable, Writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   export let disabled = false;

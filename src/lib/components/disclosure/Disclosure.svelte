@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import { writable, Writable } from "svelte/store";
+  import { Readable, writable, Writable } from "svelte/store";
   import { getContext, setContext } from "svelte";
   export enum DisclosureStates {
     Open,
@@ -26,7 +26,7 @@
 
   export function useDisclosureContext(
     component: string
-  ): Writable<StateDefinition> {
+  ): Readable<StateDefinition> {
     let context: Writable<StateDefinition> | undefined = getContext(
       DISCLOSURE_CONTEXT_NAME
     );
@@ -93,13 +93,20 @@
     };
   });
 
-  let openClosedState: Writable<State> | undefined = writable();
+  function computeOpenClosedState(disclosureState: DisclosureStates) {
+    return match(disclosureState, {
+      [DisclosureStates.Open]: State.Open,
+      [DisclosureStates.Closed]: State.Closed,
+    });
+  }
+
+  let openClosedState: Writable<State> = writable(
+    computeOpenClosedState(disclosureState)
+  );
+
   useOpenClosedProvider(openClosedState);
 
-  $: $openClosedState = match(disclosureState, {
-    [DisclosureStates.Open]: State.Open,
-    [DisclosureStates.Closed]: State.Closed,
-  });
+  $: $openClosedState = computeOpenClosedState(disclosureState);
 </script>
 
 <div {...$$restProps}>

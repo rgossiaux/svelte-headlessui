@@ -2,7 +2,7 @@
   import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
   import LabelProvider from "$lib/components/label/LabelProvider.svelte";
   import { createEventDispatcher, getContext, setContext } from "svelte";
-  import { Writable, writable } from "svelte/store";
+  import { Readable, Writable, writable } from "svelte/store";
   import { Focus, focusIn, FocusResult } from "$lib/utils/focus-management";
   import { Keys } from "$lib/utils/keyboard";
   import { useId } from "$lib/hooks/use-id";
@@ -29,7 +29,7 @@
   const RADIO_GROUP_CONTEXT_NAME = "headlessui-radio-group-context";
   export function useRadioGroupContext(
     component: string
-  ): Writable<StateDefinition> {
+  ): Readable<StateDefinition> {
     const context = getContext(RADIO_GROUP_CONTEXT_NAME) as
       | Writable<StateDefinition>
       | undefined;

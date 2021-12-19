@@ -7,8 +7,6 @@
     ListboxOptions,
   } from "$lib";
 
-  import { onMount } from "svelte";
-
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }

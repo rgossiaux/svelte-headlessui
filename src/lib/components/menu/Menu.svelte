@@ -4,7 +4,7 @@
     calculateActiveIndex,
   } from "$lib/utils/calculate-active-index";
   import { getContext, setContext } from "svelte";
-  import { writable, Writable } from "svelte/store";
+  import { Readable, writable, Writable } from "svelte/store";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { match } from "$lib/utils/match";
   import { ActionArray, useActions } from "$lib/hooks/use-actions";
@@ -36,7 +36,7 @@
 
   export function useMenuContext(
     componentName: string
-  ): Writable<StateDefinition> {
+  ): Readable<StateDefinition> {
     let context: Writable<StateDefinition> | undefined =
       getContext(MENU_CONTEXT_NAME);
 

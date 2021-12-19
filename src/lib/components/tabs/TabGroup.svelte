@@ -6,7 +6,7 @@
     setContext,
   } from "svelte";
 
-  import { writable, Writable } from "svelte/store";
+  import { Readable, writable, Writable } from "svelte/store";
 
   export type StateDefinition = {
     // State
@@ -27,7 +27,7 @@
 
   const TABS_CONTEXT_NAME = "headlessui-tabs-context";
 
-  export function useTabsContext(component: string): Writable<StateDefinition> {
+  export function useTabsContext(component: string): Readable<StateDefinition> {
     let context: Writable<StateDefinition> | undefined =
       getContext(TABS_CONTEXT_NAME);
 

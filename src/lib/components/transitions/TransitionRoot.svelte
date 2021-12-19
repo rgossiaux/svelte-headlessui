@@ -22,7 +22,7 @@
   export function hasTransitionContext() {
     return getContext(TRANSITION_CONTEXT_NAME) !== undefined;
   }
-  export function useTransitionContext(): Writable<TransitionContextValues> {
+  export function useTransitionContext(): Readable<TransitionContextValues> {
     let context = getContext(TRANSITION_CONTEXT_NAME) as
       | Writable<TransitionContextValues>
       | undefined;
@@ -35,7 +35,7 @@
     return context;
   }
 
-  export function useParentNesting(): Writable<NestingContextValues> {
+  export function useParentNesting(): Readable<NestingContextValues> {
     let context = getContext(NESTING_CONTEXT_NAME) as
       | Writable<NestingContextValues>
       | undefined;
@@ -105,7 +105,7 @@
 <script lang="ts">
   import { getContext, onMount, setContext } from "svelte";
 
-  import { writable, Writable } from "svelte/store";
+  import { Readable, writable, Writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
   import { RenderStrategy } from "$lib/utils/Render.svelte";
@@ -149,8 +149,7 @@
   }
   let state = shouldShow ? TreeStates.Visible : TreeStates.Hidden;
 
-  let nestingBag: Writable<NestingContextValues> = writable();
-  nestingBag.set(
+  let nestingBag: Writable<NestingContextValues> = writable(
     useNesting(() => {
       state = TreeStates.Hidden;
     })
