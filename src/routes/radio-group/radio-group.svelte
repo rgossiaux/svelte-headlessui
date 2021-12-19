@@ -20,15 +20,12 @@
       description: "You are the only one able to access this project",
     },
   ];
-  let active;
+  let active: typeof access[number];
 </script>
 
 <div class="p-12 max-w-xl">
   <a href="/">Link before</a>
-  <RadioGroup
-    value={active}
-    on:updateValue={(event) => (active = event.detail)}
-  >
+  <RadioGroup value={active} on:change={(event) => (active = event.detail)}>
     <fieldset class="space-y-4">
       <legend>
         <h2 class="text-xl">Privacy setting</h2>

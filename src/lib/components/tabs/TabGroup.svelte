@@ -61,7 +61,7 @@
     setSelectedIndex(index: number) {
       if (selectedIndex === index) return;
       selectedIndex = index;
-      dispatch("updateValue", index);
+      dispatch("change", index);
     },
     registerTab(tab: typeof tabs[number]) {
       if (!tabs.includes(tab)) tabs = [...tabs, tab];

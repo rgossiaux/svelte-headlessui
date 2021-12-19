@@ -33,7 +33,7 @@
     <Switch
       as="button"
       checked={manual}
-      on:updateValue={(event) => (manual = event.detail)}
+      on:change={(event) => (manual = event.detail)}
       class={({ checked }) =>
         classNames(
           "relative inline-flex flex-shrink-0 h-6 border-2 border-transparent rounded-full cursor-pointer w-11 focus:outline-none focus:shadow-outline transition-colors ease-in-out duration-200",

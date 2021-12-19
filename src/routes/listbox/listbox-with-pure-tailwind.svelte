@@ -7,8 +7,6 @@
     ListboxOptions,
   } from "$lib";
 
-  import { onMount } from "svelte";
-
   function classNames(
     ...classes: (false | null | undefined | string)[]
   ): string {
@@ -36,8 +34,8 @@
     <div class="space-y-1">
       <Listbox
         value={active}
-        on:updateValue={(event) => {
-          active = event.detail.value;
+        on:change={(event) => {
+          active = event.detail;
         }}
       >
         <ListboxLabel class="block text-sm font-medium leading-5 text-gray-700">

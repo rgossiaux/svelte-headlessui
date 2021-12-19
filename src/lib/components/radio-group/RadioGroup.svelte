@@ -70,7 +70,7 @@
         (option) => option.propsRef.value === nextValue
       )?.propsRef;
       if (nextOption?.disabled) return false;
-      dispatch("updateValue", nextValue);
+      dispatch("change", nextValue);
       return true;
     },
     registerOption(action: Option) {

@@ -164,7 +164,7 @@
     },
     select(value: unknown) {
       if (disabled) return;
-      dispatch("updateValue", { value });
+      dispatch("change", value);
     },
   });
   setContext(LISTBOX_CONTEXT_NAME, api);

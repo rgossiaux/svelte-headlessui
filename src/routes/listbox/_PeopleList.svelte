@@ -36,9 +36,9 @@
   <div class="space-y-1">
     <Listbox
       value={active}
-      on:updateValue={(event) => {
-        console.log("value:", event.detail.value);
-        active = event.detail.value;
+      on:change={(event) => {
+        console.log("value:", event.detail);
+        active = event.detail;
       }}
     >
       <ListboxLabel class="block text-sm font-medium leading-5 text-gray-700">

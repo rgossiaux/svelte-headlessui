@@ -18,7 +18,7 @@
   $: switchStore = $api?.switchStore;
 
   function toggle() {
-    dispatch("updateValue", !checked);
+    dispatch("change", !checked);
   }
 
   function handleClick(event: MouseEvent) {
