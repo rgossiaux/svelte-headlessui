@@ -4,15 +4,23 @@
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { tick } from "svelte";
-  import { ActionArray, useActions } from "$lib/hooks/use-actions";
-  export let use: ActionArray = [];
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+  export let as: SupportedAs = "button";
+  export let use: HTMLActionArray = [];
+
   export let disabled = false;
   const api = useMenuContext("MenuButton");
   const id = `headlessui-menu-button-${useId()}`;
 
   $: buttonStore = $api.buttonStore;
   $: itemsStore = $api.itemsStore;
-  async function handleKeyDown(event: KeyboardEvent) {
+  async function handleKeyDown(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     switch (event.key) {
       // Ref: https://www.w3.org/TR/wai-aria-practices-1.2/#keyboard-interaction-13
 
@@ -38,7 +46,8 @@
     }
   }
 
-  function handleKeyUp(event: KeyboardEvent) {
+  function handleKeyUp(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     switch (event.key) {
       case Keys.Space:
         // Required for firefox, event.preventDefault() in handleKeyDown for
@@ -49,7 +58,8 @@
     }
   }
 
-  async function handleClick(event: MouseEvent) {
+  async function handleClick(e: CustomEvent) {
+    let event = e as any as MouseEvent;
     if (disabled) return;
     if ($api.menuState === MenuStates.Open) {
       $api.closeMenu();
@@ -70,15 +80,20 @@
     "aria-controls": $itemsStore?.id,
     "aria-expanded": disabled ? undefined : $api.menuState === MenuStates.Open,
   };
+
+  $: slot = { open: $api.menuState === MenuStates.Open };
 </script>
 
-<button
+<Render
   {...{ ...$$restProps, ...propsWeControl }}
-  bind:this={$buttonStore}
-  use:useActions={use}
+  {as}
+  {slot}
+  use={[...use, forwardEvents]}
+  name={"MenuButton"}
+  bind:el={$buttonStore}
   on:click={handleClick}
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}
 >
-  <slot open={$api.menuState === MenuStates.Open} />
-</button>
+  <slot {...slot} />
+</Render>

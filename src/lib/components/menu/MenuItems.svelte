@@ -6,8 +6,15 @@
   import { treeWalker } from "$lib/hooks/use-tree-walker";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
   import { tick } from "svelte";
-  import { ActionArray, useActions } from "$lib/hooks/use-actions";
-  export let use: ActionArray = [];
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import Render from "$lib/utils/Render.svelte";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
   const api = useMenuContext("MenuButton");
   const id = `headlessui-menu-items-${useId()}`;
   let searchDebounce: ReturnType<typeof setTimeout> | null = null;
@@ -36,8 +43,9 @@
     },
   });
 
-  async function handleKeyDown(event: KeyboardEvent) {
+  async function handleKeyDown(e: CustomEvent) {
     if (searchDebounce) clearTimeout(searchDebounce);
+    let event = e as any as KeyboardEvent;
 
     switch (event.key) {
       // Ref: https://www.w3.org/TR/wai-aria-practices-1.2/#keyboard-interaction-12
@@ -105,7 +113,8 @@
     }
   }
 
-  function handleKeyUp(event: KeyboardEvent) {
+  function handleKeyUp(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     switch (event.key) {
       case Keys.Space:
         // Required for firefox, event.preventDefault() in handleKeyDown for
@@ -126,16 +135,20 @@
     role: "menu",
     tabIndex: 0,
   };
+  $: slot = { open: $api.menuState === MenuStates.Open };
 </script>
 
 {#if visible}
-  <div
+  <Render
     {...{ ...$$restProps, ...propsWeControl }}
-    bind:this={$itemsStore}
-    use:useActions={use}
+    {as}
+    {slot}
+    use={[...use, forwardEvents]}
+    bind:el={$itemsStore}
+    name={"MenuItems"}
     on:keydown={handleKeyDown}
     on:keyup={handleKeyUp}
   >
-    <slot open={$api.menuState === MenuStates.Open} />
-  </div>
+    <slot {...slot} />
+  </Render>
 {/if}

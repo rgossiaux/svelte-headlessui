@@ -7,7 +7,12 @@
   import { Readable, writable, Writable } from "svelte/store";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { match } from "$lib/utils/match";
-  import { ActionArray, useActions } from "$lib/hooks/use-actions";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import Render from "$lib/utils/Render.svelte";
+
   export enum MenuStates {
     Open,
     Closed,
@@ -50,7 +55,9 @@
 </script>
 
 <script lang="ts">
-  export let use: ActionArray = [];
+  export let use: HTMLActionArray = [];
+  export let as: SupportedAs = "div";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
   let menuState: StateDefinition["menuState"] = MenuStates.Closed;
   let buttonStore: StateDefinition["buttonStore"] = writable(null);
   let itemsStore: StateDefinition["itemsStore"] = writable(null);
@@ -158,6 +165,6 @@
 </script>
 
 <svelte:window on:mousedown={handleWindowMousedown} />
-<div use:useActions={use} {...$$restProps}>
+<Render {...$$restProps} use={[...use, forwardEvents]} {as} name={"Menu"}>
   <slot />
-</div>
+</Render>

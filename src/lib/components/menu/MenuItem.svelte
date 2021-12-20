@@ -3,8 +3,14 @@
   import { useId } from "$lib/hooks/use-id";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { afterUpdate, onDestroy, onMount, tick } from "svelte";
-  import { ActionArray, useActions } from "$lib/hooks/use-actions";
-  export let use: ActionArray = [];
+  import Render from "$lib/utils/Render.svelte";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+  export let as: SupportedAs = "a";
+  export let use: HTMLActionArray = [];
   export let disabled = false;
   const api = useMenuContext("MenuItem");
   const id = `headlessui-menu-item-${useId()}`;
@@ -16,7 +22,7 @@
 
   $: buttonStore = $api.buttonStore;
 
-  let elementRef: HTMLDivElement | undefined;
+  let elementRef: HTMLElement | undefined;
   $: textValue = elementRef?.textContent?.toLowerCase().trim();
   $: data = { disabled, textValue } as MenuItemData;
 
@@ -36,7 +42,7 @@
     elementRef?.scrollIntoView?.({ block: "nearest" });
   });
 
-  async function handleClick(event: MouseEvent) {
+  async function handleClick(event: CustomEvent) {
     if (disabled) return event.preventDefault();
     $api.closeMenu();
     $buttonStore?.focus({ preventScroll: true });
@@ -65,12 +71,17 @@
     tabIndex: disabled === true ? undefined : -1,
     "aria-disabled": disabled === true ? true : undefined,
   };
+
+  $: slot = { active, disabled };
 </script>
 
-<div
+<Render
   {...{ ...$$restProps, ...propsWeControl }}
-  bind:this={elementRef}
-  use:useActions={use}
+  use={[...use, forwardEvents]}
+  {as}
+  {slot}
+  name={"MenuItem"}
+  bind:el={elementRef}
   on:click={handleClick}
   on:focus={handleFocus}
   on:pointermove={handleMove}
@@ -78,5 +89,5 @@
   on:pointerleave={handleLeave}
   on:mouseleave={handleLeave}
 >
-  <slot {active} {disabled} />
-</div>
+  <slot {...slot} />
+</Render>
