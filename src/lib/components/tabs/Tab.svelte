@@ -3,9 +3,17 @@
   import { Focus, focusIn } from "$lib/utils/focus-management";
   import { Keys } from "$lib/utils/keyboard";
   import { match } from "$lib/utils/match";
-
   import { useTabsContext } from "./TabGroup.svelte";
   import { useId } from "$lib/hooks/use-id";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  export let as: SupportedAs = "button";
+  export let use: HTMLActionArray = [];
 
   export let disabled = false;
 
@@ -21,7 +29,8 @@
   $: myIndex = $api.tabs.indexOf(tabRef);
   $: selected = myIndex === $api.selectedIndex;
 
-  function handleKeyDown(event: KeyboardEvent) {
+  function handleKeyDown(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     let list = $api.tabs.filter(Boolean) as HTMLElement[];
 
     if (event.key === Keys.Space || event.key === Keys.Enter) {
@@ -86,22 +95,19 @@
     disabled: disabled ? true : undefined,
   };
 
-  $: classStyle = $$props.class
-    ? typeof $$props.class === "function"
-      ? $$props.class({
-          selected,
-        })
-      : $$props.class
-    : "";
+  $: slotProps = { selected };
 </script>
 
-<button
+<Render
   {...{ ...$$restProps, ...propsWeControl }}
-  bind:this={tabRef}
-  class={classStyle}
+  {as}
+  {slotProps}
+  use={[...use, forwardEvents]}
+  name={"Tab"}
+  bind:el={tabRef}
   on:keydown={handleKeyDown}
   on:click={handleSelection}
   on:focus={$api.activation === "manual" ? handleFocus : handleSelection}
 >
-  <slot {selected} />
-</button>
+  <slot {...slotProps} />
+</Render>

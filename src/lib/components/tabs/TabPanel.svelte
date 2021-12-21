@@ -2,6 +2,15 @@
   import { onMount } from "svelte";
   import { useTabsContext } from "./TabGroup.svelte";
   import { useId } from "$lib/hooks/use-id";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
 
   let api = useTabsContext("TabPanel");
   let id = `headlessui-tabs-panel-${useId()}`;
@@ -23,7 +32,12 @@
 </script>
 
 {#if selected}
-  <div {...{ ...$$restProps, ...propsWeControl }}>
+  <Render
+    {...{ ...$$restProps, ...propsWeControl }}
+    {as}
+    use={[...use, forwardEvents]}
+    name={"TabPanel"}
+  >
     <slot />
-  </div>
+  </Render>
 {/if}

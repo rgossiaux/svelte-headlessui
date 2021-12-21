@@ -1,13 +1,4 @@
 <script lang="ts" context="module">
-  import {
-    createEventDispatcher,
-    getContext,
-    onMount,
-    setContext,
-  } from "svelte";
-
-  import { Readable, writable, Writable } from "svelte/store";
-
   export type StateDefinition = {
     // State
     selectedIndex: number | null;
@@ -42,6 +33,25 @@
 </script>
 
 <script lang="ts">
+  import {
+    createEventDispatcher,
+    getContext,
+    onMount,
+    setContext,
+  } from "svelte";
+
+  import { Readable, writable, Writable } from "svelte/store";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "change",
+  ]);
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
   export let defaultIndex = 0;
   export let vertical = false;
   export let manual = false;
@@ -120,8 +130,16 @@
       selectedIndex = tabs.indexOf(next);
     }
   });
+
+  $: slotProps = { selectedIndex };
 </script>
 
-<div {...$$restProps}>
-  <slot {selectedIndex} />
-</div>
+<Render
+  {...$$restProps}
+  {as}
+  {slotProps}
+  use={[...use, forwardEvents]}
+  name={"TabGroup"}
+>
+  <slot {...slotProps} />
+</Render>
