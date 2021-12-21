@@ -5,6 +5,16 @@
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
   import { createEventDispatcher } from "svelte";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "change",
+  ]);
+  export let as: SupportedAs = "button";
+  export let use: HTMLActionArray = [];
 
   const dispatch = createEventDispatcher();
   export let checked = false;
@@ -18,18 +28,21 @@
     dispatch("change", !checked);
   }
 
-  function handleClick(event: MouseEvent) {
+  function handleClick(e: CustomEvent) {
+    let event = e as any as MouseEvent;
     event.preventDefault();
     toggle();
   }
 
-  function handleKeyUp(event: KeyboardEvent) {
+  function handleKeyUp(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     if (event.key !== Keys.Tab) event.preventDefault();
     if (event.key === Keys.Space) toggle();
   }
 
   // This is needed so that we can "cancel" the click event when we use the `Enter` key on a button.
-  function handleKeyPress(event: KeyboardEvent) {
+  function handleKeyPress(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     event.preventDefault();
   }
 
@@ -42,34 +55,36 @@
     "aria-describedby": $descriptionContext?.descriptionIds,
   };
 
-  $: classStyle = $$props.class
-    ? typeof $$props.class === "function"
-      ? $$props.class({
-          checked,
-        })
-      : $$props.class
-    : "";
+  $: slot = { checked };
 </script>
 
+<!-- TODO: I'm sure there's a better way of doing this -->
 {#if switchStore}
-  <button
+  <Render
     {...{ ...$$restProps, ...propsWeControl }}
-    bind:this={$switchStore}
-    class={classStyle}
+    {as}
+    {slot}
+    use={[...use, forwardEvents]}
+    name={"Switch"}
+    bind:el={$switchStore}
     on:click={handleClick}
     on:keyup={handleKeyUp}
     on:keypress={handleKeyPress}
   >
-    <slot {checked} />
-  </button>
+    <slot {...slot} />
+  </Render>
 {:else}
-  <button
+  <Render
     {...{ ...$$restProps, ...propsWeControl }}
-    class={classStyle}
+    {as}
+    {slot}
+    use={[...use, forwardEvents]}
+    name={"Switch"}
+    bind:el={$switchStore}
     on:click={handleClick}
     on:keyup={handleKeyUp}
     on:keypress={handleKeyPress}
   >
-    <slot {checked} />
-  </button>
+    <slot {...slot} />
+  </Render>
 {/if}
