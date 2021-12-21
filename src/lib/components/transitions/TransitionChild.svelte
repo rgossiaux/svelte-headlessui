@@ -4,7 +4,6 @@
   import { match } from "$lib/utils/match";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { Reason, transition } from "$lib/utils/transition";
-
   import {
     hasChildren,
     NestingContextValues,
@@ -15,6 +14,20 @@
     useTransitionContext,
   } from "./TransitionRoot.svelte";
   import { useId } from "$lib/hooks/use-id";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "beforeEnter",
+    "beforeLeave",
+    "afterEnter",
+    "afterLeave",
+  ]);
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
 
   export let unmount = true;
   export let enter = "";
@@ -166,8 +179,15 @@
     : `${$$props.class || ""} ${entered}`;
 </script>
 
-<div bind:this={container} {...$$restProps} class={classes}>
+<Render
+  {...$$restProps}
+  {as}
+  use={[...use, forwardEvents]}
+  name={"TransitionChild"}
+  bind:el={container}
+  class={classes}
+>
   {#if state === TreeStates.Visible}
     <slot />
   {/if}
-</div>
+</Render>

@@ -111,6 +111,19 @@
   import { RenderStrategy } from "$lib/utils/Render.svelte";
   import TransitionChild from "./TransitionChild.svelte";
   import type { useId } from "$lib/hooks/use-id";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "beforeEnter",
+    "beforeLeave",
+    "afterEnter",
+    "afterLeave",
+  ]);
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
 
   export let show: boolean | undefined = undefined;
   export let unmount = true;
@@ -181,6 +194,8 @@
 {#if state === TreeStates.Visible}
   <TransitionChild
     {...$$restProps}
+    {as}
+    use={[...use, forwardEvents]}
     {unmount}
     on:afterEnter
     on:afterLeave
