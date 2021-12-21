@@ -3,6 +3,16 @@
   import { usePanelContext } from "./DisclosurePanel.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  export let as: SupportedAs = "button";
+  export let use: HTMLActionArray = [];
+
   export let disabled = false;
   const api = useDisclosureContext("DisclosureButton");
   const panelContext = usePanelContext();
@@ -25,8 +35,9 @@
     }
   }
 
-  function handleKeyDown(event: KeyboardEvent) {
+  function handleKeyDown(e: CustomEvent) {
     if (disabled) return;
+    let event = e as any as KeyboardEvent;
 
     if (isWithinPanel) {
       switch (event.key) {
@@ -50,7 +61,8 @@
     }
   }
 
-  function handleKeyUp(event: KeyboardEvent) {
+  function handleKeyUp(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     switch (event.key) {
       case Keys.Space:
         // Required for firefox, event.preventDefault() in handleKeyDown for
@@ -71,30 +83,37 @@
         "aria-controls": $panelStore ? $api.panelId : undefined,
         disabled: disabled ? true : undefined,
       };
+
+  $: slotProps = {
+    open: $api.disclosureState === DisclosureStates.Open,
+    close: $api.close,
+  };
 </script>
 
 {#if isWithinPanel}
-  <button
+  <Render
     {...{ ...$$restProps, ...propsWeControl }}
+    {as}
+    {slotProps}
+    use={[...use, forwardEvents]}
+    name={"DisclosureButton"}
     on:click={handleClick}
     on:keydown={handleKeyDown}
   >
-    <slot
-      open={$api.disclosureState === DisclosureStates.Open}
-      close={$api.close}
-    />
-  </button>
+    <slot {...slotProps} />
+  </Render>
 {:else}
-  <button
+  <Render
     {...{ ...$$restProps, ...propsWeControl }}
-    bind:this={$buttonStore}
+    {as}
+    {slotProps}
+    use={[...use, forwardEvents]}
+    name={"DisclosureButton"}
+    bind:el={$buttonStore}
     on:click={handleClick}
     on:keydown={handleKeyDown}
     on:keyup={handleKeyUp}
   >
-    <slot
-      open={$api.disclosureState === DisclosureStates.Open}
-      close={$api.close}
-    />
-  </button>
+    <slot {...slotProps} />
+  </Render>
 {/if}

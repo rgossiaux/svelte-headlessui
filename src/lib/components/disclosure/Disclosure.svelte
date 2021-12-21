@@ -45,6 +45,16 @@
   import { useId } from "$lib/hooks/use-id";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
+
   export let defaultOpen = false;
   let buttonId = `headlessui-disclosure-button-${useId()}`;
   let panelId = `headlessui-disclosure-panel-${useId()}`;
@@ -107,8 +117,19 @@
   useOpenClosedProvider(openClosedState);
 
   $: $openClosedState = computeOpenClosedState(disclosureState);
+
+  $: slotProps = {
+    open: disclosureState === DisclosureStates.Open,
+    close: $api.close,
+  };
 </script>
 
-<div {...$$restProps}>
-  <slot open={disclosureState === DisclosureStates.Open} close={$api.close} />
-</div>
+<Render
+  {...$$restProps}
+  {as}
+  {slotProps}
+  use={[...use, forwardEvents]}
+  name={"Disclosure"}
+>
+  <slot {...slotProps} />
+</Render>
