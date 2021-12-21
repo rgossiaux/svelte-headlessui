@@ -23,6 +23,7 @@ import H5 from "./H5.svelte";
 import H6 from "./H6.svelte";
 import Header from "./Header.svelte";
 import I from "./I.svelte";
+import Label from "./Label.svelte";
 import Li from "./Li.svelte";
 import Main from "./Main.svelte";
 import Nav from "./Nav.svelte";
@@ -58,6 +59,7 @@ const components = {
   "h6": H6,
   "header": Header,
   "i": I,
+  "label": Label,
   "li": Li,
   "main": Main,
   "nav": Nav,
