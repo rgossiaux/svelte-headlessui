@@ -72,14 +72,14 @@
     "aria-disabled": disabled === true ? true : undefined,
   };
 
-  $: slot = { active, disabled };
+  $: slotProps = { active, disabled };
 </script>
 
 <Render
   {...{ ...$$restProps, ...propsWeControl }}
   use={[...use, forwardEvents]}
   {as}
-  {slot}
+  {slotProps}
   name={"MenuItem"}
   bind:el={elementRef}
   on:click={handleClick}
@@ -89,5 +89,5 @@
   on:pointerleave={handleLeave}
   on:mouseleave={handleLeave}
 >
-  <slot {...slot} />
+  <slot {...slotProps} />
 </Render>

@@ -21,7 +21,7 @@
     $buttonRef?.focus({ preventScroll: true });
   }
 
-  $: slot = {
+  $: slotProps = {
     open: $api.listboxState === ListboxStates.Open,
     disabled: $api.disabled,
   };
@@ -31,11 +31,11 @@
   {...$$restProps}
   {id}
   {as}
-  {slot}
+  {slotProps}
   use={[...use, forwardEvents]}
   name={"ListboxLabel"}
   bind:el={$labelRef}
   on:click={handleClick}
 >
-  <slot {...slot} />
+  <slot {...slotProps} />
 </Render>

@@ -82,7 +82,7 @@
     disabled: $api.disabled === true ? true : undefined,
   };
 
-  $: slot = {
+  $: slotProps = {
     open: $api.listboxState === ListboxStates.Open,
     disabled: $api.disabled,
   };
@@ -92,7 +92,7 @@
   {...$$restProps}
   {...propsWeControl}
   {as}
-  {slot}
+  {slotProps}
   use={[...use, forwardEvents]}
   name={"ListboxButton"}
   bind:el={$buttonRef}
@@ -100,5 +100,5 @@
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}
 >
-  <slot {...slot} />
+  <slot {...slotProps} />
 </Render>

@@ -117,7 +117,7 @@
       ? $usesOpenClosedState === State.Open
       : $api.listboxState === ListboxStates.Open;
 
-  $: slot = { open: $api.listboxState === ListboxStates.Open };
+  $: slotProps = { open: $api.listboxState === ListboxStates.Open };
 </script>
 
 {#if visible}
@@ -125,12 +125,12 @@
     {...$$restProps}
     {...propsWeControl}
     {as}
-    {slot}
+    {slotProps}
     use={[...use, forwardEvents]}
     name={"ListboxOptions"}
     bind:el={$optionsRef}
     on:keydown={handleKeyDown}
   >
-    <slot {...slot} />
+    <slot {...slotProps} />
   </Render>
 {/if}

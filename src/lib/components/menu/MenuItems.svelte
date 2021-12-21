@@ -135,20 +135,20 @@
     role: "menu",
     tabIndex: 0,
   };
-  $: slot = { open: $api.menuState === MenuStates.Open };
+  $: slotProps = { open: $api.menuState === MenuStates.Open };
 </script>
 
 {#if visible}
   <Render
     {...{ ...$$restProps, ...propsWeControl }}
     {as}
-    {slot}
+    {slotProps}
     use={[...use, forwardEvents]}
     bind:el={$itemsStore}
     name={"MenuItems"}
     on:keydown={handleKeyDown}
     on:keyup={handleKeyUp}
   >
-    <slot {...slot} />
+    <slot {...slotProps} />
   </Render>
 {/if}

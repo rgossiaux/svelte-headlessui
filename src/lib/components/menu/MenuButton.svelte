@@ -81,13 +81,13 @@
     "aria-expanded": disabled ? undefined : $api.menuState === MenuStates.Open,
   };
 
-  $: slot = { open: $api.menuState === MenuStates.Open };
+  $: slotProps = { open: $api.menuState === MenuStates.Open };
 </script>
 
 <Render
   {...{ ...$$restProps, ...propsWeControl }}
   {as}
-  {slot}
+  {slotProps}
   use={[...use, forwardEvents]}
   name={"MenuButton"}
   bind:el={$buttonStore}
@@ -95,5 +95,5 @@
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}
 >
-  <slot {...slot} />
+  <slot {...slotProps} />
 </Render>

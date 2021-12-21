@@ -216,16 +216,16 @@
       $buttonRef?.focus({ preventScroll: true });
     }
   }
-  $: slot = { open: listboxState === ListboxStates.Open };
+  $: slotProps = { open: listboxState === ListboxStates.Open };
 </script>
 
 <svelte:window on:mousedown={handleMousedown} />
 <Render
   {...$$restProps}
   {as}
-  {slot}
+  {slotProps}
   use={[...use, forwardEvents]}
   name={"Listbox"}
 >
-  <slot {...slot} />
+  <slot {...slotProps} />
 </Render>

@@ -19,7 +19,7 @@
   export let as: SvelteComponent | SupportedElement;
   export let el: HTMLElement | null = null;
   export let use: ActionArray = [];
-  export let slot: unknown = {};
+  export let slotProps: unknown = {};
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   if (!as) {
@@ -41,7 +41,7 @@
   bind:el
   use={[...use, forwardEvents]}
   {...$$restProps}
-  class={typeof classStyle === "function" ? classStyle(slot) : classStyle}
+  class={typeof classStyle === "function" ? classStyle(slotProps) : classStyle}
 >
   <slot />
 </svelte:component>

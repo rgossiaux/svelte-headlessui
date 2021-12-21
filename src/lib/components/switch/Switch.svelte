@@ -55,7 +55,7 @@
     "aria-describedby": $descriptionContext?.descriptionIds,
   };
 
-  $: slot = { checked };
+  $: slotProps = { checked };
 </script>
 
 <!-- TODO: I'm sure there's a better way of doing this -->
@@ -63,7 +63,7 @@
   <Render
     {...{ ...$$restProps, ...propsWeControl }}
     {as}
-    {slot}
+    {slotProps}
     use={[...use, forwardEvents]}
     name={"Switch"}
     bind:el={$switchStore}
@@ -71,13 +71,13 @@
     on:keyup={handleKeyUp}
     on:keypress={handleKeyPress}
   >
-    <slot {...slot} />
+    <slot {...slotProps} />
   </Render>
 {:else}
   <Render
     {...{ ...$$restProps, ...propsWeControl }}
     {as}
-    {slot}
+    {slotProps}
     use={[...use, forwardEvents]}
     name={"Switch"}
     bind:el={$switchStore}
@@ -85,6 +85,6 @@
     on:keyup={handleKeyUp}
     on:keypress={handleKeyPress}
   >
-    <slot {...slot} />
+    <slot {...slotProps} />
   </Render>
 {/if}

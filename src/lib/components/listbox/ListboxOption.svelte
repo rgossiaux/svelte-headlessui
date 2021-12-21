@@ -103,14 +103,14 @@
     "aria-selected": selected === true ? selected : undefined,
   };
 
-  $: slot = { active, selected, disabled };
+  $: slotProps = { active, selected, disabled };
 </script>
 
 <Render
   {...$$restProps}
   {...propsWeControl}
   {as}
-  {slot}
+  {slotProps}
   use={[...use, forwardEvents]}
   name={"ListboxOption"}
   on:click={handleClick}
@@ -120,5 +120,5 @@
   on:pointerleave={handleLeave}
   on:mouseleave={handleLeave}
 >
-  <slot {...slot} />
+  <slot {...slotProps} />
 </Render>
