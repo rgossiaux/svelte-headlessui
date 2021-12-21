@@ -9,8 +9,16 @@
   import { PopoverStates, usePopoverContext } from "./Popover.svelte";
   import { usePopoverGroupContext } from "./PopoverGroup.svelte";
   import { usePopoverPanelContext } from "./PopoverPanel.svelte";
-  import { ActionArray, useActions } from "$lib/hooks/use-actions";
-  export let use: ActionArray = [];
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  export let as: SupportedAs = "button";
+  export let use: HTMLActionArray = [];
+
   export let disabled: Boolean = false;
   let api = usePopoverContext("PopoverButton");
 
@@ -38,7 +46,8 @@
     activeElementRef = document.activeElement;
   }
 
-  function handleKeyDown(event: KeyboardEvent) {
+  function handleKeyDown(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     if (isWithinPanel) {
       if ($api.popoverState === PopoverStates.Closed) return;
       switch (event.key) {
@@ -106,7 +115,8 @@
       }
     }
   }
-  function handleKeyUp(event: KeyboardEvent) {
+  function handleKeyUp(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     if (isWithinPanel) return;
     if (event.key === Keys.Space) {
       // Required for firefox, event.preventDefault() in handleKeyDown for
@@ -163,18 +173,25 @@
         "aria-controls": $api.panel ? $api.panelId : undefined,
         disabled: disabled ? true : undefined,
       };
+
+  $: slotProps = {
+    open: $api.popoverState === PopoverStates.Open,
+  };
 </script>
 
 <svelte:window on:focus|capture={handleFocus} />
 
-<button
+<Render
   {...$$restProps}
   {...propsWeControl}
-  use:useActions={use}
+  {as}
+  {slotProps}
+  use={[...use, forwardEvents]}
+  name={"PopoverButton"}
+  bind:el={$ourStore}
   on:click={handleClick}
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}
-  bind:this={$ourStore}
 >
-  <slot open={$api.popoverState === PopoverStates.Open} />
-</button>
+  <slot {...slotProps} />
+</Render>

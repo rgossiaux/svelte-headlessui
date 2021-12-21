@@ -15,8 +15,16 @@
 <script lang="ts">
   import type { PopoverRegisterBag } from "./Popover.svelte";
   import { getContext, setContext } from "svelte";
-  import { ActionArray, useActions } from "$lib/hooks/use-actions";
-  export let use: ActionArray = [];
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
+
   let groupRef: HTMLDivElement | undefined;
   let popovers: PopoverRegisterBag[] = [];
 
@@ -59,6 +67,12 @@
   });
 </script>
 
-<div use:useActions={use} {...$$restProps} bind:this={groupRef}>
+<Render
+  {...$$restProps}
+  {as}
+  use={[...use, forwardEvents]}
+  name={"PopoverGroup"}
+  bind:el={groupRef}
+>
   <slot />
-</div>
+</Render>

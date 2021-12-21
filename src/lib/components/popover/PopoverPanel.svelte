@@ -24,8 +24,16 @@
     StateDefinition,
     usePopoverContext,
   } from "./Popover.svelte";
-  import { ActionArray, useActions } from "$lib/hooks/use-actions";
-  export let use: ActionArray = [];
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
+
   export let focus = false;
 
   let api = usePopoverContext("PopoverPanel");
@@ -102,7 +110,8 @@
     $api.closePopover();
   }
 
-  function handleKeydown(event: KeyboardEvent) {
+  function handleKeydown(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     switch (event.key) {
       case Keys.Escape:
         if ($api.popoverState !== PopoverStates.Open) return;
@@ -115,6 +124,11 @@
         break;
     }
   }
+
+  $: slotProps = {
+    open: $api.popoverState === PopoverStates.Open,
+    close: $api.close,
+  };
 </script>
 
 <svelte:window
@@ -122,12 +136,16 @@
   on:focus|capture={handleFocus}
 />
 {#if visible}
-  <div
-    use:useActions={use}
+  <Render
     {...$$restProps}
+    id={$api.panelId}
+    {as}
+    {slotProps}
+    use={[...use, forwardEvents]}
+    name={"PopoverPanel"}
+    bind:el={$panelStore}
     on:keydown={handleKeydown}
-    bind:this={$panelStore}
   >
-    <slot open={$api.popoverState === PopoverStates.Open} close={$api.close} />
-  </div>
+    <slot {...slotProps} />
+  </Render>
 {/if}

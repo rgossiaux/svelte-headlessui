@@ -1,9 +1,15 @@
 <script lang="ts">
-  import { ActionArray, useActions } from "$lib/hooks/use-actions";
-
   import { State, useOpenClosed } from "$lib/internal/open-closed";
   import { PopoverStates, usePopoverContext } from "./Popover.svelte";
-  export let use: ActionArray = [];
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
 
   let api = usePopoverContext("PopoverOverlay");
 
@@ -17,10 +23,20 @@
   function handleClick() {
     $api.closePopover();
   }
+
+  $: slotProps = { open: $api.popoverState === PopoverStates.Open };
 </script>
 
 {#if visible}
-  <div use:useActions={use} {...$$restProps} on:click={handleClick} aria-hidden>
-    <slot open={$api.popoverState === PopoverStates.Open} />
-  </div>
+  <Render
+    {...$$restProps}
+    {as}
+    {slotProps}
+    use={[...use, forwardEvents]}
+    name={"PopoverOverlay"}
+    on:click={handleClick}
+    aria-hidden
+  >
+    <slot {...slotProps} />
+  </Render>
 {/if}

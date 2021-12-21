@@ -52,9 +52,15 @@
   import { usePopoverGroupContext } from "./PopoverGroup.svelte";
   import { getContext, setContext, onMount } from "svelte";
   import { Readable, writable, Writable } from "svelte/store";
-  import { ActionArray, useActions } from "$lib/hooks/use-actions";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
 
-  export let use: ActionArray = [];
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
 
   const buttonId = `headlessui-popover-button-${useId()}`;
   const panelId = `headlessui-popover-panel-${useId()}`;
@@ -155,9 +161,20 @@
       $button?.focus();
     }
   }
+
+  $: slotProps = {
+    open: popoverState === PopoverStates.Open,
+    close: $api.close,
+  };
 </script>
 
 <svelte:window on:focus|capture={handleFocus} on:mousedown={handleMousedown} />
-<div use:useActions={use} {...$$restProps}>
-  <slot open={popoverState === PopoverStates.Open} close={$api.close} />
-</div>
+<Render
+  {...$$restProps}
+  {as}
+  {slotProps}
+  use={[...use, forwardEvents]}
+  name={"Popover"}
+>
+  <slot {...slotProps} />
+</Render>
