@@ -61,6 +61,17 @@
   import { Readable, writable, Writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "change",
+  ]);
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
+
   export let disabled = false;
   export let horizontal = false;
   export let value: StateDefinition["value"];
@@ -205,7 +216,16 @@
       $buttonRef?.focus({ preventScroll: true });
     }
   }
+  $: slot = { open: listboxState === ListboxStates.Open };
 </script>
 
 <svelte:window on:mousedown={handleMousedown} />
-<slot open={listboxState === ListboxStates.Open} />
+<Render
+  {...$$restProps}
+  {as}
+  {slot}
+  use={[...use, forwardEvents]}
+  name={"Listbox"}
+>
+  <slot {...slot} />
+</Render>

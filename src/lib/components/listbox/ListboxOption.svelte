@@ -3,6 +3,16 @@
   import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Focus } from "$lib/utils/calculate-active-index";
+  import Render from "$lib/utils/Render.svelte";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import { get_current_component } from "svelte/internal";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+  export let as: SupportedAs = "li";
+  export let use: HTMLActionArray = [];
+
   export let value: unknown;
   export let disabled = false;
   let api = useListboxContext("ListboxOption");
@@ -59,7 +69,8 @@
   }
   $: updateFocus($api.listboxState, selected, active);
 
-  async function handleClick(event: MouseEvent) {
+  async function handleClick(e: CustomEvent) {
+    let event = e as any as MouseEvent;
     if (disabled) return event.preventDefault();
     $api.select(value);
     $api.closeListbox();
@@ -92,17 +103,16 @@
     "aria-selected": selected === true ? selected : undefined,
   };
 
-  $: classStyle = $$props.class
-    ? typeof $$props.class === "function"
-      ? $$props.class({ active, selected, disabled })
-      : $$props.class
-    : "";
+  $: slot = { active, selected, disabled };
 </script>
 
-<li
+<Render
   {...$$restProps}
-  class={classStyle}
   {...propsWeControl}
+  {as}
+  {slot}
+  use={[...use, forwardEvents]}
+  name={"ListboxOption"}
   on:click={handleClick}
   on:focus={handleFocus}
   on:pointermove={handleMove}
@@ -110,5 +120,5 @@
   on:pointerleave={handleLeave}
   on:mouseleave={handleLeave}
 >
-  <slot {active} {selected} {disabled} />
-</li>
+  <slot {...slot} />
+</Render>

@@ -6,6 +6,15 @@
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
+  import Render from "$lib/utils/Render.svelte";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import { get_current_component } from "svelte/internal";
+
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+  export let as: SupportedAs = "ul";
+  export let use: HTMLActionArray = [];
 
   let api = useListboxContext("ListboxOptions");
   let id = `headlessui-listbox-options-${useId()}`;
@@ -14,7 +23,8 @@
   let labelRef = $api.labelRef;
 
   let searchDebounce: ReturnType<typeof setTimeout> | null = null;
-  async function handleKeyDown(event: KeyboardEvent) {
+  async function handleKeyDown(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     if (searchDebounce) clearTimeout(searchDebounce);
 
     switch (event.key) {
@@ -106,15 +116,21 @@
     usesOpenClosedState !== undefined
       ? $usesOpenClosedState === State.Open
       : $api.listboxState === ListboxStates.Open;
+
+  $: slot = { open: $api.listboxState === ListboxStates.Open };
 </script>
 
 {#if visible}
-  <ul
-    bind:this={$optionsRef}
-    on:keydown={handleKeyDown}
+  <Render
     {...$$restProps}
     {...propsWeControl}
+    {as}
+    {slot}
+    use={[...use, forwardEvents]}
+    name={"ListboxOptions"}
+    bind:el={$optionsRef}
+    on:keydown={handleKeyDown}
   >
-    <slot open={$api.listboxState === ListboxStates.Open} />
-  </ul>
+    <slot {...slot} />
+  </Render>
 {/if}

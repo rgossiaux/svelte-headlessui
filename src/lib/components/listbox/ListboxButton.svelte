@@ -4,6 +4,15 @@
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import { get_current_component } from "svelte/internal";
+  import Render from "$lib/utils/Render.svelte";
+
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+  export let as: SupportedAs = "button";
+  export let use: HTMLActionArray = [];
 
   let api = useListboxContext("ListboxButton");
   let id = `headlessui-listbox-button-${useId()}`;
@@ -11,7 +20,8 @@
   let optionsRef = $api.optionsRef;
   let labelRef = $api.labelRef;
 
-  async function handleKeyDown(event: KeyboardEvent) {
+  async function handleKeyDown(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     switch (event.key) {
       // Ref: https://www.w3.org/TR/wai-aria-practices-1.2/#keyboard-interaction-13
       case Keys.Space:
@@ -34,7 +44,8 @@
     }
   }
 
-  function handleKeyUp(event: KeyboardEvent) {
+  function handleKeyUp(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     switch (event.key) {
       case Keys.Space:
         // Required for firefox, event.preventDefault() in handleKeyDown for
@@ -45,7 +56,8 @@
     }
   }
 
-  async function handleClick(event: MouseEvent) {
+  async function handleClick(e: CustomEvent) {
+    let event = e as any as MouseEvent;
     if ($api.disabled) return;
     if ($api.listboxState === ListboxStates.Open) {
       $api.closeListbox();
@@ -69,18 +81,24 @@
     "aria-labelledby": $labelRef ? [$labelRef?.id, id].join(" ") : undefined,
     disabled: $api.disabled === true ? true : undefined,
   };
+
+  $: slot = {
+    open: $api.listboxState === ListboxStates.Open,
+    disabled: $api.disabled,
+  };
 </script>
 
-<button
+<Render
   {...$$restProps}
   {...propsWeControl}
-  bind:this={$buttonRef}
+  {as}
+  {slot}
+  use={[...use, forwardEvents]}
+  name={"ListboxButton"}
+  bind:el={$buttonRef}
   on:click={handleClick}
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}
 >
-  <slot
-    open={$api.listboxState === ListboxStates.Open}
-    disabled={$api.disabled}
-  />
-</button>
+  <slot {...slot} />
+</Render>
