@@ -46,6 +46,18 @@
 
 <script lang="ts">
   import { treeWalker } from "$lib/hooks/use-tree-walker";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "change",
+  ]);
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
+
   export let disabled = false;
   export let value: StateDefinition["value"];
   let radioGroupRef: HTMLElement | null = null;
@@ -108,7 +120,8 @@
     },
   });
 
-  function handleKeyDown(event: KeyboardEvent) {
+  function handleKeyDown(e: CustomEvent) {
+    let event = e as any as KeyboardEvent;
     if (!radioGroupRef) return;
     if (!radioGroupRef.contains(event.target as HTMLElement)) return;
 
@@ -171,16 +184,19 @@
   };
 </script>
 
-<DescriptionProvider name="RadioGroup.Description" let:describedby>
-  <LabelProvider name="RadioGroup.Label" let:labelledby>
-    <div
+<DescriptionProvider name="RadioGroupDescription" let:describedby>
+  <LabelProvider name="RadioGroupLabel" let:labelledby>
+    <Render
       {...{ ...$$restProps, ...propsWeControl }}
-      bind:this={radioGroupRef}
+      {as}
+      use={[...use, forwardEvents]}
+      name={"RadioGroup"}
+      bind:el={radioGroupRef}
       aria-labelledby={labelledby}
       aria-describedby={describedby}
       on:keydown={handleKeyDown}
     >
       <slot />
-    </div>
+    </Render>
   </LabelProvider>
 </DescriptionProvider>

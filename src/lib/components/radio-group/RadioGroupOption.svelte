@@ -2,9 +2,17 @@
   import { onDestroy } from "svelte";
   import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
   import LabelProvider from "$lib/components/label/LabelProvider.svelte";
-
   import { useRadioGroupContext, Option } from "./RadioGroup.svelte";
   import { useId } from "$lib/hooks/use-id";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
 
   enum OptionState {
     Empty = 1 << 0,
@@ -50,42 +58,37 @@
     state &= ~OptionState.Active;
   }
 
-  $: classStyle = $$props.class
-    ? typeof $$props.class === "function"
-      ? $$props.class({
-          active: state & OptionState.Active,
-          checked,
-          disabled: isDisabled,
-        })
-      : $$props.class
-    : "";
-
   $: propsWeControl = {
     id,
-    class: classStyle,
     role: "radio",
     "aria-checked": checked ? ("true" as const) : ("false" as const),
     "aria-disabled": isDisabled ? true : undefined,
     tabIndex: tabIndex,
   };
+
+  $: slotProps = {
+    checked,
+    disabled: isDisabled,
+    active: state & OptionState.Active,
+  };
 </script>
 
-<DescriptionProvider name="RadioGroup.Description" let:describedby>
-  <LabelProvider name="RadioGroup.Label" let:labelledby>
-    <div
+<DescriptionProvider name="RadioGroupDescription" let:describedby>
+  <LabelProvider name="RadioGroupLabel" let:labelledby>
+    <Render
       {...{ ...$$restProps, ...propsWeControl }}
-      bind:this={optionRef}
+      {as}
+      {slotProps}
+      use={[...use, forwardEvents]}
+      name={"RadioGroupOption"}
+      bind:el={optionRef}
       aria-labelledby={labelledby}
       aria-describedby={describedby}
-      on:click={isDisabled ? undefined : handleClick}
-      on:focus={isDisabled ? undefined : handleFocus}
-      on:blur={isDisabled ? undefined : handleBlur}
+      on:click={isDisabled ? () => {} : handleClick}
+      on:focus={isDisabled ? () => {} : handleFocus}
+      on:blur={isDisabled ? () => {} : handleBlur}
     >
-      <slot
-        {checked}
-        disabled={isDisabled}
-        active={state & OptionState.Active}
-      />
-    </div>
+      <slot {...slotProps} />
+    </Render>
   </LabelProvider>
 </DescriptionProvider>
