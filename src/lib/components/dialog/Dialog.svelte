@@ -55,6 +55,17 @@
   import ForcePortalRootContext from "$lib/internal/ForcePortalRootContext.svelte";
   import Portal from "$lib/components/portal/Portal.svelte";
   import PortalGroup from "$lib/components/portal/PortalGroup.svelte";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { get_current_component } from "svelte/internal";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import Render from "$lib/utils/Render.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "close",
+  ]);
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
+
   export let open: Boolean | undefined = undefined;
   export let initialFocus: HTMLElement | null = null;
 
@@ -217,7 +228,8 @@
     }
   });
 
-  function handleClick(event: MouseEvent) {
+  function handleClick(e: CustomEvent) {
+    let event = e as any as MouseEvent;
     event.stopPropagation();
   }
 
@@ -227,6 +239,8 @@
     "aria-modal": dialogState === DialogStates.Open ? true : undefined,
     "aria-labelledby": titleId,
   };
+
+  $: slotProps = { open };
 </script>
 
 <svelte:window
@@ -253,14 +267,18 @@
         <PortalGroup target={internalDialogRef}>
           <ForcePortalRootContext force={false}>
             <DescriptionProvider name={"Dialog.Description"} let:describedby>
-              <div
+              <Render
                 {...{ ...$$restProps, ...propsWeControl }}
-                bind:this={internalDialogRef}
+                {as}
+                {slotProps}
+                use={[...use, forwardEvents]}
+                name={"Dialog"}
+                bind:el={internalDialogRef}
                 aria-describedby={describedby}
                 on:click={handleClick}
               >
-                <slot {open} />
-              </div>
+                <slot {...slotProps} />
+              </Render>
             </DescriptionProvider>
           </ForcePortalRootContext>
         </PortalGroup>
