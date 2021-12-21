@@ -163,7 +163,7 @@
   // from blowing away the transition classes
   $: classes = isTransitioning
     ? container?.className
-    : `${$$props.class} ${entered}`;
+    : `${$$props.class || ""} ${entered}`;
 </script>
 
 <div bind:this={container} {...$$restProps} class={classes}>
