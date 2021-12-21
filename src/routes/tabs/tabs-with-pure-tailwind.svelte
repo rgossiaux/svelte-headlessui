@@ -71,14 +71,14 @@
           <span>{tab.name}</span>
           {#if tab.disabled}
             <small class="inline-block px-4 text-xs">(disabled)</small>
-            <span
-              aria-hidden="true"
-              class={classNames(
-                selected ? "bg-indigo-500" : "bg-transparent",
-                "absolute inset-x-0 bottom-0 h-0.5"
-              )}
-            />
           {/if}
+          <span
+            aria-hidden="true"
+            class={classNames(
+              selected ? "bg-indigo-500" : "bg-transparent",
+              "absolute inset-x-0 bottom-0 h-0.5"
+            )}
+          />
         </Tab>
       {/each}
     </TabList>
