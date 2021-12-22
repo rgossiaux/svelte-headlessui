@@ -15,6 +15,12 @@
   interface TransitionContextValues {
     show: boolean;
     appear: boolean;
+    // This is not part of base Headless UI, but we need it because TransitionRoot does not render.
+    // In base Headless UI, for a component with unmount=false, the initial state for the Child is
+    // still "visible". It still works, because the parent still is hidden and has display: none
+    // In our version the parent renders nothing, so we need to send down the correct initial state
+    // ourselves.
+    initialShow: boolean;
   }
 
   const TRANSITION_CONTEXT_NAME = "headlessui-transition-context";
@@ -148,6 +154,9 @@
     show,
     openClosedState !== undefined ? $openClosedState : undefined
   );
+
+  let initialShow = shouldShow;
+
   $: {
     shouldShow = computeShow(
       show,
@@ -172,6 +181,7 @@
   $: transitionBag.set({
     show: !!shouldShow,
     appear: appear || !initial,
+    initialShow: !!initialShow,
   });
 
   onMount(() => {

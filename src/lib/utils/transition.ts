@@ -62,12 +62,13 @@ export function transition(
   base: string[],
   from: string[],
   to: string[],
+  entered: string[],
   done?: (reason: Reason) => void
 ) {
   let d = disposables();
   let _done = done !== undefined ? once(done) : () => { };
 
-  removeClasses(node);
+  removeClasses(node, ...entered);
   addClasses(node, ...base, ...from);
 
   d.nextFrame(() => {
@@ -77,6 +78,7 @@ export function transition(
     d.add(
       waitForTransition(node, (reason) => {
         removeClasses(node, ...to, ...base);
+        addClasses(node, ...entered);
         return _done(reason);
       })
     );

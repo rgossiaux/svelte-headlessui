@@ -40,16 +40,19 @@
   const dispatch = createEventDispatcher();
 
   let container: HTMLElement | null = null;
-  let state = TreeStates.Visible;
 
   let transitionContext = useTransitionContext();
   let nestingContext = useParentNesting();
+  let state =
+    $transitionContext.initialShow || $$props.unmount !== false
+      ? TreeStates.Visible
+      : TreeStates.Hidden;
 
   let initial = true;
-
   let id = useId();
-
   let isTransitioning = false;
+  $: strategy =
+    $$props.unmount === false ? RenderStrategy.Hidden : RenderStrategy.Unmount;
 
   let nesting: Writable<NestingContextValues> = writable(
     useNesting(() => {
@@ -68,7 +71,7 @@
   $: {
     (() => {
       // If we are in another mode than the Hidden mode then ignore
-      /* if (strategy.value !== RenderStrategy.Hidden) return */
+      if (strategy !== RenderStrategy.Hidden) return;
       if (!id) return;
 
       // Make sure that we are visible
@@ -90,13 +93,15 @@
       .filter((className) => className.trim().length > 1);
   }
 
-  let enterClasses = splitClasses(enter);
-  let enterFromClasses = splitClasses(enterFrom);
-  let enterToClasses = splitClasses(enterTo);
+  $: enterClasses = splitClasses(enter);
+  $: enterFromClasses = splitClasses(enterFrom);
+  $: enterToClasses = splitClasses(enterTo);
 
-  let leaveClasses = splitClasses(leave);
-  let leaveFromClasses = splitClasses(leaveFrom);
-  let leaveToClasses = splitClasses(leaveTo);
+  $: enteredClasses = splitClasses(entered);
+
+  $: leaveClasses = splitClasses(leave);
+  $: leaveFromClasses = splitClasses(leaveFrom);
+  $: leaveToClasses = splitClasses(leaveTo);
 
   let mounted = false;
   onMount(() => (mounted = true));
@@ -120,6 +125,7 @@
           enterClasses,
           enterFromClasses,
           enterToClasses,
+          enteredClasses,
           (reason) => {
             isTransitioning = false;
             if (reason === Reason.Finished) dispatch("afterEnter");
@@ -130,6 +136,7 @@
           leaveClasses,
           leaveFromClasses,
           leaveToClasses,
+          enteredClasses,
           (reason) => {
             isTransitioning = false;
 
