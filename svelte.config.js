@@ -15,7 +15,7 @@ const config = {
     adapter: adapter(),
     package: {
       exports: (filepath) => {
-        return filepath.endsWith("src/lib/index.ts");
+        return filepath.endsWith("index.js");
       }
     },
 
