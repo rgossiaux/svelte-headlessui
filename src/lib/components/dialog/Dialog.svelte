@@ -59,7 +59,7 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { Features } from "$lib/utils/Render.svelte";
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
     "close",
   ]);
@@ -247,42 +247,42 @@
   on:mousedown={handleWindowMousedown}
   on:keydown={handleWindowKeydown}
 />
-{#if visible}
-  <FocusTrap {containers} {enabled} options={{ initialFocus }} />
-  <StackContextProvider
-    element={internalDialogRef}
-    onUpdate={(message, element) => {
-      return match(message, {
-        [StackMessage.Add]() {
-          containers.add(element);
-        },
-        [StackMessage.Remove]() {
-          containers.delete(element);
-        },
-      });
-    }}
-  >
-    <ForcePortalRootContext force={true}>
-      <Portal>
-        <PortalGroup target={internalDialogRef}>
-          <ForcePortalRootContext force={false}>
-            <DescriptionProvider name={"Dialog.Description"} let:describedby>
-              <Render
-                {...{ ...$$restProps, ...propsWeControl }}
-                {as}
-                {slotProps}
-                use={[...use, forwardEvents]}
-                name={"Dialog"}
-                bind:el={internalDialogRef}
-                aria-describedby={describedby}
-                on:click={handleClick}
-              >
-                <slot {...slotProps} />
-              </Render>
-            </DescriptionProvider>
-          </ForcePortalRootContext>
-        </PortalGroup>
-      </Portal>
-    </ForcePortalRootContext>
-  </StackContextProvider>
-{/if}
+<FocusTrap {containers} {enabled} options={{ initialFocus }} />
+<StackContextProvider
+  element={internalDialogRef}
+  onUpdate={(message, element) => {
+    return match(message, {
+      [StackMessage.Add]() {
+        containers.add(element);
+      },
+      [StackMessage.Remove]() {
+        containers.delete(element);
+      },
+    });
+  }}
+>
+  <ForcePortalRootContext force={true}>
+    <Portal>
+      <PortalGroup target={internalDialogRef}>
+        <ForcePortalRootContext force={false}>
+          <DescriptionProvider name={"Dialog.Description"} let:describedby>
+            <Render
+              {...{ ...$$restProps, ...propsWeControl }}
+              {as}
+              {slotProps}
+              use={[...use, forwardEvents]}
+              name={"Dialog"}
+              bind:el={internalDialogRef}
+              aria-describedby={describedby}
+              on:click={handleClick}
+              {visible}
+              features={Features.RenderStrategy | Features.Static}
+            >
+              <slot {...slotProps} />
+            </Render>
+          </DescriptionProvider>
+        </ForcePortalRootContext>
+      </PortalGroup>
+    </Portal>
+  </ForcePortalRootContext>
+</StackContextProvider>

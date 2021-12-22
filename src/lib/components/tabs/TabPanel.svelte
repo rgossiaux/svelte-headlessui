@@ -6,7 +6,7 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { Features } from "$lib/utils/Render.svelte";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   export let as: SupportedAs = "div";
@@ -31,13 +31,13 @@
   };
 </script>
 
-{#if selected}
-  <Render
-    {...{ ...$$restProps, ...propsWeControl }}
-    {as}
-    use={[...use, forwardEvents]}
-    name={"TabPanel"}
-  >
-    <slot />
-  </Render>
-{/if}
+<Render
+  {...{ ...$$restProps, ...propsWeControl }}
+  {as}
+  use={[...use, forwardEvents]}
+  name={"TabPanel"}
+  visible={selected}
+  features={Features.RenderStrategy | Features.Static}
+>
+  <slot />
+</Render>

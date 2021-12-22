@@ -6,7 +6,7 @@
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { Features } from "$lib/utils/Render.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
@@ -120,17 +120,17 @@
   $: slotProps = { open: $api.listboxState === ListboxStates.Open };
 </script>
 
-{#if visible}
-  <Render
-    {...$$restProps}
-    {...propsWeControl}
-    {as}
-    {slotProps}
-    use={[...use, forwardEvents]}
-    name={"ListboxOptions"}
-    bind:el={$optionsRef}
-    on:keydown={handleKeyDown}
-  >
-    <slot {...slotProps} />
-  </Render>
-{/if}
+<Render
+  {...$$restProps}
+  {...propsWeControl}
+  {as}
+  {slotProps}
+  use={[...use, forwardEvents]}
+  name={"ListboxOptions"}
+  bind:el={$optionsRef}
+  on:keydown={handleKeyDown}
+  {visible}
+  features={Features.RenderStrategy | Features.Static}
+>
+  <slot {...slotProps} />
+</Render>

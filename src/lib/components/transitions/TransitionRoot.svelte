@@ -126,7 +126,6 @@
   export let use: HTMLActionArray = [];
 
   export let show: boolean | undefined = undefined;
-  export let unmount = true;
   export let appear = false;
 
   let openClosedState = useOpenClosed();
@@ -191,12 +190,11 @@
   setContext(TRANSITION_CONTEXT_NAME, transitionBag);
 </script>
 
-{#if state === TreeStates.Visible}
+{#if state === TreeStates.Visible || $$props.unmount === false}
   <TransitionChild
     {...$$restProps}
     {as}
     use={[...use, forwardEvents]}
-    {unmount}
     on:afterEnter
     on:afterLeave
     on:beforeEnter

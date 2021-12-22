@@ -8,7 +8,7 @@
   import { tick } from "svelte";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import type { SupportedAs } from "$lib/internal/elements";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { Features } from "$lib/utils/Render.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
 
@@ -138,17 +138,17 @@
   $: slotProps = { open: $api.menuState === MenuStates.Open };
 </script>
 
-{#if visible}
-  <Render
-    {...{ ...$$restProps, ...propsWeControl }}
-    {as}
-    {slotProps}
-    use={[...use, forwardEvents]}
-    bind:el={$itemsStore}
-    name={"MenuItems"}
-    on:keydown={handleKeyDown}
-    on:keyup={handleKeyUp}
-  >
-    <slot {...slotProps} />
-  </Render>
-{/if}
+<Render
+  {...{ ...$$restProps, ...propsWeControl }}
+  {as}
+  {slotProps}
+  use={[...use, forwardEvents]}
+  bind:el={$itemsStore}
+  name={"MenuItems"}
+  on:keydown={handleKeyDown}
+  on:keyup={handleKeyUp}
+  {visible}
+  features={Features.RenderStrategy | Features.Static}
+>
+  <slot {...slotProps} />
+</Render>

@@ -18,7 +18,7 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { Features, RenderStrategy } from "$lib/utils/Render.svelte";
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
     "beforeEnter",
     "beforeLeave",
@@ -29,7 +29,6 @@
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
-  export let unmount = true;
   export let enter = "";
   export let enterFrom = "";
   export let enterTo = "";
@@ -186,8 +185,8 @@
   name={"TransitionChild"}
   bind:el={container}
   class={classes}
+  visible={state === TreeStates.Visible}
+  features={Features.RenderStrategy}
 >
-  {#if state === TreeStates.Visible}
-    <slot />
-  {/if}
+  <slot />
 </Render>
