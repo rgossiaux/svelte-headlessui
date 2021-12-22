@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "repository": "github:rgossiaux/svelte-headlessui",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
