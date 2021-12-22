@@ -9,6 +9,7 @@
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import { get_current_component } from "svelte/internal";
   import Render from "$lib/utils/Render.svelte";
+  import { resolveButtonType } from "$lib/utils/resolve-button-type";
 
   const forwardEvents = forwardEventsBuilder(get_current_component());
   export let as: SupportedAs = "button";
@@ -73,6 +74,7 @@
 
   $: propsWeControl = {
     id,
+    type: resolveButtonType({ type: $$props.type, as }, $buttonRef),
     "aria-haspopup": true,
     "aria-controls": $optionsRef?.id,
     "aria-expanded": $api.disabled

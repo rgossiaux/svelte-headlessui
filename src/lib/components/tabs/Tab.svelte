@@ -10,6 +10,7 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
+  import { resolveButtonType } from "$lib/utils/resolve-button-type";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   export let as: SupportedAs = "button";
@@ -89,6 +90,7 @@
   $: propsWeControl = {
     id,
     role: "tab",
+    type: resolveButtonType({ type: $$props.type, as }, tabRef),
     "aria-controls": $api.panels[myIndex],
     "aria-selected": selected,
     tabIndex: selected ? 0 : -1,

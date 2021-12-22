@@ -14,6 +14,7 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
+  import { resolveButtonType } from "$lib/utils/resolve-button-type";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   export let as: SupportedAs = "button";
@@ -163,10 +164,12 @@
     }
   }
 
+  $: type = resolveButtonType({ type: $$props.type, as }, $ourStore);
   $: propsWeControl = isWithinPanel
-    ? {}
+    ? { type }
     : {
         id: $api.buttonId,
+        type,
         "aria-expanded": disabled
           ? undefined
           : $api.popoverState === PopoverStates.Open,

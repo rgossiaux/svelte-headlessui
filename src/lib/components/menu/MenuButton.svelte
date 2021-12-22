@@ -9,6 +9,7 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
+  import { resolveButtonType } from "$lib/utils/resolve-button-type";
   const forwardEvents = forwardEventsBuilder(get_current_component());
   export let as: SupportedAs = "button";
   export let use: HTMLActionArray = [];
@@ -76,6 +77,7 @@
 
   $: propsWeControl = {
     id,
+    type: resolveButtonType({ type: $$props.type, as }, $buttonStore),
     "aria-haspopup": true,
     "aria-controls": $itemsStore?.id,
     "aria-expanded": disabled ? undefined : $api.menuState === MenuStates.Open,

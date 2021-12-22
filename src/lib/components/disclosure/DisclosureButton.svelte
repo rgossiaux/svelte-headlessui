@@ -8,6 +8,8 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
+  import { Writable, writable } from "svelte/store";
+  import { resolveButtonType } from "$lib/utils/resolve-button-type";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   export let as: SupportedAs = "button";
@@ -23,6 +25,9 @@
 
   $: isWithinPanel =
     panelContext === null ? false : panelContext === $api.panelId;
+
+  let ourStore: Writable<HTMLElement | null> = writable(null);
+  $: if (!isWithinPanel) ourStore = buttonStore;
 
   function handleClick() {
     if (disabled) return;
@@ -73,10 +78,12 @@
     }
   }
 
+  $: type = resolveButtonType({ type: $$props.type, as }, $ourStore);
   $: propsWeControl = isWithinPanel
-    ? {}
+    ? { type }
     : {
         id,
+        type,
         "aria-expanded": disabled
           ? undefined
           : $api.disclosureState === DisclosureStates.Open,
@@ -97,6 +104,7 @@
     {slotProps}
     use={[...use, forwardEvents]}
     name={"DisclosureButton"}
+    bind:el={$ourStore}
     on:click={handleClick}
     on:keydown={handleKeyDown}
   >
@@ -109,7 +117,7 @@
     {slotProps}
     use={[...use, forwardEvents]}
     name={"DisclosureButton"}
-    bind:el={$buttonStore}
+    bind:el={$ourStore}
     on:click={handleClick}
     on:keydown={handleKeyDown}
     on:keyup={handleKeyUp}
