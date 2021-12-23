@@ -12,6 +12,9 @@ import Cite from "./Cite.svelte";
 import Code from "./Code.svelte";
 import Data from "./Data.svelte";
 import Datalist from "./Datalist.svelte";
+import Dd from "./Dd.svelte";
+import Dl from "./Dl.svelte";
+import Dt from "./Dt.svelte";
 import Div from "./Div.svelte";
 import Em from "./Em.svelte";
 import Footer from "./Footer.svelte";
@@ -48,6 +51,9 @@ const components = {
   "code": Code,
   "data": Data,
   "datalist": Datalist,
+  "dd": Dd,
+  "dl": Dl,
+  "dt": Dt,
   "div": Div,
   "em": Em,
   "footer": Footer,
