@@ -1,14 +1,21 @@
 {
   "name": "@rgossiaux/svelte-headlessui",
   "description": "A complete, full-featured, unofficial Svelte port of Headless UI, an unstyled, fully accessible UI component library.",
-  "keywords": ["svelte", "headlessui", "svelte3", "svelte-components", "headless", "sveltejs"],
+  "keywords": [
+    "svelte",
+    "headlessui",
+    "svelte3",
+    "svelte-components",
+    "headless",
+    "sveltejs"
+  ],
   "homepage": "https://github.com/rgossiaux/svelte-headlessui",
   "bugs": {
     "url": "https://github.com/rgossiaux/svelte-headlessui/issues"
   },
   "license": "MIT",
   "repository": "github:rgossiaux/svelte-headlessui",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
