@@ -4,6 +4,9 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
     '^.+\\.ts$': 'ts-jest',
   },
+  setupFilesAfterEnv: [
+    '@testing-library/jest-dom/extend-expect',
+  ],
   testEnvironment: "jsdom",
   moduleFileExtensions: ['js', 'ts', 'svelte'],
   moduleNameMapper: {
