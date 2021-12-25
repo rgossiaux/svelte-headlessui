@@ -34,6 +34,7 @@
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
     "@tailwindcss/forms": "^0.4.0",
+    "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/svelte": "^3.0.3",
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
