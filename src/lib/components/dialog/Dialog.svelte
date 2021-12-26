@@ -84,11 +84,11 @@
         : open;
 
     // Validations
-    let hasOpen = open !== undefined || openClosedState !== null;
+    let hasOpen = open !== undefined || openClosedState !== undefined;
 
     if (!hasOpen) {
       throw new Error(
-        `You forgot to provide an \`open\` prop to the \`Dialog\`.`
+        `You forgot to provide an \`open\` prop to the \`Dialog\` component.`
       );
     }
 
