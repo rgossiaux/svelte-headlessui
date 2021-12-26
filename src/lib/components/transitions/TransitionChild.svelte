@@ -12,7 +12,7 @@
     useNesting,
     useParentNesting,
     useTransitionContext,
-  } from "./TransitionRoot.svelte";
+  } from "$lib/components/transitions/common.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";

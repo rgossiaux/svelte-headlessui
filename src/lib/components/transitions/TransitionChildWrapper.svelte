@@ -1,13 +1,12 @@
 <script lang="ts">
   import { hasOpenClosed } from "$lib/internal/open-closed";
   import TransitionChild from "./TransitionChild.svelte";
-  import TransitionRoot, {
-    hasTransitionContext,
-  } from "./TransitionRoot.svelte";
+  import TransitionRoot from "./TransitionRoot.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import { hasTransitionContext } from "./common.svelte";
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
     "beforeEnter",
     "beforeLeave",
