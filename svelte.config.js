@@ -31,7 +31,8 @@ const config = {
   kit: {
     adapter: adapter(),
     package: {
-      exports: (file) => file.endsWith("index.js")
+      exports: (filepath) => filepath.endsWith("index.js"),
+      files: (filepath) => !filepath.endsWith('.text.js')
     },
     target: "#svelte",
     vite: {
