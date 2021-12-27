@@ -20,11 +20,10 @@
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
-  const api = useDisclosureContext("DisclosureButton");
-  $: id = $api.panelId;
+  const api = useDisclosureContext("DisclosurePanel");
   let openClosedState = useOpenClosed();
 
-  setContext(DISCLOSURE_PANEL_CONTEXT_NAME, id);
+  setContext(DISCLOSURE_PANEL_CONTEXT_NAME, $api.panelId);
 
   $: panelStore = $api.panelStore;
 
@@ -33,7 +32,7 @@
       ? $openClosedState === State.Open
       : $api.disclosureState === DisclosureStates.Open;
 
-  $: propsWeControl = { id };
+  $: propsWeControl = { id: $api.panelId };
 
   $: slotProps = {
     open: $api.disclosureState === DisclosureStates.Open,

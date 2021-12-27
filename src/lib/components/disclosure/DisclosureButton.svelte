@@ -1,7 +1,6 @@
 <script lang="ts">
   import { useDisclosureContext, DisclosureStates } from "./Disclosure.svelte";
   import { usePanelContext } from "./DisclosurePanel.svelte";
-  import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
@@ -18,7 +17,6 @@
   export let disabled = false;
   const api = useDisclosureContext("DisclosureButton");
   const panelContext = usePanelContext();
-  const id = `headlessui-disclosure-button-${useId()}`;
 
   $: buttonStore = $api.buttonStore;
   $: panelStore = $api.panelStore;
@@ -82,7 +80,7 @@
   $: propsWeControl = isWithinPanel
     ? { type }
     : {
-        id,
+        id: $api.buttonId,
         type,
         "aria-expanded": disabled
           ? undefined
