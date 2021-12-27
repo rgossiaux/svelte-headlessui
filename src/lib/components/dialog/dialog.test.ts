@@ -5,9 +5,11 @@ import { suppressConsoleLogs } from "$lib/test-utils/suppress-console-logs";
 import { render } from "@testing-library/svelte";
 import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
 import Button from "$lib/internal/elements/Button.svelte";
+import Div from "$lib/internal/elements/Div.svelte";
+import Form from "$lib/internal/elements/Form.svelte";
 import P from "$lib/internal/elements/P.svelte";
 import Input from "$lib/internal/elements/Input.svelte";
-import { assertDialog, assertDialogDescription, DialogState, getDialog } from "$lib/test-utils/accessibility-assertions";
+import { assertActiveElement, assertDialog, assertDialogDescription, DialogState, getByText, getDialog, getDialogOverlay } from "$lib/test-utils/accessibility-assertions";
 import { click, Keys, press } from "$lib/test-utils/interactions";
 import Transition from "$lib/components/transitions/TransitionRoot.svelte";
 import { tick } from "svelte";
@@ -399,7 +401,7 @@ describe('Keyboard interactions', () => {
           TestRenderer, {
           allProps: [
             [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-              ["Contents"],
+              "Contents",
               [Input, { id: "name" }],
               [TestTabSentinel],
             ]],
@@ -432,7 +434,7 @@ describe('Keyboard interactions', () => {
           TestRenderer, {
           allProps: [
             [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-              ["Contents"],
+              "Contents",
               [Input, { id: "name", onKeydown: (e: CustomEvent) => { e.preventDefault(); e.stopPropagation(); } }],
               [TestTabSentinel],
             ]],
@@ -458,3 +460,220 @@ describe('Keyboard interactions', () => {
       })
   })
 })
+
+describe('Mouse interactions', () => {
+  it(
+    'should be possible to close a Dialog using a click on the Dialog.Overlay',
+    suppressConsoleLogs(async () => {
+      render(
+        TestRenderer, {
+        allProps: [
+          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
+            [DialogOverlay],
+            "Contents",
+            [TestTabSentinel],
+          ]],
+        ]
+      })
+
+      // Open dialog
+      await click(document.getElementById('trigger'))
+
+      // Verify it is open
+      assertDialog({ state: DialogState.Visible })
+
+      // Click to close
+      await click(getDialogOverlay())
+
+      // Verify it is closed
+      assertDialog({ state: DialogState.InvisibleUnmounted })
+    })
+  )
+
+  it(
+    'should not close the Dialog when clicking on contents of the Dialog.Overlay',
+    suppressConsoleLogs(async () => {
+      render(
+        TestRenderer, {
+        allProps: [
+          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
+            [DialogOverlay, {}, [
+              [Button, {}, "hi"]
+            ]],
+            "Contents",
+            [TestTabSentinel],
+          ]],
+        ]
+      })
+
+      // Open dialog
+      await click(document.getElementById('trigger'))
+
+      // Verify it is open
+      assertDialog({ state: DialogState.Visible })
+
+      // Click on an element inside the overlay
+      await click(getByText('hi'))
+
+      // Verify it is still open
+      assertDialog({ state: DialogState.Visible })
+    })
+  )
+
+  it(
+    'should be possible to close the dialog, and re-focus the button when we click outside on the body element',
+    suppressConsoleLogs(async () => {
+      render(
+        TestRenderer, {
+        allProps: [
+          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
+            "Contents",
+            [TestTabSentinel],
+          ]],
+        ]
+      })
+
+      // Open dialog
+      await click(getByText('Trigger'))
+
+      // Verify it is open
+      assertDialog({ state: DialogState.Visible })
+
+      // Click the body to close
+      await click(document.body)
+
+      // Verify it is closed
+      assertDialog({ state: DialogState.InvisibleUnmounted })
+
+      // Verify the button is focused
+      assertActiveElement(getByText('Trigger'))
+    })
+  )
+
+  it(
+    'should be possible to close the dialog, and keep focus on the focusable element',
+    suppressConsoleLogs(async () => {
+      render(
+        TestRenderer, {
+        allProps: [
+          [Button, {}, "Hello"],
+          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
+            "Contents",
+            [TestTabSentinel],
+          ]],
+        ]
+      })
+
+      // Open dialog
+      await click(getByText('Trigger'))
+
+      // Verify it is open
+      assertDialog({ state: DialogState.Visible })
+
+      // Click the button to close (outside click)
+      await click(getByText('Hello'))
+
+      // Verify it is closed
+      assertDialog({ state: DialogState.InvisibleUnmounted })
+
+      // Verify the button is focused
+      assertActiveElement(getByText('Hello'))
+    })
+  )
+
+  it(
+    'should stop propagating click events when clicking on the Dialog.Overlay',
+    suppressConsoleLogs(async () => {
+      let wrapperFn = jest.fn()
+      render(
+        TestRenderer, {
+        allProps: [
+          [Div, { onClick: wrapperFn }, [
+            [ManagedDialog, { initialOpen: true }, [
+              "Contents",
+              [DialogOverlay],
+              [TestTabSentinel],
+            ]],
+          ]]
+        ]
+      })
+
+      // Verify it is open
+      assertDialog({ state: DialogState.Visible })
+
+      // Verify that the wrapper function has not been called yet
+      expect(wrapperFn).toHaveBeenCalledTimes(0)
+
+      // Click the Dialog.Overlay to close the Dialog
+      await click(getDialogOverlay())
+
+      // Verify it is closed
+      assertDialog({ state: DialogState.InvisibleUnmounted })
+
+      // Verify that the wrapper function has not been called yet
+      expect(wrapperFn).toHaveBeenCalledTimes(0)
+    })
+  )
+
+  it(
+    'should be possible to submit a form inside a Dialog',
+    suppressConsoleLogs(async () => {
+      let submitFn = jest.fn()
+      render(
+        TestRenderer, {
+        allProps: [
+          [ManagedDialog, { initialOpen: true }, [
+            [Form, { onSubmit: submitFn }, [
+              [Input, { type: "hidden", value: "abc" }],
+              [Button, { type: "submit" }, "Submit"]
+            ]],
+            [TestTabSentinel],
+          ]],
+        ]
+      })
+
+      // Verify it is open
+      assertDialog({ state: DialogState.Visible })
+
+      // Submit the form
+      await click(getByText('Submit'))
+
+      // Verify that the submitFn function has been called
+      expect(submitFn).toHaveBeenCalledTimes(1)
+    })
+  )
+
+  it(
+    'should stop propagating click events when clicking on an element inside the Dialog',
+    suppressConsoleLogs(async () => {
+      let wrapperFn = jest.fn()
+      render(
+        TestRenderer, {
+        allProps: [
+          [Div, { onClick: wrapperFn }, [
+            [ManagedDialog, { initialOpen: true, buttonInside: true, buttonText: "Inside" }, [
+              "Contents",
+              [TestTabSentinel],
+            ]],
+          ]]
+        ]
+      })
+
+      // Verify it is open
+      assertDialog({ state: DialogState.Visible })
+
+      // Verify that the wrapper function has not been called yet
+      expect(wrapperFn).toHaveBeenCalledTimes(0)
+
+      // Click the button inside the the Dialog
+      await click(getByText('Inside'))
+
+      // Verify it is closed
+      assertDialog({ state: DialogState.InvisibleUnmounted })
+
+      // Verify that the wrapper function has not been called yet
+      expect(wrapperFn).toHaveBeenCalledTimes(0)
+    })
+  )
+})
+
