@@ -4,18 +4,25 @@
     onChange?: HandlerType;
     onClose?: HandlerType;
     onFocus?: HandlerType;
+    onKeydown?: HandlerType;
   }
-  type SingleComponent = [SvelteComponent, ComponentProps, TestRendererProps];
+  type SingleComponent =
+    | string
+    | [SvelteComponent, ComponentProps, TestRendererProps];
   export type TestRendererProps =
     | undefined
-    | string
     | SingleComponent
     | SingleComponent[];
 
   function isSingleComponent(
     props: SingleComponent | SingleComponent[]
   ): props is SingleComponent {
-    return Array.isArray(props) && !Array.isArray(props[0]);
+    return (
+      typeof props === "string" ||
+      (Array.isArray(props) &&
+        !Array.isArray(props[0]) &&
+        typeof props[0] !== "string")
+    );
   }
 </script>
 
@@ -28,32 +35,37 @@
   let onChange: HandlerType = () => {};
   let onClose: HandlerType = () => {};
   let onFocus: HandlerType = () => {};
+  let onKeydown: HandlerType = () => {};
   if (allProps && typeof allProps !== "string" && isSingleComponent(allProps)) {
     ({
       onChange = onChange,
       onClose = onClose,
       onFocus = onFocus,
+      onKeydown = onKeydown,
       ...spreadProps
     } = allProps[1] || {});
   }
 </script>
 
-{#if typeof allProps === "string"}
-  {allProps}
-{:else if Array.isArray(allProps)}
-  {#if Array.isArray(allProps[0])}
+{#if allProps}
+  {#if isSingleComponent(allProps)}
+    {#if typeof allProps === "string"}
+      {allProps}
+    {:else}
+      <svelte:component
+        this={allProps[0]}
+        {...spreadProps}
+        on:change={onChange}
+        on:close={onClose}
+        on:focus={onFocus}
+        on:keydown={onKeydown}
+      >
+        <svelte:self allProps={allProps[2]} />
+      </svelte:component>
+    {/if}
+  {:else}
     {#each allProps as childProps}
       <svelte:self allProps={childProps} />
     {/each}
-  {:else}
-    <svelte:component
-      this={allProps[0]}
-      {...spreadProps}
-      on:change={onChange}
-      on:close={onClose}
-      on:focus={onFocus}
-    >
-      <svelte:self allProps={allProps[2]} />
-    </svelte:component>
   {/if}
 {/if}

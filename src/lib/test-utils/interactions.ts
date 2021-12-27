@@ -181,9 +181,9 @@ export async function click(
 
     if (button === MouseButton.Left) {
       // Cancel in pointerDown cancels mouseDown, mouseUp
-      let cancelled = !fireEvent.pointerDown(element, options)
+      let cancelled = !(await fireEvent.pointerDown(element, options))
       if (!cancelled) {
-        fireEvent.mouseDown(element, options)
+        await fireEvent.mouseDown(element, options)
       }
 
       // Ensure to trigger a `focus` event if the element is focusable, or within a focusable element
@@ -196,26 +196,25 @@ export async function click(
         next = next.parentElement
       }
 
-      fireEvent.pointerUp(element, options)
+      await fireEvent.pointerUp(element, options)
       if (!cancelled) {
-        fireEvent.mouseUp(element, options)
+        await fireEvent.mouseUp(element, options)
       }
-      fireEvent.click(element, options)
+      await fireEvent.click(element, options)
     } else if (button === MouseButton.Right) {
       // Cancel in pointerDown cancels mouseDown, mouseUp
-      let cancelled = !fireEvent.pointerDown(element, options)
+      let cancelled = !(await fireEvent.pointerDown(element, options))
       if (!cancelled) {
-        fireEvent.mouseDown(element, options)
+        await fireEvent.mouseDown(element, options)
       }
 
       // Only in Firefox:
-      fireEvent.pointerUp(element, options)
+      await fireEvent.pointerUp(element, options)
       if (!cancelled) {
-        fireEvent.mouseUp(element, options)
+        await fireEvent.mouseUp(element, options)
       }
     }
 
-    await tick()
   } catch (err: any) {
     Error.captureStackTrace(err, click)
     throw err
@@ -226,7 +225,7 @@ export async function focus(element: Document | Element | Window | null) {
   try {
     if (element === null) return expect(element).not.toBe(null)
 
-    fireEvent.focus(element)
+    await fireEvent.focus(element)
 
     await tick()
   } catch (err: any) {
@@ -238,9 +237,9 @@ export async function mouseEnter(element: Document | Element | Window | null) {
   try {
     if (element === null) return expect(element).not.toBe(null)
 
-    fireEvent.pointerOver(element)
-    fireEvent.pointerEnter(element)
-    fireEvent.mouseOver(element)
+    await fireEvent.pointerOver(element)
+    await fireEvent.pointerEnter(element)
+    await fireEvent.mouseOver(element)
 
     await tick()
   } catch (err: any) {
@@ -253,8 +252,8 @@ export async function mouseMove(element: Document | Element | Window | null) {
   try {
     if (element === null) return expect(element).not.toBe(null)
 
-    fireEvent.pointerMove(element)
-    fireEvent.mouseMove(element)
+    await fireEvent.pointerMove(element)
+    await fireEvent.mouseMove(element)
 
     await tick()
   } catch (err: any) {
@@ -267,10 +266,10 @@ export async function mouseLeave(element: Document | Element | Window | null) {
   try {
     if (element === null) return expect(element).not.toBe(null)
 
-    fireEvent.pointerOut(element)
-    fireEvent.pointerLeave(element)
-    fireEvent.mouseOut(element)
-    fireEvent.mouseLeave(element)
+    await fireEvent.pointerOut(element)
+    await fireEvent.pointerLeave(element)
+    await fireEvent.mouseOut(element)
+    await fireEvent.mouseLeave(element)
 
     await tick()
   } catch (err: any) {

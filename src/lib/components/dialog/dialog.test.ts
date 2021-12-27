@@ -12,7 +12,12 @@ import { click, Keys, press } from "$lib/test-utils/interactions";
 import Transition from "$lib/components/transitions/TransitionRoot.svelte";
 import { tick } from "svelte";
 
-jest.mock('../../hooks/use-id')
+let id = 0;
+jest.mock('../../hooks/use-id', () => {
+  return {
+    useId: jest.fn(() => ++id),
+  }
+})
 
 // @ts-expect-error
 global.IntersectionObserver = class FakeIntersectionObserver {
@@ -20,6 +25,7 @@ global.IntersectionObserver = class FakeIntersectionObserver {
   disconnect() { }
 }
 
+beforeEach(() => id = 0)
 afterAll(() => jest.restoreAllMocks())
 
 describe('Safe guards', () => {
@@ -56,10 +62,7 @@ describe('Safe guards', () => {
         ]
       })
 
-      assertDialog({
-        state: DialogState.InvisibleUnmounted,
-        attributes: { id: 'headlessui-dialog-1' },
-      })
+      assertDialog({ state: DialogState.InvisibleUnmounted })
     })
   )
 })
@@ -355,4 +358,103 @@ describe('Composition', () => {
   )
 })
 
+describe('Keyboard interactions', () => {
+  describe('`Escape` key', () => {
+    it(
+      'should be possible to close the dialog with Escape',
+      async () => {
+        render(
+          TestRenderer, {
+          allProps: [
+            [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
+              "Contents",
+              [TestTabSentinel],
+            ]],
+          ]
+        })
 
+        assertDialog({ state: DialogState.InvisibleUnmounted })
+
+        // Open dialog
+        await click(document.getElementById("trigger"))
+
+        // Verify it is open
+        assertDialog({
+          state: DialogState.Visible,
+          attributes: { id: 'headlessui-dialog-1' },
+        })
+
+        // Close dialog
+        await press(Keys.Escape)
+
+        // Verify it is close
+        assertDialog({ state: DialogState.InvisibleUnmounted })
+      }
+    )
+
+    it(
+      'should be possible to close the dialog with Escape, when a field is focused',
+      suppressConsoleLogs(async () => {
+        render(
+          TestRenderer, {
+          allProps: [
+            [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
+              ["Contents"],
+              [Input, { id: "name" }],
+              [TestTabSentinel],
+            ]],
+          ]
+        })
+
+        assertDialog({ state: DialogState.InvisibleUnmounted })
+
+        // Open dialog
+        await click(document.getElementById('trigger'))
+
+        // Verify it is open
+        assertDialog({
+          state: DialogState.Visible,
+          attributes: { id: 'headlessui-dialog-1' },
+        })
+
+        // Close dialog
+        await press(Keys.Escape)
+
+        // Verify it is close
+        assertDialog({ state: DialogState.InvisibleUnmounted })
+      })
+    )
+
+    it(
+      'should not be possible to close the dialog with Escape, when a field is focused but cancels the event',
+      async () => {
+        render(
+          TestRenderer, {
+          allProps: [
+            [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
+              ["Contents"],
+              [Input, { id: "name", onKeydown: (e: CustomEvent) => { e.preventDefault(); e.stopPropagation(); } }],
+              [TestTabSentinel],
+            ]],
+          ]
+        })
+
+        assertDialog({ state: DialogState.InvisibleUnmounted })
+
+        // Open dialog
+        await click(document.getElementById('trigger'))
+
+        // Verify it is open
+        assertDialog({
+          state: DialogState.Visible,
+          attributes: { id: 'headlessui-dialog-1' },
+        })
+
+        // Try to close the dialog
+        await press(Keys.Escape)
+
+        // Verify it is still open
+        assertDialog({ state: DialogState.Visible })
+      })
+  })
+})
