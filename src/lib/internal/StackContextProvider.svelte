@@ -9,24 +9,21 @@
 
 <script lang="ts">
   import { getContext, onDestroy, setContext } from "svelte";
-  import { Readable, writable, Writable } from "svelte/store";
   type OnUpdate = (message: StackMessage, element: HTMLElement) => void;
 
   export let onUpdate: OnUpdate | undefined;
   export let element: HTMLElement | null;
 
-  let parentUpdateStore: Readable<OnUpdate> | undefined =
-    getContext(STACK_CONTEXT_NAME);
-  let notifyStore: Writable<OnUpdate> = writable(() => {});
-  setContext(STACK_CONTEXT_NAME, notifyStore);
-
-  $: notifyStore.set((...args: Parameters<OnUpdate>) => {
+  function notify(...args: Parameters<OnUpdate>) {
     // Notify our layer
     onUpdate?.(...args);
 
     // Notify the parent
-    $parentUpdateStore?.(...args);
-  });
+    parentUpdate?.(...args);
+  }
+
+  let parentUpdate: OnUpdate | undefined = getContext(STACK_CONTEXT_NAME);
+  setContext(STACK_CONTEXT_NAME, notify);
 
   $: _cleanup = (() => {
     if (_cleanup) {
@@ -34,8 +31,8 @@
     }
     if (!element) return null;
     let savedElement = element;
-    $notifyStore(StackMessage.Add, savedElement);
-    return () => $notifyStore(StackMessage.Remove, savedElement);
+    notify(StackMessage.Add, savedElement);
+    return () => notify(StackMessage.Remove, savedElement);
   })();
 
   onDestroy(() => {

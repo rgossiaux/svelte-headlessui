@@ -253,10 +253,11 @@
   onUpdate={(message, element) => {
     return match(message, {
       [StackMessage.Add]() {
-        containers.add(element);
+        containers = new Set([...containers, element]);
       },
       [StackMessage.Remove]() {
         containers.delete(element);
+        containers = new Set([...containers]);
       },
     });
   }}

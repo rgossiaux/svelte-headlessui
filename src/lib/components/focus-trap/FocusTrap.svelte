@@ -7,7 +7,7 @@
     FocusResult,
   } from "$lib/utils/focus-management";
   import { contains } from "$lib/internal/dom-containers";
-  import { afterUpdate, onMount, onDestroy, tick } from "svelte";
+  import { onMount, onDestroy, tick } from "svelte";
 
   export let containers: Set<HTMLElement>;
   export let enabled: boolean = true;
@@ -74,7 +74,7 @@
   // Handle initial focus
   onMount(handleFocus);
 
-  afterUpdate(() => (enabled ? handleFocus() : restore()));
+  $: enabled && containers ? handleFocus() : restore();
 
   // When this component is being destroyed, focusElement is called
   // before handleWindowFocus is removed, so in the svelte port we add this
