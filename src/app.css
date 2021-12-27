@@ -3,8 +3,34 @@
 @tailwind components;
 @tailwind utilities;
 
-/* This was removed from preflight, but turning it back on for better testing */
-button:focus {
-  outline: 1px dotted;
-  outline: 5px auto -webkit-focus-ring-color;
+html {
+  tab-size: 2;
+}
+
+pre .token.tag {@apply text-indigo-400}
+pre .token.attr-name {@apply text-emerald-400}
+pre .token.attr-value {@apply text-emerald-200}
+pre .token.namespace {@apply text-purple-400}
+pre .token.keyword,
+pre .token.operator {@apply text-purple-400}
+pre .token.string {@apply text-emerald-300}
+pre .token.function {@apply text-sky-400}
+pre .token.comment {@apply text-gray-600}
+pre .token.parameter,
+pre .token.interpolation {@apply text-cyan-400}
+pre .token.number {@apply text-teal-300}
+pre .token.boolean {@apply text-pink-400}
+
+table tr td:first-child,
+table tr th:first-child {
+  max-width: 150px;
+}
+table tr td:first-child + td:last-child,
+table tr th:first-child + th:last-child {
+  margin-left: 150px;
+}
+
+table tr td + td:not(:last-child),
+table tr th + th:not(:last-child) {
+  max-width: 150px;
 }

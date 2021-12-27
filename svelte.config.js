@@ -1,29 +1,46 @@
-import adapter from "@sveltejs/adapter-auto";
+import path from 'path';
+import adapter from "@sveltejs/adapter-vercel";
 import preprocess from "svelte-preprocess";
+import {mdsvex} from 'mdsvex';
+import slug from 'rehype-slug';
+import Prism from 'prismjs';
+import 'prism-svelte';
+
+const dev = process.env.NODE_ENV === 'development';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-  // Consult https://github.com/sveltejs/svelte-preprocess
-  // for more information about preprocessors
+  extensions: ['.svelte', '.md'],
   preprocess: [
     preprocess({
       postcss: true,
     }),
+    mdsvex({
+      extensions: ['.md'],
+      rehypePlugins: [slug],
+      highlight: function (str, lang) {
+        if (lang && lang in Prism.languages) {
+          try {
+            return Prism.highlight(str, Prism.languages[lang], lang);
+          } catch(__) {}
+        }
+        return '';
+      }
+    })
   ],
-
   kit: {
     adapter: adapter(),
     package: {
-      exports: (filepath) => {
-        return filepath.endsWith("index.js");
-      },
-      files: (filepath) => {
-        return !filepath.endsWith(".test.ts");
-      }
+      exports: (file) => file.endsWith("index.js")
     },
-
-    // hydrate the <div id="svelte"> element in src/app.html
     target: "#svelte",
+    vite: {
+      resolve: {
+        alias: {
+          '$site': path.resolve('./src/site')
+        }
+      }
+    }
   },
 };
 
