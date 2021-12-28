@@ -8,7 +8,9 @@
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    { name: "click", shouldExclude: () => disabled },
+  ]);
   export let as: SupportedAs = "a";
   export let use: HTMLActionArray = [];
   export let disabled = false;
