@@ -78,6 +78,7 @@
   $: propsWeControl = {
     id,
     type: resolveButtonType({ type: $$props.type, as }, $buttonStore),
+    disabled: disabled ? true : undefined,
     "aria-haspopup": true,
     "aria-controls": $itemsStore?.id,
     "aria-expanded": disabled ? undefined : $api.menuState === MenuStates.Open,

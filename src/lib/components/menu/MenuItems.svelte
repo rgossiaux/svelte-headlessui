@@ -15,7 +15,7 @@
   const forwardEvents = forwardEventsBuilder(get_current_component());
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
-  const api = useMenuContext("MenuButton");
+  const api = useMenuContext("MenuItems");
   const id = `headlessui-menu-items-${useId()}`;
   let searchDebounce: ReturnType<typeof setTimeout> | null = null;
 

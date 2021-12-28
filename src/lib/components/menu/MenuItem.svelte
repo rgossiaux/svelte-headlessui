@@ -27,7 +27,6 @@
   $: data = { disabled, textValue } as MenuItemData;
 
   onMount(async () => {
-    await tick();
     $api.registerItem(id, data);
   });
 
