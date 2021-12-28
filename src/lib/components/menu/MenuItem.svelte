@@ -25,8 +25,13 @@
   $: buttonStore = $api.buttonStore;
 
   let elementRef: HTMLElement | undefined;
-  $: textValue = elementRef?.textContent?.toLowerCase().trim();
-  $: data = { disabled, textValue } as MenuItemData;
+  $: textValue = elementRef?.textContent?.toLowerCase().trim() || "";
+  // Fairly hacky (Svelte): only mutate the contents of the data object.
+  // On first registration, `data` will not contain the correct textValue,
+  // so it must be mutated afterwards
+  let data = { disabled, textValue } as MenuItemData;
+  $: data.disabled = disabled;
+  $: data.textValue = textValue;
 
   onMount(async () => {
     $api.registerItem(id, data);
