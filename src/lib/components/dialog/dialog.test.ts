@@ -1,4 +1,4 @@
-import { Dialog, DialogDescription, DialogOverlay, DialogTitle } from "."
+import { Dialog, DialogDescription, DialogOverlay, DialogTitle } from ".";
 import TestTabSentinel from "./_TestTabSentinel.svelte";
 import ManagedDialog from "./_ManagedDialog.svelte";
 import NestedTestComponent from "./_NestedTestComponent.svelte";
@@ -10,95 +10,100 @@ import Div from "$lib/internal/elements/Div.svelte";
 import Form from "$lib/internal/elements/Form.svelte";
 import P from "$lib/internal/elements/P.svelte";
 import Input from "$lib/internal/elements/Input.svelte";
-import { assertActiveElement, assertDialog, assertDialogDescription, DialogState, getByText, getDialog, getDialogOverlay, getDialogOverlays, getDialogs } from "$lib/test-utils/accessibility-assertions";
+import {
+  assertActiveElement,
+  assertDialog,
+  assertDialogDescription,
+  DialogState,
+  getByText,
+  getDialog,
+  getDialogOverlay,
+  getDialogOverlays,
+  getDialogs,
+} from "$lib/test-utils/accessibility-assertions";
 import { click, Keys, press } from "$lib/test-utils/interactions";
 import Transition from "$lib/components/transitions/TransitionRoot.svelte";
 import { tick } from "svelte";
 
 let id = 0;
-jest.mock('../../hooks/use-id', () => {
+jest.mock("../../hooks/use-id", () => {
   return {
     useId: jest.fn(() => ++id),
-  }
-})
+  };
+});
 
 // @ts-expect-error
 global.IntersectionObserver = class FakeIntersectionObserver {
-  observe() { }
-  disconnect() { }
-}
+  observe() {}
+  disconnect() {}
+};
 
-beforeEach(() => id = 0)
-afterAll(() => jest.restoreAllMocks())
+beforeEach(() => (id = 0));
+afterAll(() => jest.restoreAllMocks());
 
-describe('Safe guards', () => {
+describe("Safe guards", () => {
   it.each([
-    ['DialogOverlay', DialogOverlay],
-    ['DialogTitle', DialogTitle],
+    ["DialogOverlay", DialogOverlay],
+    ["DialogTitle", DialogTitle],
   ])(
-    'should error when we are using a <%s /> without a parent <Dialog />',
+    "should error when we are using a <%s /> without a parent <Dialog />",
     suppressConsoleLogs((name, Component) => {
       expect(() => render(Component)).toThrowError(
         `<${name} /> is missing a parent <Dialog /> component.`
-      )
-      expect.hasAssertions()
+      );
+      expect.hasAssertions();
     })
-  )
+  );
 
   it(
-    'should be possible to render a Dialog without crashing',
+    "should be possible to render a Dialog without crashing",
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
+      render(TestRenderer, {
         allProps: [
           Dialog,
           { open: false, onClose: console.log },
           [
-            [Button,
-              {},
-              "Trigger"],
+            [Button, {}, "Trigger"],
             [DialogOverlay],
             [DialogTitle],
             [P, {}, "Contents"],
-            [DialogDescription]
-          ]
-        ]
-      })
+            [DialogDescription],
+          ],
+        ],
+      });
 
-      assertDialog({ state: DialogState.InvisibleUnmounted })
+      assertDialog({ state: DialogState.InvisibleUnmounted });
     })
-  )
-})
+  );
+});
 
-describe('Rendering', () => {
-  describe('Dialog', () => {
+describe("Rendering", () => {
+  describe("Dialog", () => {
     it(
-      'should complain when the `open` and `onClose` prop are missing',
-      suppressConsoleLogs(async () => {
-        expect(() => render(Dialog, { as: "div" })).toThrowErrorMatchingInlineSnapshot(
-          `"You forgot to provide an \`open\` prop to the \`Dialog\` component."`
-        )
-        expect.hasAssertions()
-      })
-    )
-
-    it(
-      'should complain when an `open` prop is not a boolean',
+      "should complain when the `open` and `onClose` prop are missing",
       suppressConsoleLogs(async () => {
         expect(() =>
-          render(
-            TestRenderer, {
-            allProps: [
-              Dialog,
-              { open: null, onClose: console.log, as: "div" },
-            ]
+          render(Dialog, { as: "div" })
+        ).toThrowErrorMatchingInlineSnapshot(
+          `"You forgot to provide an \`open\` prop to the \`Dialog\` component."`
+        );
+        expect.hasAssertions();
+      })
+    );
+
+    it(
+      "should complain when an `open` prop is not a boolean",
+      suppressConsoleLogs(async () => {
+        expect(() =>
+          render(TestRenderer, {
+            allProps: [Dialog, { open: null, onClose: console.log, as: "div" }],
           })
         ).toThrowErrorMatchingInlineSnapshot(
           `"You provided an \`open\` prop to the \`Dialog\`, but the value is not a boolean. Received: null"`
-        )
-        expect.hasAssertions()
+        );
+        expect.hasAssertions();
       })
-    )
+    );
 
     // TODO: render prop tests!
 

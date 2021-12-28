@@ -2,70 +2,76 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from ".";
 import { suppressConsoleLogs } from "$lib/test-utils/suppress-console-logs";
 import { render } from "@testing-library/svelte";
 import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
-import { assertActiveElement, assertDisclosureButton, assertDisclosurePanel, DisclosureState, getByText, getDisclosureButton, getDisclosurePanel } from "$lib/test-utils/accessibility-assertions";
+import {
+  assertActiveElement,
+  assertDisclosureButton,
+  assertDisclosurePanel,
+  DisclosureState,
+  getByText,
+  getDisclosureButton,
+  getDisclosurePanel,
+} from "$lib/test-utils/accessibility-assertions";
 import { click, Keys, MouseButton, press } from "$lib/test-utils/interactions";
 import { Transition, TransitionChild } from "../transitions";
 import TransitionDebug from "./_TransitionDebug.svelte";
 
 let id = 0;
-jest.mock('../../hooks/use-id', () => {
+jest.mock("../../hooks/use-id", () => {
   return {
     useId: jest.fn(() => ++id),
-  }
-})
+  };
+});
 
-
-beforeEach(() => id = 0)
-afterAll(() => jest.restoreAllMocks())
+beforeEach(() => (id = 0));
+afterAll(() => jest.restoreAllMocks());
 
 function nextFrame() {
-  return new Promise<void>(resolve => {
+  return new Promise<void>((resolve) => {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        resolve()
-      })
-    })
-  })
+        resolve();
+      });
+    });
+  });
 }
 
-describe('Safe guards', () => {
+describe("Safe guards", () => {
   it.each([
-    ['DisclosureButton', DisclosureButton],
-    ['DisclosurePanel', DisclosurePanel],
+    ["DisclosureButton", DisclosureButton],
+    ["DisclosurePanel", DisclosurePanel],
   ])(
-    'should error when we are using a <%s /> without a parent <Disclosure />',
+    "should error when we are using a <%s /> without a parent <Disclosure />",
     suppressConsoleLogs((name, Component) => {
       expect(() => render(Component)).toThrowError(
         `<${name} /> is missing a parent <Disclosure /> component.`
-      )
+      );
     })
-  )
+  );
 
   it(
-    'should be possible to render a Disclosure without crashing',
+    "should be possible to render a Disclosure without crashing",
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
+      render(TestRenderer, {
         allProps: [
           Disclosure,
           {},
           [
             [DisclosureButton, {}, "Trigger"],
             [DisclosurePanel, {}, "Contents"],
-          ]
-        ]
-      })
+          ],
+        ],
+      });
 
       assertDisclosureButton({
         state: DisclosureState.InvisibleUnmounted,
-        attributes: { id: 'headlessui-disclosure-button-1' },
-      })
-      assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
+        attributes: { id: "headlessui-disclosure-button-1" },
+      });
+      assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted });
     })
-  )
-})
+  );
+});
 
-describe('Rendering', () => {
+describe("Rendering", () => {
   // describe('Disclosure', () => {
   //   it(
   //     'should be possible to render a Disclosure using a render prop',
@@ -242,7 +248,7 @@ describe('Rendering', () => {
   //   )
   // })
 
-  describe('DisclosureButton', () => {
+  describe("DisclosureButton", () => {
     // it(
     //   'should be possible to render a DisclosureButton using a render prop',
     //   suppressConsoleLogs(async () => {

@@ -1,4 +1,11 @@
-import { assertActiveElement, assertFocusable, assertNotFocusable, assertRadioGroupLabel, getByText, getRadioGroupOptions } from "$lib/test-utils/accessibility-assertions";
+import {
+  assertActiveElement,
+  assertFocusable,
+  assertNotFocusable,
+  assertRadioGroupLabel,
+  getByText,
+  getRadioGroupOptions,
+} from "$lib/test-utils/accessibility-assertions";
 import { render } from "@testing-library/svelte";
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from ".";
 import { suppressConsoleLogs } from "$lib/test-utils/suppress-console-logs";

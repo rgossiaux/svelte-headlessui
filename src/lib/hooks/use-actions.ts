@@ -52,7 +52,7 @@ export function useActions(
   return {
     update(actions: ActionArray) {
       if (((actions && actions.length) || 0) != actionReturns.length) {
-        throw new Error('You must not change the length of an actions array.');
+        throw new Error("You must not change the length of an actions array.");
       }
 
       if (actions) {

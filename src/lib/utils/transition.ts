@@ -66,7 +66,7 @@ export function transition(
   done?: (reason: Reason) => void
 ) {
   let d = disposables();
-  let _done = done !== undefined ? once(done) : () => { };
+  let _done = done !== undefined ? once(done) : () => {};
 
   removeClasses(node, ...entered);
   addClasses(node, ...base, ...from);

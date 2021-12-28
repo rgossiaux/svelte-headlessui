@@ -1,15 +1,13 @@
 module.exports = {
   transform: {
-    '^.+\\.svelte$': ['svelte-jester', { preprocess: true }],
-    '^.+\\.js$': 'babel-jest',
-    '^.+\\.ts$': 'ts-jest',
+    "^.+\\.svelte$": ["svelte-jester", { preprocess: true }],
+    "^.+\\.js$": "babel-jest",
+    "^.+\\.ts$": "ts-jest",
   },
-  setupFilesAfterEnv: [
-    '@testing-library/jest-dom/extend-expect',
-  ],
+  setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"],
   testEnvironment: "jsdom",
-  moduleFileExtensions: ['js', 'ts', 'svelte'],
+  moduleFileExtensions: ["js", "ts", "svelte"],
   moduleNameMapper: {
     "\\$lib/(.+)$": "<rootDir>/src/lib/$1",
   },
-}
+};
