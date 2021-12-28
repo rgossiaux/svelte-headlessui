@@ -6,6 +6,7 @@
     onFocus?: HandlerType;
     onKeydown?: HandlerType;
     onSubmit?: HandlerType;
+    onClick?: HandlerType;
   }
   type SingleComponent =
     | string
@@ -38,6 +39,7 @@
   let onFocus: HandlerType = () => {};
   let onKeydown: HandlerType = () => {};
   let onSubmit: HandlerType = () => {};
+  let onClick: HandlerType = () => {};
   if (allProps && typeof allProps !== "string" && isSingleComponent(allProps)) {
     ({
       onChange = onChange,
@@ -45,6 +47,7 @@
       onFocus = onFocus,
       onKeydown = onKeydown,
       onSubmit = onSubmit,
+      onClick = onClick,
       ...spreadProps
     } = allProps[1] || {});
   }
@@ -63,6 +66,7 @@
         on:focus={onFocus}
         on:keydown={onKeydown}
         on:submit={onSubmit}
+        on:click={onClick}
       >
         <svelte:self allProps={allProps[2]} />
       </svelte:component>
