@@ -173,7 +173,7 @@
         "aria-expanded": disabled
           ? undefined
           : $api.popoverState === PopoverStates.Open,
-        "aria-controls": $api.panel ? $api.panelId : undefined,
+        "aria-controls": $apiPanel ? $api.panelId : undefined,
         disabled: disabled ? true : undefined,
       };
 
