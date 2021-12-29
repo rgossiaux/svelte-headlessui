@@ -6,12 +6,14 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render, { Features } from "$lib/utils/Render.svelte";
+  import { useId } from "$lib/hooks/use-id";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
   let api = usePopoverContext("PopoverOverlay");
+  let id = `headlessui-popover-overlay-${useId()}`;
 
   let openClosedState = useOpenClosed();
 
@@ -25,10 +27,13 @@
   }
 
   $: slotProps = { open: $api.popoverState === PopoverStates.Open };
+
+  $: propsWeControl = { id };
 </script>
 
 <Render
   {...$$restProps}
+  {...propsWeControl}
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
