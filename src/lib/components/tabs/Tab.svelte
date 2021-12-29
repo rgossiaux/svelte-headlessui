@@ -97,6 +97,9 @@
     tabIndex: selected ? 0 : -1,
     disabled: disabled ? true : undefined,
   };
+  $: if (process.env.NODE_ENV === "test") {
+    Object.assign(propsWeControl, { ["data-headlessui-index"]: myIndex });
+  }
 
   $: slotProps = { selected };
 </script>

@@ -33,6 +33,10 @@
     "aria-labelledby": $api.tabs[myIndex]?.id,
     tabIndex: selected ? 0 : -1,
   };
+
+  $: if (process.env.NODE_ENV === "test") {
+    Object.assign(propsWeControl, { ["data-headlessui-index"]: myIndex });
+  }
 </script>
 
 <Render
