@@ -7,20 +7,24 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render, { Features } from "$lib/utils/Render.svelte";
+  import { writable, Writable } from "svelte/store";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
+  let elementRef: Writable<HTMLElement | null> = writable(null);
   let api = useTabsContext("TabPanel");
   let id = `headlessui-tabs-panel-${useId()}`;
 
+  $: panelData = { id, ref: elementRef };
+
   onMount(() => {
-    $api.registerPanel(id);
-    return () => $api.unregisterPanel(id);
+    $api.registerPanel(panelData);
+    return () => $api.unregisterPanel(panelData);
   });
 
-  $: myIndex = $api.panels.indexOf(id);
+  $: myIndex = $api.panels.indexOf(panelData);
   $: selected = myIndex === $api.selectedIndex;
 
   $: propsWeControl = {
@@ -36,6 +40,7 @@
   {as}
   use={[...use, forwardEvents]}
   name={"TabPanel"}
+  bind:el={$elementRef}
   visible={selected}
   features={Features.RenderStrategy | Features.Static}
 >

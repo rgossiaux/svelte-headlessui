@@ -87,11 +87,12 @@
     $api.setSelectedIndex(myIndex);
   }
 
+  $: myPanelRef = $api.panels[myIndex]?.ref;
   $: propsWeControl = {
     id,
     role: "tab",
     type: resolveButtonType({ type: $$props.type, as }, tabRef),
-    "aria-controls": $api.panels[myIndex],
+    "aria-controls": $myPanelRef ? $api.panels[myIndex]?.id : undefined,
     "aria-selected": selected,
     tabIndex: selected ? 0 : -1,
     disabled: disabled ? true : undefined,

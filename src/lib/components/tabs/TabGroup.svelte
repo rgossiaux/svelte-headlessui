@@ -1,4 +1,8 @@
 <script lang="ts" context="module">
+  interface PanelData {
+    id: string;
+    ref: Readable<HTMLElement | null>;
+  }
   export type StateDefinition = {
     // State
     selectedIndex: number | null;
@@ -6,14 +10,14 @@
     activation: "auto" | "manual";
 
     tabs: (HTMLElement | null)[];
-    panels: string[];
+    panels: PanelData[];
 
     // State mutators
     setSelectedIndex(index: number): void;
     registerTab(tab: HTMLElement | null): void;
     unregisterTab(tab: HTMLElement | null): void;
-    registerPanel(panel: string): void;
-    unregisterPanel(panel: string): void;
+    registerPanel(panel: PanelData): void;
+    unregisterPanel(panel: PanelData): void;
   };
 
   const TABS_CONTEXT_NAME = "headlessui-tabs-context";
