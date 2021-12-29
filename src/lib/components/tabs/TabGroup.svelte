@@ -104,34 +104,38 @@
   });
 
   onMount(() => {
-    if ($api.tabs.length <= 0) return;
+    if (tabs.length <= 0) return;
     if (selectedIndex !== null) return;
 
-    let tabs = $api.tabs.filter(Boolean) as HTMLElement[];
-    let focusableTabs = tabs.filter((tab) => !tab.hasAttribute("disabled"));
+    let mountedTabs = tabs.filter(Boolean) as HTMLElement[];
+    let focusableTabs = mountedTabs.filter(
+      (tab) => !tab.hasAttribute("disabled")
+    );
     if (focusableTabs.length <= 0) return;
 
     // Underflow
     if (defaultIndex < 0) {
-      selectedIndex = tabs.indexOf(focusableTabs[0]);
+      selectedIndex = mountedTabs.indexOf(focusableTabs[0]);
     }
 
     // Overflow
-    else if (defaultIndex > $api.tabs.length) {
-      selectedIndex = tabs.indexOf(focusableTabs[focusableTabs.length - 1]);
+    else if (defaultIndex > mountedTabs.length) {
+      selectedIndex = mountedTabs.indexOf(
+        focusableTabs[focusableTabs.length - 1]
+      );
     }
 
     // Middle
     else {
-      let before = tabs.slice(0, defaultIndex);
-      let after = tabs.slice(defaultIndex);
+      let before = mountedTabs.slice(0, defaultIndex);
+      let after = mountedTabs.slice(defaultIndex);
 
       let next = [...after, ...before].find((tab) =>
         focusableTabs.includes(tab)
       );
       if (!next) return;
 
-      selectedIndex = tabs.indexOf(next);
+      selectedIndex = mountedTabs.indexOf(next);
     }
   });
 
