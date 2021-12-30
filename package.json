@@ -31,6 +31,8 @@
     "svelte": "^3.44.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/preset-env": "^7.16.5",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
     "@tailwindcss/forms": "^0.4.0",
@@ -52,6 +54,7 @@
     "prettier-plugin-svelte": "^2.4.0",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.6",
+    "svelte-inline-compile": "^0.0.1",
     "svelte-jester": "^2.1.5",
     "svelte-popperjs": "^1.2.7",
     "svelte-preprocess": "^4.9.8",
