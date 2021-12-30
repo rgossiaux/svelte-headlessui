@@ -10,4 +10,10 @@ module.exports = {
   moduleNameMapper: {
     "\\$lib/(.+)$": "<rootDir>/src/lib/$1",
   },
+  globals: {
+    "ts-jest": {
+      babelConfig: true,
+      useESM: true,
+    }
+  }
 };
