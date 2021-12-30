@@ -162,9 +162,17 @@
     [MenuStates.Open]: State.Open,
     [MenuStates.Closed]: State.Closed,
   });
+
+  $: slot = { open: menuState === MenuStates.Open };
 </script>
 
 <svelte:window on:mousedown={handleWindowMousedown} />
-<Render {...$$restProps} use={[...use, forwardEvents]} {as} name={"Menu"}>
-  <slot />
+<Render
+  {...$$restProps}
+  use={[...use, forwardEvents]}
+  {as}
+  {slot}
+  name={"Menu"}
+>
+  <slot {...slot} />
 </Render>
