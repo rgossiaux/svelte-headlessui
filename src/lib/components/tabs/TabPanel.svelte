@@ -37,6 +37,8 @@
   $: if (process.env.NODE_ENV === "test") {
     Object.assign(propsWeControl, { ["data-headlessui-index"]: myIndex });
   }
+
+  $: slotProps = { selected };
 </script>
 
 <Render
@@ -44,9 +46,10 @@
   {as}
   use={[...use, forwardEvents]}
   name={"TabPanel"}
+  {slotProps}
   bind:el={$elementRef}
   visible={selected}
   features={Features.RenderStrategy | Features.Static}
 >
-  <slot />
+  <slot {...slotProps} />
 </Render>
