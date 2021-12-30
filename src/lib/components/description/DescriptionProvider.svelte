@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   export interface DescriptionContext {
     name?: string;
-    props?: object;
+    props?: { slotProps?: object };
     register: (value: string) => void;
     descriptionIds?: string;
   }

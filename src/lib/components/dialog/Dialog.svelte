@@ -266,7 +266,11 @@
     <Portal>
       <PortalGroup target={internalDialogRef}>
         <ForcePortalRootContext force={false}>
-          <DescriptionProvider name={"Dialog.Description"} let:describedby>
+          <DescriptionProvider
+            name={"DialogDescription"}
+            {slotProps}
+            let:describedby
+          >
             <Render
               {...{ ...$$restProps, ...propsWeControl }}
               {as}

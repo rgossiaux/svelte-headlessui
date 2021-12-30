@@ -1,7 +1,18 @@
 <script lang="ts">
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+
   import { useId } from "$lib/hooks/use-id";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import Render from "$lib/utils/Render.svelte";
   import { onMount } from "svelte";
+  import { get_current_component } from "svelte/internal";
   import { useDescriptionContext } from "./DescriptionProvider.svelte";
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+  export let as: SupportedAs = "p";
+  export let use: HTMLActionArray = [];
+
+  $: slotProps = $contextStore?.props?.slotProps ?? {};
   const id = `headlessui-description-${useId()}`;
   let contextStore = useDescriptionContext();
   if (!contextStore) {
@@ -13,6 +24,13 @@
   onMount(() => $contextStore?.register(id));
 </script>
 
-<p {...$$restProps} {...$contextStore?.props} {id}>
-  <slot />
-</p>
+<Render
+  name={"Description"}
+  {...$$restProps}
+  {as}
+  {...$contextStore?.props}
+  {id}
+  use={[...use, forwardEvents]}
+>
+  <slot {...slotProps} />
+</Render>
