@@ -14,14 +14,14 @@ import { click, Keys, press, shift } from "$lib/test-utils/interactions";
 import Button from "$lib/internal/elements/Button.svelte";
 import ManagedRadioGroup from "./_ManagedRadioGroup.svelte";
 
-let id = 0;
+let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
   return {
-    useId: jest.fn(() => ++id),
+    useId: jest.fn(() => ++mockId),
   }
 })
 
-beforeEach(() => id = 0)
+beforeEach(() => mockId = 0)
 beforeAll(() => {
   // jest.spyOn(window, 'requestAnimationFrame').mockImplementation(setImmediate as any)
   // jest.spyOn(window, 'cancelAnimationFrame').mockImplementation(clearImmediate as any)

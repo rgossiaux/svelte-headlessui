@@ -25,20 +25,20 @@ import { click, Keys, press } from "$lib/test-utils/interactions";
 import Transition from "$lib/components/transitions/TransitionRoot.svelte";
 import { tick } from "svelte";
 
-let id = 0;
+let mockId = 0;
 jest.mock("../../hooks/use-id", () => {
   return {
-    useId: jest.fn(() => ++id),
+    useId: jest.fn(() => ++mockId),
   };
 });
 
 // @ts-expect-error
 global.IntersectionObserver = class FakeIntersectionObserver {
-  observe() {}
-  disconnect() {}
+  observe() { }
+  disconnect() { }
 };
 
-beforeEach(() => (id = 0));
+beforeEach(() => (mockId = 0));
 afterAll(() => jest.restoreAllMocks());
 
 describe("Safe guards", () => {

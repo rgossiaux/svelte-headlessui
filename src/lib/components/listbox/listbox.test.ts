@@ -46,14 +46,14 @@ import Button from "$lib/internal/elements/Button.svelte";
 import Div from "$lib/internal/elements/Div.svelte";
 import Span from "$lib/internal/elements/Span.svelte";
 
-let id = 0;
+let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
   return {
-    useId: jest.fn(() => ++id),
+    useId: jest.fn(() => ++mockId),
   }
 })
 
-beforeEach(() => id = 0)
+beforeEach(() => mockId = 0)
 beforeAll(() => {
   // jest.spyOn(window, 'requestAnimationFrame').mockImplementation(setImmediate as any)
   // jest.spyOn(window, 'cancelAnimationFrame').mockImplementation(clearImmediate as any)

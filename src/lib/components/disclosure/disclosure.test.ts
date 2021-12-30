@@ -15,14 +15,14 @@ import { click, Keys, MouseButton, press } from "$lib/test-utils/interactions";
 import { Transition, TransitionChild } from "../transitions";
 import TransitionDebug from "./_TransitionDebug.svelte";
 
-let id = 0;
+let mockId = 0;
 jest.mock("../../hooks/use-id", () => {
   return {
-    useId: jest.fn(() => ++id),
+    useId: jest.fn(() => ++mockId),
   };
 });
 
-beforeEach(() => (id = 0));
+beforeEach(() => (mockId = 0));
 afterAll(() => jest.restoreAllMocks());
 
 function nextFrame() {
