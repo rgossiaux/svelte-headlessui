@@ -10,6 +10,7 @@ import Span from "$lib/internal/elements/Span.svelte";
 import { Transition, TransitionChild } from "$lib/components/transitions";
 import TransitionDebug from "$lib/components/disclosure/_TransitionDebug.svelte";
 import Portal from "$lib/components/portal/Portal.svelte";
+import svelte from "svelte-inline-compile";
 
 let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
@@ -119,216 +120,158 @@ describe('Rendering', () => {
   })
 
   describe('Popover', () => {
-    // it(
-    //   'should be possible to render a Popover using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Popover>
-    //         {({ open }) => (
-    //           <>
-    //             <Popover.Button>Trigger</Popover.Button>
-    //             <Popover.Panel>Panel is: {open ? 'open' : 'closed'}</Popover.Panel>
-    //           </>
-    //         )}
-    //       </Popover>
-    //     )
+    it(
+      'should render a Popover with slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Popover let:open>
+            <PopoverButton>Trigger</PopoverButton>
+            <PopoverPanel>Panel is: {open ? 'open' : 'closed'}</PopoverPanel>
+          </Popover>
+        `)
 
-    //     assertPopoverButton({
-    //       state: PopoverState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-popover-button-1' },
-    //     })
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
+        assertPopoverButton({
+          state: PopoverState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-popover-button-1' },
+        })
+        assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
 
-    //     await click(getPopoverButton())
+        await click(getPopoverButton())
 
-    //     assertPopoverButton({
-    //       state: PopoverState.Visible,
-    //       attributes: { id: 'headlessui-popover-button-1' },
-    //     })
-    //     assertPopoverPanel({ state: PopoverState.Visible, textContent: 'Panel is: open' })
-    //   })
-    // )
+        assertPopoverButton({
+          state: PopoverState.Visible,
+          attributes: { id: 'headlessui-popover-button-1' },
+        })
+        assertPopoverPanel({ state: PopoverState.Visible, textContent: 'Panel is: open' })
+      })
+    )
 
-    // it(
-    //   'should expose a close function that closes the popover',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Popover>
-    //         {({ close }) => (
-    //           <>
-    //             <Popover.Button>Trigger</Popover.Button>
-    //             <Popover.Panel>
-    //               <button onClick={() => close()}>Close me</button>
-    //             </Popover.Panel>
-    //           </>
-    //         )}
-    //       </Popover>
-    //     )
+    it(
+      'should expose a close function that closes the popover',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Popover let:close>
+            <PopoverButton>Trigger</PopoverButton>
+            <PopoverPanel>
+              <button on:click={() => close()}>Close me</button>
+            </PopoverPanel>
+          </Popover>
+        `)
 
-    //     // Focus the button
-    //     getPopoverButton()?.focus()
+        // Focus the button
+        getPopoverButton()?.focus()
 
-    //     // Ensure the button is focused
-    //     assertActiveElement(getPopoverButton())
+        // Ensure the button is focused
+        assertActiveElement(getPopoverButton())
 
-    //     // Open the popover
-    //     await click(getPopoverButton())
+        // Open the popover
+        await click(getPopoverButton())
 
-    //     // Ensure we can click the close button
-    //     await click(getByText('Close me'))
+        // Ensure we can click the close button
+        await click(getByText('Close me'))
 
-    //     // Ensure the popover is closed
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
+        // Ensure the popover is closed
+        assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
 
-    //     // Ensure the Popover.Button got the restored focus
-    //     assertActiveElement(getByText('Trigger'))
-    //   })
-    // )
+        // Ensure the PopoverButton got the restored focus
+        assertActiveElement(getByText('Trigger'))
+      })
+    )
 
-    // it(
-    //   'should expose a close function that closes the popover and restores to a specific element',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <>
-    //         <button id="test">restoreable</button>
-    //         <Popover>
-    //           {({ close }) => (
-    //             <>
-    //               <Popover.Button>Trigger</Popover.Button>
-    //               <Popover.Panel>
-    //                 <button onClick={() => close(document.getElementById('test')!)}>
-    //                   Close me
-    //                 </button>
-    //               </Popover.Panel>
-    //             </>
-    //           )}
-    //         </Popover>
-    //       </>
-    //     )
+    it(
+      'should expose a close function that closes the popover and restores to a specific element',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+            <button id="test">restoreable</button>
+            <Popover let:close>
+              <PopoverButton>Trigger</PopoverButton>
+              <PopoverPanel>
+                <button on:click={() => close(document.getElementById('test'))}>
+                  Close me
+                </button>
+              </PopoverPanel>
+            </Popover>
+        `)
 
-    //     // Focus the button
-    //     getPopoverButton()?.focus()
+        // Focus the button
+        getPopoverButton()?.focus()
 
-    //     // Ensure the button is focused
-    //     assertActiveElement(getPopoverButton())
+        // Ensure the button is focused
+        assertActiveElement(getPopoverButton())
 
-    //     // Open the popover
-    //     await click(getPopoverButton())
+        // Open the popover
+        await click(getPopoverButton())
 
-    //     // Ensure we can click the close button
-    //     await click(getByText('Close me'))
+        // Ensure we can click the close button
+        await click(getByText('Close me'))
 
-    //     // Ensure the popover is closed
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
+        // Ensure the popover is closed
+        assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
 
-    //     // Ensure the restoreable button got the restored focus
-    //     assertActiveElement(getByText('restoreable'))
-    //   })
-    // )
-
-    // it(
-    //   'should expose a close function that closes the popover and restores to a ref',
-    //   suppressConsoleLogs(async () => {
-    //     function Example() {
-    //       let elementRef = useRef(null)
-    //       return (
-    //         <>
-    //           <button ref={elementRef}>restoreable</button>
-    //           <Popover>
-    //             {({ close }) => (
-    //               <>
-    //                 <Popover.Button>Trigger</Popover.Button>
-    //                 <Popover.Panel>
-    //                   <button onClick={() => close(elementRef)}>Close me</button>
-    //                 </Popover.Panel>
-    //               </>
-    //             )}
-    //           </Popover>
-    //         </>
-    //       )
-    //     }
-
-    //     render(<Example />)
-
-    //     // Focus the button
-    //     getPopoverButton()?.focus()
-
-    //     // Ensure the button is focused
-    //     assertActiveElement(getPopoverButton())
-
-    //     // Open the popover
-    //     await click(getPopoverButton())
-
-    //     // Ensure we can click the close button
-    //     await click(getByText('Close me'))
-
-    //     // Ensure the popover is closed
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
-
-    //     // Ensure the restoreable button got the restored focus
-    //     assertActiveElement(getByText('restoreable'))
-    //   })
-    // )
+        // Ensure the restoreable button got the restored focus
+        assertActiveElement(getByText('restoreable'))
+      })
+    )
   })
 
-  describe('Popover.Button', () => {
-    // it(
-    //   'should be possible to render a Popover.Button using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Popover>
-    //         <Popover.Button>{JSON.stringify}</Popover.Button>
-    //         <Popover.Panel></Popover.Panel>
-    //       </Popover>
-    //     )
+  describe('PopoverButton', () => {
+    it(
+      'should render a PopoverButton with slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Popover>
+            <PopoverButton let:open>{JSON.stringify({open})}</PopoverButton>
+            <PopoverPanel></PopoverPanel>
+          </Popover>
+        `)
 
-    //     assertPopoverButton({
-    //       state: PopoverState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-popover-button-1' },
-    //       textContent: JSON.stringify({ open: false }),
-    //     })
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
+        assertPopoverButton({
+          state: PopoverState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-popover-button-1' },
+          textContent: JSON.stringify({ open: false }),
+        })
+        assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
 
-    //     await click(getPopoverButton())
+        await click(getPopoverButton())
 
-    //     assertPopoverButton({
-    //       state: PopoverState.Visible,
-    //       attributes: { id: 'headlessui-popover-button-1' },
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //     assertPopoverPanel({ state: PopoverState.Visible })
-    //   })
-    // )
+        assertPopoverButton({
+          state: PopoverState.Visible,
+          attributes: { id: 'headlessui-popover-button-1' },
+          textContent: JSON.stringify({ open: true }),
+        })
+        assertPopoverPanel({ state: PopoverState.Visible })
+      })
+    )
 
-    // it(
-    //   'should be possible to render a Popover.Button using a render prop and an `as` prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Popover>
-    //         <Popover.Button as="div" role="button">
-    //           {JSON.stringify}
-    //         </Popover.Button>
-    //         <Popover.Panel />
-    //       </Popover>
-    //     )
+    it(
+      'should render a PopoverButton with a slot prop and use an `as` prop',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Popover>
+            <PopoverButton as="div" role="button" let:open>
+              {JSON.stringify({ open })}
+            </PopoverButton>
+            <PopoverPanel />
+          </Popover>
+        `)
 
-    //     assertPopoverButton({
-    //       state: PopoverState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-popover-button-1' },
-    //       textContent: JSON.stringify({ open: false }),
-    //     })
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
+        assertPopoverButton({
+          state: PopoverState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-popover-button-1' },
+          textContent: JSON.stringify({ open: false }),
+        })
+        assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
 
-    //     await click(getPopoverButton())
+        await click(getPopoverButton())
 
-    //     assertPopoverButton({
-    //       state: PopoverState.Visible,
-    //       attributes: { id: 'headlessui-popover-button-1' },
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //     assertPopoverPanel({ state: PopoverState.Visible })
-    //   })
-    // )
+        assertPopoverButton({
+          state: PopoverState.Visible,
+          attributes: { id: 'headlessui-popover-button-1' },
+          textContent: JSON.stringify({ open: true }),
+        })
+        assertPopoverPanel({ state: PopoverState.Visible })
+      })
+    )
 
     describe('`type` attribute', () => {
       it('should set the `type` to "button" by default', async () => {
@@ -370,37 +313,37 @@ describe('Rendering', () => {
     })
   })
 
-  describe('Popover.Panel', () => {
-    // it(
-    //   'should be possible to render Popover.Panel using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Popover>
-    //         <Popover.Button>Trigger</Popover.Button>
-    //         <Popover.Panel>{JSON.stringify}</Popover.Panel>
-    //       </Popover>
-    //     )
+  describe('PopoverPanel', () => {
+    it(
+      'should render PopoverPanel with slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Popover>
+            <PopoverButton>Trigger</PopoverButton>
+            <PopoverPanel let:open>{JSON.stringify({ open })}</PopoverPanel>
+          </Popover>
+        `)
 
-    //     assertPopoverButton({
-    //       state: PopoverState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-popover-button-1' },
-    //     })
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
+        assertPopoverButton({
+          state: PopoverState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-popover-button-1' },
+        })
+        assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
 
-    //     await click(getPopoverButton())
+        await click(getPopoverButton())
 
-    //     assertPopoverButton({
-    //       state: PopoverState.Visible,
-    //       attributes: { id: 'headlessui-popover-button-1' },
-    //     })
-    //     assertPopoverPanel({
-    //       state: PopoverState.Visible,
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //   })
-    // )
+        assertPopoverButton({
+          state: PopoverState.Visible,
+          attributes: { id: 'headlessui-popover-button-1' },
+        })
+        assertPopoverPanel({
+          state: PopoverState.Visible,
+          textContent: JSON.stringify({ open: true }),
+        })
+      })
+    )
 
-    it('should be possible to always render the Popover.Panel if we provide it a `static` prop', () => {
+    it('should be possible to always render the PopoverPanel if we provide it a `static` prop', () => {
       render(
         TestRenderer, {
         allProps: [
@@ -415,7 +358,7 @@ describe('Rendering', () => {
       expect(getPopoverPanel()).not.toBe(null)
     })
 
-    it('should be possible to use a different render strategy for the Popover.Panel', async () => {
+    it('should be possible to use a different render strategy for the PopoverPanel', async () => {
       render(
         TestRenderer, {
         allProps: [
@@ -477,7 +420,7 @@ describe('Rendering', () => {
     // TODO: This test doesn't work but I'm also not totally sure it should... 
     // calling element.focus in the browser doesn't seem to call the window focus handler
     it.skip(
-      'should close the Popover, when Popover.Panel has the focus prop and you focus the open button',
+      'should close the Popover, when PopoverPanel has the focus prop and you focus the open button',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -573,120 +516,76 @@ describe('Rendering', () => {
       })
     )
 
-    // it(
-    //   'should expose a close function that closes the popover',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Popover>
-    //         <Popover.Button>Trigger</Popover.Button>
-    //         <Popover.Panel>
-    //           {({ close }) => <button onClick={() => close()}>Close me</button>}
-    //         </Popover.Panel>
-    //       </Popover>
-    //     )
+    it(
+      'should expose a close function that closes the popover',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Popover>
+            <PopoverButton>Trigger</PopoverButton>
+            <PopoverPanel let:close>
+              <button on:click={() => close()}>Close me</button>
+            </PopoverPanel>
+          </Popover>
+        `)
 
-    //     // Focus the button
-    //     getPopoverButton()?.focus()
+        // Focus the button
+        getPopoverButton()?.focus()
 
-    //     // Ensure the button is focused
-    //     assertActiveElement(getPopoverButton())
+        // Ensure the button is focused
+        assertActiveElement(getPopoverButton())
 
-    //     // Open the popover
-    //     await click(getPopoverButton())
+        // Open the popover
+        await click(getPopoverButton())
 
-    //     // Ensure we can click the close button
-    //     await click(getByText('Close me'))
+        // Ensure we can click the close button
+        await click(getByText('Close me'))
 
-    //     // Ensure the popover is closed
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
+        // Ensure the popover is closed
+        assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
 
-    //     // Ensure the Popover.Button got the restored focus
-    //     assertActiveElement(getByText('Trigger'))
-    //   })
-    // )
+        // Ensure the PopoverButton got the restored focus
+        assertActiveElement(getByText('Trigger'))
+      })
+    )
 
-    // it(
-    //   'should expose a close function that closes the popover and restores to a specific element',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <>
-    //         <button id="test">restoreable</button>
-    //         <Popover>
-    //           <Popover.Button>Trigger</Popover.Button>
-    //           <Popover.Panel>
-    //             {({ close }) => (
-    //               <button onClick={() => close(document.getElementById('test')!)}>Close me</button>
-    //             )}
-    //           </Popover.Panel>
-    //         </Popover>
-    //       </>
-    //     )
+    it(
+      'should expose a close function that closes the popover and restores to a specific element',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <button id="test">restoreable</button>
+          <Popover>
+            <PopoverButton>Trigger</PopoverButton>
+            <PopoverPanel let:close>
+              <button on:click={() => close(document.getElementById('test'))}>Close me</button>
+            </PopoverPanel>
+          </Popover>
+        `)
 
-    //     // Focus the button
-    //     getPopoverButton()?.focus()
+        // Focus the button
+        getPopoverButton()?.focus()
 
-    //     // Ensure the button is focused
-    //     assertActiveElement(getPopoverButton())
+        // Ensure the button is focused
+        assertActiveElement(getPopoverButton())
 
-    //     // Open the popover
-    //     await click(getPopoverButton())
+        // Open the popover
+        await click(getPopoverButton())
 
-    //     // Ensure we can click the close button
-    //     await click(getByText('Close me'))
+        // Ensure we can click the close button
+        await click(getByText('Close me'))
 
-    //     // Ensure the popover is closed
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
+        // Ensure the popover is closed
+        assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
 
-    //     // Ensure the restoreable button got the restored focus
-    //     assertActiveElement(getByText('restoreable'))
-    //   })
-    // )
-
-    // it(
-    //   'should expose a close function that closes the popover and restores to a ref',
-    //   suppressConsoleLogs(async () => {
-    //     function Example() {
-    //       let elementRef = useRef(null)
-    //       return (
-    //         <>
-    //           <button ref={elementRef}>restoreable</button>
-    //           <Popover>
-    //             <Popover.Button>Trigger</Popover.Button>
-    //             <Popover.Panel>
-    //               {({ close }) => <button onClick={() => close(elementRef)}>Close me</button>}
-    //             </Popover.Panel>
-    //           </Popover>
-    //         </>
-    //       )
-    //     }
-
-    //     render(<Example />)
-
-    //     // Focus the button
-    //     getPopoverButton()?.focus()
-
-    //     // Ensure the button is focused
-    //     assertActiveElement(getPopoverButton())
-
-    //     // Open the popover
-    //     await click(getPopoverButton())
-
-    //     // Ensure we can click the close button
-    //     await click(getByText('Close me'))
-
-    //     // Ensure the popover is closed
-    //     assertPopoverPanel({ state: PopoverState.InvisibleUnmounted })
-
-    //     // Ensure the restoreable button got the restored focus
-    //     assertActiveElement(getByText('restoreable'))
-    //   })
-    // )
+        // Ensure the restoreable button got the restored focus
+        assertActiveElement(getByText('restoreable'))
+      })
+    )
   })
 })
 
 describe('Composition', () => {
   it(
-    'should be possible to wrap the Popover.Panel with a Transition component',
+    'should be possible to wrap the PopoverPanel with a Transition component',
     suppressConsoleLogs(async () => {
       let orderFn = jest.fn()
       render(
@@ -889,7 +788,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should close the Popover by pressing `Enter` on a Popover.Button inside a Popover.Panel',
+      'should close the Popover by pressing `Enter` on a PopoverButton inside a PopoverPanel',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -926,7 +825,7 @@ describe('Keyboard interactions', () => {
 
   describe('`Escape` key', () => {
     it(
-      'should close the Popover menu, when pressing escape on the Popover.Button',
+      'should close the Popover menu, when pressing escape on the PopoverButton',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -962,7 +861,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should close the Popover menu, when pressing escape on the Popover.Panel',
+      'should close the Popover menu, when pressing escape on the PopoverPanel',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1006,7 +905,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should be possible to close a sibling Popover when pressing escape on a sibling Popover.Button',
+      'should be possible to close a sibling Popover when pressing escape on a sibling PopoverButton',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1059,7 +958,7 @@ describe('Keyboard interactions', () => {
 
   describe('`Tab` key', () => {
     it(
-      'should be possible to Tab through the panel contents onto the next Popover.Button',
+      'should be possible to Tab through the panel contents onto the next PopoverButton',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1261,7 +1160,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should close the Popover when the Popover.Panel has a focus prop',
+      'should close the Popover when the PopoverPanel has a focus prop',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1297,7 +1196,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should close the Popover when the Popover.Panel has a focus prop (Popover.Panel uses a Portal)',
+      'should close the Popover when the PopoverPanel has a focus prop (PopoverPanel uses a Portal)',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1343,7 +1242,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should close the Popover when the Popover.Panel has a focus prop (Popover.Panel uses a Portal), and focus the next focusable item in line',
+      'should close the Popover when the PopoverPanel has a focus prop (PopoverPanel uses a Portal), and focus the next focusable item in line',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1473,7 +1372,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should focus the previous Popover.Button when Shift+Tab on the second Popover.Button',
+      'should focus the previous PopoverButton when Shift+Tab on the second PopoverButton',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1509,19 +1408,19 @@ describe('Keyboard interactions', () => {
         // Ensure the popover is now closed
         assertPopoverButton({ state: PopoverState.InvisibleUnmounted }, getByText('Trigger 2'))
 
-        // Ensure the second Popover.Button is focused
+        // Ensure the second PopoverButton is focused
         assertActiveElement(getByText('Trigger 2'))
 
         // Tab backwards
         await press(shift(Keys.Tab))
 
-        // Ensure the first Popover.Button is open
+        // Ensure the first PopoverButton is open
         assertActiveElement(getByText('Trigger 1'))
       })
     )
 
     it(
-      'should focus the Popover.Button when pressing Shift+Tab when we focus inside the Popover.Panel',
+      'should focus the PopoverButton when pressing Shift+Tab when we focus inside the PopoverPanel',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1548,7 +1447,7 @@ describe('Keyboard interactions', () => {
         // Tab out of the Panel
         await press(shift(Keys.Tab))
 
-        // Ensure the Popover.Button is focused again
+        // Ensure the PopoverButton is focused again
         assertActiveElement(getPopoverButton())
 
         // Ensure the Popover is closed
@@ -1558,7 +1457,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should focus the Popover.Button when pressing Shift+Tab when we focus inside the Popover.Panel (inside a Portal)',
+      'should focus the PopoverButton when pressing Shift+Tab when we focus inside the PopoverPanel (inside a Portal)',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1587,7 +1486,7 @@ describe('Keyboard interactions', () => {
         // Tab out of the Panel
         await press(shift(Keys.Tab))
 
-        // Ensure the Popover.Button is focused again
+        // Ensure the PopoverButton is focused again
         assertActiveElement(getPopoverButton())
 
         // Ensure the Popover is closed
@@ -1597,7 +1496,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should be possible to focus the last item in the Popover.Panel when pressing Shift+Tab on the next Popover.Button',
+      'should be possible to focus the last item in the PopoverPanel when pressing Shift+Tab on the next PopoverButton',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1637,7 +1536,7 @@ describe('Keyboard interactions', () => {
         assertPopoverButton({ state: PopoverState.Visible })
         assertPopoverPanel({ state: PopoverState.Visible })
 
-        // Press shift+tab, to move focus to the last item in the Popover.Panel
+        // Press shift+tab, to move focus to the last item in the PopoverPanel
         await press(shift(Keys.Tab), getByText('Trigger 2'))
 
         // Verify we are focusing the last link of the first Popover
@@ -1646,7 +1545,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      "should be possible to focus the last item in the Popover.Panel when pressing Shift+Tab on the next Popover.Button (using Portal's)",
+      "should be possible to focus the last item in the PopoverPanel when pressing Shift+Tab on the next PopoverButton (using Portal's)",
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -1690,7 +1589,7 @@ describe('Keyboard interactions', () => {
         assertPopoverButton({ state: PopoverState.Visible })
         assertPopoverPanel({ state: PopoverState.Visible })
 
-        // Press shift+tab, to move focus to the last item in the Popover.Panel
+        // Press shift+tab, to move focus to the last item in the PopoverPanel
         await press(shift(Keys.Tab), getByText('Trigger 2'))
 
         // Verify we are focusing the last link of the first Popover
@@ -1852,7 +1751,7 @@ describe('Keyboard interactions', () => {
     )
 
     it(
-      'should close the Popover by pressing `Space` on a Popover.Button inside a Popover.Panel',
+      'should close the Popover by pressing `Space` on a PopoverButton inside a PopoverPanel',
       suppressConsoleLogs(async () => {
         render(
           TestRenderer, {
@@ -2170,7 +2069,7 @@ describe('Mouse interactions', () => {
   )
 
   it(
-    'should be possible to close the Popover by clicking on a Popover.Button inside a Popover.Panel',
+    'should be possible to close the Popover by clicking on a PopoverButton inside a PopoverPanel',
     suppressConsoleLogs(async () => {
       render(
         TestRenderer, {
@@ -2205,7 +2104,7 @@ describe('Mouse interactions', () => {
   )
 
   it(
-    'should not close the Popover when clicking on a focusable element inside a static Popover.Panel',
+    'should not close the Popover when clicking on a focusable element inside a static PopoverPanel',
     suppressConsoleLogs(async () => {
       let clickFn = jest.fn()
 
@@ -2236,7 +2135,7 @@ describe('Mouse interactions', () => {
   )
 
   it(
-    'should not close the Popover when clicking on a non-focusable element inside a static Popover.Panel',
+    'should not close the Popover when clicking on a non-focusable element inside a static PopoverPanel',
     suppressConsoleLogs(async () => {
       render(
         TestRenderer, {
@@ -2262,7 +2161,7 @@ describe('Mouse interactions', () => {
   )
 
   it(
-    'should close the Popover when clicking outside of a static Popover.Panel',
+    'should close the Popover when clicking outside of a static PopoverPanel',
     suppressConsoleLogs(async () => {
       render(
         TestRenderer, {

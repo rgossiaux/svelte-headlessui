@@ -14,6 +14,7 @@ import {
 import { click, Keys, MouseButton, press } from "$lib/test-utils/interactions";
 import { Transition, TransitionChild } from "../transitions";
 import TransitionDebug from "./_TransitionDebug.svelte";
+import svelte from "svelte-inline-compile";
 
 let mockId = 0;
 jest.mock("../../hooks/use-id", () => {
@@ -72,240 +73,178 @@ describe("Safe guards", () => {
 });
 
 describe("Rendering", () => {
-  // describe('Disclosure', () => {
-  //   it(
-  //     'should be possible to render a Disclosure using a render prop',
-  //     suppressConsoleLogs(async () => {
-  //       render(
-  //         <Disclosure>
-  //           {({ open }) => (
-  //             <>
-  //               <DisclosureButton>Trigger</DisclosureButton>
-  //               <DisclosurePanel>Panel is: {open ? 'open' : 'closed'}</DisclosurePanel>
-  //             </>
-  //           )}
-  //         </Disclosure>
-  //       )
+  describe('Disclosure', () => {
+    it(
+      'should render a Disclosure with slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Disclosure let:open>
+            <DisclosureButton>Trigger</DisclosureButton>
+            <DisclosurePanel>Panel is: {open ? 'open' : 'closed'}</DisclosurePanel>
+          </Disclosure>
+        `)
 
-  //       assertDisclosureButton({
-  //         state: DisclosureState.InvisibleUnmounted,
-  //         attributes: { id: 'headlessui-disclosure-button-1' },
-  //       })
-  //       assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
+        assertDisclosureButton({
+          state: DisclosureState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-disclosure-button-1' },
+        })
+        assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
 
-  //       await click(getDisclosureButton())
+        await click(getDisclosureButton())
 
-  //       assertDisclosureButton({
-  //         state: DisclosureState.Visible,
-  //         attributes: { id: 'headlessui-disclosure-button-1' },
-  //       })
-  //       assertDisclosurePanel({ state: DisclosureState.Visible, textContent: 'Panel is: open' })
-  //     })
-  //   )
+        assertDisclosureButton({
+          state: DisclosureState.Visible,
+          attributes: { id: 'headlessui-disclosure-button-1' },
+        })
+        assertDisclosurePanel({ state: DisclosureState.Visible, textContent: 'Panel is: open' })
+      })
+    )
 
-  //   it('should be possible to render a Disclosure in an open state by default', async () => {
-  //     render(
-  //       <Disclosure defaultOpen>
-  //         {({ open }) => (
-  //           <>
-  //             <DisclosureButton>Trigger</DisclosureButton>
-  //             <DisclosurePanel>Panel is: {open ? 'open' : 'closed'}</DisclosurePanel>
-  //           </>
-  //         )}
-  //       </Disclosure>
-  //     )
+    it('should be possible to render a Disclosure in an open state by default', async () => {
+      render(svelte`
+        <Disclosure defaultOpen let:open>
+          <DisclosureButton>Trigger</DisclosureButton>
+          <DisclosurePanel>Panel is: {open ? 'open' : 'closed'}</DisclosurePanel>
+        </Disclosure>
+      `)
 
-  //     assertDisclosureButton({
-  //       state: DisclosureState.Visible,
-  //       attributes: { id: 'headlessui-disclosure-button-1' },
-  //     })
-  //     assertDisclosurePanel({ state: DisclosureState.Visible, textContent: 'Panel is: open' })
+      assertDisclosureButton({
+        state: DisclosureState.Visible,
+        attributes: { id: 'headlessui-disclosure-button-1' },
+      })
+      assertDisclosurePanel({ state: DisclosureState.Visible, textContent: 'Panel is: open' })
 
-  //     await click(getDisclosureButton())
+      await click(getDisclosureButton())
 
-  //     assertDisclosureButton({ state: DisclosureState.InvisibleUnmounted })
-  //   })
+      assertDisclosureButton({ state: DisclosureState.InvisibleUnmounted })
+    })
 
-  //   it(
-  //     'should expose a close function that closes the disclosure',
-  //     suppressConsoleLogs(async () => {
-  //       render(
-  //         <Disclosure>
-  //           {({ close }) => (
-  //             <>
-  //               <DisclosureButton>Trigger</DisclosureButton>
-  //               <DisclosurePanel>
-  //                 <button onClick={() => close()}>Close me</button>
-  //               </DisclosurePanel>
-  //             </>
-  //           )}
-  //         </Disclosure>
-  //       )
+    it(
+      'should expose a close function that closes the disclosure',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Disclosure let:close>
+            <DisclosureButton>Trigger</DisclosureButton>
+            <DisclosurePanel>
+              <button on:click={() => close()}>Close me</button>
+            </DisclosurePanel>
+          </Disclosure>
+        `)
 
-  //       // Focus the button
-  //       getDisclosureButton()?.focus()
+        // Focus the button
+        getDisclosureButton()?.focus()
 
-  //       // Ensure the button is focused
-  //       assertActiveElement(getDisclosureButton())
+        // Ensure the button is focused
+        assertActiveElement(getDisclosureButton())
 
-  //       // Open the disclosure
-  //       await click(getDisclosureButton())
+        // Open the disclosure
+        await click(getDisclosureButton())
 
-  //       // Ensure we can click the close button
-  //       await click(getByText('Close me'))
+        // Ensure we can click the close button
+        await click(getByText('Close me'))
 
-  //       // Ensure the disclosure is closed
-  //       assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
+        // Ensure the disclosure is closed
+        assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
 
-  //       // Ensure the DisclosureButton got the restored focus
-  //       assertActiveElement(getByText('Trigger'))
-  //     })
-  //   )
+        // Ensure the DisclosureButton got the restored focus
+        assertActiveElement(getByText('Trigger'))
+      })
+    )
 
-  //   it(
-  //     'should expose a close function that closes the disclosure and restores to a specific element',
-  //     suppressConsoleLogs(async () => {
-  //       render(
-  //         <>
-  //           <button id="test">restoreable</button>
-  //           <Disclosure>
-  //             {({ close }) => (
-  //               <>
-  //                 <DisclosureButton>Trigger</DisclosureButton>
-  //                 <DisclosurePanel>
-  //                   <button onClick={() => close(document.getElementById('test')!)}>
-  //                     Close me
-  //                   </button>
-  //                 </DisclosurePanel>
-  //               </>
-  //             )}
-  //           </Disclosure>
-  //         </>
-  //       )
+    it(
+      'should expose a close function that closes the disclosure and restores to a specific element',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <button id="test">restoreable</button>
+          <Disclosure let:close>
+            <DisclosureButton>Trigger</DisclosureButton>
+            <DisclosurePanel>
+              <button on:click={() => close(document.getElementById('test'))}>
+                Close me
+              </button>
+            </DisclosurePanel>
+          </Disclosure>
+        `)
 
-  //       // Focus the button
-  //       getDisclosureButton()?.focus()
+        // Focus the button
+        getDisclosureButton()?.focus()
 
-  //       // Ensure the button is focused
-  //       assertActiveElement(getDisclosureButton())
+        // Ensure the button is focused
+        assertActiveElement(getDisclosureButton())
 
-  //       // Open the disclosure
-  //       await click(getDisclosureButton())
+        // Open the disclosure
+        await click(getDisclosureButton())
 
-  //       // Ensure we can click the close button
-  //       await click(getByText('Close me'))
+        // Ensure we can click the close button
+        await click(getByText('Close me'))
 
-  //       // Ensure the disclosure is closed
-  //       assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
+        // Ensure the disclosure is closed
+        assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
 
-  //       // Ensure the restoreable button got the restored focus
-  //       assertActiveElement(getByText('restoreable'))
-  //     })
-  //   )
-
-  //   it(
-  //     'should expose a close function that closes the disclosure and restores to a ref',
-  //     suppressConsoleLogs(async () => {
-  //       function Example() {
-  //         let elementRef = useRef(null)
-  //         return (
-  //           <>
-  //             <button ref={elementRef}>restoreable</button>
-  //             <Disclosure>
-  //               {({ close }) => (
-  //                 <>
-  //                   <DisclosureButton>Trigger</DisclosureButton>
-  //                   <DisclosurePanel>
-  //                     <button onClick={() => close(elementRef)}>Close me</button>
-  //                   </DisclosurePanel>
-  //                 </>
-  //               )}
-  //             </Disclosure>
-  //           </>
-  //         )
-  //       }
-
-  //       render(<Example />)
-
-  //       // Focus the button
-  //       getDisclosureButton()?.focus()
-
-  //       // Ensure the button is focused
-  //       assertActiveElement(getDisclosureButton())
-
-  //       // Open the disclosure
-  //       await click(getDisclosureButton())
-
-  //       // Ensure we can click the close button
-  //       await click(getByText('Close me'))
-
-  //       // Ensure the disclosure is closed
-  //       assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
-
-  //       // Ensure the restoreable button got the restored focus
-  //       assertActiveElement(getByText('restoreable'))
-  //     })
-  //   )
-  // })
+        // Ensure the restoreable button got the restored focus
+        assertActiveElement(getByText('restoreable'))
+      })
+    )
+  })
 
   describe("DisclosureButton", () => {
-    // it(
-    //   'should be possible to render a DisclosureButton using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Disclosure>
-    //         <DisclosureButton>{JSON.stringify}</DisclosureButton>
-    //         <DisclosurePanel></DisclosurePanel>
-    //       </Disclosure>
-    //     )
+    it(
+      'should render a DisclosureButton with slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Disclosure let:open>
+            <DisclosureButton>{JSON.stringify({ open })}</DisclosureButton>
+            <DisclosurePanel></DisclosurePanel>
+          </Disclosure>
+        `)
 
-    //     assertDisclosureButton({
-    //       state: DisclosureState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-disclosure-button-1' },
-    //       textContent: JSON.stringify({ open: false }),
-    //     })
-    //     assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
+        assertDisclosureButton({
+          state: DisclosureState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-disclosure-button-1' },
+          textContent: JSON.stringify({ open: false }),
+        })
+        assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
 
-    //     await click(getDisclosureButton())
+        await click(getDisclosureButton())
 
-    //     assertDisclosureButton({
-    //       state: DisclosureState.Visible,
-    //       attributes: { id: 'headlessui-disclosure-button-1' },
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //     assertDisclosurePanel({ state: DisclosureState.Visible })
-    //   })
-    // )
+        assertDisclosureButton({
+          state: DisclosureState.Visible,
+          attributes: { id: 'headlessui-disclosure-button-1' },
+          textContent: JSON.stringify({ open: true }),
+        })
+        assertDisclosurePanel({ state: DisclosureState.Visible })
+      })
+    )
 
-    // it(
-    //   'should be possible to render a DisclosureButton using a render prop and an `as` prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Disclosure>
-    //         <DisclosureButton as="div" role="button">
-    //           {JSON.stringify}
-    //         </DisclosureButton>
-    //         <DisclosurePanel />
-    //       </Disclosure>
-    //     )
+    it(
+      'should be possible to render a DisclosureButton using a render prop and an `as` prop',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Disclosure>
+            <DisclosureButton as="div" role="button" let:open>
+              {JSON.stringify({ open })}
+            </DisclosureButton>
+            <DisclosurePanel />
+          </Disclosure>
+        `)
 
-    //     assertDisclosureButton({
-    //       state: DisclosureState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-disclosure-button-1' },
-    //       textContent: JSON.stringify({ open: false }),
-    //     })
-    //     assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
+        assertDisclosureButton({
+          state: DisclosureState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-disclosure-button-1' },
+          textContent: JSON.stringify({ open: false }),
+        })
+        assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
 
-    //     await click(getDisclosureButton())
+        await click(getDisclosureButton())
 
-    //     assertDisclosureButton({
-    //       state: DisclosureState.Visible,
-    //       attributes: { id: 'headlessui-disclosure-button-1' },
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //     assertDisclosurePanel({ state: DisclosureState.Visible })
-    //   })
-    // )
+        assertDisclosureButton({
+          state: DisclosureState.Visible,
+          attributes: { id: 'headlessui-disclosure-button-1' },
+          textContent: JSON.stringify({ open: true }),
+        })
+        assertDisclosurePanel({ state: DisclosureState.Visible })
+      })
+    )
 
     describe('`type` attribute', () => {
       it('should set the `type` to "button" by default', async () => {
@@ -354,34 +293,34 @@ describe("Rendering", () => {
   })
 
   describe('DisclosurePanel', () => {
-    // it(
-    //   'should be possible to render DisclosurePanel using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Disclosure>
-    //         <DisclosureButton>Trigger</DisclosureButton>
-    //         <DisclosurePanel>{JSON.stringify}</DisclosurePanel>
-    //       </Disclosure>
-    //     )
+    it(
+      'should render a DisclosurePanel with slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Disclosure>
+            <DisclosureButton>Trigger</DisclosureButton>
+            <DisclosurePanel let:open>{JSON.stringify({ open })}</DisclosurePanel>
+          </Disclosure>
+        `)
 
-    //     assertDisclosureButton({
-    //       state: DisclosureState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-disclosure-button-1' },
-    //     })
-    //     assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
+        assertDisclosureButton({
+          state: DisclosureState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-disclosure-button-1' },
+        })
+        assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
 
-    //     await click(getDisclosureButton())
+        await click(getDisclosureButton())
 
-    //     assertDisclosureButton({
-    //       state: DisclosureState.Visible,
-    //       attributes: { id: 'headlessui-disclosure-button-1' },
-    //     })
-    //     assertDisclosurePanel({
-    //       state: DisclosureState.Visible,
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //   })
-    // )
+        assertDisclosureButton({
+          state: DisclosureState.Visible,
+          attributes: { id: 'headlessui-disclosure-button-1' },
+        })
+        assertDisclosurePanel({
+          state: DisclosureState.Visible,
+          textContent: JSON.stringify({ open: true }),
+        })
+      })
+    )
 
     it('should be possible to always render the DisclosurePanel if we provide it a `static` prop', () => {
       render(
@@ -427,114 +366,70 @@ describe("Rendering", () => {
       assertDisclosurePanel({ state: DisclosureState.InvisibleHidden })
     })
 
-    // it(
-    //   'should expose a close function that closes the disclosure',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Disclosure>
-    //         <DisclosureButton>Trigger</DisclosureButton>
-    //         <DisclosurePanel>
-    //           {({ close }) => <button onClick={() => close()}>Close me</button>}
-    //         </DisclosurePanel>
-    //       </Disclosure>
-    //     )
+    it(
+      'should expose a close function that closes the disclosure',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Disclosure>
+            <DisclosureButton>Trigger</DisclosureButton>
+            <DisclosurePanel let:close>
+              <button on:click={() => close()}>Close me</button>
+            </DisclosurePanel>
+          </Disclosure>
+        `)
 
-    //     // Focus the button
-    //     getDisclosureButton()?.focus()
+        // Focus the button
+        getDisclosureButton()?.focus()
 
-    //     // Ensure the button is focused
-    //     assertActiveElement(getDisclosureButton())
+        // Ensure the button is focused
+        assertActiveElement(getDisclosureButton())
 
-    //     // Open the disclosure
-    //     await click(getDisclosureButton())
+        // Open the disclosure
+        await click(getDisclosureButton())
 
-    //     // Ensure we can click the close button
-    //     await click(getByText('Close me'))
+        // Ensure we can click the close button
+        await click(getByText('Close me'))
 
-    //     // Ensure the disclosure is closed
-    //     assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
+        // Ensure the disclosure is closed
+        assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
 
-    //     // Ensure the DisclosureButton got the restored focus
-    //     assertActiveElement(getByText('Trigger'))
-    //   })
-    // )
+        // Ensure the DisclosureButton got the restored focus
+        assertActiveElement(getByText('Trigger'))
+      })
+    )
 
-    // it(
-    //   'should expose a close function that closes the disclosure and restores to a specific element',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <>
-    //         <button id="test">restoreable</button>
-    //         <Disclosure>
-    //           <DisclosureButton>Trigger</DisclosureButton>
-    //           <DisclosurePanel>
-    //             {({ close }) => (
-    //               <button onClick={() => close(document.getElementById('test')!)}>Close me</button>
-    //             )}
-    //           </DisclosurePanel>
-    //         </Disclosure>
-    //       </>
-    //     )
+    it(
+      'should expose a close function that closes the disclosure and restores to a specific element',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <button id="test">restoreable</button>
+          <Disclosure>
+            <DisclosureButton>Trigger</DisclosureButton>
+            <DisclosurePanel let:close>
+                <button on:click={() => close(document.getElementById('test'))}>Close me</button>
+            </DisclosurePanel>
+          </Disclosure>
+        `)
 
-    //     // Focus the button
-    //     getDisclosureButton()?.focus()
+        // Focus the button
+        getDisclosureButton()?.focus()
 
-    //     // Ensure the button is focused
-    //     assertActiveElement(getDisclosureButton())
+        // Ensure the button is focused
+        assertActiveElement(getDisclosureButton())
 
-    //     // Open the disclosure
-    //     await click(getDisclosureButton())
+        // Open the disclosure
+        await click(getDisclosureButton())
 
-    //     // Ensure we can click the close button
-    //     await click(getByText('Close me'))
+        // Ensure we can click the close button
+        await click(getByText('Close me'))
 
-    //     // Ensure the disclosure is closed
-    //     assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
+        // Ensure the disclosure is closed
+        assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
 
-    //     // Ensure the restoreable button got the restored focus
-    //     assertActiveElement(getByText('restoreable'))
-    //   })
-    // )
-
-    // it(
-    //   'should expose a close function that closes the disclosure and restores to a ref',
-    //   suppressConsoleLogs(async () => {
-    //     function Example() {
-    //       let elementRef = useRef(null)
-    //       return (
-    //         <>
-    //           <button ref={elementRef}>restoreable</button>
-    //           <Disclosure>
-    //             <DisclosureButton>Trigger</DisclosureButton>
-    //             <DisclosurePanel>
-    //               {({ close }) => <button onClick={() => close(elementRef)}>Close me</button>}
-    //             </DisclosurePanel>
-    //           </Disclosure>
-    //         </>
-    //       )
-    //     }
-
-    //     render(<Example />)
-
-    //     // Focus the button
-    //     getDisclosureButton()?.focus()
-
-    //     // Ensure the button is focused
-    //     assertActiveElement(getDisclosureButton())
-
-    //     // Open the disclosure
-    //     await click(getDisclosureButton())
-
-    //     // Ensure we can click the close button
-    //     await click(getByText('Close me'))
-
-    //     // Ensure the disclosure is closed
-    //     assertDisclosurePanel({ state: DisclosureState.InvisibleUnmounted })
-
-    //     // Ensure the restoreable button got the restored focus
-    //     assertActiveElement(getByText('restoreable'))
-    //   })
-    // )
+        // Ensure the restoreable button got the restored focus
+        assertActiveElement(getByText('restoreable'))
+      })
+    )
   })
 })
 

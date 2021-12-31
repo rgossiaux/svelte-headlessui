@@ -15,6 +15,8 @@ import {
   assertListboxButton,
   assertListboxButtonLinkedWithListbox,
   assertListboxButtonLinkedWithListboxLabel,
+  assertListboxLabel,
+  assertListboxLabelLinkedWithListbox,
   assertListboxOption,
   assertNoActiveListboxOption,
   assertNoSelectedListboxOption,
@@ -45,6 +47,7 @@ import ManagedListbox from "./_ManagedListbox.svelte";
 import Button from "$lib/internal/elements/Button.svelte";
 import Div from "$lib/internal/elements/Div.svelte";
 import Span from "$lib/internal/elements/Span.svelte";
+import svelte from "svelte-inline-compile";
 
 let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
@@ -103,41 +106,37 @@ describe('safeguards', () => {
 
 describe('Rendering', () => {
   describe('Listbox', () => {
-    // it(
-    //   'should be possible to render a Listbox using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Listbox value={undefined} onChange={console.log}>
-    //         {({ open }) => (
-    //           <>
-    //             <ListboxButton>Trigger</ListboxButton>
-    //             {open && (
-    //               <ListboxOptions>
-    //                 <ListboxOption value="a">Option A</ListboxOption>
-    //                 <ListboxOption value="b">Option B</ListboxOption>
-    //                 <ListboxOption value="c">Option C</ListboxOption>
-    //               </ListboxOptions>
-    //             )}
-    //           </>
-    //         )}
-    //       </Listbox>
-    //     )
+    it(
+      'should render a Listbox using slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Listbox value={undefined} on:change={console.log} let:open>
+            <ListboxButton>Trigger</ListboxButton>
+            {#if open}
+              <ListboxOptions>
+                <ListboxOption value="a">Option A</ListboxOption>
+                <ListboxOption value="b">Option B</ListboxOption>
+                <ListboxOption value="c">Option C</ListboxOption>
+              </ListboxOptions>
+            {/if}
+          </Listbox>
+        `)
 
-    //     assertListboxButton({
-    //       state: ListboxState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-listbox-button-1' },
-    //     })
-    //     assertListbox({ state: ListboxState.InvisibleUnmounted })
+        assertListboxButton({
+          state: ListboxState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-listbox-button-1' },
+        })
+        assertListbox({ state: ListboxState.InvisibleUnmounted })
 
-    //     await click(getListboxButton())
+        await click(getListboxButton())
 
-    //     assertListboxButton({
-    //       state: ListboxState.Visible,
-    //       attributes: { id: 'headlessui-listbox-button-1' },
-    //     })
-    //     assertListbox({ state: ListboxState.Visible })
-    //   })
-    // )
+        assertListboxButton({
+          state: ListboxState.Visible,
+          attributes: { id: 'headlessui-listbox-button-1' },
+        })
+        assertListbox({ state: ListboxState.Visible })
+      })
+    )
 
     it(
       'should be possible to disable a Listbox',
@@ -182,142 +181,142 @@ describe('Rendering', () => {
   })
 
   describe('ListboxLabel', () => {
-    // it(
-    //   'should be possible to render a ListboxLabel using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Listbox value={ undefined } onChange = { console.log } >
-    //       <ListboxLabel>{ JSON.stringify } < /ListboxLabel>
-    //       < ListboxButton > Trigger < /ListboxButton>
-    //       < ListboxOptions >
-    //       <ListboxOption value="a" > Option A < /ListboxOption>
-    //     < ListboxOption value = "b" > Option B < /ListboxOption>
-    //     < ListboxOption value = "c" > Option C < /ListboxOption>
-    //     < /ListboxOptions>
-    //     < /Listbox>
-    //     )
+    it(
+      'should be possible to render a ListboxLabel using a render prop',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Listbox value={undefined} on:change={console.log}>
+            <ListboxLabel let:open let:disabled>{JSON.stringify({ open, disabled })}</ListboxLabel>
+            <ListboxButton>Trigger</ListboxButton>
+            <ListboxOptions>
+              <ListboxOption value="a"> Option A </ListboxOption>
+              <ListboxOption value="b"> Option B </ListboxOption>
+              <ListboxOption value="c"> Option C </ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        `)
 
-    //     assertListboxButton({
-    //       state: ListboxState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-listbox-button-2' },
-    //     })
-    //     assertListboxLabel({
-    //       attributes: { id: 'headlessui-listbox-label-1' },
-    //       textContent: JSON.stringify({ open: false, disabled: false }),
-    //     })
-    //     assertListbox({ state: ListboxState.InvisibleUnmounted })
+        assertListboxButton({
+          state: ListboxState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-listbox-button-2' },
+        })
+        assertListboxLabel({
+          attributes: { id: 'headlessui-listbox-label-1' },
+          textContent: JSON.stringify({ open: false, disabled: false }),
+        })
+        assertListbox({ state: ListboxState.InvisibleUnmounted })
 
-    //     await click(getListboxButton())
+        await click(getListboxButton())
 
-    //     assertListboxLabel({
-    //       attributes: { id: 'headlessui-listbox-label-1' },
-    //       textContent: JSON.stringify({ open: true, disabled: false }),
-    //     })
-    //     assertListbox({ state: ListboxState.Visible })
-    //     assertListboxLabelLinkedWithListbox()
-    //     assertListboxButtonLinkedWithListboxLabel()
-    //   })
-    // )
+        assertListboxLabel({
+          attributes: { id: 'headlessui-listbox-label-1' },
+          textContent: JSON.stringify({ open: true, disabled: false }),
+        })
+        assertListbox({ state: ListboxState.Visible })
+        assertListboxLabelLinkedWithListbox()
+        assertListboxButtonLinkedWithListboxLabel()
+      })
+    )
 
-    // it(
-    //   'should be possible to render a ListboxLabel using a render prop and an `as` prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Listbox value={ undefined } onChange = { console.log } >
-    //       <ListboxLabel as="p" > { JSON.stringify } < /ListboxLabel>
-    //       < ListboxButton > Trigger < /ListboxButton>
-    //       < ListboxOptions >
-    //     <ListboxOption value="a" > Option A < /ListboxOption>
-    //     < ListboxOption value = "b" > Option B < /ListboxOption>
-    //     < ListboxOption value = "c" > Option C < /ListboxOption>
-    //     < /ListboxOptions>
-    //     < /Listbox>
-    //     )
+    it(
+      'should be possible to render a ListboxLabel with slot props and an `as` prop',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Listbox value={undefined} on:change={console.log}>
+            <ListboxLabel as="p" let:open let:disabled>{JSON.stringify({ open, disabled })}</ListboxLabel>
+            <ListboxButton>Trigger</ListboxButton>
+            <ListboxOptions>
+              <ListboxOption value="a">Option A</ListboxOption>
+              <ListboxOption value="b">Option B</ListboxOption>
+              <ListboxOption value="c">Option C</ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        `)
 
-    //     assertListboxLabel({
-    //       attributes: { id: 'headlessui-listbox-label-1' },
-    //       textContent: JSON.stringify({ open: false, disabled: false }),
-    //       tag: 'p',
-    //     })
-    //     assertListbox({ state: ListboxState.InvisibleUnmounted })
+        assertListboxLabel({
+          attributes: { id: 'headlessui-listbox-label-1' },
+          textContent: JSON.stringify({ open: false, disabled: false }),
+          tag: 'p',
+        })
+        assertListbox({ state: ListboxState.InvisibleUnmounted })
 
-    //     await click(getListboxButton())
-    //     assertListboxLabel({
-    //       attributes: { id: 'headlessui-listbox-label-1' },
-    //       textContent: JSON.stringify({ open: true, disabled: false }),
-    //       tag: 'p',
-    //     })
-    //     assertListbox({ state: ListboxState.Visible })
-    //   })
-    // )
+        await click(getListboxButton())
+        assertListboxLabel({
+          attributes: { id: 'headlessui-listbox-label-1' },
+          textContent: JSON.stringify({ open: true, disabled: false }),
+          tag: 'p',
+        })
+        assertListbox({ state: ListboxState.Visible })
+      })
+    )
   });
 
   describe("ListboxButton", () => {
-    // it(
-    //   'should be possible to render a ListboxButton using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Listbox value={ undefined } onChange = { console.log } >
-    //       <ListboxButton>{ JSON.stringify } < /ListboxButton>
-    //       < ListboxOptions >
-    //       <ListboxOption value="a" > Option A < /ListboxOption>
-    //     < ListboxOption value = "b" > Option B < /ListboxOption>
-    //     < ListboxOption value = "c" > Option C < /ListboxOption>
-    //     < /ListboxOptions>
-    //     < /Listbox>
-    //     )
+    it(
+      'should render a ListboxButton with slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Listbox value={undefined} on:change={console.log}>
+            <ListboxButton let:open let:disabled>{JSON.stringify({ open, disabled})}</ListboxButton>
+            <ListboxOptions>
+              <ListboxOption value="a">Option A </ListboxOption>
+              <ListboxOption value="b">Option B </ListboxOption>
+              <ListboxOption value="c">Option C </ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        `)
 
-    //     assertListboxButton({
-    //       state: ListboxState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-listbox-button-1' },
-    //       textContent: JSON.stringify({ open: false, disabled: false }),
-    //     })
-    //     assertListbox({ state: ListboxState.InvisibleUnmounted })
+        assertListboxButton({
+          state: ListboxState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-listbox-button-1' },
+          textContent: JSON.stringify({ open: false, disabled: false }),
+        })
+        assertListbox({ state: ListboxState.InvisibleUnmounted })
 
-    //     await click(getListboxButton())
+        await click(getListboxButton())
 
-    //     assertListboxButton({
-    //       state: ListboxState.Visible,
-    //       attributes: { id: 'headlessui-listbox-button-1' },
-    //       textContent: JSON.stringify({ open: true, disabled: false }),
-    //     })
-    //     assertListbox({ state: ListboxState.Visible })
-    //   })
-    // )
+        assertListboxButton({
+          state: ListboxState.Visible,
+          attributes: { id: 'headlessui-listbox-button-1' },
+          textContent: JSON.stringify({ open: true, disabled: false }),
+        })
+        assertListbox({ state: ListboxState.Visible })
+      })
+    )
 
-    // it(
-    //   'should be possible to render a ListboxButton using a render prop and an `as` prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Listbox value={ undefined } onChange = { console.log } >
-    //       <ListboxButton as="div" role = "button" >
-    //       { JSON.stringify }
-    //       < /ListboxButton>
-    //       < ListboxOptions >
-    //       <ListboxOption value="a" > Option A < /ListboxOption>
-    //     < ListboxOption value = "b" > Option B < /ListboxOption>
-    //     < ListboxOption value = "c" > Option C < /ListboxOption>
-    //     < /ListboxOptions>
-    //     < /Listbox>
-    //     )
+    it(
+      'should be possible to render a ListboxButton using a render prop and an `as` prop',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Listbox value={undefined} onChange={console.log}>
+            <ListboxButton as="div" role="button" let:open let:disabled>
+              {JSON.stringify({ open, disabled })}
+            </ListboxButton>
+            <ListboxOptions>
+              <ListboxOption value="a">Option A</ListboxOption>
+              <ListboxOption value="b">Option B</ListboxOption>
+              <ListboxOption value="c">Option C</ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        `)
 
-    //     assertListboxButton({
-    //       state: ListboxState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-listbox-button-1' },
-    //       textContent: JSON.stringify({ open: false, disabled: false }),
-    //     })
-    //     assertListbox({ state: ListboxState.InvisibleUnmounted })
+        assertListboxButton({
+          state: ListboxState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-listbox-button-1' },
+          textContent: JSON.stringify({ open: false, disabled: false }),
+        })
+        assertListbox({ state: ListboxState.InvisibleUnmounted })
 
-    //     await click(getListboxButton())
+        await click(getListboxButton())
 
-    //     assertListboxButton({
-    //       state: ListboxState.Visible,
-    //       attributes: { id: 'headlessui-listbox-button-1' },
-    //       textContent: JSON.stringify({ open: true, disabled: false }),
-    //     })
-    //     assertListbox({ state: ListboxState.Visible })
-    //   })
-    // )
+        assertListboxButton({
+          state: ListboxState.Visible,
+          attributes: { id: 'headlessui-listbox-button-1' },
+          textContent: JSON.stringify({ open: true, disabled: false }),
+        })
+        assertListbox({ state: ListboxState.Visible })
+      })
+    )
 
     it(
       'should be possible to render a ListboxButton and a ListboxLabel and see them linked together',
@@ -393,41 +392,37 @@ describe('Rendering', () => {
   })
 
   describe('ListboxOptions', () => {
-    // it(
-    //   'should be possible to render ListboxOptions using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Listbox value={undefined} onChange={console.log}>
-    //         <ListboxButton>Trigger</ListboxButton>
-    //         <ListboxOptions>
-    //           {data => (
-    //             <>
-    //               <ListboxOption value="a">{JSON.stringify(data)}</ListboxOption>
-    //             </>
-    //           )}
-    //         </ListboxOptions>
-    //       </Listbox>
-    //     )
+    it(
+      'should render ListboxOptions with slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Listbox value={undefined} on:change={console.log}>
+            <ListboxButton>Trigger</ListboxButton>
+            <ListboxOptions let:open>
+              <ListboxOption value="a">{JSON.stringify({ open })}</ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        `)
 
-    //     assertListboxButton({
-    //       state: ListboxState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-listbox-button-1' },
-    //     })
-    //     assertListbox({ state: ListboxState.InvisibleUnmounted })
+        assertListboxButton({
+          state: ListboxState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-listbox-button-1' },
+        })
+        assertListbox({ state: ListboxState.InvisibleUnmounted })
 
-    //     await click(getListboxButton())
+        await click(getListboxButton())
 
-    //     assertListboxButton({
-    //       state: ListboxState.Visible,
-    //       attributes: { id: 'headlessui-listbox-button-1' },
-    //     })
-    //     assertListbox({
-    //       state: ListboxState.Visible,
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //     assertActiveElement(getListbox())
-    //   })
-    // )
+        assertListboxButton({
+          state: ListboxState.Visible,
+          attributes: { id: 'headlessui-listbox-button-1' },
+        })
+        assertListbox({
+          state: ListboxState.Visible,
+          textContent: JSON.stringify({ open: true }),
+        })
+        assertActiveElement(getListbox())
+      })
+    )
 
     it('should be possible to always render the ListboxOptions if we provide it a `static` prop', () => {
       render(
@@ -472,38 +467,40 @@ describe('Rendering', () => {
     })
   })
 
-  // describe('ListboxOption', () => {
-  //   it(
-  //     'should be possible to render a ListboxOption using a render prop',
-  //     suppressConsoleLogs(async () => {
-  //       render(
-  //         <Listbox value={undefined} onChange={console.log}>
-  //           <ListboxButton>Trigger</ListboxButton>
-  //           <ListboxOptions>
-  //             <ListboxOption value="a">{JSON.stringify}</ListboxOption>
-  //           </ListboxOptions>
-  //         </Listbox>
-  //       )
+  describe('ListboxOption', () => {
+    it(
+      'should render a ListboxOption with slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Listbox value={undefined} on:change={console.log}>
+            <ListboxButton>Trigger</ListboxButton>
+            <ListboxOptions>
+              <ListboxOption value="a" let:active let:selected let:disabled>
+                {JSON.stringify({ active, selected, disabled })}
+              </ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        `)
 
-  //       assertListboxButton({
-  //         state: ListboxState.InvisibleUnmounted,
-  //         attributes: { id: 'headlessui-listbox-button-1' },
-  //       })
-  //       assertListbox({ state: ListboxState.InvisibleUnmounted })
+        assertListboxButton({
+          state: ListboxState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-listbox-button-1' },
+        })
+        assertListbox({ state: ListboxState.InvisibleUnmounted })
 
-  //       await click(getListboxButton())
+        await click(getListboxButton())
 
-  //       assertListboxButton({
-  //         state: ListboxState.Visible,
-  //         attributes: { id: 'headlessui-listbox-button-1' },
-  //       })
-  //       assertListbox({
-  //         state: ListboxState.Visible,
-  //         textContent: JSON.stringify({ active: false, selected: false, disabled: false }),
-  //       })
-  //     })
-  //   )
-  // })
+        assertListboxButton({
+          state: ListboxState.Visible,
+          attributes: { id: 'headlessui-listbox-button-1' },
+        })
+        assertListbox({
+          state: ListboxState.Visible,
+          textContent: JSON.stringify({ active: false, selected: false, disabled: false }),
+        })
+      })
+    )
+  })
 })
 
 describe('Rendering composition', () => {

@@ -13,6 +13,7 @@ import Div from "$lib/internal/elements/Div.svelte";
 import Span from "$lib/internal/elements/Span.svelte";
 import ManagedSwitch from "./_ManagedSwitch.svelte";
 import { click, Keys, press } from "$lib/test-utils/interactions";
+import svelte from "svelte-inline-compile";
 jest.mock("../../hooks/use-id");
 
 describe("Safe guards", () => {
@@ -24,27 +25,25 @@ describe("Safe guards", () => {
 });
 
 describe("Rendering", () => {
-  // TODO: handle these render prop (slot prop) tests
+  it('(on) Switch should have a slot prop', () => {
+    render(svelte`
+      <Switch checked={true} on:change={console.log} let:checked>
+        <span>{checked ? 'On' : 'Off'}</span>
+      </Switch>
+    `)
 
-  // it('should be possible to render an (on) Switch using a render prop', () => {
-  //   render(TestRenderer, {
-  //     <Switch checked={true} onChange={console.log}>
-  //       {({ checked }) => <span>{checked ? 'On' : 'Off'}</span>}
-  //     </Switch>
-  //   )
+    assertSwitch({ state: SwitchState.On, textContent: 'On' })
+  })
 
-  //   assertSwitch({ state: SwitchState.On, textContent: 'On' })
-  // })
+  it('(off) Switch should have a slot prop', () => {
+    render(svelte`
+      <Switch checked={false} on:change={console.log} let:checked>
+        <span>{checked ? 'On' : 'Off'}</span>
+      </Switch>
+    `)
 
-  // it('should be possible to render an (off) Switch using a render prop', () => {
-  //   render(
-  //     <Switch checked={false} onChange={console.log}>
-  //       {({ checked }) => <span>{checked ? 'On' : 'Off'}</span>}
-  //     </Switch>
-  //   )
-
-  //   assertSwitch({ state: SwitchState.Off, textContent: 'Off' })
-  // })
+    assertSwitch({ state: SwitchState.Off, textContent: 'Off' })
+  })
 
   it("should be possible to render an (on) Switch using an `as` prop", () => {
     render(TestRenderer, {

@@ -13,6 +13,7 @@ import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
 import { click, Keys, press, shift } from "$lib/test-utils/interactions";
 import Button from "$lib/internal/elements/Button.svelte";
 import ManagedRadioGroup from "./_ManagedRadioGroup.svelte";
+import svelte from "svelte-inline-compile";
 
 let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
@@ -123,169 +124,159 @@ describe('Rendering', () => {
     assertNotFocusable(getByText('Dine in'))
   })
 
-  // it('should guarantee the radio option order after a few unmounts', async () => {
-  //   function Example() {
-  //     let [showFirst, setShowFirst] = useState(false)
-  //     let [active, setActive] = useState()
+  // TODO: fix this test!
+  it.skip('should guarantee the radio option order after a few unmounts', async () => {
+    render(svelte`
+      <script>
+        let showFirst = false;
+        let active;
+      </script>
+      <button on:click={() => showFirst = !showFirst}>Toggle</button>
+      <RadioGroup value={active} on:change={(e) => active = e.detail}>
+        <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+        {#if showFirst}
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+        {/if}
+        <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+        <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+      </RadioGroup>
+    `)
 
-  //     return (
-  //       <>
-  //         <button onClick={() => setShowFirst(v => !v)}>Toggle</button>
-  //         <RadioGroup value={active} onChange={setActive}>
-  //           <RadioGroup.Label>Pizza Delivery</RadioGroup.Label>
-  //           {showFirst && <RadioGroup.Option value="pickup">Pickup</RadioGroup.Option>}
-  //           <RadioGroup.Option value="home-delivery">Home delivery</RadioGroup.Option>
-  //           <RadioGroup.Option value="dine-in">Dine in</RadioGroup.Option>
-  //         </RadioGroup>
-  //       </>
-  //     )
-  //   }
+    await click(getByText('Toggle')) // Render the pickup again
 
-  //   render(<Example />)
+    await press(Keys.Tab) // Focus first element
+    assertActiveElement(getByText('Pickup'))
 
-  //   await click(getByText('Toggle')) // Render the pickup again
+    await press(Keys.ArrowUp) // Loop around
+    assertActiveElement(getByText('Dine in'))
 
-  //   await press(Keys.Tab) // Focus first element
-  //   assertActiveElement(getByText('Pickup'))
+    await press(Keys.ArrowUp) // Up again
+    assertActiveElement(getByText('Home delivery'))
+  })
 
-  //   await press(Keys.ArrowUp) // Loop around
-  //   assertActiveElement(getByText('Dine in'))
+  it('should be possible to disable a RadioGroup', async () => {
+    let changeFn = jest.fn()
 
-  //   await press(Keys.ArrowUp) // Up again
-  //   assertActiveElement(getByText('Home delivery'))
-  // })
+    render(svelte`
+      <script>
+        let disabled = true;
+      </script>
+      <button on:click={() => disabled = !disabled}>Toggle</button>
+      <RadioGroup value={undefined} on:change={changeFn} {disabled}>
+        <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+        <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+        <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+        <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        <RadioGroupOption value="slot-prop" data-value="slot-prop" let:checked let:disabled let:active>
+          {JSON.stringify({ checked, disabled, active })}
+        </RadioGroupOption>
+      </RadioGroup>
+    `)
 
-  // it('should be possible to disable a RadioGroup', async () => {
-  //   let changeFn = jest.fn()
 
-  //   function Example() {
-  //     let [disabled, setDisabled] = useState(true)
-  //     return (
-  //       <>
-  //         <button onClick={() => setDisabled(v => !v)}>Toggle</button>
-  //         <RadioGroup value={undefined} onChange={changeFn} disabled={disabled}>
-  //           <RadioGroup.Label>Pizza Delivery</RadioGroup.Label>
-  //           <RadioGroup.Option value="pickup">Pickup</RadioGroup.Option>
-  //           <RadioGroup.Option value="home-delivery">Home delivery</RadioGroup.Option>
-  //           <RadioGroup.Option value="dine-in">Dine in</RadioGroup.Option>
-  //           <RadioGroup.Option value="render-prop" data-value="render-prop">
-  //             {JSON.stringify}
-  //           </RadioGroup.Option>
-  //         </RadioGroup>
-  //       </>
-  //     )
-  //   }
+    // Try to click one a few options
+    await click(getByText('Pickup'))
+    await click(getByText('Dine in'))
 
-  //   render(<Example />)
+    // Verify that the RadioGroupOption gets the disabled state
+    expect(document.querySelector('[data-value="slot-prop"]')).toHaveTextContent(
+      JSON.stringify({
+        checked: false,
+        disabled: true,
+        active: false,
+      })
+    )
 
-  //   // Try to click one a few options
-  //   await click(getByText('Pickup'))
-  //   await click(getByText('Dine in'))
+    // Make sure that the onChange handler never got called
+    expect(changeFn).toHaveBeenCalledTimes(0)
 
-  //   // Verify that the RadioGroup.Option gets the disabled state
-  //   expect(document.querySelector('[data-value="render-prop"]')).toHaveTextContent(
-  //     JSON.stringify({
-  //       checked: false,
-  //       disabled: true,
-  //       active: false,
-  //     })
-  //   )
+    // Make sure that all the options get an `aria-disabled`
+    let options = getRadioGroupOptions()
+    expect(options).toHaveLength(4)
+    for (let option of options) expect(option).toHaveAttribute('aria-disabled', 'true')
 
-  //   // Make sure that the onChange handler never got called
-  //   expect(changeFn).toHaveBeenCalledTimes(0)
+    // Toggle the disabled state
+    await click(getByText('Toggle'))
 
-  //   // Make sure that all the options get an `aria-disabled`
-  //   let options = getRadioGroupOptions()
-  //   expect(options).toHaveLength(4)
-  //   for (let option of options) expect(option).toHaveAttribute('aria-disabled', 'true')
+    // Verify that the RadioGroupOption gets the disabled state
+    expect(document.querySelector('[data-value="slot-prop"]')).toHaveTextContent(
+      JSON.stringify({
+        checked: false,
+        disabled: false,
+        active: false,
+      })
+    )
 
-  //   // Toggle the disabled state
-  //   await click(getByText('Toggle'))
+    // Try to click one a few options
+    await click(getByText('Pickup'))
 
-  //   // Verify that the RadioGroup.Option gets the disabled state
-  //   expect(document.querySelector('[data-value="render-prop"]')).toHaveTextContent(
-  //     JSON.stringify({
-  //       checked: false,
-  //       disabled: false,
-  //       active: false,
-  //     })
-  //   )
+    // Make sure that the onChange handler got called
+    expect(changeFn).toHaveBeenCalledTimes(1)
+  })
 
-  //   // Try to click one a few options
-  //   await click(getByText('Pickup'))
+  it('should be possible to disable a RadioGroupOption', async () => {
+    let changeFn = jest.fn()
 
-  //   // Make sure that the onChange handler got called
-  //   expect(changeFn).toHaveBeenCalledTimes(1)
-  // })
+    render(svelte`
+      <script>
+        let disabled = true;
+      </script>
+      <button on:click={() => disabled = !disabled}>Toggle</button>
+      <RadioGroup value={undefined} on:change={changeFn}>
+        <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+        <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+        <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+        <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        <RadioGroupOption value="slot-prop" {disabled} data-value="slot-prop" let:checked let:disabled let:active>
+          {JSON.stringify({ checked, disabled, active })}
+        </RadioGroupOption>
+      </RadioGroup>
+    `)
 
-  // it('should be possible to disable a RadioGroup.Option', async () => {
-  //   let changeFn = jest.fn()
+    // Try to click the disabled option
+    await click(document.querySelector('[data-value="slot-prop"]'))
 
-  //   function Example() {
-  //     let [disabled, setDisabled] = useState(true)
-  //     return (
-  //       <>
-  //         <button onClick={() => setDisabled(v => !v)}>Toggle</button>
-  //         <RadioGroup value={undefined} onChange={changeFn}>
-  //           <RadioGroup.Label>Pizza Delivery</RadioGroup.Label>
-  //           <RadioGroup.Option value="pickup">Pickup</RadioGroup.Option>
-  //           <RadioGroup.Option value="home-delivery">Home delivery</RadioGroup.Option>
-  //           <RadioGroup.Option value="dine-in">Dine in</RadioGroup.Option>
-  //           <RadioGroup.Option value="render-prop" disabled={disabled} data-value="render-prop">
-  //             {JSON.stringify}
-  //           </RadioGroup.Option>
-  //         </RadioGroup>
-  //       </>
-  //     )
-  //   }
+    // Verify that the RadioGroupOption gets the disabled state
+    expect(document.querySelector('[data-value="slot-prop"]')).toHaveTextContent(
+      JSON.stringify({
+        checked: false,
+        disabled: true,
+        active: false,
+      })
+    )
 
-  //   render(<Example />)
+    // Make sure that the onChange handler never got called
+    expect(changeFn).toHaveBeenCalledTimes(0)
 
-  //   // Try to click the disabled option
-  //   await click(document.querySelector('[data-value="render-prop"]'))
+    // Make sure that the option with value "slot-prop" gets an `aria-disabled`
+    let options = getRadioGroupOptions()
+    expect(options).toHaveLength(4)
+    for (let option of options) {
+      if (option.dataset.value) {
+        expect(option).toHaveAttribute('aria-disabled', 'true')
+      } else {
+        expect(option).not.toHaveAttribute('aria-disabled')
+      }
+    }
 
-  //   // Verify that the RadioGroup.Option gets the disabled state
-  //   expect(document.querySelector('[data-value="render-prop"]')).toHaveTextContent(
-  //     JSON.stringify({
-  //       checked: false,
-  //       disabled: true,
-  //       active: false,
-  //     })
-  //   )
+    // Toggle the disabled state
+    await click(getByText('Toggle'))
 
-  //   // Make sure that the onChange handler never got called
-  //   expect(changeFn).toHaveBeenCalledTimes(0)
+    // Verify that the RadioGroupOption gets the disabled state
+    expect(document.querySelector('[data-value="slot-prop"]')).toHaveTextContent(
+      JSON.stringify({
+        checked: false,
+        disabled: false,
+        active: false,
+      })
+    )
 
-  //   // Make sure that the option with value "render-prop" gets an `aria-disabled`
-  //   let options = getRadioGroupOptions()
-  //   expect(options).toHaveLength(4)
-  //   for (let option of options) {
-  //     if (option.dataset.value) {
-  //       expect(option).toHaveAttribute('aria-disabled', 'true')
-  //     } else {
-  //       expect(option).not.toHaveAttribute('aria-disabled')
-  //     }
-  //   }
+    // Try to click one a few options
+    await click(document.querySelector('[data-value="slot-prop"]'))
 
-  //   // Toggle the disabled state
-  //   await click(getByText('Toggle'))
-
-  //   // Verify that the RadioGroup.Option gets the disabled state
-  //   expect(document.querySelector('[data-value="render-prop"]')).toHaveTextContent(
-  //     JSON.stringify({
-  //       checked: false,
-  //       disabled: false,
-  //       active: false,
-  //     })
-  //   )
-
-  //   // Try to click one a few options
-  //   await click(document.querySelector('[data-value="render-prop"]'))
-
-  //   // Make sure that the onChange handler got called
-  //   expect(changeFn).toHaveBeenCalledTimes(1)
-  // })
-  // })
+    // Make sure that the onChange handler got called
+    expect(changeFn).toHaveBeenCalledTimes(1)
+  })
 
 })
 

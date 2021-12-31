@@ -5,6 +5,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from ".";
 import { assertActiveElement, assertTabs, getByText, getTabs } from "$lib/test-utils/accessibility-assertions";
 import { click, Keys, press, shift } from "$lib/test-utils/interactions";
 import Button from "$lib/internal/elements/Button.svelte";
+import svelte from "svelte-inline-compile";
 
 let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
@@ -59,7 +60,7 @@ describe('safeguards', () => {
 })
 
 describe('Rendering', () => {
-  it('should be possible to render the Tab.Panels first, then the Tab.List', async () => {
+  it('should be possible to render the TabPanels first, then the TabList', async () => {
     render(
       TestRenderer, {
       allProps: [
@@ -81,229 +82,192 @@ describe('Rendering', () => {
     assertTabs({ active: 0 })
   })
 
-  // describe('`renderProps`', () => {
-  //   it('should expose the `selectedIndex` on the `Tab.Group` component', async () => {
-  //     render(
-  //       <Tab.Group>
-  //         {data => (
-  //           <>
-  //             <pre id="exposed">{JSON.stringify(data)}</pre>
+  describe('`slot props`', () => {
+    it('should expose the `selectedIndex` on the `TabGroup` component', async () => {
+      render(svelte`
+        <TabGroup let:selectedIndex>
+          <pre id="exposed">{JSON.stringify({ selectedIndex })}</pre>
 
-  //             <Tab.List>
-  //               <Tab>Tab 1</Tab>
-  //               <Tab>Tab 2</Tab>
-  //               <Tab>Tab 3</Tab>
-  //             </Tab.List>
+          <TabList>
+            <Tab>Tab 1</Tab>
+            <Tab>Tab 2</Tab>
+            <Tab>Tab 3</Tab>
+          </TabList>
 
-  //             <Tab.Panels>
-  //               <Tab.Panel>Content 1</Tab.Panel>
-  //               <Tab.Panel>Content 2</Tab.Panel>
-  //               <Tab.Panel>Content 3</Tab.Panel>
-  //             </Tab.Panels>
-  //           </>
-  //         )}
-  //       </Tab.Group>
-  //     )
+          <TabPanels>
+            <TabPanel>Content 1</TabPanel>
+            <TabPanel>Content 2</TabPanel>
+            <TabPanel>Content 3</TabPanel>
+          </TabPanels>
+        </TabGroup>
+      `)
 
-  //     expect(document.getElementById('exposed')).toHaveTextContent(
-  //       JSON.stringify({ selectedIndex: 0 })
-  //     )
+      expect(document.getElementById('exposed')).toHaveTextContent(
+        JSON.stringify({ selectedIndex: 0 })
+      )
 
-  //     await click(getByText('Tab 2'))
+      await click(getByText('Tab 2'))
 
-  //     expect(document.getElementById('exposed')).toHaveTextContent(
-  //       JSON.stringify({ selectedIndex: 1 })
-  //     )
-  //   })
+      expect(document.getElementById('exposed')).toHaveTextContent(
+        JSON.stringify({ selectedIndex: 1 })
+      )
+    })
 
-  //   it('should expose the `selectedIndex` on the `Tab.List` component', async () => {
-  //     render(
-  //       <Tab.Group>
-  //         <Tab.List>
-  //           {data => (
-  //             <>
-  //               <pre id="exposed">{JSON.stringify(data)}</pre>
-  //               <Tab>Tab 1</Tab>
-  //               <Tab>Tab 2</Tab>
-  //               <Tab>Tab 3</Tab>
-  //             </>
-  //           )}
-  //         </Tab.List>
+    it('should expose the `selectedIndex` on the `TabList` component', async () => {
+      render(svelte`
+        <TabGroup>
+          <TabList let:selectedIndex>
+            <pre id="exposed">{ JSON.stringify({ selectedIndex }) }</pre>
+            <Tab>Tab 1</Tab>
+            <Tab>Tab 2</Tab>
+            <Tab>Tab 3</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>Content 1</TabPanel>
+            <TabPanel>Content 2</TabPanel>
+            <TabPanel>Content 3</TabPanel>
+          </TabPanels>
+        </TabGroup>
+      `)
 
-  //         <Tab.Panels>
-  //           <Tab.Panel>Content 1</Tab.Panel>
-  //           <Tab.Panel>Content 2</Tab.Panel>
-  //           <Tab.Panel>Content 3</Tab.Panel>
-  //         </Tab.Panels>
-  //       </Tab.Group>
-  //     )
+      expect(document.getElementById('exposed')).toHaveTextContent(
+        JSON.stringify({ selectedIndex: 0 })
+      )
 
-  //     expect(document.getElementById('exposed')).toHaveTextContent(
-  //       JSON.stringify({ selectedIndex: 0 })
-  //     )
+      await click(getByText('Tab 2'))
 
-  //     await click(getByText('Tab 2'))
+      expect(document.getElementById('exposed')).toHaveTextContent(
+        JSON.stringify({ selectedIndex: 1 })
+      )
+    })
 
-  //     expect(document.getElementById('exposed')).toHaveTextContent(
-  //       JSON.stringify({ selectedIndex: 1 })
-  //     )
-  //   })
+    it('should expose the `selectedIndex` on the `TabPanels` component', async () => {
+      render(svelte`
+        <TabGroup>
+          <TabList>
+            <Tab>Tab 1</Tab>
+            <Tab>Tab 2</Tab>
+            <Tab>Tab 3</Tab>
+          </TabList>
 
-  //   it('should expose the `selectedIndex` on the `Tab.Panels` component', async () => {
-  //     render(
-  //       <Tab.Group>
-  //         <Tab.List>
-  //           <Tab>Tab 1</Tab>
-  //           <Tab>Tab 2</Tab>
-  //           <Tab>Tab 3</Tab>
-  //         </Tab.List>
+          <TabPanels let:selectedIndex>
+            <pre id="exposed">{ JSON.stringify({ selectedIndex }) }</pre>
+            <TabPanel>Content 1</TabPanel>
+            <TabPanel>Content 2</TabPanel>
+            <TabPanel>Content 3</TabPanel>
+          </TabPanels>
+      </TabGroup>
+    `)
 
-  //         <Tab.Panels>
-  //           {data => (
-  //             <>
-  //               <pre id="exposed">{JSON.stringify(data)}</pre>
-  //               <Tab.Panel>Content 1</Tab.Panel>
-  //               <Tab.Panel>Content 2</Tab.Panel>
-  //               <Tab.Panel>Content 3</Tab.Panel>
-  //             </>
-  //           )}
-  //         </Tab.Panels>
-  //       </Tab.Group>
-  //     )
+      expect(document.getElementById('exposed')).toHaveTextContent(
+        JSON.stringify({ selectedIndex: 0 })
+      )
 
-  //     expect(document.getElementById('exposed')).toHaveTextContent(
-  //       JSON.stringify({ selectedIndex: 0 })
-  //     )
+      await click(getByText('Tab 2'))
 
-  //     await click(getByText('Tab 2'))
+      expect(document.getElementById('exposed')).toHaveTextContent(
+        JSON.stringify({ selectedIndex: 1 })
+      )
+    })
 
-  //     expect(document.getElementById('exposed')).toHaveTextContent(
-  //       JSON.stringify({ selectedIndex: 1 })
-  //     )
-  //   })
+    it('should expose the `selected` state on the `Tab` components', async () => {
+      render(svelte`
+        <TabGroup>
+          <TabList>
+            <Tab let:selected>
+              <pre data-tab={0}>{JSON.stringify({selected})}</pre>
+              <span>Tab 1</span>
+            </Tab>
+            <Tab let:selected>
+              <pre data-tab={1}>{JSON.stringify({selected})}</pre>
+              <span>Tab 2</span>
+            </Tab>
+            <Tab let:selected>
+              <pre data-tab={2}>{JSON.stringify({selected})}</pre>
+              <span>Tab 3</span>
+            </Tab>
+          </TabList>
 
-  //   it('should expose the `selected` state on the `Tab` components', async () => {
-  //     render(
-  //       <Tab.Group>
-  //         <Tab.List>
-  //           <Tab>
-  //             {data => (
-  //               <>
-  //                 <pre data-tab={0}>{JSON.stringify(data)}</pre>
-  //                 <span>Tab 1</span>
-  //               </>
-  //             )}
-  //           </Tab>
-  //           <Tab>
-  //             {data => (
-  //               <>
-  //                 <pre data-tab={1}>{JSON.stringify(data)}</pre>
-  //                 <span>Tab 2</span>
-  //               </>
-  //             )}
-  //           </Tab>
-  //           <Tab>
-  //             {data => (
-  //               <>
-  //                 <pre data-tab={2}>{JSON.stringify(data)}</pre>
-  //                 <span>Tab 3</span>
-  //               </>
-  //             )}
-  //           </Tab>
-  //         </Tab.List>
+          <TabPanels>
+            <TabPanel>Content 1</TabPanel>
+            <TabPanel>Content 2</TabPanel>
+            <TabPanel>Content 3</TabPanel>
+          </TabPanels>
+        </TabGroup>
+      `)
 
-  //         <Tab.Panels>
-  //           <Tab.Panel>Content 1</Tab.Panel>
-  //           <Tab.Panel>Content 2</Tab.Panel>
-  //           <Tab.Panel>Content 3</Tab.Panel>
-  //         </Tab.Panels>
-  //       </Tab.Group>
-  //     )
+      expect(document.querySelector('[data-tab="0"]')).toHaveTextContent(
+        JSON.stringify({ selected: true })
+      )
+      expect(document.querySelector('[data-tab="1"]')).toHaveTextContent(
+        JSON.stringify({ selected: false })
+      )
+      expect(document.querySelector('[data-tab="2"]')).toHaveTextContent(
+        JSON.stringify({ selected: false })
+      )
 
-  //     expect(document.querySelector('[data-tab="0"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: true })
-  //     )
-  //     expect(document.querySelector('[data-tab="1"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: false })
-  //     )
-  //     expect(document.querySelector('[data-tab="2"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: false })
-  //     )
+      await click(getTabs()[1])
 
-  //     await click(getTabs()[1])
+      expect(document.querySelector('[data-tab="0"]')).toHaveTextContent(
+        JSON.stringify({ selected: false })
+      )
+      expect(document.querySelector('[data-tab="1"]')).toHaveTextContent(
+        JSON.stringify({ selected: true })
+      )
+      expect(document.querySelector('[data-tab="2"]')).toHaveTextContent(
+        JSON.stringify({ selected: false })
+      )
+    })
 
-  //     expect(document.querySelector('[data-tab="0"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: false })
-  //     )
-  //     expect(document.querySelector('[data-tab="1"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: true })
-  //     )
-  //     expect(document.querySelector('[data-tab="2"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: false })
-  //     )
-  //   })
+    it('should expose the `selected` state on the `TabPanel` components', async () => {
+      render(svelte`
+        <TabGroup>
+          <TabList>
+            <Tab>Tab 1</Tab>
+            <Tab>Tab 2</Tab>
+            <Tab>Tab 3</Tab>
+          </TabList>
 
-  //   it('should expose the `selected` state on the `Tab.Panel` components', async () => {
-  //     render(
-  //       <Tab.Group>
-  //         <Tab.List>
-  //           <Tab>Tab 1</Tab>
-  //           <Tab>Tab 2</Tab>
-  //           <Tab>Tab 3</Tab>
-  //         </Tab.List>
+          <TabPanels>
+            <TabPanel unmount={false} let:selected>
+              <pre data-panel={0}>{JSON.stringify({ selected })}</pre>
+              <span> Content 1 </span>
+            </TabPanel>
+            <TabPanel unmount={false} let:selected>
+              <pre data-panel={1}>{JSON.stringify({ selected })}</pre>
+              <span> Content 2 </span>
+            </TabPanel>
+            <TabPanel unmount={false} let:selected>
+              <pre data-panel={2}>{JSON.stringify({ selected })}</pre>
+              <span> Content 3 </span>
+            </TabPanel>
+          </TabPanels>
+        </TabGroup>
+      `)
 
-  //         <Tab.Panels>
-  //           <Tab.Panel unmount={false}>
-  //             {data => (
-  //               <>
-  //                 <pre data-panel={0}>{JSON.stringify(data)}</pre>
-  //                 <span>Content 1</span>
-  //               </>
-  //             )}
-  //           </Tab.Panel>
-  //           <Tab.Panel unmount={false}>
-  //             {data => (
-  //               <>
-  //                 <pre data-panel={1}>{JSON.stringify(data)}</pre>
-  //                 <span>Content 2</span>
-  //               </>
-  //             )}
-  //           </Tab.Panel>
-  //           <Tab.Panel unmount={false}>
-  //             {data => (
-  //               <>
-  //                 <pre data-panel={2}>{JSON.stringify(data)}</pre>
-  //                 <span>Content 3</span>
-  //               </>
-  //             )}
-  //           </Tab.Panel>
-  //         </Tab.Panels>
-  //       </Tab.Group>
-  //     )
+      expect(document.querySelector('[data-panel="0"]')).toHaveTextContent(
+        JSON.stringify({ selected: true })
+      )
+      expect(document.querySelector('[data-panel="1"]')).toHaveTextContent(
+        JSON.stringify({ selected: false })
+      )
+      expect(document.querySelector('[data-panel="2"]')).toHaveTextContent(
+        JSON.stringify({ selected: false })
+      )
 
-  //     expect(document.querySelector('[data-panel="0"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: true })
-  //     )
-  //     expect(document.querySelector('[data-panel="1"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: false })
-  //     )
-  //     expect(document.querySelector('[data-panel="2"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: false })
-  //     )
+      await click(getByText('Tab 2'))
 
-  //     await click(getByText('Tab 2'))
-
-  //     expect(document.querySelector('[data-panel="0"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: false })
-  //     )
-  //     expect(document.querySelector('[data-panel="1"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: true })
-  //     )
-  //     expect(document.querySelector('[data-panel="2"]')).toHaveTextContent(
-  //       JSON.stringify({ selected: false })
-  //     )
-  //   })
-  // })
+      expect(document.querySelector('[data-panel="0"]')).toHaveTextContent(
+        JSON.stringify({ selected: false })
+      )
+      expect(document.querySelector('[data-panel="1"]')).toHaveTextContent(
+        JSON.stringify({ selected: true })
+      )
+      expect(document.querySelector('[data-panel="2"]')).toHaveTextContent(
+        JSON.stringify({ selected: false })
+      )
+    })
+  })
 
   describe('`defaultIndex`', () => {
     it('should jump to the nearest tab when the defaultIndex is out of bounds (-2)', async () => {

@@ -14,6 +14,8 @@ import {
   assertActiveElement,
   assertDialog,
   assertDialogDescription,
+  assertDialogOverlay,
+  assertDialogTitle,
   DialogState,
   getByText,
   getDialog,
@@ -24,6 +26,7 @@ import {
 import { click, Keys, press } from "$lib/test-utils/interactions";
 import Transition from "$lib/components/transitions/TransitionRoot.svelte";
 import { tick } from "svelte";
+import svelte from "svelte-inline-compile";
 
 let mockId = 0;
 jest.mock("../../hooks/use-id", () => {
@@ -105,41 +108,29 @@ describe("Rendering", () => {
       })
     );
 
-    // TODO: render prop tests!
+    it(
+      'Dialog should have slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <script>
+            let isOpen = false;
+          </script>
+          <button id="trigger" on:click={() => isOpen = (true)}>
+            Trigger
+          </button>
+          <Dialog open={isOpen} on:close={(e) => isOpen = e.detail} let:open>
+            <pre>{JSON.stringify({open})}</pre>
+            <TestTabSentinel />
+          </Dialog>
+        `)
 
-    // it(
-    //   'should be possible to render a Dialog using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     function Example() {
-    //       let [isOpen, setIsOpen] = useState(false)
+        assertDialog({ state: DialogState.InvisibleUnmounted })
 
-    //       return (
-    //         <>
-    //         <button id= "trigger" onClick = {() => setIsOpen(true)
-    //     }>
-    //       Trigger
-    //       < /button>
-    //       < Dialog open = { isOpen } onClose = { setIsOpen } >
-    //         { data => (
-    //           <>
-    //           <pre>{ JSON.stringify(data) } < /pre>
-    //           < TabSentinel />
-    //           </>
-    //         )
-    //   }
-    //           </Dialog>
-    //     < />
-    //   )
-    //     }
-    // render(<Example />)
+        await click(document.getElementById('trigger'))
 
-    //     assertDialog({ state: DialogState.InvisibleUnmounted })
-
-    //     await click(document.getElementById('trigger'))
-
-    //     assertDialog({ state: DialogState.Visible, textContent: JSON.stringify({ open: true }) })
-    //   })
-    // )
+        assertDialog({ state: DialogState.Visible, textContent: JSON.stringify({ open: true }) })
+      })
+    )
 
     it('should be possible to always render the Dialog if we provide it a `static` prop (and enable focus trapping based on `open`)', async () => {
       let focusCounter = jest.fn()
@@ -235,91 +226,85 @@ describe("Rendering", () => {
       })
     )
   })
-  // TODO: more render prop tests!
+  describe('DialogOverlay', () => {
+    it(
+      'DialogOverlay should have slot props',
+      suppressConsoleLogs(async () => {
+        let overlay = jest.fn().mockReturnValue(null)
+        render(svelte`
+          <script>
+            let isOpen = false;
+          </script>
+          <button id="trigger" on:click={() => isOpen = !isOpen}>
+            Trigger
+          </button>
+          <Dialog open={isOpen} on:close={(e) => isOpen = e.detail}>
+            <DialogOverlay let:open>{overlay({ open })}</DialogOverlay>
+            <TestTabSentinel />
+          </Dialog>
+        `)
 
-  // describe('Dialog.Overlay', () => {
-  //   it(
-  //     'should be possible to render Dialog.Overlay using a render prop',
-  //     suppressConsoleLogs(async () => {
-  //       let overlay = jest.fn().mockReturnValue(null)
-  //       function Example() {
-  //         let [isOpen, setIsOpen] = useState(false)
-  //         return (
-  //           <>
-  //             <button id="trigger" onClick={() => setIsOpen(v => !v)}>
-  //               Trigger
-  //             </button>
-  //             <Dialog open={isOpen} onClose={setIsOpen}>
-  //               <Dialog.Overlay>{overlay}</Dialog.Overlay>
-  //               <TabSentinel />
-  //             </Dialog>
-  //           </>
-  //         )
-  //       }
+        assertDialogOverlay({
+          state: DialogState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-dialog-overlay-2' },
+        })
 
-  //       render(<Example />)
+        await click(document.getElementById('trigger'))
 
-  //       assertDialogOverlay({
-  //         state: DialogState.InvisibleUnmounted,
-  //         attributes: { id: 'headlessui-dialog-overlay-2' },
-  //       })
+        assertDialogOverlay({
+          state: DialogState.Visible,
+          attributes: { id: 'headlessui-dialog-overlay-2' },
+        })
+        expect(overlay).toHaveBeenCalledWith({ open: true })
+      })
+    )
+  })
 
-  //       await click(document.getElementById('trigger'))
+  describe('DialogTitle', () => {
+    it(
+      'DialogTitle should have slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+            <Dialog open={true} on:close={console.log}>
+              <DialogTitle let:open>{JSON.stringify({ open })}</DialogTitle>
+              <TestTabSentinel />
+            </Dialog>
+          `)
 
-  //       assertDialogOverlay({
-  //         state: DialogState.Visible,
-  //         attributes: { id: 'headlessui-dialog-overlay-2' },
-  //       })
-  //       expect(overlay).toHaveBeenCalledWith({ open: true })
-  //     })
-  //   )
-  // })
+        assertDialog({
+          state: DialogState.Visible,
+          attributes: { id: 'headlessui-dialog-1' },
+        })
+        assertDialogTitle({
+          state: DialogState.Visible,
+          textContent: JSON.stringify({ open: true }),
+        })
+      })
+    )
+  })
 
-  // describe('Dialog.Title', () => {
-  //     it(
-  //       'should be possible to render Dialog.Title using a render prop',
-  //       suppressConsoleLogs(async () => {
-  //         render(
-  //           <Dialog open={true} onClose={console.log}>
-  //             <Dialog.Title>{JSON.stringify}</Dialog.Title>
-  //             <TabSentinel />
-  //           </Dialog>
-  //         )
+  describe('DialogDescription', () => {
+    it(
+      'DialogDescription should have slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Dialog open={true} on:close={console.log}>
+            <DialogDescription let:open>{JSON.stringify({ open })}</DialogDescription>
+            <TestTabSentinel />
+          </Dialog>
+        `)
 
-  //         assertDialog({
-  //           state: DialogState.Visible,
-  //           attributes: { id: 'headlessui-dialog-1' },
-  //         })
-  //         assertDialogTitle({
-  //           state: DialogState.Visible,
-  //           textContent: JSON.stringify({ open: true }),
-  //         })
-  //       })
-  //     )
-  //   })
-
-  //   describe('Dialog.Description', () => {
-  //     it(
-  //       'should be possible to render Dialog.Description using a render prop',
-  //       suppressConsoleLogs(async () => {
-  //         render(
-  //           <Dialog open={true} onClose={console.log}>
-  //             <Dialog.Description>{JSON.stringify}</Dialog.Description>
-  //             <TabSentinel />
-  //           </Dialog>
-  //         )
-
-  //         assertDialog({
-  //           state: DialogState.Visible,
-  //           attributes: { id: 'headlessui-dialog-1' },
-  //         })
-  //         assertDialogDescription({
-  //           state: DialogState.Visible,
-  //           textContent: JSON.stringify({ open: true }),
-  //         })
-  //       })
-  //     )
-  //   })
+        assertDialog({
+          state: DialogState.Visible,
+          attributes: { id: 'headlessui-dialog-1' },
+        })
+        assertDialogDescription({
+          state: DialogState.Visible,
+          textContent: JSON.stringify({ open: true }),
+        })
+      })
+    )
+  })
 })
 
 describe('Composition', () => {
@@ -469,7 +454,7 @@ describe('Keyboard interactions', () => {
 
 describe('Mouse interactions', () => {
   it(
-    'should be possible to close a Dialog using a click on the Dialog.Overlay',
+    'should be possible to close a Dialog using a click on the DialogOverlay',
     suppressConsoleLogs(async () => {
       render(
         TestRenderer, {
@@ -497,7 +482,7 @@ describe('Mouse interactions', () => {
   )
 
   it(
-    'should not close the Dialog when clicking on contents of the Dialog.Overlay',
+    'should not close the Dialog when clicking on contents of the DialogOverlay',
     suppressConsoleLogs(async () => {
       render(
         TestRenderer, {
@@ -588,7 +573,7 @@ describe('Mouse interactions', () => {
   )
 
   it(
-    'should stop propagating click events when clicking on the Dialog.Overlay',
+    'should stop propagating click events when clicking on the DialogOverlay',
     suppressConsoleLogs(async () => {
       let wrapperFn = jest.fn()
       render(
@@ -610,7 +595,7 @@ describe('Mouse interactions', () => {
       // Verify that the wrapper function has not been called yet
       expect(wrapperFn).toHaveBeenCalledTimes(0)
 
-      // Click the Dialog.Overlay to close the Dialog
+      // Click the DialogOverlay to close the Dialog
       await click(getDialogOverlay())
 
       // Verify it is closed
@@ -688,7 +673,7 @@ describe('Nesting', () => {
     strategy                            | action
     ${'with `Escape`'}                  | ${() => press(Keys.Escape)}
     ${'with `Outside Click`'}           | ${() => click(document.body)}
-    ${'with `Click on Dialog.Overlay`'} | ${() => click(getDialogOverlays().pop()!)}
+    ${'with `Click on DialogOverlay`'} | ${() => click(getDialogOverlays().pop()!)}
   `(
     'should be possible to open nested Dialog components and close them $strategy',
     async ({ action }) => {

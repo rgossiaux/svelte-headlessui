@@ -10,6 +10,7 @@ import Button from "$lib/internal/elements/Button.svelte";
 import Div from "$lib/internal/elements/Div.svelte";
 import Form from "$lib/internal/elements/Form.svelte";
 import Span from "$lib/internal/elements/Span.svelte";
+import svelte from "svelte-inline-compile";
 
 let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
@@ -66,110 +67,106 @@ describe('Safe guards', () => {
 })
 
 describe('Rendering', () => {
-  // describe('Menu', () => {
-  // it(
-  //   'should be possible to render a Menu using a render prop',
-  //   suppressConsoleLogs(async () => {
-  //     render(
-  //       <Menu>
-  //         {({ open }) => (
-  //           <>
-  //             <Menu.Button>Trigger</Menu.Button>
-  //             {open && (
-  //               <Menu.Items>
-  //                 <Menu.Item as="a">Item A</Menu.Item>
-  //                 <Menu.Item as="a">Item B</Menu.Item>
-  //                 <Menu.Item as="a">Item C</Menu.Item>
-  //               </Menu.Items>
-  //             )}
-  //           </>
-  //         )}
-  //       </Menu>
-  //     )
+  describe('Menu', () => {
+    it(
+      'Menu should have slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+        <Menu let:open>
+          <MenuButton>Trigger</MenuButton>
+          {#if open}
+            <MenuItems>
+              <MenuItem as="a">Item A</MenuItem>
+              <MenuItem as="a">Item B</MenuItem>
+              <MenuItem as="a">Item C</MenuItem>
+            </MenuItems>
+          {/if}
+        </Menu>
+      `)
 
-  //     assertMenuButton({
-  //       state: MenuState.InvisibleUnmounted,
-  //       attributes: { id: 'headlessui-menu-button-1' },
-  //     })
-  //     assertMenu({ state: MenuState.InvisibleUnmounted })
+        assertMenuButton({
+          state: MenuState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-menu-button-1' },
+        })
+        assertMenu({ state: MenuState.InvisibleUnmounted })
 
-  //     await click(getMenuButton())
+        await click(getMenuButton())
 
-  //     assertMenuButton({
-  //       state: MenuState.Visible,
-  //       attributes: { id: 'headlessui-menu-button-1' },
-  //     })
-  //     assertMenu({ state: MenuState.Visible })
-  //   })
-  // )
-  // })
+        assertMenuButton({
+          state: MenuState.Visible,
+          attributes: { id: 'headlessui-menu-button-1' },
+        })
+        assertMenu({ state: MenuState.Visible })
+      })
+    )
+  })
 
-  describe('Menu.Button', () => {
-    // it(
-    //   'should be possible to render a Menu.Button using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Menu>
-    //         <Menu.Button>{JSON.stringify}</Menu.Button>
-    //         <Menu.Items>
-    //           <Menu.Item as="a">Item A</Menu.Item>
-    //           <Menu.Item as="a">Item B</Menu.Item>
-    //           <Menu.Item as="a">Item C</Menu.Item>
-    //         </Menu.Items>
-    //       </Menu>
-    //     )
+  describe('MenuButton', () => {
+    it(
+      'MenuButton should have slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Menu>
+            <MenuButton let:open>{open}</MenuButton>
+            <MenuItems>
+              <MenuItem as="a">Item A</MenuItem>
+              <MenuItem as="a">Item B</MenuItem>
+              <MenuItem as="a">Item C</MenuItem>
+            </MenuItems>
+          </Menu>
+        `)
 
-    //     assertMenuButton({
-    //       state: MenuState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-menu-button-1' },
-    //       textContent: JSON.stringify({ open: false }),
-    //     })
-    //     assertMenu({ state: MenuState.InvisibleUnmounted })
+        assertMenuButton({
+          state: MenuState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-menu-button-1' },
+          textContent: "false",
+        })
+        assertMenu({ state: MenuState.InvisibleUnmounted })
 
-    //     await click(getMenuButton())
+        await click(getMenuButton())
 
-    //     assertMenuButton({
-    //       state: MenuState.Visible,
-    //       attributes: { id: 'headlessui-menu-button-1' },
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //     assertMenu({ state: MenuState.Visible })
-    //   })
-    // )
+        assertMenuButton({
+          state: MenuState.Visible,
+          attributes: { id: 'headlessui-menu-button-1' },
+          textContent: "true",
+        })
+        assertMenu({ state: MenuState.Visible })
+      })
+    )
 
-    // it(
-    //   'should be possible to render a Menu.Button using a render prop and an `as` prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Menu>
-    //         <Menu.Button as="div" role="button">
-    //           {JSON.stringify}
-    //         </Menu.Button>
-    //         <Menu.Items>
-    //           <Menu.Item as="a">Item A</Menu.Item>
-    //           <Menu.Item as="a">Item B</Menu.Item>
-    //           <Menu.Item as="a">Item C</Menu.Item>
-    //         </Menu.Items>
-    //       </Menu>
-    //     )
+    it(
+      'MenuButton should have slot props and support an `as` prop',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Menu>
+            <MenuButton as="div" role="button" let:open>
+              {open}
+            </MenuButton>
+            <MenuItems>
+              <MenuItem as="a">Item A</MenuItem>
+              <MenuItem as="a">Item B</MenuItem>
+              <MenuItem as="a">Item C</MenuItem>
+            </MenuItems>
+          </Menu>
+        `)
 
-    //     assertMenuButton({
-    //       state: MenuState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-menu-button-1' },
-    //       textContent: JSON.stringify({ open: false }),
-    //     })
-    //     assertMenu({ state: MenuState.InvisibleUnmounted })
+        assertMenuButton({
+          state: MenuState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-menu-button-1' },
+          textContent: "false",
+        })
+        assertMenu({ state: MenuState.InvisibleUnmounted })
 
-    //     await click(getMenuButton())
+        await click(getMenuButton())
 
-    //     assertMenuButton({
-    //       state: MenuState.Visible,
-    //       attributes: { id: 'headlessui-menu-button-1' },
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //     assertMenu({ state: MenuState.Visible })
-    //   })
-    // )
+        assertMenuButton({
+          state: MenuState.Visible,
+          attributes: { id: 'headlessui-menu-button-1' },
+          textContent: "true",
+        })
+        assertMenu({ state: MenuState.Visible })
+      })
+    )
 
     describe('`type` attribute', () => {
       it('should set the `type` to "button" by default', async () => {
@@ -214,43 +211,39 @@ describe('Rendering', () => {
     })
   })
 
-  describe('Menu.Items', () => {
-    // it(
-    //   'should be possible to render Menu.Items using a render prop',
-    //   suppressConsoleLogs(async () => {
-    //     render(
-    //       <Menu>
-    //         <Menu.Button>Trigger</Menu.Button>
-    //         <Menu.Items>
-    //           {data => (
-    //             <>
-    //               <Menu.Item as="a">{JSON.stringify(data)}</Menu.Item>
-    //             </>
-    //           )}
-    //         </Menu.Items>
-    //       </Menu>
-    //     )
+  describe('MenuItems', () => {
+    it(
+      'MenuItems should have slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Menu>
+            <MenuButton>Trigger</MenuButton>
+            <MenuItems let:open>
+              <MenuItem as="a">{open}</MenuItem>
+            </MenuItems>
+          </Menu>
+        `)
 
-    //     assertMenuButton({
-    //       state: MenuState.InvisibleUnmounted,
-    //       attributes: { id: 'headlessui-menu-button-1' },
-    //     })
-    //     assertMenu({ state: MenuState.InvisibleUnmounted })
+        assertMenuButton({
+          state: MenuState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-menu-button-1' },
+        })
+        assertMenu({ state: MenuState.InvisibleUnmounted })
 
-    //     await click(getMenuButton())
+        await click(getMenuButton())
 
-    //     assertMenuButton({
-    //       state: MenuState.Visible,
-    //       attributes: { id: 'headlessui-menu-button-1' },
-    //     })
-    //     assertMenu({
-    //       state: MenuState.Visible,
-    //       textContent: JSON.stringify({ open: true }),
-    //     })
-    //   })
-    // )
+        assertMenuButton({
+          state: MenuState.Visible,
+          attributes: { id: 'headlessui-menu-button-1' },
+        })
+        assertMenu({
+          state: MenuState.Visible,
+          textContent: "true",
+        })
+      })
+    )
 
-    it('should be possible to always render the Menu.Items if we provide it a `static` prop', () => {
+    it('should be possible to always render the MenuItems if we provide it a `static` prop', () => {
       render(
         TestRenderer, {
         allProps: [
@@ -269,7 +262,7 @@ describe('Rendering', () => {
       expect(getMenu()).not.toBe(null)
     })
 
-    it('should be possible to use a different render strategy for the Menu.Items', async () => {
+    it('should be possible to use a different render strategy for the MenuItems', async () => {
       render(
         TestRenderer, {
         allProps: [
@@ -293,38 +286,38 @@ describe('Rendering', () => {
     })
   })
 
-  // describe('Menu.Item', () => {
-  // it(
-  //   'should be possible to render a Menu.Item using a render prop',
-  //   suppressConsoleLogs(async () => {
-  //     render(
-  //       <Menu>
-  //         <Menu.Button>Trigger</Menu.Button>
-  //         <Menu.Items>
-  //           <Menu.Item as="a">{JSON.stringify}</Menu.Item>
-  //         </Menu.Items>
-  //       </Menu>
-  //     )
+  describe('MenuItem', () => {
+    it(
+      'MenuItem should have slot props',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+        <Menu>
+          <MenuButton>Trigger</MenuButton>
+          <MenuItems>
+            <MenuItem as="a" let:active let:disabled>{JSON.stringify({ active, disabled })}</MenuItem>
+          </MenuItems>
+        </Menu>
+      `)
 
-  //     assertMenuButton({
-  //       state: MenuState.InvisibleUnmounted,
-  //       attributes: { id: 'headlessui-menu-button-1' },
-  //     })
-  //     assertMenu({ state: MenuState.InvisibleUnmounted })
+        assertMenuButton({
+          state: MenuState.InvisibleUnmounted,
+          attributes: { id: 'headlessui-menu-button-1' },
+        })
+        assertMenu({ state: MenuState.InvisibleUnmounted })
 
-  //     await click(getMenuButton())
+        await click(getMenuButton())
 
-  //     assertMenuButton({
-  //       state: MenuState.Visible,
-  //       attributes: { id: 'headlessui-menu-button-1' },
-  //     })
-  //     assertMenu({
-  //       state: MenuState.Visible,
-  //       textContent: JSON.stringify({ active: false, disabled: false }),
-  //     })
-  //   })
-  // )
-  // })
+        assertMenuButton({
+          state: MenuState.Visible,
+          attributes: { id: 'headlessui-menu-button-1' },
+        })
+        assertMenu({
+          state: MenuState.Visible,
+          textContent: JSON.stringify({ active: false, disabled: false }),
+        })
+      })
+    )
+  })
 })
 
 describe('Rendering composition', () => {
@@ -421,7 +414,7 @@ describe('Rendering composition', () => {
   )
 
   it(
-    'should mark all the elements between Menu.Items and Menu.Item with role none',
+    'should mark all the elements between MenuItems and MenuItem with role none',
     suppressConsoleLogs(async () => {
       render
       render(
@@ -472,7 +465,7 @@ describe('Rendering composition', () => {
 
 describe('Composition', () => {
   it.skip(
-    'should be possible to wrap the Menu.Items with a Transition component',
+    'should be possible to wrap the MenuItems with a Transition component',
     suppressConsoleLogs(async () => {
       let orderFn = jest.fn()
       render(
@@ -525,7 +518,7 @@ describe('Composition', () => {
   )
 
   it.skip(
-    'should be possible to wrap the Menu.Items with a Transition.Child component',
+    'should be possible to wrap the MenuItems with a Transition.Child component',
     suppressConsoleLogs(async () => {
       let orderFn = jest.fn()
       render(
