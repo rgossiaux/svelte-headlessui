@@ -337,9 +337,9 @@ describe('Rendering composition', () => {
       render(
         TestRenderer, {
         allProps: [
-          [Menu, {}, [
-            [MenuButton, {}, "Trigger"],
-            [MenuItems, {}, [
+          [Menu, { class: (bag: any) => JSON.stringify(bag), id: "menu" }, [
+            [MenuButton, { class: (bag: any) => JSON.stringify(bag) }, "Trigger"],
+            [MenuItems, { class: (bag: any) => JSON.stringify(bag) }, [
               [MenuItem, { as: "a", class: (bag: any) => JSON.stringify(bag) }, "Item A"],
               [MenuItem, { as: "a", disabled: true, class: (bag: any) => JSON.stringify(bag) }, "Item B"],
               [MenuItem, { as: "a", class: "no-special-treatment" }, "Item C"],
@@ -354,12 +354,19 @@ describe('Rendering composition', () => {
       })
       assertMenu({ state: MenuState.InvisibleUnmounted })
 
+      // Verify correct classNames
+      expect("" + document.querySelector('[id="menu"]')?.classList).toEqual(JSON.stringify({ open: false }))
+      expect("" + getMenuButton()?.classList).toEqual(JSON.stringify({ open: false }))
+
       // Open menu
       await click(getMenuButton())
 
       let items = getMenuItems()
 
       // Verify correct classNames
+      expect("" + document.querySelector('[id="menu"]')?.classList).toEqual(JSON.stringify({ open: true }))
+      expect("" + getMenu()?.classList).toEqual(JSON.stringify({ open: true }))
+      expect("" + getMenuButton()?.classList).toEqual(JSON.stringify({ open: true }))
       expect('' + items[0].classList).toEqual(JSON.stringify({ active: false, disabled: false }))
       expect('' + items[1].classList).toEqual(JSON.stringify({ active: false, disabled: true }))
       expect('' + items[2].classList).toEqual('no-special-treatment')

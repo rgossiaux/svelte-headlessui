@@ -58,6 +58,7 @@
   export let use: HTMLActionArray = [];
   export let as: SupportedAs = "div";
   const forwardEvents = forwardEventsBuilder(get_current_component());
+
   let menuState: StateDefinition["menuState"] = MenuStates.Closed;
   let buttonStore: StateDefinition["buttonStore"] = writable(null);
   let itemsStore: StateDefinition["itemsStore"] = writable(null);
@@ -163,7 +164,7 @@
     [MenuStates.Closed]: State.Closed,
   });
 
-  $: slot = { open: menuState === MenuStates.Open };
+  $: slotProps = { open: menuState === MenuStates.Open };
 </script>
 
 <svelte:window on:mousedown={handleWindowMousedown} />
@@ -171,8 +172,8 @@
   {...$$restProps}
   use={[...use, forwardEvents]}
   {as}
-  {slot}
+  {slotProps}
   name={"Menu"}
 >
-  <slot {...slot} />
+  <slot {...slotProps} />
 </Render>
