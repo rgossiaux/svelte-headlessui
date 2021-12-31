@@ -4,7 +4,7 @@
   import { portal } from "$lib/hooks/use-portal";
   let forceInRoot = usePortalRoot();
   let groupTarget = usePortalGroupContext();
-  let target = (() => {
+  $: target = (() => {
     // Group context is used, but still null
     if (
       !(forceInRoot && $forceInRoot) &&
