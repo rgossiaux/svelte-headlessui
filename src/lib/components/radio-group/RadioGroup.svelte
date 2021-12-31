@@ -86,7 +86,22 @@
       return true;
     },
     registerOption(action: Option) {
-      options = [...options, action];
+      if (!radioGroupRef) {
+        // We haven't mounted yet so just append
+        options = [...options, action];
+        return;
+      }
+      let orderMap = Array.from(
+        radioGroupRef.querySelectorAll('[id^="headlessui-radiogroup-option-"]')!
+      ).reduce(
+        (lookup, element, index) =>
+          Object.assign(lookup, { [element.id]: index }),
+        {}
+      ) as Record<string, number>;
+
+      let newOptions = [...options, action];
+      newOptions.sort((a, z) => orderMap[a.id] - orderMap[z.id]);
+      options = newOptions;
     },
     unregisterOption(id: Option["id"]) {
       options = options.filter((radio) => radio.id !== id);

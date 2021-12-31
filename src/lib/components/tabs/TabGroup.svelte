@@ -9,8 +9,10 @@
     orientation: "vertical" | "horizontal";
     activation: "auto" | "manual";
 
-    tabs: (HTMLElement | null)[];
+    tabs: HTMLElement[];
     panels: PanelData[];
+
+    listRef: Writable<HTMLElement | null>;
 
     // State mutators
     setSelectedIndex(index: number): void;
@@ -63,6 +65,7 @@
   let selectedIndex: StateDefinition["selectedIndex"] = null;
   let tabs: StateDefinition["tabs"] = [];
   let panels: StateDefinition["panels"] = [];
+  let listRef: StateDefinition["listRef"] = writable(null);
 
   const dispatch = createEventDispatcher();
 
@@ -72,13 +75,39 @@
     activation: manual ? "manual" : "auto",
     tabs,
     panels,
+    listRef,
     setSelectedIndex(index: number) {
       if (selectedIndex === index) return;
       selectedIndex = index;
       dispatch("change", index);
     },
     registerTab(tab: typeof tabs[number]) {
-      if (!tabs.includes(tab)) tabs = [...tabs, tab];
+      if (tabs.includes(tab)) return;
+      if (!$listRef) {
+        // We haven't mounted yet so just append
+        tabs = [...tabs, tab];
+        return;
+      }
+      let currentSelectedTab =
+        selectedIndex !== null ? tabs[selectedIndex] : null;
+
+      let orderMap = Array.from(
+        $listRef.querySelectorAll('[id^="headlessui-tabs-tab-"]')!
+      ).reduce(
+        (lookup, element, index) =>
+          Object.assign(lookup, { [element.id]: index }),
+        {}
+      ) as Record<string, number>;
+
+      let nextTabs = [...tabs, tab];
+      nextTabs.sort((a, z) => orderMap[a.id] - orderMap[z.id]);
+      tabs = nextTabs;
+
+      // Maintain the correct item active
+      selectedIndex = (() => {
+        if (currentSelectedTab === null) return null;
+        return tabs.indexOf(currentSelectedTab);
+      })();
     },
     unregisterTab(tab: typeof tabs[number]) {
       tabs = tabs.filter((t) => t !== tab);

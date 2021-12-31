@@ -155,7 +155,31 @@
       searchQuery = "";
     },
     registerOption(id: string, dataRef) {
-      options = [...options, { id, dataRef }];
+      if (!$optionsRef) {
+        // We haven't mounted yet so just append
+        options = [...options, { id, dataRef }];
+        return;
+      }
+      let currentActiveOption =
+        activeOptionIndex !== null ? options[activeOptionIndex] : null;
+
+      let orderMap = Array.from(
+        $optionsRef.querySelectorAll('[id^="headlessui-listbox-option-"]')!
+      ).reduce(
+        (lookup, element, index) =>
+          Object.assign(lookup, { [element.id]: index }),
+        {}
+      ) as Record<string, number>;
+
+      let nextOptions = [...options, { id, dataRef }];
+      nextOptions.sort((a, z) => orderMap[a.id] - orderMap[z.id]);
+      options = nextOptions;
+
+      // Maintain the correct item active
+      activeOptionIndex = (() => {
+        if (currentActiveOption === null) return null;
+        return options.indexOf(currentActiveOption);
+      })();
     },
     unregisterOption(id: string) {
       let nextOptions = options.slice();

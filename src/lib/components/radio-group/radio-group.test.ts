@@ -124,8 +124,7 @@ describe('Rendering', () => {
     assertNotFocusable(getByText('Dine in'))
   })
 
-  // TODO: fix this test!
-  it.skip('should guarantee the radio option order after a few unmounts', async () => {
+  it('should guarantee the radio option order after a few unmounts', async () => {
     render(svelte`
       <script>
         let showFirst = false;

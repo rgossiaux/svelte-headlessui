@@ -27,7 +27,7 @@
     return () => $api.unregisterTab(tabRef);
   });
 
-  $: myIndex = $api.tabs.indexOf(tabRef);
+  $: myIndex = tabRef ? $api.tabs.indexOf(tabRef) : -1;
   $: selected = myIndex === $api.selectedIndex;
 
   function handleKeyDown(e: CustomEvent) {

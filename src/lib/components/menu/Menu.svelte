@@ -111,7 +111,31 @@
       searchQuery = "";
     },
     registerItem(id: string, data: MenuItemData) {
-      items.push({ id, data });
+      if (!$itemsStore) {
+        // We haven't mounted yet so just append
+        items = [...items, { id, data }];
+        return;
+      }
+      let currentActiveItem =
+        activeItemIndex !== null ? items[activeItemIndex] : null;
+
+      let orderMap = Array.from(
+        $itemsStore.querySelectorAll('[id^="headlessui-menu-item-"]')!
+      ).reduce(
+        (lookup, element, index) =>
+          Object.assign(lookup, { [element.id]: index }),
+        {}
+      ) as Record<string, number>;
+
+      let nextItems = [...items, { id, data }];
+      nextItems.sort((a, z) => orderMap[a.id] - orderMap[z.id]);
+      items = nextItems;
+
+      // Maintain the correct item active
+      activeItemIndex = (() => {
+        if (currentActiveItem === null) return null;
+        return items.indexOf(currentActiveItem);
+      })();
     },
     unregisterItem(id: string) {
       let nextItems = items.slice();
@@ -137,7 +161,7 @@
       ...obj,
       menuState,
       buttonStore,
-      itemsStore: itemsStore,
+      itemsStore,
       items,
       searchQuery,
       activeItemIndex,

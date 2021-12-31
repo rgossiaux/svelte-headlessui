@@ -11,6 +11,8 @@
   export let use: HTMLActionArray = [];
 
   let api = useTabsContext("TabList");
+  let listRef = $api.listRef;
+
   $: propsWeControl = {
     role: "tablist",
     "aria-orientation": $api.orientation,
@@ -23,6 +25,7 @@
   {...{ ...$$restProps, ...propsWeControl }}
   {as}
   {slotProps}
+  bind:el={$listRef}
   use={[...use, forwardEvents]}
   name={"TabList"}
 >

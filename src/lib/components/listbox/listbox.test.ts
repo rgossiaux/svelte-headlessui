@@ -6,7 +6,7 @@ import {
   ListboxOptions,
 } from ".";
 import { suppressConsoleLogs } from "$lib/test-utils/suppress-console-logs";
-import { render } from "@testing-library/svelte";
+import { act, render } from "@testing-library/svelte";
 import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
 import {
   assertActiveElement,
@@ -48,6 +48,7 @@ import Button from "$lib/internal/elements/Button.svelte";
 import Div from "$lib/internal/elements/Div.svelte";
 import Span from "$lib/internal/elements/Span.svelte";
 import svelte from "svelte-inline-compile";
+import { writable } from "svelte/store";
 
 let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
@@ -192,7 +193,7 @@ describe('Rendering', () => {
 
   describe('ListboxLabel', () => {
     it(
-      'should be possible to render a ListboxLabel using a render prop',
+      'should be possible to render a ListboxLabel using slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
           <Listbox value={undefined} on:change={console.log}>
@@ -295,7 +296,7 @@ describe('Rendering', () => {
     )
 
     it(
-      'should be possible to render a ListboxButton using a render prop and an `as` prop',
+      'should be possible to render a ListboxButton using slot props and an `as` prop',
       suppressConsoleLogs(async () => {
         render(svelte`
           <Listbox value={undefined} onChange={console.log}>
@@ -510,6 +511,61 @@ describe('Rendering', () => {
         })
       })
     )
+
+    it('should guarantee the listbox option order after a few unmounts', async () => {
+      let showFirst = writable(false);
+      render(svelte`
+      <Listbox value={undefined}>
+        <ListboxButton>Trigger</ListboxButton>
+        <ListboxOptions>
+          {#if $showFirst}
+            <ListboxOption value="a">Option A</ListboxOption>
+          {/if}
+          <ListboxOption value="b">Option B</ListboxOption>
+          <ListboxOption value="c">Option C</ListboxOption>
+        </ListboxOptions>
+      </Listbox>
+    `)
+
+      assertListboxButton({
+        state: ListboxState.InvisibleUnmounted,
+        attributes: { id: 'headlessui-listbox-button-1' },
+      })
+      assertListbox({ state: ListboxState.InvisibleUnmounted })
+
+      // Open Listbox
+      await click(getListboxButton())
+
+      let options = getListboxOptions()
+      expect(options).toHaveLength(2)
+      options.forEach(option => assertListboxOption(option))
+
+      // Make the first option active
+      await press(Keys.ArrowDown)
+
+      // Verify that the first listbox option is active
+      assertActiveListboxOption(options[0])
+
+      // Now add a new option dynamically
+      await act(() => showFirst.set(true));
+
+      // New option should be treated correctly
+      options = getListboxOptions()
+      expect(options).toHaveLength(3)
+      options.forEach(option => assertListboxOption(option))
+
+      // Focused option should now be second
+      assertActiveListboxOption(options[1])
+
+      // We should be able to go to the first option
+      await press(Keys.Home)
+      assertActiveListboxOption(options[0])
+
+      // And the last one
+      await press(Keys.End)
+      assertActiveListboxOption(options[2])
+
+    })
   })
 })
 

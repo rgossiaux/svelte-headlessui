@@ -1,4 +1,4 @@
-import { render } from "@testing-library/svelte";
+import { act, render } from "@testing-library/svelte";
 import { suppressConsoleLogs } from "$lib/test-utils/suppress-console-logs";
 import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from ".";
@@ -6,6 +6,7 @@ import { assertActiveElement, assertTabs, getByText, getTabs } from "$lib/test-u
 import { click, Keys, press, shift } from "$lib/test-utils/interactions";
 import Button from "$lib/internal/elements/Button.svelte";
 import svelte from "svelte-inline-compile";
+import { writable } from "svelte/store";
 
 let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
@@ -430,6 +431,48 @@ describe('Rendering', () => {
         expect(getTabs()[0]).not.toHaveAttribute('type')
       })
 
+    })
+
+    it('should guarantee the tab order after a few unmounts', async () => {
+      let showFirst = writable(false);
+      render(svelte`
+      <TabGroup>
+        <TabList>
+          {#if $showFirst}
+            <Tab>Tab 1</Tab>
+          {/if}
+          <Tab>Tab 2</Tab>
+          <Tab>Tab 3</Tab>
+        </TabList>
+      </TabGroup>
+    `)
+
+      let tabs = getTabs()
+      expect(tabs).toHaveLength(2)
+
+      // Make the first tab active
+      await press(Keys.Tab)
+
+      // Verify that the first tab is active
+      assertTabs({ active: 0 })
+
+      // Now add a new tab dynamically
+      await act(() => showFirst.set(true));
+
+      // New tab should be treated correctly
+      tabs = getTabs()
+      expect(tabs).toHaveLength(3)
+
+      // Active tab should now be second
+      assertTabs({ active: 1 })
+
+      // We should be able to go to the first tab
+      await press(Keys.Home)
+      assertTabs({ active: 0 })
+
+      // And the last one
+      await press(Keys.End)
+      assertTabs({ active: 2 })
     })
   })
 })

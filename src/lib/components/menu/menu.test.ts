@@ -1,5 +1,5 @@
 import { assertActiveElement, assertMenu, assertMenuButton, assertMenuButtonLinkedWithMenu, assertMenuItem, assertMenuLinkedWithMenuItem, assertNoActiveMenuItem, getByText, getMenu, getMenuButton, getMenuButtons, getMenuItems, getMenus, MenuState } from "$lib/test-utils/accessibility-assertions";
-import { render } from "@testing-library/svelte";
+import { act, render } from "@testing-library/svelte";
 import { Menu, MenuButton, MenuItem, MenuItems } from ".";
 import { suppressConsoleLogs } from "$lib/test-utils/suppress-console-logs";
 import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
@@ -11,6 +11,7 @@ import Div from "$lib/internal/elements/Div.svelte";
 import Form from "$lib/internal/elements/Form.svelte";
 import Span from "$lib/internal/elements/Span.svelte";
 import svelte from "svelte-inline-compile";
+import { writable } from "svelte/store";
 
 let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
@@ -327,6 +328,61 @@ describe('Rendering', () => {
         })
       })
     )
+
+    it('should guarantee the menu item order after a few unmounts', async () => {
+      let showFirst = writable(false);
+      render(svelte`
+      <Menu>
+        <MenuButton>Trigger</MenuButton>
+        <MenuItems>
+          {#if $showFirst}
+            <MenuItem as="a">Item A</MenuItem>
+          {/if}
+          <MenuItem as="a">Item B</MenuItem>
+          <MenuItem as="a">Item C</MenuItem>
+        </MenuItems>
+      </Menu>
+    `)
+
+      assertMenuButton({
+        state: MenuState.InvisibleUnmounted,
+        attributes: { id: 'headlessui-menu-button-1' },
+      })
+      assertMenu({ state: MenuState.InvisibleUnmounted })
+
+      // Open Listbox
+      await click(getMenuButton())
+
+      let items = getMenuItems()
+      expect(items).toHaveLength(2)
+      items.forEach(item => assertMenuItem(item))
+
+      // Make the first item active
+      await press(Keys.ArrowDown)
+
+      // Verify that the first menu item is active
+      assertMenuLinkedWithMenuItem(items[0])
+
+      // Now add a new option dynamically
+      await act(() => showFirst.set(true));
+
+      // New option should be treated correctly
+      items = getMenuItems()
+      expect(items).toHaveLength(3)
+      items.forEach(item => assertMenuItem(item))
+
+      // Active item should now be second
+      assertMenuLinkedWithMenuItem(items[1])
+
+      // We should be able to go to the first option
+      await press(Keys.Home)
+      assertMenuLinkedWithMenuItem(items[0])
+
+      // And the last one
+      await press(Keys.End)
+      assertMenuLinkedWithMenuItem(items[2])
+
+    })
   })
 })
 
