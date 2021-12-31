@@ -26,6 +26,16 @@ beforeAll(() => {
 })
 afterAll(() => jest.restoreAllMocks())
 
+function nextFrame() {
+  return new Promise<void>((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        resolve();
+      });
+    });
+  });
+}
+
 describe('Safe guards', () => {
   it.each([
     ['MenuButton', MenuButton],
@@ -464,7 +474,7 @@ describe('Rendering composition', () => {
 })
 
 describe('Composition', () => {
-  it.skip(
+  it(
     'should be possible to wrap the MenuItems with a Transition component',
     suppressConsoleLogs(async () => {
       let orderFn = jest.fn()
@@ -506,6 +516,9 @@ describe('Composition', () => {
 
       await click(getMenuButton())
 
+      // Wait for all transitions to finish
+      await nextFrame()
+
       // Verify that we tracked the `mounts` and `unmounts` in the correct order
       expect(orderFn.mock.calls).toEqual([
         ['Mounting - Menu'],
@@ -517,8 +530,8 @@ describe('Composition', () => {
     })
   )
 
-  it.skip(
-    'should be possible to wrap the MenuItems with a Transition.Child component',
+  it(
+    'should be possible to wrap the MenuItems with a TransitionChild component',
     suppressConsoleLogs(async () => {
       let orderFn = jest.fn()
       render(
@@ -558,6 +571,9 @@ describe('Composition', () => {
       })
 
       await click(getMenuButton())
+
+      // Wait for all transitions to finish
+      await nextFrame()
 
       // Verify that we tracked the `mounts` and `unmounts` in the correct order
       expect(orderFn.mock.calls).toEqual([

@@ -63,6 +63,16 @@ beforeAll(() => {
 })
 afterAll(() => jest.restoreAllMocks())
 
+function nextFrame() {
+  return new Promise<void>((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        resolve();
+      });
+    });
+  });
+}
+
 describe('safeguards', () => {
   it.each([
     ['ListboxButton', ListboxButton],
@@ -610,8 +620,7 @@ describe('Rendering composition', () => {
 
 
 describe('Composition', () => {
-  // TODO: fix this test
-  it.skip(
+  it(
     'should be possible to wrap the ListboxOptions with a Transition component',
     suppressConsoleLogs(async () => {
       let orderFn = jest.fn()
@@ -652,6 +661,9 @@ describe('Composition', () => {
       })
 
       await click(getListboxButton())
+
+      // Wait for all transitions to finish
+      await nextFrame()
 
       // Verify that we tracked the `mounts` and `unmounts` in the correct order
       expect(orderFn.mock.calls).toEqual([
