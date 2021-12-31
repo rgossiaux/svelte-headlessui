@@ -69,7 +69,7 @@
   $: slotProps = {
     checked,
     disabled: isDisabled,
-    active: state & OptionState.Active,
+    active: !!(state & OptionState.Active),
   };
 </script>
 
