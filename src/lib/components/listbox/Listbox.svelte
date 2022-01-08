@@ -197,9 +197,14 @@
         return nextOptions.indexOf(currentActiveOption);
       })();
     },
-    select(value: unknown) {
+    select(nextValue: unknown) {
       if (disabled) return;
-      dispatch("change", value);
+      const newValue = Array.isArray(value)
+        ? value.includes(nextValue)
+          ? value.filter((option) => option !== nextValue)
+          : [...value, nextValue]
+        : nextValue;
+      dispatch("change", newValue);
     },
   });
   setContext(LISTBOX_CONTEXT_NAME, api);

@@ -24,9 +24,9 @@
     "Emil Schaefer",
   ];
 
-  let active: string | undefined;
+  let active: string[] | undefined;
   if (active === undefined) {
-    active = people[Math.floor(Math.random() * people.length)];
+    active = [people[Math.floor(Math.random() * people.length)]];
   }
 </script>
 

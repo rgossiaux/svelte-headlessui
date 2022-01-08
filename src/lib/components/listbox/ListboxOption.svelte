@@ -25,7 +25,10 @@
       ? $api.options[$api.activeOptionIndex].id === id
       : false;
 
-  $: selected = $api.value === value;
+  $: selected = Array.isArray($api.value)
+    ? $api.value.includes(value)
+    : $api.value === value;
+
   $: dataRef = {
     disabled,
     value,
