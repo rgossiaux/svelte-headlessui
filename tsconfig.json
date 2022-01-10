@@ -26,6 +26,8 @@
     "paths": {
       "$lib": ["src/lib"],
       "$lib/*": ["src/lib/*"],
+      "$site": ["src/site"],
+      "$site/*": ["src/site/*"],
       "*": ["src/types/*"]
     }
   },
