@@ -2,7 +2,8 @@
   import { onDestroy } from "svelte";
   import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
   import LabelProvider from "$lib/components/label/LabelProvider.svelte";
-  import { useRadioGroupContext, Option } from "./RadioGroup.svelte";
+  import type { Option } from "./RadioGroup.svelte";
+  import { useRadioGroupContext } from "./RadioGroup.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";

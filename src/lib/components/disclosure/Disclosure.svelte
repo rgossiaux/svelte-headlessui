@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
-  import { Readable, writable, Writable } from "svelte/store";
+  import type { Readable, Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   import { getContext, setContext } from "svelte";
   export enum DisclosureStates {
     Open,

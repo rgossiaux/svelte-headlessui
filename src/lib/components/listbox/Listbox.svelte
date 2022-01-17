@@ -58,7 +58,8 @@
     calculateActiveIndex,
   } from "$lib/utils/calculate-active-index";
   import { createEventDispatcher, getContext, setContext } from "svelte";
-  import { Readable, writable, Writable } from "svelte/store";
+  import type { Readable, Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";

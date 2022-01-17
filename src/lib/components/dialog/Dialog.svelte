@@ -41,7 +41,8 @@
 
 <script lang="ts">
   import { State, useOpenClosed } from "$lib/internal/open-closed";
-  import { Readable, writable, Writable } from "svelte/store";
+  import type { Readable, Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { useId } from "$lib/hooks/use-id";
   import { useInertOthers } from "$lib/hooks/use-inert-others";

@@ -16,7 +16,8 @@
 
 <script lang="ts">
   import { getContext, setContext } from "svelte";
-  import { Readable, writable, Writable } from "svelte/store";
+  import type { Readable, Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   export let name: string;
   let descriptionIds: string[] = [];
   let contextStore: Writable<DescriptionContext> = writable({

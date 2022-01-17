@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
   import { getContext, setContext } from "svelte";
-  import { writable, Writable } from "svelte/store";
+  import type { Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   const FORCE_PORTAL_ROOT_CONTEXT_NAME = "headlessui-force-portal-root-context";
 
   export function usePortalRoot(): Writable<boolean> | undefined {

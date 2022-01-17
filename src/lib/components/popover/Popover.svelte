@@ -51,7 +51,8 @@
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { usePopoverGroupContext } from "./PopoverGroup.svelte";
   import { getContext, setContext, onMount } from "svelte";
-  import { Readable, writable, Writable } from "svelte/store";
+  import type { Readable, Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";

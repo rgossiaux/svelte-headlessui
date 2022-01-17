@@ -7,7 +7,8 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
-  import { Writable, writable } from "svelte/store";
+  import type { Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   import { resolveButtonType } from "$lib/utils/resolve-button-type";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 

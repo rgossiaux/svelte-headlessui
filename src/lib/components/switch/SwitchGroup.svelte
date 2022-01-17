@@ -13,7 +13,8 @@
   import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
   import LabelProvider from "$lib/components/label/LabelProvider.svelte";
   import { getContext, setContext } from "svelte";
-  import { Writable, writable } from "svelte/store";
+  import type { Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";

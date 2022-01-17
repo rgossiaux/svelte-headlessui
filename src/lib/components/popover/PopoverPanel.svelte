@@ -19,11 +19,8 @@
     focusIn,
   } from "$lib/utils/focus-management";
   import { getContext, setContext } from "svelte";
-  import {
-    PopoverStates,
-    StateDefinition,
-    usePopoverContext,
-  } from "./Popover.svelte";
+  import type { StateDefinition } from "./Popover.svelte";
+  import { PopoverStates, usePopoverContext } from "./Popover.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";

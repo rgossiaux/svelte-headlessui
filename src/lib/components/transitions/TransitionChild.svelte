@@ -1,12 +1,13 @@
 <script lang="ts">
   import { createEventDispatcher, onMount, setContext } from "svelte";
-  import { writable, Writable } from "svelte/store";
+  import type { Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { Reason, transition } from "$lib/utils/transition";
+  import type { NestingContextValues } from "$lib/components/transitions/common.svelte";
   import {
     hasChildren,
-    NestingContextValues,
     NESTING_CONTEXT_NAME,
     TreeStates,
     useNesting,

@@ -19,8 +19,6 @@ afterAll(() => jest.restoreAllMocks());
 
 it("should be possible to render a DescriptionProvider", () => {
   render(DescriptionProvider, { name: "test" });
-  // This dumb line is to trick the TS compiler to not remove my imports
-  expect(DescriptionProvider).not.toBe(Description);
 });
 
 it("should be possible to use a DescriptionProvider without using a Description", async () => {

@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
   import { getContext, setContext } from "svelte";
-  import { Readable, writable } from "svelte/store";
+  import type { Readable } from "svelte/store";
+  import { writable } from "svelte/store";
   const PORTAL_GROUP_CONTEXT_NAME = "headlessui-portal-group-context";
 
   export function usePortalGroupContext():

@@ -2,7 +2,8 @@
   import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
   import LabelProvider from "$lib/components/label/LabelProvider.svelte";
   import { createEventDispatcher, getContext, setContext } from "svelte";
-  import { Readable, Writable, writable } from "svelte/store";
+  import type { Readable, Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   import { Focus, focusIn, FocusResult } from "$lib/utils/focus-management";
   import { Keys } from "$lib/utils/keyboard";
   import { useId } from "$lib/hooks/use-id";

@@ -1,8 +1,6 @@
 <script lang="ts" context="module">
-  import {
-    getElementComponent,
-    SupportedElement,
-  } from "$lib/internal/elements";
+  import type { SupportedElement } from "$lib/internal/elements";
+  import { getElementComponent } from "$lib/internal/elements";
   import { get_current_component, SvelteComponent } from "svelte/internal";
 
   export enum Features {

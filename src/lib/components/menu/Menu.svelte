@@ -4,7 +4,8 @@
     calculateActiveIndex,
   } from "$lib/utils/calculate-active-index";
   import { getContext, setContext } from "svelte";
-  import { Readable, writable, Writable } from "svelte/store";
+  import type { Readable, Writable } from "svelte/store";
+  import { writable } from "svelte/store";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
   import { match } from "$lib/utils/match";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";

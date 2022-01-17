@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { useMenuContext, MenuStates, MenuItemData } from "./Menu.svelte";
+  import type { MenuItemData } from "./Menu.svelte";
+  import { useMenuContext, MenuStates } from "./Menu.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { afterUpdate, onDestroy, onMount, tick } from "svelte";
