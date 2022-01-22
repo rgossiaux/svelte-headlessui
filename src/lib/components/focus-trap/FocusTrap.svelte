@@ -109,6 +109,10 @@
 
   // Prevent programmatically escaping
   function handleWindowFocus(event: FocusEvent) {
+    if (event.target === window.document.body) {
+      // Workaround for a SvelteKit issue: https://github.com/sveltejs/kit/issues/3501
+      return;
+    }
     if (!enabled) return;
     if (containers.size !== 1) return;
     if (destroying) return;
