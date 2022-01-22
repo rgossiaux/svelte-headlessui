@@ -3125,6 +3125,46 @@ describe('Keyboard interactions', () => {
         assertActiveListboxOption(options[1])
       })
     )
+
+    it(
+      'should be possible to search for the next occurence',
+      suppressConsoleLogs(async () => {
+        render(svelte`
+          <Listbox value={undefined} onChange={console.log}>
+            <ListboxButton>Trigger</ListboxButton>
+            <ListboxOptions>
+              <ListboxOption value="a">alice</ListboxOption>
+              <ListboxOption value="b">bob</ListboxOption>
+              <ListboxOption value="c">charlie</ListboxOption>
+              <ListboxOption value="d">bob</ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        `)
+
+        // Open listbox
+        await click(getListboxButton())
+
+        let options = getListboxOptions()
+
+        // Search for bob
+        await type(word('b'))
+
+        // We should be on the first `bob`
+        assertActiveListboxOption(options[1])
+
+        // Search for bob again
+        await type(word('b'))
+
+        // We should be on the second `bob`
+        assertActiveListboxOption(options[3])
+
+        // Search for bob once again
+        await type(word('b'))
+
+        // We should be back on the first `bob`
+        assertActiveListboxOption(options[1])
+      })
+    )
   })
 })
 

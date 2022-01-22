@@ -99,14 +99,22 @@
     search(value: string) {
       searchQuery += value.toLowerCase();
 
-      let match = items.findIndex(
+      let reorderedItems =
+        activeItemIndex !== null
+          ? items
+              .slice(activeItemIndex + 1)
+              .concat(items.slice(0, activeItemIndex + 1))
+          : items;
+
+      let matchingItem = reorderedItems.find(
         (item) =>
           item.data.textValue.startsWith(searchQuery) && !item.data.disabled
       );
 
-      if (match === -1 || match === activeItemIndex) return;
+      let matchIdx = matchingItem ? items.indexOf(matchingItem) : -1;
+      if (matchIdx === -1 || matchIdx === activeItemIndex) return;
 
-      activeItemIndex = match;
+      activeItemIndex = matchIdx;
     },
     clearSearch() {
       searchQuery = "";

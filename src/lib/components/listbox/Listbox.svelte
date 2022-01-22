@@ -139,14 +139,22 @@
 
       searchQuery += value.toLowerCase();
 
-      let match = options.findIndex(
+      let reorderedOptions =
+        activeOptionIndex !== null
+          ? options
+              .slice(activeOptionIndex + 1)
+              .concat(options.slice(0, activeOptionIndex + 1))
+          : options;
+
+      let matchingOption = reorderedOptions.find(
         (option) =>
           !option.dataRef.disabled &&
           option.dataRef.textValue.startsWith(searchQuery)
       );
 
-      if (match === -1 || match === activeOptionIndex) return;
-      activeOptionIndex = match;
+      let matchIdx = matchingOption ? options.indexOf(matchingOption) : -1;
+      if (matchIdx === -1 || matchIdx === activeOptionIndex) return;
+      activeOptionIndex = matchIdx;
     },
     clearSearch() {
       if (disabled) return;
