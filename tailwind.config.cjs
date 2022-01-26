@@ -9,6 +9,7 @@ const config = {
     require("@tailwindcss/forms")({
       strategy: "class",
     }),
+    require("@tailwindcss/typography"),
   ],
 };
 
