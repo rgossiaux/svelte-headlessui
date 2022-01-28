@@ -74,8 +74,8 @@
   };
 </script>
 
-<DescriptionProvider name="RadioGroupDescription" let:describedby>
-  <LabelProvider name="RadioGroupLabel" let:labelledby>
+<DescriptionProvider name="RadioGroupDescription" {slotProps} let:describedby>
+  <LabelProvider name="RadioGroupLabel" {slotProps} let:labelledby>
     <Render
       {...{ ...$$restProps, ...propsWeControl }}
       {as}

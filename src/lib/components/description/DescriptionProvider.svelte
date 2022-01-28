@@ -1,7 +1,8 @@
 <script lang="ts" context="module">
   export interface DescriptionContext {
     name?: string;
-    props?: { slotProps?: object };
+    slotProps?: object;
+    props?: object;
     register: (value: string) => void;
     descriptionIds?: string;
   }
@@ -19,16 +20,19 @@
   import type { Readable, Writable } from "svelte/store";
   import { writable } from "svelte/store";
   export let name: string;
+  export let slotProps = {};
   let descriptionIds: string[] = [];
   let contextStore: Writable<DescriptionContext> = writable({
     name,
-    register,
+    slotProps,
     props: $$restProps,
+    register,
   });
   setContext(DESCRIPTION_CONTEXT_NAME, contextStore);
 
   $: contextStore.set({
     name,
+    slotProps,
     props: $$restProps,
     register,
     descriptionIds:

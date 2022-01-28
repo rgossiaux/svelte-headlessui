@@ -102,3 +102,33 @@ it("should be possible to use a DescriptionProvider and multiple Description com
     </div>
   `);
 });
+
+it("should be possible to use a DescriptionProvider with slot props", async () => {
+  let { container } = render(svelte`
+    <DescriptionProvider name={"test"} slotProps={{num: 12345}} let:describedby>
+      <div aria-describedby={describedby}>
+        <Description let:num>{num}</Description>
+        <span>Contents</span>
+      </div>
+    </DescriptionProvider>
+  `);
+
+  expect(container.firstChild?.firstChild).toMatchInlineSnapshot(`
+    <div
+      aria-describedby="headlessui-description-1"
+    >
+      <p
+        id="headlessui-description-1"
+      >
+        12345
+      </p>
+      
+      
+       
+      <span>
+        Contents
+      </span>
+    </div>
+  `);
+});
+

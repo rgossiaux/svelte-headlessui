@@ -24,6 +24,9 @@
 
   let allProps: any = {};
   $: allProps = { ...$$restProps, ...$contextStore!.props, id };
+
+  $: slotProps = $contextStore!.slotProps;
+
   if (passive) delete allProps["onClick"];
 </script>
 
@@ -32,10 +35,11 @@
   {...allProps}
   name={"Label"}
   {as}
+  {slotProps}
   use={[...use, forwardEvents]}
   on:click={(event) => {
     if (!passive) allProps["onClick"]?.(event);
   }}
 >
-  <slot />
+  <slot {...slotProps} />
 </Render>

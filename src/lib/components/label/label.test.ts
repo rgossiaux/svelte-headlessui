@@ -31,7 +31,7 @@ it(
 
 it("should be possible to use a LabelProvider without using a Label", async () => {
   let { container } = render(svelte`
-  <LabelProvider let:labelledby>
+  <LabelProvider name={"test"} let:labelledby>
     <div aria-labelledby={labelledby}>
       No label
     </div>
@@ -46,7 +46,7 @@ it("should be possible to use a LabelProvider without using a Label", async () =
 
 it("should be possible to use a LabelProvider and a single Label, and have them linked", async () => {
   let { container } = render(svelte`
-  <LabelProvider let:labelledby>
+  <LabelProvider name={"test"} let:labelledby>
     <div aria-labelledby={labelledby}>
       <Label>I am a label</Label>
       <span>Contents</span>
@@ -74,7 +74,7 @@ it("should be possible to use a LabelProvider and a single Label, and have them 
 
 it("should be possible to use a LabelProvider and multiple Label components, and have them linked", async () => {
   let { container } = render(svelte`
-  <LabelProvider let:labelledby>
+  <LabelProvider name={"test"} let:labelledby>
     <div aria-labelledby={labelledby}>
       <Label>I am a label</Label>
       <span>Contents</span>
@@ -111,7 +111,7 @@ it("should be possible to use a LabelProvider and multiple Label components, and
 
 it("should be possible to render a Label with an `as` prop", async () => {
   let { container } = render(svelte`
-  <LabelProvider let:labelledby>
+  <LabelProvider name={"test"} let:labelledby>
     <div aria-labelledby={labelledby}>
       <Label as="p">I am a label</Label>
       <span>Contents</span>
@@ -140,7 +140,7 @@ it("should be possible to render a Label with an `as` prop", async () => {
 it("should be possible to change the props of a Label", async () => {
   let classStore: Writable<string | null> = writable(null);
   let { container } = render(svelte`
-  <LabelProvider let:labelledby>
+  <LabelProvider name={"test"} let:labelledby>
     <div aria-labelledby={labelledby}>
       <Label class={$classStore}>I am a label</Label>
       <span>Contents</span>
@@ -178,6 +178,34 @@ it("should be possible to change the props of a Label", async () => {
         id="headlessui-label-1"
       >
         I am a label
+      </label>
+      
+      
+       
+      <span>
+        Contents
+      </span>
+    </div>
+  `);
+});
+
+it("should be possible to use a LabelProvider with slot props", async () => {
+  let { container } = render(svelte`
+  <LabelProvider name={"test"} slotProps={{num: 12345}} let:labelledby>
+    <div aria-labelledby={labelledby}>
+      <Label let:num>{num}</Label>
+      <span>Contents</span>
+    </div>
+  </LabelProvider>
+`);
+  expect(container.firstChild?.firstChild).toMatchInlineSnapshot(`
+    <div
+      aria-labelledby="headlessui-label-1"
+    >
+      <label
+        id="headlessui-label-1"
+      >
+        12345
       </label>
       
       

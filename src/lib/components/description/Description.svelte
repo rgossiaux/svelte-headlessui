@@ -12,7 +12,6 @@
   export let as: SupportedAs = "p";
   export let use: HTMLActionArray = [];
 
-  $: slotProps = $contextStore?.props?.slotProps ?? {};
   const id = `headlessui-description-${useId()}`;
   let contextStore = useDescriptionContext();
   if (!contextStore) {
@@ -22,12 +21,15 @@
   }
 
   onMount(() => $contextStore?.register(id));
+
+  $: slotProps = $contextStore!.slotProps;
 </script>
 
 <Render
   name={"Description"}
   {...$$restProps}
   {as}
+  {slotProps}
   {...$contextStore?.props}
   {id}
   use={[...use, forwardEvents]}
