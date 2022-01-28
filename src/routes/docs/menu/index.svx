@@ -1,4 +1,4 @@
-# Basic example
+## Basic example
 
 Menus are built using a combination of the `Menu`, `MenuButton`, `MenuItems`, and `MenuItem` components:
 
@@ -24,13 +24,13 @@ Menus are built using a combination of the `Menu`, `MenuButton`, `MenuItems`, an
 
 ```
 
-# Styling
+## Styling
 
 This component is completely unstyled by default, allowing you to customize the appearance of the `Menu` yourself. This is primarily done via <a href="https://svelte.dev/tutorial/slot-props">slot props</a>. See below for examples.
 
 Slot props can be used to style any descendent components, but they cannot be used to style the same component that defines them. To work around this, any component that defines slot props will also accept a **function** for its `class` prop. This function will be **called with the slot props as an argument**. See below for examples.
 
-## Active item
+### Active item
 
 To style the active `MenuItem`, you can use the `active` slot prop that it provides, which tells you whether or not that menu item is currently focused via the mouse or keyboard. You can use this state to conditionally apply whatever active/focus styles you wish.
 
@@ -71,7 +71,7 @@ If necessary, you can also style the `MenuItem` itself by passing a function to 
 </Menu>
 ```
 
-# Showing/hiding the menu
+## Showing/hiding the menu
 
 By default, the `MenuItems` instance will be shown and hidden automatically based on the internal `open` state tracked by the `Menu` component itself.
 
@@ -97,7 +97,7 @@ If you'd rather handle this yourself (perhaps because you need to add an extra w
 </Menu>
 ```
 
-# Disabling an item
+## Disabling an item
 
 Use the `disabled` prop to disable a `MenuItem`. This will make it unselectable via keyboard navigation, and it will be skipped when pressing the up/down arrows.
 
@@ -121,7 +121,7 @@ Use the `disabled` prop to disable a `MenuItem`. This will make it unselectable 
 </Menu>
 ```
 
-# Transitions
+## Transitions
 
 To transition the opening/closing of the menu, you may use the provided `Transition` component with CSS transitions. All you need to do is wrap the `MenuItems` in a `<Transition>`, and the transition will be applied automatically.
 
@@ -184,7 +184,7 @@ The components in this library communicate with each other, so the Transition wi
 
 You can also use this approach to integrate other animation libraries or to use Svelte's built-in transitions.
 
-# Rendering additional content
+## Rendering additional content
 
 The accessibility semantics of role="menu" are fairly strict, and any children of a Menu besides MenuItem components will be automatically hidden from assistive technology to make sure the menu works the way screen reader users expect.
 
@@ -192,7 +192,7 @@ For this reason, rendering any children other than MenuItem components is discou
 
 If you want to build a dropdown with more flexible content, consider using <a href="popover">Popover</a> instead.
 
-# Rendering a different element for a component
+## Rendering a different element for a component
 
 By default, the Menu and its subcomponents each render a default element that is sensible for that component. `MenuButton` renders a `<button>`, `MenuItem` renders an `<a>`, and the `Menu` and `MenuItems` containers render as `<div>`.
 
@@ -216,17 +216,17 @@ This is easy to change using the `as` prop, which exists on every component.
 </Menu>
 ```
 
-# Accessibility notes
+## Accessibility notes
 
-## Focus management
+### Focus management
 
 Clicking the `MenuButton` toggles the menu and focuses the `MenuItems` component. Focus is trapped within the open menu until Escape is pressed or the user clicks outside the menu. Closing the menu returns focus to the `MenuButton`.
 
-## Mouse interaction
+### Mouse interaction
 
 Clicking a `MenuButton` toggles the menu. Clicking anywhere outside of an open menu will close that menu.
 
-## Keyboard interaction
+### Keyboard interaction
 
 | Command | Description |
 | ------- | ----------- |
@@ -238,13 +238,13 @@ Clicking a `MenuButton` toggles the menu. Clicking anywhere outside of an open m
 | `<Enter>` `<Space>` when menu is open | Activates/clicks the current menu item |
 | `<A-Za-z>` when menu is open | Focuses next item that matches keyboard input |
 
-## Other
+### Other
 
 All relevant ARIA attributes are automatically managed.
 
 For a full reference on all accessibility features implemented in `Menu`, see <a href="https://www.w3.org/TR/wai-aria-practices-1.2/#menu">the ARIA spec on Menus</a>.
 
-# When to use a Menu
+## When to use a Menu
 
 Menus are best for UI elements that resemble things like the menus you'd find in the title bar of most operating systems. They have specific accessibility semantics, and their content should be restricted to a list of links or buttons. Focus is trapped in an open menu, so you cannot tab through the content or away from the menu. Instead, the arrow keys navigate through a Menu's items.
 
@@ -256,9 +256,9 @@ Here's when you might use other similar components from Headless UI:
 
 * <a href="dialog">Dialog</a>: Dialogs are meant to grab the user's full attention. They typically render a floating panel in the center of the screen, and use a backdrop to dim the rest of the application's contents. They also capture focus and prevent tabbing away from the Dialog's contents until the Dialog is dismissed.
 
-# Component API
+## Component API
 
-## Menu
+### Menu
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
@@ -268,7 +268,7 @@ Here's when you might use other similar components from Headless UI:
 | --------- | ---- | ----------- |
 | `open`    | `boolean` | Whether or not the menu is open |
 
-## MenuButton
+### MenuButton
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
@@ -278,7 +278,7 @@ Here's when you might use other similar components from Headless UI:
 | --------- | ---- | ----------- |
 | `open`    | `boolean` | Whether or not the menu is open |
 
-## MenuItems
+### MenuItems
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
@@ -292,7 +292,7 @@ Note that `static` and `unmount` cannot be used together.
 | --------- | ---- | ----------- |
 | `open`    | `boolean` | Whether or not the menu is open |
 
-## MenuItem
+### MenuItem
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
