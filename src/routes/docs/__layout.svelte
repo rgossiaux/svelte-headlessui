@@ -13,6 +13,7 @@
   <div class="w-64 lg:block">
     <nav title="Components" class="sticky top-4">
       <a href="menu">Menu</a>
+      <a href="radio-group">Radio Group</a>
     </nav>
   </div>
   <article class="prose" bind:this={el}>
