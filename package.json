@@ -53,7 +53,7 @@
     "prettier": "^2.4.1",
     "prettier-plugin-svelte": "^2.4.0",
     "svelte": "^3.44.0",
-    "svelte-check": "^2.2.6",
+    "svelte-check": "^2.4.1",
     "svelte-inline-compile": "^0.0.1",
     "svelte-jester": "^2.1.5",
     "svelte-popperjs": "^1.2.7",
