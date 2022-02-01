@@ -17,7 +17,9 @@
   export let as: SupportedAs = "button";
   export let use: HTMLActionArray = [];
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    change: boolean;
+  }>();
   export let checked = false;
   let api = useSwitchContext();
   let labelContext = useLabelContext();

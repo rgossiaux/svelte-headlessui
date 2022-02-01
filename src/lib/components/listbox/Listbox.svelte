@@ -80,7 +80,9 @@
     horizontal ? "horizontal" : "vertical"
   ) as StateDefinition["orientation"];
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    change: any;
+  }>();
 
   let listboxState: StateDefinition["listboxState"] = ListboxStates.Closed;
   let labelRef: StateDefinition["labelRef"] = writable(null);

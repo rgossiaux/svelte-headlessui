@@ -66,7 +66,9 @@
 
   let id = `headlessui-radiogroup-${useId()}`;
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    change: any;
+  }>();
 
   let api: Writable<StateDefinition> = writable({
     options,

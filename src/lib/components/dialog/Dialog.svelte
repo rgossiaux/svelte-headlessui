@@ -70,7 +70,9 @@
   export let open: Boolean | undefined = undefined;
   export let initialFocus: HTMLElement | null = null;
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    close: boolean;
+  }>();
 
   let containers: Set<HTMLElement> = new Set();
   let openClosedState = useOpenClosed();

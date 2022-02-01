@@ -38,7 +38,12 @@
   export let leaveFrom = "";
   export let leaveTo = "";
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    afterEnter: null;
+    afterLeave: null;
+    beforeEnter: null;
+    beforeLeave: null;
+  }>();
 
   let container: HTMLElement | null = null;
 
