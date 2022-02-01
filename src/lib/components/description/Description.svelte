@@ -22,7 +22,7 @@
 
   onMount(() => $contextStore?.register(id));
 
-  $: slotProps = $contextStore!.slotProps;
+  $: slotProps = $contextStore!.slotProps || {};
 </script>
 
 <Render

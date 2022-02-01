@@ -34,15 +34,26 @@
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
+  type TSlotProps = $$Generic<{}>;
+
   export let name: string;
   export let as: SvelteComponent | SupportedElement;
+  export let slotProps: TSlotProps;
+
   export let el: HTMLElement | null = null;
   export let use: ActionArray = [];
-  export let slotProps: unknown = {};
   export let visible = true;
   export let features: Features = Features.None;
   // The static and unmount props are only used in conjunction with the render strategies
   export let unmount = true;
+
+  let classProp: ((props: TSlotProps) => string) | string | undefined =
+    undefined;
+  export { classProp as class };
+
+  // This is not in upstream Headless UI, but we might as well add it here
+  export let style: ((props: TSlotProps) => string) | string | undefined =
+    undefined;
 
   if (!as) {
     throw new Error(`<${name}> did not provide an \`as\` value to <Render>`);
@@ -55,7 +66,9 @@
     );
   }
 
-  $: classStyle = $$props.class;
+  $: computedClass =
+    typeof classProp === "function" ? classProp(slotProps) : classProp;
+  $: computedStyle = typeof style === "function" ? style(slotProps) : style;
 
   $: show =
     visible ||
@@ -74,10 +87,9 @@
     bind:el
     use={[...use, forwardEvents]}
     {...$$restProps}
-    class={typeof classStyle === "function"
-      ? classStyle(slotProps)
-      : classStyle}
-    style={hidden ? "display: none" : $$props.style}
+    class={computedClass}
+    style={`${computedStyle ?? ""}${hidden ? " display: none" : ""}` ||
+      undefined}
     hidden={hidden || undefined}
   >
     <slot />

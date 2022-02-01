@@ -208,6 +208,7 @@
       {...{ ...$$restProps, ...propsWeControl }}
       {as}
       use={[...use, forwardEvents]}
+      slotProps={{}}
       name={"RadioGroup"}
       bind:el={radioGroupRef}
       aria-labelledby={labelledby}

@@ -195,6 +195,7 @@
   {...$$restProps}
   {as}
   use={[...use, forwardEvents]}
+  slotProps={{}}
   name={"TransitionChild"}
   bind:el={container}
   class={classes}

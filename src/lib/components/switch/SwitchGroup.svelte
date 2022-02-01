@@ -42,6 +42,7 @@
   {...$$restProps}
   {as}
   use={[...use, forwardEvents]}
+  slotProps={{}}
   name={"SwitchGroup"}
 >
   <DescriptionProvider name="SwitchDescription">

@@ -71,6 +71,7 @@
   {...$$restProps}
   {as}
   use={[...use, forwardEvents]}
+  slotProps={{}}
   name={"PopoverGroup"}
   bind:el={groupRef}
 >
