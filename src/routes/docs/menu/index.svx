@@ -26,9 +26,7 @@ Menus are built using a combination of the `Menu`, `MenuButton`, `MenuItems`, an
 
 ## Styling
 
-This component is completely unstyled by default, allowing you to customize the appearance of the `Menu` yourself. This is primarily done via <a href="https://svelte.dev/tutorial/slot-props">slot props</a>. See below for examples.
-
-Slot props can be used to style any descendent components, but they cannot be used to style the same component that defines them. To work around this, any component that defines slot props will also accept a **function** for its `class` prop. This function will be **called with the slot props as an argument**. See below for examples.
+See TODO for some general notes on styling the components in this library.
 
 ### Active item
 
@@ -191,30 +189,6 @@ The accessibility semantics of role="menu" are fairly strict, and any children o
 For this reason, rendering any children other than MenuItem components is discouraged, as that content will be inaccessible to people using assistive technology.
 
 If you want to build a dropdown with more flexible content, consider using <a href="popover">Popover</a> instead.
-
-## Rendering a different element for a component
-
-By default, the Menu and its subcomponents each render a default element that is sensible for that component. `MenuButton` renders a `<button>`, `MenuItem` renders an `<a>`, and the `Menu` and `MenuItems` containers render as `<div>`.
-
-This is easy to change using the `as` prop, which exists on every component.
-
-```svelte
-<script>
-  import { Menu, MenuButton, MenuItems, MenuItem } from "@rgossiaux/svelte-headlessui";
-</script>
-
-<Menu>
-  <MenuButton>More</MenuButton>
-  <!-- Render a `ul` instead of a `div` -->
-  <MenuItems as="ul">
-    <!-- Render a `li` instead of an `a` -->
-    <MenuItem as="li" let:active>
-      <a href="/account-settings" class={`${active ? "active" : "inactive"}`}>Account settings</a>
-    </MenuItem>
-    <!-- ... -->
-  </MenuItems>
-</Menu>
-```
 
 ## Accessibility notes
 
