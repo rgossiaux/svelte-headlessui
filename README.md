@@ -16,7 +16,7 @@ This project is an **unofficial** port. I have no affiliation with Tailwind Labs
 ## Installation
 
 ```
-npm install @rgossiaux/svelte-headlessui
+npm install -D @rgossiaux/svelte-headlessui
 ```
 
 ## Usage
