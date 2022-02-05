@@ -147,7 +147,7 @@ The main Radio Group component.
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `String` | The element the `RadioGroup` should render as |
+| `as` | `div`   | `string` | The element the `RadioGroup` should render as |
 | `disabled` | `false`   | `boolean` | Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled |
 | `value` | --   | `T | undefined` | The currently selected value in the `RadioGroup` |
 
@@ -163,7 +163,7 @@ The wrapper component for each selectable option.
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `String` | The element the `RadioGroupOption` should render as |
+| `as` | `div`   | `string` | The element the `RadioGroupOption` should render as |
 | `disabled` | `false`   | `boolean` | Whether the `RadioGroupOption` is disabled |
 | `value` | --   | `T | undefined` | The value of the `RadioGroupOption`; the type should match the type of the `value` prop in the `RadioGroup` |
 
@@ -179,7 +179,7 @@ Renders an element that is linked to its nearest `RadioGroup` or `RadioGroupOpti
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `label`   | `String` | The element the `RadioGroupLabel` should render as |
+| `as` | `label`   | `string` | The element the `RadioGroupLabel` should render as |
 
 If the `RadioGroupLabel` is labeling a `RadioGroupOption` (instead of the `RadioGroup`), it will also have these slot props available:
 
@@ -195,7 +195,7 @@ Renders an element that is linked to its nearest `RadioGroup` or `RadioGroupOpti
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `a`   | `String` | The element the `RadioGroupDescription` should render as |
+| `as` | `a`   | `string` | The element the `RadioGroupDescription` should render as |
 
 If the `RadioGroupDescription` is describing a `RadioGroupOption` (instead of the `RadioGroup`), it will also have these slot props available:
 

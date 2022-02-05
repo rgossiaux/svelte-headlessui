@@ -14,6 +14,7 @@
     <nav title="Components" class="sticky top-4">
       <a href="menu">Menu</a>
       <a href="radio-group">Radio Group</a>
+      <a href="listbox">Listbox</a>
     </nav>
   </div>
   <article class="prose" bind:this={el}>

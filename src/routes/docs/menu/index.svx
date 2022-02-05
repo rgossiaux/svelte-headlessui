@@ -95,6 +95,25 @@ If you'd rather handle this yourself (perhaps because you need to add an extra w
 </Menu>
 ```
 
+You can also choose to have the `Menu` merely hide the `MenuItems` when the `Menu` is closed, instead of removing it from the DOM entirely, by using the `unmount` prop. This may be useful for performance reasons if rendering the `MenuItems` is expensive.
+
+```svelte
+<script>
+  import { Menu, MenuButton, MenuItems, MenuItem } from "@rgossiaux/svelte-headlessui";
+</script>
+
+<Menu>
+  <MenuButton>More</MenuButton>
+  <!-- Using `unmount={false}`, the `MenuItems` is kept in the DOM when the `Menu` is closed -->
+  <MenuItems unmount={false}>
+    <MenuItem>
+      <!-- ... -->
+    </MenuItem>
+    <!-- ... -->
+  </MenuItems>
+</Menu>
+```
+
 ## Disabling an item
 
 Use the `disabled` prop to disable a `MenuItem`. This will make it unselectable via keyboard navigation, and it will be skipped when pressing the up/down arrows.
@@ -208,8 +227,8 @@ Clicking a `MenuButton` toggles the menu. Clicking anywhere outside of an open m
 | `<ArrowDown>` / `<ArrowUp>` when `MenuButton` is focused | Opens menu and focuses first/last non-disabled item |
 | `<Esc>` when menu is open | Closes any open Menus |
 | `<ArrowDown>` / `<ArrowUp>` when menu is open | Focuses next/previous non-disabled item |
-| `<Home>` `<End>` when menu is open | Focuses first/last non-disabled item |
-| `<Enter>` `<Space>` when menu is open | Activates/clicks the current menu item |
+| `<Home>` / `<End>` when menu is open | Focuses first/last non-disabled item |
+| `<Enter>` / `<Space>` when menu is open | Activates/clicks the current menu item |
 | `<A-Za-z>` when menu is open | Focuses next item that matches keyboard input |
 
 ### Other
@@ -236,7 +255,7 @@ Here's when you might use other similar components from Headless UI:
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `String` | The element the `Menu` should render as |
+| `as` | `div`   | `string` | The element the `Menu` should render as |
 
 | Slot prop | Type | Description |
 | --------- | ---- | ----------- |
@@ -246,7 +265,7 @@ Here's when you might use other similar components from Headless UI:
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `button`   | `String` | The element the `MenuButton` should render as |
+| `as` | `button`   | `string` | The element the `MenuButton` should render as |
 
 | Slot prop | Type | Description |
 | --------- | ---- | ----------- |
@@ -256,9 +275,9 @@ Here's when you might use other similar components from Headless UI:
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `String` | The element the `MenuItems` should render as |
+| `as` | `div`   | `string` | The element the `MenuItems` should render as |
 | `static` | `false`   | `boolean` | Whether the element should ignore the internally managed open/closed state |
-| `unmount` | `true`   | `boolean` | Whether the element should be unmounted or hidden based on the open/closed state |
+| `unmount` | `true`   | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
 
 Note that `static` and `unmount` cannot be used together.
 
@@ -270,7 +289,7 @@ Note that `static` and `unmount` cannot be used together.
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `a`   | `String` | The element the `MenuItem` should render as |
+| `as` | `a`   | `string` | The element the `MenuItem` should render as |
 | `disabled` | `false`   | `boolean` | Whether the item should be disabled for keyboard navigation and ARIA purposes |
 
 | Slot prop | Type | Description |
