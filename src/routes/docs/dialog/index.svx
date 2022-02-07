@@ -1,6 +1,6 @@
 ## Basic example
 
-Dialogs are built using the `Dialog`, `DialogOverlay`, `DialogTitle` and `DialogDescription` components.
+Dialogs are built using the `Dialog`, `DialogOverlay`, `DialogTitle`, and `DialogDescription` components.
 
 When the dialog's `open` prop is `true`, the contents of the dialog will render. Focus will be moved inside the dialog and trapped there as the user cycles through the focusable elements. Scrolling is locked, the rest of your application UI is hidden from screen readers, and clicking outside the dialog or pressing the Escape key will fire the `close` event and close the dialog.
 

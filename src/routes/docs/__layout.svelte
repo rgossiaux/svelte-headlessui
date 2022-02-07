@@ -11,10 +11,11 @@
 
 <div class="flex">
   <div class="w-64 lg:block">
-    <nav title="Components" class="sticky top-4">
+    <nav title="Components" class="sticky top-4 flex flex-col">
+      <a href="dialog">Dialog</a>
+      <a href="listbox">Listbox</a>
       <a href="menu">Menu</a>
       <a href="radio-group">Radio Group</a>
-      <a href="listbox">Listbox</a>
     </nav>
   </div>
   <article class="prose" bind:this={el}>
