@@ -15,11 +15,11 @@
   },
   "license": "MIT",
   "repository": "github:rgossiaux/svelte-headlessui",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0-beta.9",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
-    "package": "svelte-kit package",
+    "package": "svelte-kit package && find package/ -type f -exec sed -i '' -e 's/process.env.NODE_ENV/\"production\"/' {} \\;",
     "preview": "svelte-kit preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
