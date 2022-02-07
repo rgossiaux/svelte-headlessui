@@ -56,7 +56,6 @@
     >
       {#each tabs as tab, tabIdx (tab.name)}
         <Tab
-          key={tab.name}
           disabled={tab.disabled}
           class={({ selected }) =>
             classNames(
@@ -85,7 +84,7 @@
 
     <TabPanels class="mt-4">
       {#each tabs as tab (tab.name)}
-        <TabPanel class="bg-white rounded-lg p-4 shadow" key={tab.name}>
+        <TabPanel class="bg-white rounded-lg p-4 shadow">
           {tab.content}
         </TabPanel>
       {/each}

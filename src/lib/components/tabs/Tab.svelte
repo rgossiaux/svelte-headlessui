@@ -1,3 +1,12 @@
+<script lang="ts" context="module">
+  type TTabProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {
+    disabled?: boolean;
+  };
+</script>
+
 <script lang="ts">
   import { onMount } from "svelte";
   import { Focus, focusIn } from "$lib/utils/focus-management";
@@ -9,15 +18,21 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
   import { resolveButtonType } from "$lib/utils/resolve-button-type";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TTabProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "button";
   export let use: HTMLActionArray = [];
-
   export let disabled = false;
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let api = useTabsContext("Tab");
   let id = `headlessui-tabs-tab-${useId()}`;
   let tabRef: HTMLElement | null = null;
