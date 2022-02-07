@@ -7,6 +7,11 @@
   export function useSwitchContext(): Writable<StateDefinition> | undefined {
     return getContext(SWITCH_CONTEXT_NAME);
   }
+
+  type TSwitchGroupProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {};
 </script>
 
 <script lang="ts">
@@ -19,11 +24,19 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TSwitchGroupProps<typeof slotProps, TAsProp>;
+
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let switchStore: StateDefinition["switchStore"] = writable(null);
 
   let api = writable<StateDefinition>({
@@ -36,18 +49,20 @@
     $switchStore.click();
     $switchStore.focus({ preventScroll: true });
   }
+
+  $: slotProps = {};
 </script>
 
 <Render
   {...$$restProps}
   {as}
   use={[...use, forwardEvents]}
-  slotProps={{}}
+  {slotProps}
   name={"SwitchGroup"}
 >
   <DescriptionProvider name="SwitchDescription">
     <LabelProvider name="SwitchLabel" {onClick}>
-      <slot />
+      <slot {...slotProps} />
     </LabelProvider>
   </DescriptionProvider>
 </Render>

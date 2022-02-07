@@ -1,3 +1,12 @@
+<script lang="ts" context="module">
+  type TSwitchProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {
+    checked: boolean;
+  };
+</script>
+
 <script lang="ts">
   import { useSwitchContext } from "./SwitchGroup.svelte";
   import { useLabelContext } from "$lib/components/label/LabelProvider.svelte";
@@ -9,18 +18,26 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
   import { resolveButtonType } from "$lib/utils/resolve-button-type";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TSwitchProps<typeof slotProps, TAsProp>;
+
+  export let as: SupportedAs = "button";
+  export let use: HTMLActionArray = [];
+  export let checked = false;
+
+  /***** Events *****/
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
     "change",
   ]);
-  export let as: SupportedAs = "button";
-  export let use: HTMLActionArray = [];
-
   const dispatch = createEventDispatcher<{
     change: boolean;
   }>();
-  export let checked = false;
+
+  /***** Component *****/
   let api = useSwitchContext();
   let labelContext = useLabelContext();
   let descriptionContext = useDescriptionContext();
