@@ -36,6 +36,15 @@
 
     return context;
   }
+
+  type TTabGroupProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {
+    defaultIndex?: number;
+    vertical?: boolean;
+    manual?: boolean;
+  };
 </script>
 
 <script lang="ts">
@@ -52,10 +61,11 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "change",
-  ]);
+  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TTabGroupProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
@@ -63,12 +73,17 @@
   export let vertical = false;
   export let manual = false;
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "change",
+  ]);
+  const dispatch = createEventDispatcher();
+
+  /***** Component *****/
   let selectedIndex: StateDefinition["selectedIndex"] = null;
   let tabs: StateDefinition["tabs"] = [];
   let panels: StateDefinition["panels"] = [];
   let listRef: StateDefinition["listRef"] = writable(null);
-
-  const dispatch = createEventDispatcher();
 
   let api = writable<StateDefinition>({
     selectedIndex,

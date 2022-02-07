@@ -1,3 +1,10 @@
+<script lang="ts" context="module">
+  type TTabPanelProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {};
+</script>
+
 <script lang="ts">
   import { onMount } from "svelte";
   import { useTabsContext } from "./TabGroup.svelte";
@@ -6,13 +13,23 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render, { Features } from "$lib/utils/Render.svelte";
+  import Render, {
+    Features,
+    type TPassThroughProps,
+  } from "$lib/utils/Render.svelte";
   import { writable } from "svelte/store";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TTabPanelProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let elementRef = writable<HTMLElement | null>(null);
   let api = useTabsContext("TabPanel");
   let id = `headlessui-tabs-panel-${useId()}`;
