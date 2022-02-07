@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
-  import type { SupportedElement } from "$lib/internal/elements";
+  import type { SupportedAs, SupportedElement } from "$lib/internal/elements";
   import { getElementComponent } from "$lib/internal/elements";
-  import { get_current_component, SvelteComponent } from "svelte/internal";
+  import { get_current_component } from "svelte/internal";
 
   export enum Features {
     /** No features at all */
@@ -27,21 +27,59 @@
     Unmount,
     Hidden,
   }
+
+  type TRestProps<T> = T extends SupportedElement
+    ? Omit<
+        svelte.JSX.HTMLAttributes<HTMLElementTagNameMap[T]>,
+        "class" | "style"
+      >
+    : {};
+
+  type TRenderProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TRestProps<TAsProp> & {
+    name: string;
+    as: TAsProp;
+    slotProps: TSlotProps;
+    el?: HTMLElement | null;
+    use?: HTMLActionArray;
+    visible?: boolean;
+    features?: Features;
+    static?: boolean;
+    unmount?: boolean;
+    class?: ((props: TSlotProps) => string) | string;
+    style?: ((props: TSlotProps) => string) | string;
+  };
+
+  type TInternalProps = "name" | "slotProps" | "el" | "visible" | "features";
+
+  export type TPassThroughProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = Omit<
+    TRenderProps<TSlotProps, TAsProp>,
+    TInternalProps | "as" | "static" | "unmount"
+  > & {
+    as?: TAsProp;
+  };
 </script>
 
 <script lang="ts">
-  import type { ActionArray } from "$lib/hooks/use-actions";
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   type TSlotProps = $$Generic<{}>;
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TRenderProps<TSlotProps, TAsProp>;
 
   export let name: string;
-  export let as: SvelteComponent | SupportedElement;
+  export let as: TAsProp;
   export let slotProps: TSlotProps;
 
   export let el: HTMLElement | null = null;
-  export let use: ActionArray = [];
+  export let use: HTMLActionArray = [];
   export let visible = true;
   export let features: Features = Features.None;
   // The static and unmount props are only used in conjunction with the render strategies
