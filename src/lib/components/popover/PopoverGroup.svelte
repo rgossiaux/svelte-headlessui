@@ -10,6 +10,11 @@
   export function usePopoverGroupContext(): PopoverGroupContext | undefined {
     return getContext(POPOVER_GROUP_CONTEXT_NAME);
   }
+
+  type TPopoverGroupProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {};
 </script>
 
 <script lang="ts">
@@ -19,12 +24,19 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TPopoverGroupProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let groupRef: HTMLDivElement | undefined;
   let popovers: PopoverRegisterBag[] = [];
 
@@ -65,15 +77,17 @@
     isFocusWithinPopoverGroup,
     closeOthers,
   });
+
+  $: slotProps = {};
 </script>
 
 <Render
   {...$$restProps}
   {as}
   use={[...use, forwardEvents]}
-  slotProps={{}}
+  {slotProps}
   name={"PopoverGroup"}
   bind:el={groupRef}
 >
-  <slot />
+  <slot {...slotProps} />
 </Render>
