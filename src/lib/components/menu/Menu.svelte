@@ -12,7 +12,7 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
 
   export enum MenuStates {
     Open,
@@ -53,13 +53,25 @@
     }
     return context;
   }
+
+  type TMenuProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {};
 </script>
 
 <script lang="ts">
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TMenuProps<typeof slotProps, TAsProp>;
+
   export let use: HTMLActionArray = [];
   export let as: SupportedAs = "div";
+
+  /***** Events *****/
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
+  /***** Component *****/
   let menuState: StateDefinition["menuState"] = MenuStates.Closed;
   let buttonStore: StateDefinition["buttonStore"] = writable(null);
   let itemsStore: StateDefinition["itemsStore"] = writable(null);
