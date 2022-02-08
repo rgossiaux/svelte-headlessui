@@ -1,20 +1,37 @@
+<script lang="ts" context="module">
+  type TListboxOptionProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {
+    value: unknown;
+    disabled?: boolean;
+  };
+</script>
+
 <script lang="ts">
   import { onDestroy, onMount, tick } from "svelte";
   import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Focus } from "$lib/utils/calculate-active-index";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import type { SupportedAs } from "$lib/internal/elements";
   import { get_current_component } from "svelte/internal";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
 
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TListboxOptionProps<typeof slotProps, TAsProp>;
+
   export let as: SupportedAs = "li";
   export let use: HTMLActionArray = [];
-
   export let value: unknown;
   export let disabled = false;
+
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let api = useListboxContext("ListboxOption");
   let id = `headlessui-listbox-option-${useId()}`;
 
