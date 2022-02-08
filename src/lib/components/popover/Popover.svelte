@@ -39,6 +39,10 @@
     }
     return context;
   }
+  type TPopoverProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {};
 </script>
 
 <script lang="ts">
@@ -57,12 +61,19 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TPopoverProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   const buttonId = `headlessui-popover-button-${useId()}`;
   const panelId = `headlessui-popover-panel-${useId()}`;
   let popoverState: StateDefinition["popoverState"] = PopoverStates.Closed;
