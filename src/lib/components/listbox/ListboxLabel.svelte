@@ -1,16 +1,30 @@
+<script lang="ts" context="module">
+  type TListboxLabelProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {};
+</script>
+
 <script lang="ts">
   import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
-  import Render from "$lib/utils/Render.svelte";
+  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import { get_current_component } from "svelte/internal";
 
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TListboxLabelProps<typeof slotProps, TAsProp>;
+
   export let as: SupportedAs = "label";
   export let use: HTMLActionArray = [];
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let id = `headlessui-listbox-label-${useId()}`;
   let api = useListboxContext("ListboxLabel");
 

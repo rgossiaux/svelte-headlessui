@@ -74,7 +74,6 @@
             >
               {#each people as name (name)}
                 <ListboxOption
-                  key={name}
                   value={name}
                   class={({ active }) => {
                     return classNames(
