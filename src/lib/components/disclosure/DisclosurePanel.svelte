@@ -5,6 +5,13 @@
   export function usePanelContext(): string | undefined {
     return getContext(DISCLOSURE_PANEL_CONTEXT_NAME);
   }
+  type TDisclosurePanelProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp> & {
+    unmount?: boolean;
+    static?: boolean;
+  };
 </script>
 
 <script lang="ts">
@@ -14,12 +21,22 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render, { Features } from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  import Render, {
+    Features,
+    type TPassThroughProps,
+  } from "$lib/utils/Render.svelte";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TDisclosurePanelProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   const api = useDisclosureContext("DisclosurePanel");
   let openClosedState = useOpenClosed();
 
