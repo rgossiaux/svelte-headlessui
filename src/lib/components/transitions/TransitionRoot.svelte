@@ -1,9 +1,19 @@
+<script lang="ts" context="module">
+  export type TTransitionRootProps<TAsProp extends SupportedAs> =
+    TTransitionChildProps<TAsProp> & {
+      show?: boolean;
+      appear?: boolean;
+    };
+</script>
+
 <script lang="ts">
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
-  import TransitionChild from "$lib/components/transitions/TransitionChild.svelte";
+  import TransitionChild, {
+    type TTransitionChildProps,
+  } from "$lib/components/transitions/TransitionChild.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
@@ -26,12 +36,18 @@
     "afterLeave",
   ]);
 
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TTransitionRootProps<TAsProp>;
+
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
-
   export let show: boolean | undefined = undefined;
   export let appear = false;
 
+  /***** Events *****/
+
+  /***** Component *****/
   let openClosedState = useOpenClosed();
 
   function computeShow(

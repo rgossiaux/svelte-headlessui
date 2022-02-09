@@ -55,7 +55,7 @@
 {#if nested}
   <Nested on:close={() => (nested = false)} />
 {/if}
-<Transition show={isOpen} afterLeave={() => console.log("done")}>
+<Transition show={isOpen} on:afterLeave={() => console.log("done")}>
   <Dialog on:close={() => (isOpen = false)}>
     <div class="fixed z-10 inset-0 overflow-y-auto">
       <div
