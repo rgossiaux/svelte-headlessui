@@ -47,7 +47,7 @@
   type TRadioGroupProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp> & {
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
     value: StateDefinition["value"];
     disabled?: boolean;
   };

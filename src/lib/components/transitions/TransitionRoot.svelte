@@ -1,9 +1,11 @@
 <script lang="ts" context="module">
-  export type TTransitionRootProps<TAsProp extends SupportedAs> =
-    TTransitionChildProps<TAsProp> & {
-      show?: boolean;
-      appear?: boolean;
-    };
+  export type TTransitionRootProps<
+    TAsProp extends SupportedAs,
+    TDefaultAs
+  > = TTransitionChildProps<TAsProp, TDefaultAs> & {
+    show?: boolean;
+    appear?: boolean;
+  };
 </script>
 
 <script lang="ts">
@@ -38,7 +40,7 @@
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;
-  type $$Props = TTransitionRootProps<TAsProp>;
+  type $$Props = TTransitionRootProps<TAsProp, "div">;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];

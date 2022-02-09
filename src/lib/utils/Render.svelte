@@ -35,10 +35,14 @@
       >
     : {};
 
+  type TResolveAs<TAsProp, TDefaultAs> = SupportedAs extends TAsProp
+    ? TDefaultAs
+    : TAsProp;
   type TRenderProps<
     TSlotProps extends {},
-    TAsProp extends SupportedAs
-  > = TRestProps<TAsProp> & {
+    TAsProp extends SupportedAs,
+    TDefaultAs
+  > = TRestProps<TResolveAs<TAsProp, TDefaultAs>> & {
     name: string;
     as: TAsProp;
     slotProps: TSlotProps;
@@ -56,9 +60,10 @@
 
   export type TPassThroughProps<
     TSlotProps extends {},
-    TAsProp extends SupportedAs
+    TAsProp extends SupportedAs,
+    TDefaultAs
   > = Omit<
-    TRenderProps<TSlotProps, TAsProp>,
+    TRenderProps<TSlotProps, TAsProp, TDefaultAs>,
     TInternalProps | "as" | "static" | "unmount"
   > & {
     as?: TAsProp;
@@ -72,7 +77,7 @@
 
   type TSlotProps = $$Generic<{}>;
   type TAsProp = $$Generic<SupportedAs>;
-  type $$Props = TRenderProps<TSlotProps, TAsProp>;
+  type $$Props = TRenderProps<TSlotProps, TAsProp, TAsProp>;
 
   export let name: string;
   export let as: TAsProp;

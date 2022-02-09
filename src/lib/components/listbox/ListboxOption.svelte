@@ -2,7 +2,7 @@
   type TListboxOptionProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp> & {
+  > = TPassThroughProps<TSlotProps, TAsProp, "li"> & {
     value: unknown;
     disabled?: boolean;
   };

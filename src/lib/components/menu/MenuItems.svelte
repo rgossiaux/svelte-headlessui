@@ -2,7 +2,7 @@
   type TMenuItemsProps<
     TSlotProp extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProp, TAsProp> & {
+  > = TPassThroughProps<TSlotProp, TAsProp, "div"> & {
     static?: boolean;
     unmount?: boolean;
   };

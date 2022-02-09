@@ -1,16 +1,18 @@
 <script lang="ts" context="module">
-  export type TTransitionChildProps<TAsProp extends SupportedAs> =
-    TPassThroughProps<{}, TAsProp> & {
-      enter?: string;
-      enterFrom?: string;
-      enterTo?: string;
-      entered?: string;
-      leave?: string;
-      leaveFrom?: string;
-      leaveTo?: string;
-      unmount?: boolean;
-      class?: string;
-    };
+  export type TTransitionChildProps<
+    TAsProp extends SupportedAs,
+    TDefaultAs
+  > = TPassThroughProps<{}, TAsProp, TDefaultAs> & {
+    enter?: string;
+    enterFrom?: string;
+    enterTo?: string;
+    entered?: string;
+    leave?: string;
+    leaveFrom?: string;
+    leaveTo?: string;
+    unmount?: boolean;
+    class?: string;
+  };
 </script>
 
 <script lang="ts">
@@ -41,7 +43,7 @@
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;
-  type $$Props = TTransitionChildProps<TAsProp>;
+  type $$Props = TTransitionChildProps<TAsProp, "div">;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];

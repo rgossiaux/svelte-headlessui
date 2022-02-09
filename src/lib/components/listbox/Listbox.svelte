@@ -53,7 +53,7 @@
   type TListboxProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp> & {
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
     disabled?: boolean;
     horizontal?: boolean;
     value?: StateDefinition["value"];

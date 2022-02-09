@@ -2,7 +2,7 @@
   type TListboxLabelProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp> & {};
+  > = TPassThroughProps<TSlotProps, TAsProp, "label"> & {};
 </script>
 
 <script lang="ts">

@@ -2,7 +2,7 @@
   type TMenuButtonProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp> & {
+  > = TPassThroughProps<TSlotProps, TAsProp, "button"> & {
     disabled?: boolean;
   };
 </script>

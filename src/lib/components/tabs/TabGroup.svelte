@@ -40,7 +40,7 @@
   type TTabGroupProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp> & {
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
     defaultIndex?: number;
     vertical?: boolean;
     manual?: boolean;

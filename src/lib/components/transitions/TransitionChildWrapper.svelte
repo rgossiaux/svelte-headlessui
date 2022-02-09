@@ -19,7 +19,7 @@
   /***** Props *****/
 
   type TAsProp = $$Generic<SupportedAs>;
-  type $$Props = TTransitionRootProps<TAsProp>;
+  type $$Props = TTransitionRootProps<TAsProp, "div">;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
