@@ -6,9 +6,8 @@
   <PeopleList />
 
   <div>
-    <!-- svelte-ignore a11y-label-has-associated-control -->
     <label
-      html-for="email"
+      for="email"
       class="block text-sm font-medium leading-5 text-gray-700"
     >
       Email
