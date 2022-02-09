@@ -1,3 +1,18 @@
+<script lang="ts" context="module">
+  export type TTransitionChildProps<TAsProp extends SupportedAs> =
+    TPassThroughProps<{}, TAsProp> & {
+      enter?: string;
+      enterFrom?: string;
+      enterTo?: string;
+      entered?: string;
+      leave?: string;
+      leaveFrom?: string;
+      leaveTo?: string;
+      unmount?: boolean;
+      class?: string;
+    };
+</script>
+
 <script lang="ts">
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
@@ -18,13 +33,15 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render, { Features, RenderStrategy } from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "beforeEnter",
-    "beforeLeave",
-    "afterEnter",
-    "afterLeave",
-  ]);
+  import Render, {
+    Features,
+    RenderStrategy,
+    type TPassThroughProps,
+  } from "$lib/utils/Render.svelte";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TTransitionChildProps<TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
@@ -37,6 +54,7 @@
   export let leaveFrom = "";
   export let leaveTo = "";
 
+  /***** Events *****/
   const dispatch = createEventDispatcher<{
     afterEnter: null;
     afterLeave: null;
@@ -44,6 +62,14 @@
     beforeLeave: null;
   }>();
 
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "beforeEnter",
+    "beforeLeave",
+    "afterEnter",
+    "afterLeave",
+  ]);
+
+  /***** Component *****/
   let container: HTMLElement | null = null;
 
   let transitionContext = useTransitionContext();

@@ -1,7 +1,9 @@
 <script lang="ts">
   import { hasOpenClosed } from "$lib/internal/open-closed";
   import TransitionChild from "./TransitionChild.svelte";
-  import TransitionRoot from "./TransitionRoot.svelte";
+  import TransitionRoot, {
+    type TTransitionRootProps,
+  } from "./TransitionRoot.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
@@ -14,9 +16,17 @@
     "afterLeave",
   ]);
 
+  /***** Props *****/
+
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TTransitionRootProps<TAsProp>;
+
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
+  /***** Events *****/
+
+  /***** Component *****/
   let hasTransition = hasTransitionContext();
   let hasOpen = hasOpenClosed();
 </script>
