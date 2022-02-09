@@ -2,7 +2,7 @@
   type TDialogTitleProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp> & {};
+  > = TPassThroughProps<TSlotProps, TAsProp, "h2"> & {};
 </script>
 
 <script lang="ts">

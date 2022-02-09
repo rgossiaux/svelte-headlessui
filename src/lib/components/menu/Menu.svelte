@@ -57,7 +57,7 @@
   type TMenuProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp> & {};
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {};
 </script>
 
 <script lang="ts">

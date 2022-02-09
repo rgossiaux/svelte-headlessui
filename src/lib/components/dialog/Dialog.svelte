@@ -41,7 +41,7 @@
   type TDialogProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp> & {
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
     open?: boolean;
     initialFocus?: HTMLElement | null;
     static?: boolean;
