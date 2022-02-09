@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "$lib";
 
-  function classNames(...classes) {
+  function classNames(...classes: (string | false | null | undefined)[]) {
     return classes.filter(Boolean).join(" ");
   }
   function resolveClass({ active, disabled }) {

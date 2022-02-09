@@ -21,7 +21,7 @@
     modifiers: [{ name: "offset", options: { offset: [0, 10] } }],
   };
 
-  function classNames(...classes: unknown[]) {
+  function classNames(...classes: (string | false | null | undefined)[]) {
     return classes.filter(Boolean).join(" ");
   }
 

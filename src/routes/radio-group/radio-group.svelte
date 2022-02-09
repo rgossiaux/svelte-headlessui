@@ -1,6 +1,6 @@
 <script lang="ts">
   import { RadioGroup, RadioGroupOption } from "$lib";
-  function classNames(...classes) {
+  function classNames(...classes: (string | false | null | undefined)[]) {
     return classes.filter(Boolean).join(" ");
   }
   let access = [

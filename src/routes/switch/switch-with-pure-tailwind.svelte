@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Switch, SwitchGroup, SwitchLabel } from "$lib";
 
-  function classNames(...classes) {
+  function classNames(...classes: (string | false | null | undefined)[]) {
     return classes.filter(Boolean).join(" ");
   }
 
