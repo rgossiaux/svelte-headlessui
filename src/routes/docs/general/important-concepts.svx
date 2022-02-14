@@ -238,6 +238,8 @@ You can style any component using inline styles using the `style=...` prop:
 
 As mentioned above, this prop accepts a function whose input will be the component's slot props, allowing you to apply conditional styles. 
 
+One downside of inline styles is that you cannot use them to style CSS psuedoselectors, like `:focus` and `:hover`. In general this library will provide you with states that make these psuedoselectors unnecessary, however.
+
 #### Using a CSS framework
 
 You can always use the `class` prop as normal alongside a CSS framework like Bootstrap, Bulma, Tailwind, etc. The original version of this component library was written by the same team that maintains Tailwind.

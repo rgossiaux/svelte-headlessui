@@ -15,6 +15,7 @@
       <a href="dialog">Dialog</a>
       <a href="listbox">Listbox</a>
       <a href="menu">Menu</a>
+      <a href="popover">Popover</a>
       <a href="radio-group">Radio Group</a>
     </nav>
   </div>
