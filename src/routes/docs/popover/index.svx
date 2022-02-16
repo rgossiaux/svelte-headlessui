@@ -68,6 +68,10 @@ For more sophisticated approaches, you might use a library like Popper JS. We re
 ```
 
 
+## Styling
+
+See TODO for some general notes on styling the components in this library.
+
 ## Showing/hiding the popover
 
 By default, your `PopoverPanel` will be shown/hidden automatically based on the internal open state tracked within the `Popover` component itself.

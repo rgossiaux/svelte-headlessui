@@ -112,7 +112,7 @@ By default, `RadioGroupLabel` renders a `<label>` element and `RadioGroupDescrip
 </RadioGroup>
 
 <style>
-  /* WARNING! This is just for demonstration. Using :global() in this way is a bad practice. See TODO for more. */
+  /* WARNING: This is just for demonstration. Using :global() in this way is a bad practice. See TODO for more. */
   :global(.checked) {
     /* Your styles here */
   }

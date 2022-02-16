@@ -296,7 +296,7 @@ This component also dispatches a custom event, which is listened to using the Sv
 
 | Event name | Type of event `.detail` | Description |
 | --------- | ---- | ----------- |
-| `close`    | `null` | Called when the `Dialog` is dismissed (via the overlay or Escape key). Typically used to close the dialog by setting `open` to false. |
+| `close`    | `null` | Emitted when the `Dialog` is dismissed (via the overlay or Escape key). Typically used to close the dialog by setting `open` to false. |
 
 ### DialogOverlay
 
