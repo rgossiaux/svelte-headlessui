@@ -17,6 +17,7 @@
       <a href="menu">Menu</a>
       <a href="popover">Popover</a>
       <a href="radio-group">Radio Group</a>
+      <a href="tabs">Tabs</a>
     </nav>
   </div>
   <article class="prose" bind:this={el}>
