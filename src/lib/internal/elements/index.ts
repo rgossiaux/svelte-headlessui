@@ -82,7 +82,7 @@ const components = {
 };
 
 export type SupportedElement = keyof typeof components;
-export type SupportedAs = SupportedElement | SvelteComponent;
+export type SupportedAs = SupportedElement | typeof SvelteComponent;
 
 export function getElementComponent(name: SupportedElement) {
   return components[name];

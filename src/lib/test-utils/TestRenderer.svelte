@@ -10,7 +10,7 @@
   }
   type SingleComponent =
     | string
-    | [SvelteComponent, ComponentProps, TestRendererProps];
+    | [typeof SvelteComponent, ComponentProps, TestRendererProps];
   export type TestRendererProps =
     | undefined
     | SingleComponent
