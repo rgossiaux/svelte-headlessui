@@ -73,6 +73,7 @@
 <script lang="ts">
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import type { SvelteComponent } from "svelte";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   type TSlotProps = $$Generic<{}>;
@@ -104,7 +105,9 @@
     throw new Error(`<${name}> did not provide an \`as\` value to <Render>`);
   }
 
-  let element = typeof as === "string" ? getElementComponent(as) : as;
+  // This type is a lie (could also be undefined) but there's a type error if we allow undefined
+  let element: typeof SvelteComponent =
+    typeof as === "string" ? getElementComponent(as) : as;
   if (!element) {
     throw new Error(
       `<${name}> has an invalid or unsupported \`as\` prop: ${as}`
