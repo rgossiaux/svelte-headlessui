@@ -13,6 +13,7 @@
   <div class="w-64 lg:block">
     <nav title="Components" class="sticky top-4 flex flex-col">
       <a href="dialog">Dialog</a>
+      <a href="disclosure">Disclosure</a>
       <a href="listbox">Listbox</a>
       <a href="menu">Menu</a>
       <a href="popover">Popover</a>
