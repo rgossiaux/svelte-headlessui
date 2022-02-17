@@ -255,7 +255,7 @@ This component wraps the selector for an individual tab. All `Tab`s will be rend
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `button`   | `string` | The element the `Tab`` should render as |
+| `as` | `button`   | `string` | The element the `Tab` should render as |
 | `disabled` | `false`   | `boolean` | Whether the `Tab` is currently disabled |
 
 | Slot prop | Type | Description |

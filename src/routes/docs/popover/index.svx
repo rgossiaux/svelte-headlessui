@@ -325,7 +325,7 @@ You can also use this `PopoverButton` component inside a `PopoverPanel`. If you 
 
 | Prop | Default | Type | Description |
 | ---- | ------- | ---- | ----------- |
-| `as` | `button`   | `string` | The element the `PopoverButton`` should render as |
+| `as` | `button`   | `string` | The element the `PopoverButton` should render as |
 
 
 | Slot prop | Type | Description |
