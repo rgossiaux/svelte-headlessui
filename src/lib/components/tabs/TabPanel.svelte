@@ -7,14 +7,13 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render, { Features } from "$lib/utils/Render.svelte";
-  import type { Writable } from "svelte/store";
   import { writable } from "svelte/store";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
 
-  let elementRef: Writable<HTMLElement | null> = writable(null);
+  let elementRef = writable<HTMLElement | null>(null);
   let api = useTabsContext("TabPanel");
   let id = `headlessui-tabs-panel-${useId()}`;
 

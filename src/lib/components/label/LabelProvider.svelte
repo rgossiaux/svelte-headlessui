@@ -20,7 +20,7 @@
   export let name: string;
   export let slotProps = {};
   let labelIds: string[] = [];
-  let contextStore: Writable<LabelContext> = writable({
+  let contextStore = writable<LabelContext>({
     name,
     slotProps,
     props: $$restProps,

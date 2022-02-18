@@ -70,7 +70,7 @@
     change: any;
   }>();
 
-  let api: Writable<StateDefinition> = writable({
+  let api = writable<StateDefinition>({
     options,
     value,
     disabled,

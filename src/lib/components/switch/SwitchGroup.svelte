@@ -26,7 +26,7 @@
 
   let switchStore: StateDefinition["switchStore"] = writable(null);
 
-  let api: Writable<StateDefinition> = writable({
+  let api = writable<StateDefinition>({
     switchStore,
   });
   setContext(SWITCH_CONTEXT_NAME, api);

@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount, setContext } from "svelte";
-  import type { Writable } from "svelte/store";
   import { writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
@@ -69,14 +68,14 @@
   }
   let state = shouldShow ? TreeStates.Visible : TreeStates.Hidden;
 
-  let nestingBag: Writable<NestingContextValues> = writable(
+  let nestingBag = writable<NestingContextValues>(
     useNesting(() => {
       state = TreeStates.Hidden;
     })
   );
 
   let initial = true;
-  let transitionBag: Writable<TransitionContextValues> = writable();
+  let transitionBag = writable<TransitionContextValues>();
   $: transitionBag.set({
     show: !!shouldShow,
     appear: appear || !initial,

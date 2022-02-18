@@ -67,7 +67,7 @@
   let searchQuery: StateDefinition["searchQuery"] = "";
   let activeItemIndex: StateDefinition["activeItemIndex"] = null;
 
-  let api: Writable<StateDefinition> = writable({
+  let api = writable<StateDefinition>({
     menuState,
     buttonStore,
     itemsStore: itemsStore,
@@ -189,7 +189,7 @@
     if (!event.defaultPrevented) $buttonStore?.focus({ preventScroll: true });
   }
 
-  let openClosedState: Writable<State> | undefined = writable(State.Closed);
+  let openClosedState = writable<State>(State.Closed);
   useOpenClosedProvider(openClosedState);
 
   $: $openClosedState = match(menuState, {

@@ -138,7 +138,7 @@ it("should be possible to render a Label with an `as` prop", async () => {
 });
 
 it("should be possible to change the props of a Label", async () => {
-  let classStore: Writable<string | null> = writable(null);
+  let classStore = writable<string | null>(null);
   let { container } = render(svelte`
   <LabelProvider name={"test"} let:labelledby>
     <div aria-labelledby={labelledby}>

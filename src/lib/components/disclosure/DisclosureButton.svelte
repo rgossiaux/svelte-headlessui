@@ -7,7 +7,6 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
-  import type { Writable } from "svelte/store";
   import { writable } from "svelte/store";
   import { resolveButtonType } from "$lib/utils/resolve-button-type";
   const forwardEvents = forwardEventsBuilder(get_current_component());
@@ -25,7 +24,7 @@
   $: isWithinPanel =
     panelContext === null ? false : panelContext === $api.panelId;
 
-  let ourStore: Writable<HTMLElement | null> = writable(null);
+  let ourStore = writable<HTMLElement | null>(null);
   $: if (!isWithinPanel) ourStore = buttonStore;
 
   function handleClick() {

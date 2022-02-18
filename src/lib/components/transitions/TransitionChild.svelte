@@ -1,6 +1,5 @@
 <script lang="ts">
   import { createEventDispatcher, onMount, setContext } from "svelte";
-  import type { Writable } from "svelte/store";
   import { writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosedProvider } from "$lib/internal/open-closed";
@@ -60,7 +59,7 @@
   $: strategy =
     $$props.unmount === false ? RenderStrategy.Hidden : RenderStrategy.Unmount;
 
-  let nesting: Writable<NestingContextValues> = writable(
+  let nesting = writable<NestingContextValues>(
     useNesting(() => {
       // When all children have been unmounted we can only hide ourselves if and only if we are not
       // transitioning ourselves. Otherwise we would unmount before the transitions are finished.
@@ -174,7 +173,7 @@
   }
 
   setContext(NESTING_CONTEXT_NAME, nesting);
-  let openClosedState: Writable<State> = writable(State.Closed);
+  let openClosedState = writable<State>(State.Closed);
   useOpenClosedProvider(openClosedState);
 
   $: openClosedState.set(

@@ -128,7 +128,7 @@
 
   let titleId: StateDefinition["titleId"];
 
-  let api: Writable<StateDefinition> = writable({
+  let api = writable<StateDefinition>({
     titleId,
     dialogState,
     setTitleId(id?: string) {

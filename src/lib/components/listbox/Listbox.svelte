@@ -92,7 +92,7 @@
   let searchQuery: StateDefinition["searchQuery"] = "";
   let activeOptionIndex: StateDefinition["activeOptionIndex"] = null;
 
-  let api: Writable<StateDefinition> = writable({
+  let api = writable<StateDefinition>({
     listboxState,
     value,
     labelRef,

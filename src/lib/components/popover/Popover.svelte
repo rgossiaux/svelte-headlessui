@@ -69,7 +69,7 @@
   let panel: StateDefinition["panel"] = writable(null);
   let button: StateDefinition["button"] = writable(null);
 
-  let api: Writable<StateDefinition> = writable({
+  let api = writable<StateDefinition>({
     popoverState,
     buttonId,
     panelId,
@@ -100,7 +100,7 @@
   });
   setContext(POPOVER_CONTEXT_NAME, api);
 
-  let openClosedState: Writable<State> = writable(State.Closed);
+  let openClosedState = writable<State>(State.Closed);
   useOpenClosedProvider(openClosedState);
 
   $: $openClosedState = match(popoverState, {

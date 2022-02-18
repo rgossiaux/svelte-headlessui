@@ -70,7 +70,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let api: Writable<StateDefinition> = writable({
+  let api = writable<StateDefinition>({
     selectedIndex,
     orientation: vertical ? "vertical" : "horizontal",
     activation: manual ? "manual" : "auto",

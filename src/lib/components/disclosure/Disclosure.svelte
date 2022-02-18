@@ -66,7 +66,7 @@
   let panelStore: StateDefinition["panelStore"] = writable(null);
   let buttonStore: StateDefinition["buttonStore"] = writable(null);
 
-  let api: Writable<StateDefinition> = writable({
+  let api = writable<StateDefinition>({
     buttonId,
     panelId,
     disclosureState,
@@ -111,7 +111,7 @@
     });
   }
 
-  let openClosedState: Writable<State> = writable(
+  let openClosedState = writable<State>(
     computeOpenClosedState(disclosureState)
   );
 
