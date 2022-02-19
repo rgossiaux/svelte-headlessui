@@ -201,8 +201,8 @@ All interactions apply when a `Tab` component is focused.
 
 | Command | Description |
 | ------- | ----------- |
-| '<ArrowLeft>` / `<ArrowRight>` | Selects the previous/next non-disabled tab |
-| '<ArrowUp>` / `<ArrowDown>` when `vertical` is set | Selects the previous/next non-disabled tab |
+| `<ArrowLeft>` / `<ArrowRight>` | Selects the previous/next non-disabled tab |
+| `<ArrowUp>` / `<ArrowDown>` when `vertical` is set | Selects the previous/next non-disabled tab |
 | `<Home>` / `<PageUp>` | Selects the first non-disabled tab |
 | `<End>` / `<PageEnd>` | Selects the last non-disabled tab |
 | `<Enter>` / `<Space>` when `manual` is set | Activates the selected tab |
