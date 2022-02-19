@@ -140,7 +140,11 @@ Use the `disabled` prop to disable a `MenuItem`. This will make it unselectable 
 
 ## Transitions
 
-To transition the opening/closing of the menu, you may use the provided `Transition` component with CSS transitions. All you need to do is wrap the `MenuItems` in a `<Transition>`, and the transition will be applied automatically.
+To animate the opening and closing of the menu, you can use [this library's Transition component](/docs/transition) or Svelte's built-in transition engine. See that page for a comparison.
+
+### Using the `Transition` component
+
+To use the `Transition` component, all you need to do is wrap the `MenuItems` in a `<Transition>`, and the transition will be applied automatically.
 
 ```svelte
 <script>
@@ -199,7 +203,35 @@ The components in this library communicate with each other, so the Transition wi
 </Menu>
 ```
 
-You can also use this approach to integrate other animation libraries or to use Svelte's built-in transitions.
+### Using Svelte transitions
+
+The last example above also provides a blueprint for using Svelte transitions:
+
+```svelte
+<script>
+  import { Menu, MenuButton, MenuItems, MenuItem, Transition } from "@rgossiaux/svelte-headlessui";
+  import { fade } from "svelte/transition"
+</script>
+
+<!-- Use the open slot prop -->
+<Menu let:open>
+  <MenuButton>More</MenuButton>
+  <!-- Example using Tailwind CSS transition classes -->
+  {#if open}
+    <div transition:fade>
+      <!-- Mark this as static -->
+      <MenuItems static>
+        <MenuItem>
+          <!-- ... -->
+        </MenuItem>
+        <!-- ... -->
+      </MenuItems>
+    </div>
+  {/if}
+</Menu>
+```
+
+Make sure to use the `static` prop, or else the exit transitions won't work correctly.
 
 ## Rendering additional content
 

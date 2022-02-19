@@ -151,9 +151,11 @@ Because of these accessibility concerns, Svelte Headless UI's `Dialog` actually 
 
 ## Transitions
 
-To animate the opening and closing of your dialog, we recommend using this library's `Transition` component (TODO: link), though you can use Svelte's built-in transitions if you wish. 
+To animate the opening and closing of your dialog, you can use [this library's Transition component](/docs/transition) or Svelte's built-in transition engine. See that page for a comparison.
 
-All you need to do is wrap the `Dialog` in a `<Transition>`, and the dialog will transition automatically based on the value of the `show` prop on the `<Transition>`. You can remove the `open` prop on the `<Dialog>`, as the dialog will read the `show` value from the `<Transition>` automatically.
+### Using the `Transition` component
+
+To use the `Transition` component, all you need to do is wrap the `Dialog` in a `<Transition>`, and the dialog will transition automatically based on the value of the `show` prop on the `<Transition>`. You can remove the `open` prop on the `<Dialog>`, as the dialog will read the `show` value from the `<Transition>` automatically.
 
 ```svelte
 <script>
@@ -221,6 +223,8 @@ To animate the dialog's overlay and contents separately, use `Transition` and `T
 </Transition>
 ```
 
+### Using Svelte transitions
+
 If you wish to animate your dialogs using another technique (like Svelte's built-in transitions), you can use the `static` prop to tell the component to not manage rendering itself, so you can control it manually in another way.
 
 ```svelte
@@ -242,7 +246,7 @@ If you wish to animate your dialogs using another technique (like Svelte's built
 {/if}
 ```
 
-The `open` prop is still used for managing scroll locking and focus trapping, but as long as `static` is present, the actual element will always be rendered regardless of the `open` value, which allows you to control it yourself externally.
+The `open` prop is still used for managing scroll locking and focus trapping, but as long as `static` is present, the actual element will always be rendered regardless of the `open` value, which allows you to control it yourself externally. Without `static`, the exit transitions won't work correctly.
 
 ## Accessibility notes
 

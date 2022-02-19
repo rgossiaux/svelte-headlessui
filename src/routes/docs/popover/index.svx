@@ -180,9 +180,11 @@ Like all the other components, PopoverOverlay is completely unstyled, so how it 
 
 ## Transitions
 
-To animate the opening and closing of the popover panel, we recommend using this library's `Transition` component (TODO: link), though you can use Svelte's built-in transitions if you wish. 
+To animate the opening and closing of the popover panel, you can use [this library's Transition component](/docs/transition) or Svelte's built-in transition engine. See that page for a comparison.
 
-All you need to do is wrap the `PopoverPanel` in a `<Transition>` and the panel will transition automatically.
+### Using the `Transition` component
+
+To use the `Transition` component, all you need to do is wrap the `PopoverPanel` in a `<Transition>` and the panel will transition automatically.
 
 ```svelte
 <script>
@@ -207,6 +209,8 @@ All you need to do is wrap the `PopoverPanel` in a `<Transition>` and the panel 
 </Popover>
 ```
 
+### Using Svelte transitions
+
 If you wish to animate your popovers using another technique (like Svelte's built-in transitions), you can use the `static` prop to tell the component to not manage rendering itself, so you can control it manually in another way.
 
 ```svelte
@@ -226,7 +230,7 @@ If you wish to animate your popovers using another technique (like Svelte's buil
 </Popover>
 ```
 
-See also TODO.
+Without the `static` prop, the exit transitions won't work correctly.
 
 ## Grouping related popovers
 

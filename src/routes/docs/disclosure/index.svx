@@ -117,9 +117,11 @@ By default the `DisclosureButton` receives focus after calling `close()`, but yo
 
 ## Transitions
 
-To animate the opening and closing of the disclosure panel, we recommend using this library's `Transition` component (TODO: link), though you can use Svelte's built-in transitions if you wish. 
+To animate the opening and closing of the disclosure panel, you can use [this library's Transition component](/docs/transition) or Svelte's built-in transition engine. See that page for a comparison.
 
-All you need to do is wrap the `DisclosurePanel` in a `<Transition>` and the panel will transition automatically.
+### Using the `Transition` component
+
+To use the `Transition` component, all you need to do is wrap the `DisclosurePanel` in a `<Transition>` and the panel will transition automatically.
 
 ```svelte
 <script>
@@ -171,7 +173,30 @@ The components in this library communicate with each other, so the Transition wi
 </Disclosure>
 ```
 
-See also TODO.
+### Using Svelte transitions
+
+The last example above also provides a blueprint for using Svelte transitions:
+
+```svelte
+<script>
+  import { Disclosure, DisclosureButton, DisclosurePanel } from "@rgossiaux/svelte-headlessui";
+  import { fade } from "svelte/transition"
+</script>
+
+<Disclosure let:open>
+  <DisclosureButton>Is team pricing available?</DisclosureButton>
+  {#if open}
+    <div transition:fade>
+      <!-- When controlling the transition manually, make sure to use `static` -->
+      <DisclosurePanel static>
+        <!-- ... -->
+      </DisclosurePanel>
+    </div>
+  {/if}
+</Disclosure>
+```
+
+Make sure to use the `static` prop, or else the exit transitions won't work correctly.
 
 ## Accessibility notes
 

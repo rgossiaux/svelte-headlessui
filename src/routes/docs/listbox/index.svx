@@ -219,7 +219,11 @@ Use the `disabled` prop to disable a `ListboxOption`. This will make it unselect
 
 ## Transitions
 
-To transition the opening/closing of the listbox, you may use the provided `Transition` component with CSS transitions. All you need to do is wrap the `ListboxOptions` in a `<Transition>`, and the transition will be applied automatically.
+To animate the opening and closing of the listbox, you can use [this library's Transition component](/docs/transition) or Svelte's built-in transition engine. See that page for a comparison.
+
+### Using the `Transition` component
+
+To use the `Transition` component, all you need to do is wrap the `ListboxOptions` in a `<Transition>`, and the transition will be applied automatically.
 
 ```svelte
 <script>
@@ -299,7 +303,44 @@ The components in this library communicate with each other, so the Transition wi
 </Listbox>
 ```
 
-You can also use this approach to integrate other animation libraries or to use Svelte's built-in transitions.
+### Using Svelte transitions
+
+The last example above also provides a blueprint for using Svelte transitions:
+
+```svelte
+<script>
+  import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@rgossiaux/svelte-headlessui";
+  import { fade } from "svelte/transition"
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ];
+
+  let selectedPerson = people[0];
+</script>
+
+<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail} let:open>
+  <ListboxButton>{selectedPerson.name}</ListboxButton>
+  {#if open}
+    <div transition:fade>
+      <!-- When controlling the transition manually, make sure to use `static` -->
+      <ListboxOptions static>
+        {#each people as person (person.id)}
+          <ListboxOption value={person}>
+            {person.name}
+          </ListboxOption>
+        {/each}
+      </ListboxOptions>
+    </div>
+  {/if}
+</Listbox>
+```
+
+Make sure to use the `static` prop, or else the exit transitions won't work correctly.
 
 ## Horizontal options
 
