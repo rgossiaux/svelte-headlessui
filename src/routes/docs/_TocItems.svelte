@@ -4,6 +4,7 @@
     url: string;
     title: string;
     headingLevel: number;
+    index: number;
     items?: TocItem[];
   }
 </script>

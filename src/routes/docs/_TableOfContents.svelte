@@ -8,6 +8,25 @@
   let runWithCleanup = createRunWithCleanup();
   let activeId: string | undefined;
   let items: TocItem[] = [];
+  let idToItem: { [id: string]: TocItem } = {};
+  let visibleIds = new Set<string>();
+
+  function offsetItemById(id: string, offset: number): TocItem | undefined {
+    let item = idToItem[id];
+    if (item) {
+      return items[item.index + offset];
+    }
+  }
+
+  function computeActiveId() {
+    if (visibleIds.size === 0) {
+      activeId = undefined;
+      return;
+    }
+    activeId = Array.from(visibleIds)
+      .map((id) => idToItem[id]!)
+      .reduce((a, b) => (a.index < b.index ? a : b))?.id;
+  }
 
   let observer: IntersectionObserver | null = null;
   onMount(() => {
@@ -15,7 +34,22 @@
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            activeId = entry.target.id;
+            visibleIds.add(entry.target.id);
+            computeActiveId();
+          } else if (visibleIds.has(entry.target.id)) {
+            visibleIds.delete(entry.target.id);
+            if (visibleIds.size > 0) {
+              computeActiveId();
+            } else {
+              let scrollingUp =
+                entry.boundingClientRect.y < (entry.rootBounds?.y ?? 0);
+              // If scrolling up, this one should remain active: we're still in the contents of it
+              //  until we get to the next item below.
+              // If scrolling down, we should go to the previous item.
+              if (!scrollingUp) {
+                activeId = offsetItemById(entry.target.id, -1)?.id;
+              }
+            }
           }
         });
       },
@@ -26,14 +60,17 @@
   function generateItems(root: HTMLElement) {
     let headings = Array.from(root.querySelectorAll("h1, h2, h3, h4, h5, h6"));
     let newItems: TocItem[] = [];
+    let index = 0;
     for (const heading of headings) {
       let headingLevel = parseInt(heading.tagName[1]);
       const newItem = {
         headingLevel,
+        index: index++,
         id: heading.id,
         url: "#" + heading.id,
         title: heading.textContent || "",
       };
+      idToItem[newItem.id] = newItem;
       let parentItems: TocItem[] = newItems;
       while (
         parentItems.length > 0 &&
@@ -60,6 +97,7 @@
     }
     return result;
   }
+
   $: runWithCleanup(() => {
     if (!observer) {
       return;
