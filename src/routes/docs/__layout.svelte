@@ -20,6 +20,7 @@
       <a href="radio-group">Radio Group</a>
       <a href="switch">Switch</a>
       <a href="tabs">Tabs</a>
+      <a href="transition">Transition</a>
     </nav>
   </div>
   <article class="prose" bind:this={el}>
