@@ -4,7 +4,12 @@ Menus are built using a combination of the `Menu`, `MenuButton`, `MenuItems`, an
 
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem } from "@rgossiaux/svelte-headlessui";
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Menu>
@@ -21,7 +26,6 @@ Menus are built using a combination of the `Menu`, `MenuButton`, `MenuItems`, an
     </MenuItem>
   </MenuItems>
 </Menu>
-
 ```
 
 ## Styling
@@ -34,7 +38,12 @@ To style the active `MenuItem`, you can use the `active` slot prop that it provi
 
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem } from "@rgossiaux/svelte-headlessui";
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Menu>
@@ -42,7 +51,9 @@ To style the active `MenuItem`, you can use the `active` slot prop that it provi
   <MenuItems>
     <!--Use the `active` slot prop to conditionally style the active item.-->
     <MenuItem let:active>
-      <a href="/account-settings" class={`${active ? "active" : "inactive"}`}>Account settings</a>
+      <a href="/account-settings" class={`${active ? "active" : "inactive"}`}
+        >Account settings</a
+      >
     </MenuItem>
     <!-- ... -->
   </MenuItems>
@@ -51,17 +62,21 @@ To style the active `MenuItem`, you can use the `active` slot prop that it provi
 
 If necessary, you can also style the `MenuItem` itself by passing a function to `class`:
 
-
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem } from "@rgossiaux/svelte-headlessui";
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Menu>
   <MenuButton>More</MenuButton>
   <MenuItems>
     <!--Use the `active` slot prop to conditionally style the active item.-->
-    <MenuItem class={({active}) => active ? "active" : "inactive"}>
+    <MenuItem class={({ active }) => (active ? "active" : "inactive")}>
       Account settings
     </MenuItem>
     <!-- ... -->
@@ -77,7 +92,12 @@ If you'd rather handle this yourself (perhaps because you need to add an extra w
 
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem } from "@rgossiaux/svelte-headlessui";
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Menu let:open>
@@ -99,7 +119,12 @@ You can also choose to have the `Menu` merely hide the `MenuItems` when the `Men
 
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem } from "@rgossiaux/svelte-headlessui";
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Menu>
@@ -120,7 +145,12 @@ Use the `disabled` prop to disable a `MenuItem`. This will make it unselectable 
 
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem } from "@rgossiaux/svelte-headlessui";
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Menu>
@@ -148,7 +178,13 @@ To use the `Transition` component, all you need to do is wrap the `MenuItems` in
 
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Menu>
@@ -172,11 +208,19 @@ To use the `Transition` component, all you need to do is wrap the `MenuItems` in
 </Menu>
 ```
 
-The components in this library communicate with each other, so the Transition will be managed automatically when the Menu is opened/closed. If you require more control over this behavior, you may use a more explicit version:
+The components in this library communicate with each other, so the Transition
+will be managed automatically when the Menu is opened/closed. If you require
+more control over this behavior, you may use a more explicit version:
 
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <!-- Use the open slot prop -->
@@ -209,8 +253,14 @@ The last example above also provides a blueprint for using Svelte transitions:
 
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem, Transition } from "@rgossiaux/svelte-headlessui";
-  import { fade } from "svelte/transition"
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
+  import { fade } from "svelte/transition";
 </script>
 
 <!-- Use the open slot prop -->
@@ -247,11 +297,22 @@ Menus are best for UI elements that resemble things like the menus you'd find in
 
 Here's when you might use other similar components from Headless UI:
 
-* <a href="popover">Popover</a>: Popovers are general-purpose floating menus. They appear near the button that triggers them, and you can put arbitrary markup in them like images or non-clickable content. The Tab key navigates the contents of a Popover like it would any other normal markup. They're great for building header nav items with expandable content and flyout panels.
+- <a href="popover">Popover</a>: Popovers are general-purpose floating menus.
+  They appear near the button that triggers them, and you can put arbitrary
+  markup in them like images or non-clickable content. The Tab key navigates the
+  contents of a Popover like it would any other normal markup. They're great for
+  building header nav items with expandable content and flyout panels.
 
-* <a href="disclosure">Disclosure</a>: Disclosures are useful for elements that expand to reveal additional information, like a toggleable FAQ section. They are typically rendered inline and reflow the document when they're shown or hidden.
+- <a href="disclosure">Disclosure</a>: Disclosures are useful for elements that
+  expand to reveal additional information, like a toggleable FAQ section. They
+  are typically rendered inline and reflow the document when they're shown or
+  hidden.
 
-* <a href="dialog">Dialog</a>: Dialogs are meant to grab the user's full attention. They typically render a floating panel in the center of the screen, and use a backdrop to dim the rest of the application's contents. They also capture focus and prevent tabbing away from the Dialog's contents until the Dialog is dismissed.
+- <a href="dialog">Dialog</a>: Dialogs are meant to grab the user's full
+  attention. They typically render a floating panel in the center of the screen,
+  and use a backdrop to dim the rest of the application's contents. They also
+  capture focus and prevent tabbing away from the Dialog's contents until the
+  Dialog is dismissed.
 
 ## Accessibility notes
 
@@ -265,15 +326,15 @@ Clicking a `MenuButton` toggles the menu. Clicking anywhere outside of an open m
 
 ### Keyboard interaction
 
-| Command | Description |
-| ------- | ----------- |
-| `<Enter>` / `<Space>` when `MenuButton` is focused | Opens menu and focuses first non-disabled item |
+| Command                                                  | Description                                         |
+| -------------------------------------------------------- | --------------------------------------------------- |
+| `<Enter>` / `<Space>` when `MenuButton` is focused       | Opens menu and focuses first non-disabled item      |
 | `<ArrowDown>` / `<ArrowUp>` when `MenuButton` is focused | Opens menu and focuses first/last non-disabled item |
-| `<Esc>` when menu is open | Closes any open Menus |
-| `<ArrowDown>` / `<ArrowUp>` when menu is open | Focuses next/previous non-disabled item |
-| `<Home>` / `<End>` when menu is open | Focuses first/last non-disabled item |
-| `<Enter>` / `<Space>` when menu is open | Activates/clicks the current menu item |
-| `<A-Za-z>` when menu is open | Focuses next item that matches keyboard input |
+| `<Esc>` when menu is open                                | Closes any open Menus                               |
+| `<ArrowDown>` / `<ArrowUp>` when menu is open            | Focuses next/previous non-disabled item             |
+| `<Home>` / `<End>` when menu is open                     | Focuses first/last non-disabled item                |
+| `<Enter>` / `<Space>` when menu is open                  | Activates/clicks the current menu item              |
+| `<A-Za-z>` when menu is open                             | Focuses next item that matches keyboard input       |
 
 ### Other
 
@@ -285,46 +346,46 @@ For a full reference on all accessibility features implemented in `Menu`, see <a
 
 ### Menu
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
+| Prop | Default | Type     | Description                             |
+| ---- | ------- | -------- | --------------------------------------- |
 | `as` | `div`   | `string` | The element the `Menu` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                     |
+| --------- | --------- | ------------------------------- |
 | `open`    | `boolean` | Whether or not the menu is open |
 
 ### MenuButton
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `button`   | `string` | The element the `MenuButton` should render as |
+| Prop | Default  | Type     | Description                                   |
+| ---- | -------- | -------- | --------------------------------------------- |
+| `as` | `button` | `string` | The element the `MenuButton` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                     |
+| --------- | --------- | ------------------------------- |
 | `open`    | `boolean` | Whether or not the menu is open |
 
 ### MenuItems
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `string` | The element the `MenuItems` should render as |
-| `static` | `false`   | `boolean` | Whether the element should ignore the internally managed open/closed state |
-| `unmount` | `true`   | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
+| Prop      | Default | Type      | Description                                                                                     |
+| --------- | ------- | --------- | ----------------------------------------------------------------------------------------------- |
+| `as`      | `div`   | `string`  | The element the `MenuItems` should render as                                                    |
+| `static`  | `false` | `boolean` | Whether the element should ignore the internally managed open/closed state                      |
+| `unmount` | `true`  | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
 
 Note that `static` and `unmount` cannot be used together.
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                     |
+| --------- | --------- | ------------------------------- |
 | `open`    | `boolean` | Whether or not the menu is open |
 
 ### MenuItem
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `a`   | `string` | The element the `MenuItem` should render as |
-| `disabled` | `false`   | `boolean` | Whether the item should be disabled for keyboard navigation and ARIA purposes |
+| Prop       | Default | Type      | Description                                                                   |
+| ---------- | ------- | --------- | ----------------------------------------------------------------------------- |
+| `as`       | `a`     | `string`  | The element the `MenuItem` should render as                                   |
+| `disabled` | `false` | `boolean` | Whether the item should be disabled for keyboard navigation and ARIA purposes |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `open`    | `boolean` | Whether or not the menu is open |
-| `disabled`    | `boolean` | Whether the item is disabled for keyboard navigation and ARIA purposes |
+| Slot prop  | Type      | Description                                                            |
+| ---------- | --------- | ---------------------------------------------------------------------- |
+| `open`     | `boolean` | Whether or not the menu is open                                        |
+| `disabled` | `boolean` | Whether the item is disabled for keyboard navigation and ARIA purposes |

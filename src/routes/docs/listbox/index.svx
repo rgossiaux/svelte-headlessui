@@ -6,27 +6,29 @@ The `ListboxButton` will automatically open/close the `ListboxOptions` when clic
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@rgossiaux/svelte-headlessui";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  } from "@rgossiaux/svelte-headlessui";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds', unavailable: false },
-    { id: 2, name: 'Kenton Towne', unavailable: false },
-    { id: 3, name: 'Therese Wunsch', unavailable: false },
-    { id: 4, name: 'Benedict Kessler', unavailable: true },
-    { id: 5, name: 'Katelyn Rohan', unavailable: false },
+    { id: 1, name: "Durward Reynolds", unavailable: false },
+    { id: 2, name: "Kenton Towne", unavailable: false },
+    { id: 3, name: "Therese Wunsch", unavailable: false },
+    { id: 4, name: "Benedict Kessler", unavailable: true },
+    { id: 5, name: "Katelyn Rohan", unavailable: false },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
+<Listbox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   <ListboxOptions>
     {#each people as person (person.id)}
-      <ListboxOption
-        value={person}
-        disabled={person.unavailable}
-      >
+      <ListboxOption value={person} disabled={person.unavailable}>
         {person.name}
       </ListboxOption>
     {/each}
@@ -40,29 +42,34 @@ See TODO for some general notes on styling the components in this library.
 
 ### Active and selected items
 
-To style the active `ListboxOption`, you can use the `active` slot prop that it provides, which tells you whether or not that option is currently focused via the mouse or keyboard. 
+To style the active `ListboxOption`, you can use the `active` slot prop that it provides, which tells you whether or not that option is currently focused via the mouse or keyboard.
 
 To style the selected `ListboxOption`, you can use the `selected` slot prop that it provides, which tells you whether or not that option is the selected option (the one passed to the `value` prop of the `<Listbox>`)
 
-You can use these states to conditionally apply whatever active/focus styles you wish. 
+You can use these states to conditionally apply whatever active/focus styles you wish.
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@rgossiaux/svelte-headlessui";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  } from "@rgossiaux/svelte-headlessui";
   import { CheckIcon } from "@rgossiaux/svelte-heroicons/solid";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds' },
-    { id: 2, name: 'Kenton Towne' },
-    { id: 3, name: 'Therese Wunsch' },
-    { id: 4, name: 'Benedict Kessler' },
-    { id: 5, name: 'Katelyn Rohan' },
+    { id: 1, name: "Durward Reynolds" },
+    { id: 2, name: "Kenton Towne" },
+    { id: 3, name: "Therese Wunsch" },
+    { id: 4, name: "Benedict Kessler" },
+    { id: 5, name: "Katelyn Rohan" },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
+<Listbox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   <ListboxOptions>
     {#each people as person (person.id)}
@@ -71,7 +78,7 @@ You can use these states to conditionally apply whatever active/focus styles you
       <ListboxOption
         value={person}
         disabled={person.unavailable}
-        class={({ active }) => active ? "active" : ""}
+        class={({ active }) => (active ? "active" : "")}
         let:selected
       >
         {#if selected}
@@ -90,20 +97,26 @@ By default, the `Listbox` will use the `<ListboxButton>` contents as the label f
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxLabel, ListboxOptions, ListboxOption } from "@rgossiaux/svelte-headlessui";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxLabel,
+    ListboxOptions,
+    ListboxOption,
+  } from "@rgossiaux/svelte-headlessui";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds' },
-    { id: 2, name: 'Kenton Towne' },
-    { id: 3, name: 'Therese Wunsch' },
-    { id: 4, name: 'Benedict Kessler' },
-    { id: 5, name: 'Katelyn Rohan' },
+    { id: 1, name: "Durward Reynolds" },
+    { id: 2, name: "Kenton Towne" },
+    { id: 3, name: "Therese Wunsch" },
+    { id: 4, name: "Benedict Kessler" },
+    { id: 5, name: "Katelyn Rohan" },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
+<Listbox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
   <ListboxLabel>Assignee:</ListboxLabel>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   <ListboxOptions>
@@ -124,20 +137,29 @@ If you'd rather handle this yourself (perhaps because you need to add an extra w
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@rgossiaux/svelte-headlessui";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  } from "@rgossiaux/svelte-headlessui";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds' },
-    { id: 2, name: 'Kenton Towne' },
-    { id: 3, name: 'Therese Wunsch' },
-    { id: 4, name: 'Benedict Kessler' },
-    { id: 5, name: 'Katelyn Rohan' },
+    { id: 1, name: "Durward Reynolds" },
+    { id: 2, name: "Kenton Towne" },
+    { id: 3, name: "Therese Wunsch" },
+    { id: 4, name: "Benedict Kessler" },
+    { id: 5, name: "Katelyn Rohan" },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail} let:open>
+<Listbox
+  value={selectedPerson}
+  on:change={(e) => (selectedPerson = e.detail)}
+  let:open
+>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   {#if open}
     <div>
@@ -158,20 +180,25 @@ You can also choose to have the `Listbox` merely hide the `ListboxOptions` when 
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@rgossiaux/svelte-headlessui";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  } from "@rgossiaux/svelte-headlessui";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds' },
-    { id: 2, name: 'Kenton Towne' },
-    { id: 3, name: 'Therese Wunsch' },
-    { id: 4, name: 'Benedict Kessler' },
-    { id: 5, name: 'Katelyn Rohan' },
+    { id: 1, name: "Durward Reynolds" },
+    { id: 2, name: "Kenton Towne" },
+    { id: 3, name: "Therese Wunsch" },
+    { id: 4, name: "Benedict Kessler" },
+    { id: 5, name: "Katelyn Rohan" },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
+<Listbox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   <!-- Using `unmount={false}`, the `ListboxOptions` is kept in the DOM when the `Listbox` is closed -->
   <ListboxOptions unmount={false}>
@@ -190,20 +217,25 @@ Use the `disabled` prop to disable a `ListboxOption`. This will make it unselect
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@rgossiaux/svelte-headlessui";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  } from "@rgossiaux/svelte-headlessui";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds', unavailable: false },
-    { id: 2, name: 'Kenton Towne', unavailable: false },
-    { id: 3, name: 'Therese Wunsch', unavailable: false },
-    { id: 4, name: 'Benedict Kessler', unavailable: true },
-    { id: 5, name: 'Katelyn Rohan', unavailable: false },
+    { id: 1, name: "Durward Reynolds", unavailable: false },
+    { id: 2, name: "Kenton Towne", unavailable: false },
+    { id: 3, name: "Therese Wunsch", unavailable: false },
+    { id: 4, name: "Benedict Kessler", unavailable: true },
+    { id: 5, name: "Katelyn Rohan", unavailable: false },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
+<Listbox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   <ListboxOptions>
     {#each people as person (person.id)}
@@ -227,20 +259,26 @@ To use the `Transition` component, all you need to do is wrap the `ListboxOption
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxOptions, ListboxOption, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds' },
-    { id: 2, name: 'Kenton Towne' },
-    { id: 3, name: 'Therese Wunsch' },
-    { id: 4, name: 'Benedict Kessler' },
-    { id: 5, name: 'Katelyn Rohan' },
+    { id: 1, name: "Durward Reynolds" },
+    { id: 2, name: "Kenton Towne" },
+    { id: 3, name: "Therese Wunsch" },
+    { id: 4, name: "Benedict Kessler" },
+    { id: 5, name: "Katelyn Rohan" },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
+<Listbox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   <!-- Example using Tailwind CSS transition classes -->
   <Transition
@@ -266,20 +304,30 @@ The components in this library communicate with each other, so the Transition wi
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxOptions, ListboxOption, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds' },
-    { id: 2, name: 'Kenton Towne' },
-    { id: 3, name: 'Therese Wunsch' },
-    { id: 4, name: 'Benedict Kessler' },
-    { id: 5, name: 'Katelyn Rohan' },
+    { id: 1, name: "Durward Reynolds" },
+    { id: 2, name: "Kenton Towne" },
+    { id: 3, name: "Therese Wunsch" },
+    { id: 4, name: "Benedict Kessler" },
+    { id: 5, name: "Katelyn Rohan" },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail} let:open>
+<Listbox
+  value={selectedPerson}
+  on:change={(e) => (selectedPerson = e.detail)}
+  let:open
+>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   <!-- Example using Tailwind CSS transition classes -->
   <Transition
@@ -309,21 +357,30 @@ The last example above also provides a blueprint for using Svelte transitions:
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@rgossiaux/svelte-headlessui";
-  import { fade } from "svelte/transition"
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+  import { fade } from "svelte/transition";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds' },
-    { id: 2, name: 'Kenton Towne' },
-    { id: 3, name: 'Therese Wunsch' },
-    { id: 4, name: 'Benedict Kessler' },
-    { id: 5, name: 'Katelyn Rohan' },
+    { id: 1, name: "Durward Reynolds" },
+    { id: 2, name: "Kenton Towne" },
+    { id: 3, name: "Therese Wunsch" },
+    { id: 4, name: "Benedict Kessler" },
+    { id: 5, name: "Katelyn Rohan" },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail} let:open>
+<Listbox
+  value={selectedPerson}
+  on:change={(e) => (selectedPerson = e.detail)}
+  let:open
+>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   {#if open}
     <div transition:fade>
@@ -348,20 +405,29 @@ If you've styled your `ListboxOptions` to appear horizontally, use the `horizont
 
 ```svelte
 <script>
-  import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@rgossiaux/svelte-headlessui";
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
+  } from "@rgossiaux/svelte-headlessui";
 
   const people = [
-    { id: 1, name: 'Durward Reynolds' },
-    { id: 2, name: 'Kenton Towne' },
-    { id: 3, name: 'Therese Wunsch' },
-    { id: 4, name: 'Benedict Kessler' },
-    { id: 5, name: 'Katelyn Rohan' },
+    { id: 1, name: "Durward Reynolds" },
+    { id: 2, name: "Kenton Towne" },
+    { id: 3, name: "Therese Wunsch" },
+    { id: 4, name: "Benedict Kessler" },
+    { id: 5, name: "Katelyn Rohan" },
   ];
 
   let selectedPerson = people[0];
 </script>
 
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail} horizontal>
+<Listbox
+  value={selectedPerson}
+  on:change={(e) => (selectedPerson = e.detail)}
+  horizontal
+>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   <ListboxOptions>
     {#each people as person (person.id)}
@@ -372,6 +438,7 @@ If you've styled your `ListboxOptions` to appear horizontally, use the `horizont
   </ListboxOptions>
 </Listbox>
 ```
+
 ## Accessibility notes
 
 ### Focus management
@@ -386,14 +453,14 @@ Clicking a `ListboxButton` toggles the options list open and closed. Clicking an
 
 When the `horizontal` prop is set, the `<ArrowUp>` and `<ArrowDown>` below become `<ArrowLeft>` and `<ArrowRight>`:
 
-| Command | Description |
-| ------- | ----------- |
-| `<Enter>` / `<Space>` / `<ArrowUp>` / `<ArrowDown>` when `ListboxButton` is focused | Opens listbox and focuses the selected item |
-| `<Esc>` when listbox is open | Closes listbox |
-| `<ArrowDown>` / `<ArrowUp>` when listbox is open | Focuses next/previous non-disabled option |
-| `<Home>` / `<End>` when listbox is open | Focuses first/last non-disabled option |
-| `<Enter>` / `<Space>` when listbox is open | Selects the focused option |
-| `<A-Za-z>` when listbox is open | Focuses next option that matches keyboard input |
+| Command                                                                             | Description                                     |
+| ----------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `<Enter>` / `<Space>` / `<ArrowUp>` / `<ArrowDown>` when `ListboxButton` is focused | Opens listbox and focuses the selected item     |
+| `<Esc>` when listbox is open                                                        | Closes listbox                                  |
+| `<ArrowDown>` / `<ArrowUp>` when listbox is open                                    | Focuses next/previous non-disabled option       |
+| `<Home>` / `<End>` when listbox is open                                             | Focuses first/last non-disabled option          |
+| `<Enter>` / `<Space>` when listbox is open                                          | Selects the focused option                      |
+| `<A-Za-z>` when listbox is open                                                     | Focuses next option that matches keyboard input |
 
 ### Other
 
@@ -407,78 +474,78 @@ For a full reference on all accessibility features implemented in `Listbox`, see
 
 The main listbox component.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `string` | The element the `Listbox` should render as |
-| `disabled` | `false`   | `boolean` | Whether the entire `Listbox` and its children should be disabled |
-| `horizontal` | `false`   | `boolean` | Whether the entire `Listbox` should be oriented horizontally instead of vertically |
-| `value` | --   | `T` | The selected value |
+| Prop         | Default | Type      | Description                                                                        |
+| ------------ | ------- | --------- | ---------------------------------------------------------------------------------- |
+| `as`         | `div`   | `string`  | The element the `Listbox` should render as                                         |
+| `disabled`   | `false` | `boolean` | Whether the entire `Listbox` and its children should be disabled                   |
+| `horizontal` | `false` | `boolean` | Whether the entire `Listbox` should be oriented horizontally instead of vertically |
+| `value`      | --      | `T`       | The selected value                                                                 |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `disabled`    | `boolean` | Whether or not the listbox is disabled |
-| `open`    | `boolean` | Whether or not the listbox is open |
+| Slot prop  | Type      | Description                            |
+| ---------- | --------- | -------------------------------------- |
+| `disabled` | `boolean` | Whether or not the listbox is disabled |
+| `open`     | `boolean` | Whether or not the listbox is open     |
 
 This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
 
-| Event name | Type of event `.detail` | Description |
-| --------- | ---- | ----------- |
-| `change`    | `T` | Dispatched when a `ListboxOption` is selected; the event `detail` contains the `value` of the selected option |
+| Event name | Type of event `.detail` | Description                                                                                                   |
+| ---------- | ----------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `change`   | `T`                     | Dispatched when a `ListboxOption` is selected; the event `detail` contains the `value` of the selected option |
 
 ### ListboxButton
 
 The listbox's button.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `button`   | `string` | The element the `ListboxButton` should render as |
+| Prop | Default  | Type     | Description                                      |
+| ---- | -------- | -------- | ------------------------------------------------ |
+| `as` | `button` | `string` | The element the `ListboxButton` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `disabled`    | `boolean` | Whether or not the listbox is disabled |
-| `open`    | `boolean` | Whether or not the listbox is open |
+| Slot prop  | Type      | Description                            |
+| ---------- | --------- | -------------------------------------- |
+| `disabled` | `boolean` | Whether or not the listbox is disabled |
+| `open`     | `boolean` | Whether or not the listbox is open     |
 
 ### ListboxLabel
 
 A label that can be used for more control over the text your listbox will announce to screenreaders. Renders an element that is linked to the root `Listbox` via the `aria-labelledby` attribute and an autogenerated id.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `label`   | `string` | The element the `ListboxLabel` should render as |
+| Prop | Default | Type     | Description                                     |
+| ---- | ------- | -------- | ----------------------------------------------- |
+| `as` | `label` | `string` | The element the `ListboxLabel` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `disabled`    | `boolean` | Whether or not the listbox is disabled |
-| `open`    | `boolean` | Whether or not the listbox is open |
+| Slot prop  | Type      | Description                            |
+| ---------- | --------- | -------------------------------------- |
+| `disabled` | `boolean` | Whether or not the listbox is disabled |
+| `open`     | `boolean` | Whether or not the listbox is open     |
 
 ### ListboxOptions
 
 The component that directly wraps the list of options in your custom listbox.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `ul`   | `string` | The element the `ListboxOptions` should render as |
-| `static` | `false`   | `boolean` | Whether the element should ignore the internally managed open/closed state |
-| `unmount` | `true`   | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
+| Prop      | Default | Type      | Description                                                                                     |
+| --------- | ------- | --------- | ----------------------------------------------------------------------------------------------- |
+| `as`      | `ul`    | `string`  | The element the `ListboxOptions` should render as                                               |
+| `static`  | `false` | `boolean` | Whether the element should ignore the internally managed open/closed state                      |
+| `unmount` | `true`  | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
 
 Note that `static` and `unmount` cannot be used together.
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                        |
+| --------- | --------- | ---------------------------------- |
 | `open`    | `boolean` | Whether or not the listbox is open |
 
 ### ListboxOption
 
 Used to wrap each item within your listbox.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `value` | -- | `T` | The option value |
-| `as` | `li`   | `string` | The element the `ListboxOption` should render as |
-| `disabled` | `false`   | `boolean` | Whether the option should be disabled for keyboard navigation and ARIA purposes |
+| Prop       | Default | Type      | Description                                                                     |
+| ---------- | ------- | --------- | ------------------------------------------------------------------------------- |
+| `value`    | --      | `T`       | The option value                                                                |
+| `as`       | `li`    | `string`  | The element the `ListboxOption` should render as                                |
+| `disabled` | `false` | `boolean` | Whether the option should be disabled for keyboard navigation and ARIA purposes |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `active`    | `boolean` | Whether the option is active (focused) |
-| `selected`    | `boolean` | Whether the option is selected |
-| `disabled`    | `boolean` | Whether the option is disabled |
+| Slot prop  | Type      | Description                            |
+| ---------- | --------- | -------------------------------------- |
+| `active`   | `boolean` | Whether the option is active (focused) |
+| `selected` | `boolean` | Whether the option is selected         |
+| `disabled` | `boolean` | Whether the option is disabled         |

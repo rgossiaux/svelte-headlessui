@@ -4,9 +4,9 @@ One of Svelte's strengths is its great support for transitions and animations. Y
 
 There are a few reasons you may choose to use `Transition`:
 
-* You are converting code from Tailwind UI which uses a `Transition` component. It may be simpler to just be able to port that code directly instead of replacing it with a Svelte transition.
+- You are converting code from Tailwind UI which uses a `Transition` component. It may be simpler to just be able to port that code directly instead of replacing it with a Svelte transition.
 
-* You want to use CSS class-based transitions (perhaps via Tailwind CSS classes, perhaps not) instead of using Svelte's transition engine. In that case this component can help, especially by helping coordinate multiple transitions (one of the main features of the component).
+- You want to use CSS class-based transitions (perhaps via Tailwind CSS classes, perhaps not) instead of using Svelte's transition engine. In that case this component can help, especially by helping coordinate multiple transitions (one of the main features of the component).
 
 Since this component works is based on CSS class, we'll be using Tailwind CSS transition classes for the examples. However, you are free to use your own transition classes, as long as they are globally available.
 
@@ -20,9 +20,7 @@ The `Transition` accepts a `show` prop that controls whether the children should
   let show = false;
 </script>
 
-<button on:click={() => show = !show}>
-  Toggle
-</button>
+<button on:click={() => (show = !show)}> Toggle </button>
 <Transition
   {show}
   enter="transition-opacity duration-75"
@@ -46,12 +44,8 @@ Wrap the content that should be conditionally rendered in a `Transition` compone
   let show = false;
 </script>
 
-<button on:click={() => show = !show}>
-  Toggle
-</button>
-<Transition {show}>
-  I will appear and disappear
-</Transition>
+<button on:click={() => (show = !show)}> Toggle </button>
+<Transition {show}>I will appear and disappear</Transition>
 ```
 
 The `Transition` component will render a `div` by default, but you can use the `as` prop to render a different element instead if needed. Any other HTML attributes (like `class` or `style`) can be added directly to the `Transition` the same way they would be for regular HTML elements.
@@ -62,9 +56,7 @@ The `Transition` component will render a `div` by default, but you can use the `
   let show = false;
 </script>
 
-<button on:click={() => show = !show}>
-  Toggle
-</button>
+<button on:click={() => (show = !show)}> Toggle </button>
 <Transition {show} as="a" href="/my-url" style="font-weight: 700;">
   I will appear and disappear
 </Transition>
@@ -76,17 +68,17 @@ By default, a `Transition` will enter and leave instantly, which is probably not
 
 To animate your enter/leave transitions, add classes that provide the styling for each phase of the transitions using these props:
 
-* `enter`: Applied the entire time an element is entering. Usually you define your duration and what properties you want to transition here: `transition-opacity duration-75`, for example.
+- `enter`: Applied the entire time an element is entering. Usually you define your duration and what properties you want to transition here: `transition-opacity duration-75`, for example.
 
-* `enterFrom`: The starting point to enter from, like `opacity-0` if something should fade in.
+- `enterFrom`: The starting point to enter from, like `opacity-0` if something should fade in.
 
-* `enterTo`: The ending point to enter to, like `opacity-100` after fading in.
+- `enterTo`: The ending point to enter to, like `opacity-100` after fading in.
 
-* `leave`: Applied the entire time an element is leaving. Usually you define your duration and what properties you want to transition here: `transition-opacity duration-75`, for example.
+- `leave`: Applied the entire time an element is leaving. Usually you define your duration and what properties you want to transition here: `transition-opacity duration-75`, for example.
 
-* `leaveFrom`: The starting point to leave from, like `opacity-100` if something should fade out.
+- `leaveFrom`: The starting point to leave from, like `opacity-100` if something should fade out.
 
-* `leaveTo`: The ending point to leave to, like `opacity-0` after fading out.
+- `leaveTo`: The ending point to leave to, like `opacity-0` after fading out.
 
 Here's an example:
 
@@ -96,9 +88,7 @@ Here's an example:
   let show = false;
 </script>
 
-<button on:click={() => show = !show}>
-  Toggle
-</button>
+<button on:click={() => (show = !show)}> Toggle </button>
 <Transition
   {show}
   enter="transition-opacity duration-75"
@@ -178,7 +168,7 @@ This is useful if you want something to transition in on initial page load, or w
   export let show = false;
 </script>
 
-<Transition 
+<Transition
   {show}
   appear={true}
   enter="transition-opacity duration-75"
@@ -196,49 +186,49 @@ This is useful if you want something to transition in on initial page load, or w
 
 ### Transition
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `show` | --  | `boolean` | Whether the children should be shown or hidden |
-| `as` | `div`   | `string` | The element the `Transition` should render as |
-| `static` | `false`   | `boolean` | Whether the element should ignore the internally managed open/closed state |
-| `unmount` | `true`   | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
-| `enter` | "" | `string` | Classes to add to the transitioning element during the entire enter phase |
-| `enterFrom` | "" | `string` | Classes to add to the transitioning element before the enter phase starts |
-| `enterTo` | "" | `string` | Classes to add to the transitioning element immediately after the enter phase starts |
-| `entered` | "" | `string` | Classes to add to the transitioning element once the transition is done. These classes will persist after that until the `leave` phase |
-| `leave` | "" | `string` | Classes to add to the transitioning element during the entire leave phase |
-| `leaveFrom` | "" | `string` | Classes to add to the transitioning element before the leave phase starts |
-| `leaveTo` | "" | `string` | Classes to add to the transitioning element immediately after the leave phase starts |
+| Prop        | Default | Type      | Description                                                                                                                            |
+| ----------- | ------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `show`      | --      | `boolean` | Whether the children should be shown or hidden                                                                                         |
+| `as`        | `div`   | `string`  | The element the `Transition` should render as                                                                                          |
+| `static`    | `false` | `boolean` | Whether the element should ignore the internally managed open/closed state                                                             |
+| `unmount`   | `true`  | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state                                        |
+| `enter`     | ""      | `string`  | Classes to add to the transitioning element during the entire enter phase                                                              |
+| `enterFrom` | ""      | `string`  | Classes to add to the transitioning element before the enter phase starts                                                              |
+| `enterTo`   | ""      | `string`  | Classes to add to the transitioning element immediately after the enter phase starts                                                   |
+| `entered`   | ""      | `string`  | Classes to add to the transitioning element once the transition is done. These classes will persist after that until the `leave` phase |
+| `leave`     | ""      | `string`  | Classes to add to the transitioning element during the entire leave phase                                                              |
+| `leaveFrom` | ""      | `string`  | Classes to add to the transitioning element before the leave phase starts                                                              |
+| `leaveTo`   | ""      | `string`  | Classes to add to the transitioning element immediately after the leave phase starts                                                   |
 
 This component also dispatches the following custom events, which are listened to using the Svelte `on:` directive:
 
-| Event name | Type of event `.detail` | Description |
-| --------- | ---- | ----------- |
-| `beforeEnter` | null | Dispatched before we start the enter transition |
-| `afterEnter` | null | Dispatched after we finish the enter transition |
-| `beforeLeave` | null | Dispatched before we start the leave transition |
-| `afterLeave` | null | Dispatched after we finish the leave transition |
+| Event name    | Type of event `.detail` | Description                                     |
+| ------------- | ----------------------- | ----------------------------------------------- |
+| `beforeEnter` | null                    | Dispatched before we start the enter transition |
+| `afterEnter`  | null                    | Dispatched after we finish the enter transition |
+| `beforeLeave` | null                    | Dispatched before we start the leave transition |
+| `afterLeave`  | null                    | Dispatched after we finish the leave transition |
 
 ### TransitionChild
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `string` | The element the `Transition` should render as |
-| `static` | `false`   | `boolean` | Whether the element should ignore the internally managed open/closed state |
-| `unmount` | `true`   | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
-| `enter` | "" | `string` | Classes to add to the transitioning element during the entire enter phase |
-| `enterFrom` | "" | `string` | Classes to add to the transitioning element before the enter phase starts |
-| `enterTo` | "" | `string` | Classes to add to the transitioning element immediately after the enter phase starts |
-| `entered` | "" | `string` | Classes to add to the transitioning element once the transition is done. These classes will persist after that until the `leave` phase |
-| `leave` | "" | `string` | Classes to add to the transitioning element during the entire leave phase |
-| `leaveFrom` | "" | `string` | Classes to add to the transitioning element before the leave phase starts |
-| `leaveTo` | "" | `string` | Classes to add to the transitioning element immediately after the leave phase starts |
+| Prop        | Default | Type      | Description                                                                                                                            |
+| ----------- | ------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`        | `div`   | `string`  | The element the `Transition` should render as                                                                                          |
+| `static`    | `false` | `boolean` | Whether the element should ignore the internally managed open/closed state                                                             |
+| `unmount`   | `true`  | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state                                        |
+| `enter`     | ""      | `string`  | Classes to add to the transitioning element during the entire enter phase                                                              |
+| `enterFrom` | ""      | `string`  | Classes to add to the transitioning element before the enter phase starts                                                              |
+| `enterTo`   | ""      | `string`  | Classes to add to the transitioning element immediately after the enter phase starts                                                   |
+| `entered`   | ""      | `string`  | Classes to add to the transitioning element once the transition is done. These classes will persist after that until the `leave` phase |
+| `leave`     | ""      | `string`  | Classes to add to the transitioning element during the entire leave phase                                                              |
+| `leaveFrom` | ""      | `string`  | Classes to add to the transitioning element before the leave phase starts                                                              |
+| `leaveTo`   | ""      | `string`  | Classes to add to the transitioning element immediately after the leave phase starts                                                   |
 
 This component also dispatches the following custom events, which are listened to using the Svelte `on:` directive:
 
-| Event name | Type of event `.detail` | Description |
-| --------- | ---- | ----------- |
-| `beforeEnter` | null | Dispatched before we start the enter transition |
-| `afterEnter` | null | Dispatched after we finish the enter transition |
-| `beforeLeave` | null | Dispatched before we start the leave transition |
-| `afterLeave` | null | Dispatched after we finish the leave transition |
+| Event name    | Type of event `.detail` | Description                                     |
+| ------------- | ----------------------- | ----------------------------------------------- |
+| `beforeEnter` | null                    | Dispatched before we start the enter transition |
+| `afterEnter`  | null                    | Dispatched after we finish the enter transition |
+| `beforeLeave` | null                    | Dispatched before we start the leave transition |
+| `afterLeave`  | null                    | Dispatched after we finish the leave transition |

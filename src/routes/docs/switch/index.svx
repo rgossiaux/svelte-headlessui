@@ -11,7 +11,11 @@ Toggling the switch fires the `change` event with a negated version of the `chec
   let enabled = false;
 </script>
 
-<Switch checked={enabled} on:change={(e) => enabled = e.detail} class={enabled ? "switch switch-enabled" : "switch switch-disabled"}>
+<Switch
+  checked={enabled}
+  on:change={(e) => (enabled = e.detail)}
+  class={enabled ? "switch switch-enabled" : "switch switch-disabled"}
+>
   <span class="sr-only">Enable notifications</span>
   <span class="toggle" class:toggle-on={enabled} class:toggle-off={!enabled} />
 </Switch>
@@ -33,7 +37,7 @@ Toggling the switch fires the `change` event with a negated version of the `chec
 
   :global(.switch-disabled) {
     /* Gray */
-    background-color: rgb(229 231 235);	
+    background-color: rgb(229 231 235);
   }
 
   .sr-only {
@@ -80,7 +84,11 @@ This example demonstrates how to use the `SwitchGroup`, `Switch`, and `SwitchLab
 
 ```svelte
 <script>
-  import { Switch, SwitchLabel, SwitchGroup } from "@rgossiaux/svelte-headlessui";
+  import {
+    Switch,
+    SwitchLabel,
+    SwitchGroup,
+  } from "@rgossiaux/svelte-headlessui";
 
   let enabled = false;
 </script>
@@ -88,9 +96,17 @@ This example demonstrates how to use the `SwitchGroup`, `Switch`, and `SwitchLab
 <SwitchGroup>
   <div class="switch-container">
     <SwitchLabel class="switch-label">Enable notifications</SwitchLabel>
-    <Switch checked={enabled} on:change={(e) => enabled = e.detail} class={enabled ? "switch switch-enabled" : "switch switch-disabled"}>
+    <Switch
+      checked={enabled}
+      on:change={(e) => (enabled = e.detail)}
+      class={enabled ? "switch switch-enabled" : "switch switch-disabled"}
+    >
       <span class="sr-only">Enable notifications</span>
-      <span class="toggle" class:toggle-on={enabled} class:toggle-off={!enabled} />
+      <span
+        class="toggle"
+        class:toggle-on={enabled}
+        class:toggle-off={!enabled}
+      />
     </Switch>
   </div>
 </SwitchGroup>
@@ -112,11 +128,12 @@ This example demonstrates how to use the `SwitchGroup`, `Switch`, and `SwitchLab
     border-radius: 9999px;
     height: 1.5rem;
     width: 2.75rem;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-property: color, background-color, border-color,
+      text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
-  
+
   :global(.switch:focus) {
     outline: 2px solid transparent;
     outline-offset: 2px;
@@ -130,7 +147,7 @@ This example demonstrates how to use the `SwitchGroup`, `Switch`, and `SwitchLab
 
   :global(.switch-disabled) {
     /* Gray */
-    background-color: rgb(229 231 235);	
+    background-color: rgb(229 231 235);
   }
 
   .sr-only {
@@ -166,17 +183,20 @@ This example demonstrates how to use the `SwitchGroup`, `Switch`, and `SwitchLab
 
 By default, clicking a `SwitchLabel` will toggle the switch, just like labels in native HTML checkboxes do. If you'd like to make the label non-clickable (which you might if it doesn't make sense for your design), you can add a `passive` prop to the `SwitchLabel` component:
 
-
 ```svelte
 <script>
-  import { Switch, SwitchLabel, SwitchGroup } from "@rgossiaux/svelte-headlessui";
+  import {
+    Switch,
+    SwitchLabel,
+    SwitchGroup,
+  } from "@rgossiaux/svelte-headlessui";
 
   let enabled = false;
 </script>
 
 <SwitchGroup>
   <SwitchLabel passive>Enable notifications</SwitchLabel>
-  <Switch checked={enabled} on:change={(e) => enabled = e.detail}>
+  <Switch checked={enabled} on:change={(e) => (enabled = e.detail)}>
     <!-- ... -->
   </Switch>
 </SwitchGroup>
@@ -188,15 +208,20 @@ Because switches are always rendered to the DOM (rather than being mounted/unmou
 
 ```svelte
 <script>
-  import { Switch, SwitchLabel, SwitchGroup } from "@rgossiaux/svelte-headlessui";
+  import {
+    Switch,
+    SwitchLabel,
+    SwitchGroup,
+  } from "@rgossiaux/svelte-headlessui";
 
   let enabled = false;
 </script>
 
-<Switch checked={enabled} on:change={(e) => enabled = e.detail}>
+<Switch checked={enabled} on:change={(e) => (enabled = e.detail)}>
   <span class="toggle" class:enabled>
     <!-- ... -->
-</Switch>
+  </span></Switch
+>
 
 <style>
   .toggle {
@@ -225,8 +250,8 @@ Clicking a `Switch` or a `SwitchLabel` toggles the switch on and off.
 
 When the `horizontal` prop is set, the `<ArrowUp>` and `<ArrowDown>` below become `<ArrowLeft>` and `<ArrowRight>`:
 
-| Command | Description |
-| ------- | ----------- |
+| Command                              | Description        |
+| ------------------------------------ | ------------------ |
 | `<Space>` when a `Switch` is focused | Toggles the switch |
 
 ### Other
@@ -241,45 +266,45 @@ For a full reference on all accessibility features implemented in `Switch`, see 
 
 The main switch component.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `button`   | `string` | The element the `Switch` should render as |
-| `checked` | `false`   | `boolean` | Whether the switch is checked |
+| Prop      | Default  | Type      | Description                               |
+| --------- | -------- | --------- | ----------------------------------------- |
+| `as`      | `button` | `string`  | The element the `Switch` should render as |
+| `checked` | `false`  | `boolean` | Whether the switch is checked             |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `checked`    | `boolean` | Whether the switch is checked |
+| Slot prop | Type      | Description                   |
+| --------- | --------- | ----------------------------- |
+| `checked` | `boolean` | Whether the switch is checked |
 
 This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
 
-| Event name | Type of event `.detail` | Description |
-| --------- | ---- | ----------- |
-| `change`    | `T` | Dispatched when a `Switch` is toggled; the event `detail` contains the new value of the switch |
+| Event name | Type of event `.detail` | Description                                                                                    |
+| ---------- | ----------------------- | ---------------------------------------------------------------------------------------------- |
+| `change`   | `T`                     | Dispatched when a `Switch` is toggled; the event `detail` contains the new value of the switch |
 
 ### SwitchLabel
 
 A label that can be used for more control over the text your switch will announce to screenreaders. Renders an element that is linked to the `Switch` via the `aria-labelledby` attribute and an autogenerated id.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `label`   | `string` | The element the `SwitchLabel` should render as |
+| Prop | Default | Type     | Description                                    |
+| ---- | ------- | -------- | ---------------------------------------------- |
+| `as` | `label` | `string` | The element the `SwitchLabel` should render as |
 
 ### SwitchDescription
 
 This is the description for your switch. When this is used, it will set the `aria-describedby` on the switch.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `p` | `string` | The element the `SwitchDescription` should render as |
+| Prop | Default | Type     | Description                                          |
+| ---- | ------- | -------- | ---------------------------------------------------- |
+| `as` | `p`     | `string` | The element the `SwitchDescription` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                       |
+| --------- | --------- | --------------------------------- |
 | `open`    | `boolean` | Whether or not the switch is open |
 
 ### SwitchGroup
 
 Used to wrap a `Switch` together with a `SwitchLabel` and/or `SwitchDescription`
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
+| Prop | Default | Type     | Description                                    |
+| ---- | ------- | -------- | ---------------------------------------------- |
 | `as` | `div`   | `string` | The element the `SwitchGroup` should render as |

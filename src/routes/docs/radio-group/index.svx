@@ -4,11 +4,16 @@ Radio Groups are built using a combination of the `RadioGroup`, `RadioGroupOptio
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption, RadioGroupDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
-<RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+<RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
   <RadioGroupLabel>Plan</RadioGroupLabel>
   <RadioGroupOption value="startup" let:checked>
     <span class:checked>Startup</span>
@@ -38,11 +43,15 @@ To style the selected `RadioGroupOption`, you can use the `checked` slot prop th
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
-<RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+<RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
   <RadioGroupLabel>Plan</RadioGroupLabel>
   <!-- Use the `checked` slot prop to conditionally style the checked item -->
   <RadioGroupOption value="startup" let:checked>
@@ -64,11 +73,15 @@ To style the selected `RadioGroupOption`, you can use the `checked` slot prop th
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
-<RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+<RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
   <RadioGroupLabel>Plan</RadioGroupLabel>
   <!-- Use both `active` and `checked` slot props to differentiate between the active and checked states -->
   <RadioGroupOption value="startup" let:active let:checked>
@@ -127,11 +140,11 @@ Clicking a `RadioGroupOption` will select it.
 
 ### Keyboard interaction
 
-| Command | Description |
-| ------- | ----------- |
-| `<ArrowDown>` / `<ArrowRight>` when `RadioGroup` is focused | Focuses and checks the next `RadioGroupOption` |
-| `<ArrowUp>` / `<ArrowLeft>` when `RadioGroup` is focused | Focuses and checks the previous `RadioGroupOption` |
-| `<Space>` when `RadioGroup` is focused | Checks the current `RadioGroupOption` if it is not already checked |
+| Command                                                     | Description                                                        |
+| ----------------------------------------------------------- | ------------------------------------------------------------------ |
+| `<ArrowDown>` / `<ArrowRight>` when `RadioGroup` is focused | Focuses and checks the next `RadioGroupOption`                     |
+| `<ArrowUp>` / `<ArrowLeft>` when `RadioGroup` is focused    | Focuses and checks the previous `RadioGroupOption`                 |
+| `<Space>` when `RadioGroup` is focused                      | Checks the current `RadioGroupOption` if it is not already checked |
 
 ### Other
 
@@ -145,62 +158,62 @@ For a full reference on all accessibility features implemented in `RadioGroup`, 
 
 The main Radio Group component.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `string` | The element the `RadioGroup` should render as |
-| `disabled` | `false`   | `boolean` | Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled |
-| `value` | --   | `T | undefined` | The currently selected value in the `RadioGroup` |
+| Prop       | Default | Type      | Description                                                              |
+| ---------- | ------- | --------- | ------------------------------------------------------------------------ | ------------------------------------------------ |
+| `as`       | `div`   | `string`  | The element the `RadioGroup` should render as                            |
+| `disabled` | `false` | `boolean` | Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled |
+| `value`    | --      | `T        | undefined`                                                               | The currently selected value in the `RadioGroup` |
 
 This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
 
-| Event name | Type of event `.detail` | Description |
-| --------- | ---- | ----------- |
-| `change`    | `T` | Dispatched when a `RadioGroupOption` is selected; the event `detail` contains the `value` of the selected option |
+| Event name | Type of event `.detail` | Description                                                                                                      |
+| ---------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `change`   | `T`                     | Dispatched when a `RadioGroupOption` is selected; the event `detail` contains the `value` of the selected option |
 
 ### RadioGroupOption
 
 The wrapper component for each selectable option.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `string` | The element the `RadioGroupOption` should render as |
-| `disabled` | `false`   | `boolean` | Whether the `RadioGroupOption` is disabled |
-| `value` | --   | `T | undefined` | The value of the `RadioGroupOption`; the type should match the type of the `value` prop in the `RadioGroup` |
+| Prop       | Default | Type      | Description                                         |
+| ---------- | ------- | --------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `as`       | `div`   | `string`  | The element the `RadioGroupOption` should render as |
+| `disabled` | `false` | `boolean` | Whether the `RadioGroupOption` is disabled          |
+| `value`    | --      | `T        | undefined`                                          | The value of the `RadioGroupOption`; the type should match the type of the `value` prop in the `RadioGroup` |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `active`    | `boolean` | Whether the option is active (using the mouse or keyboard) |
-| `checked`    | `boolean` | Whether the option is the checked option |
-| `disabled`    | `boolean` | Whether the option is disabled |
+| Slot prop  | Type      | Description                                                |
+| ---------- | --------- | ---------------------------------------------------------- |
+| `active`   | `boolean` | Whether the option is active (using the mouse or keyboard) |
+| `checked`  | `boolean` | Whether the option is the checked option                   |
+| `disabled` | `boolean` | Whether the option is disabled                             |
 
 ### RadioGroupLabel
 
 Renders an element that is linked to its nearest `RadioGroup` or `RadioGroupOption` ancestor component via the `aria-labelledby` attribute and an autogenerated id.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `label`   | `string` | The element the `RadioGroupLabel` should render as |
+| Prop | Default | Type     | Description                                        |
+| ---- | ------- | -------- | -------------------------------------------------- |
+| `as` | `label` | `string` | The element the `RadioGroupLabel` should render as |
 
 If the `RadioGroupLabel` is labeling a `RadioGroupOption` (instead of the `RadioGroup`), it will also have these slot props available:
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `active`    | `boolean` | Whether the corresponding option is active (using the mouse or keyboard) |
-| `checked`    | `boolean` | Whether the corresponding option is the checked option |
-| `disabled`    | `boolean` | Whether the corresponding option is disabled |
+| Slot prop  | Type      | Description                                                              |
+| ---------- | --------- | ------------------------------------------------------------------------ |
+| `active`   | `boolean` | Whether the corresponding option is active (using the mouse or keyboard) |
+| `checked`  | `boolean` | Whether the corresponding option is the checked option                   |
+| `disabled` | `boolean` | Whether the corresponding option is disabled                             |
 
 ### RadioGroupDescription
 
 Renders an element that is linked to its nearest `RadioGroup` or `RadioGroupOption` ancestor component via the `aria-describedby` attribute and an autogenerated id.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `a`   | `string` | The element the `RadioGroupDescription` should render as |
+| Prop | Default | Type     | Description                                              |
+| ---- | ------- | -------- | -------------------------------------------------------- |
+| `as` | `a`     | `string` | The element the `RadioGroupDescription` should render as |
 
 If the `RadioGroupDescription` is describing a `RadioGroupOption` (instead of the `RadioGroup`), it will also have these slot props available:
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `active`    | `boolean` | Whether the corresponding option is active (using the mouse or keyboard) |
-| `checked`    | `boolean` | Whether the corresponding option is the checked option |
-| `disabled`    | `boolean` | Whether the corresponding option is disabled |
+| Slot prop  | Type      | Description                                                              |
+| ---------- | --------- | ------------------------------------------------------------------------ |
+| `active`   | `boolean` | Whether the corresponding option is active (using the mouse or keyboard) |
+| `checked`  | `boolean` | Whether the corresponding option is the checked option                   |
+| `disabled` | `boolean` | Whether the corresponding option is disabled                             |

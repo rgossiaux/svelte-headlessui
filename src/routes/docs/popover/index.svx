@@ -6,7 +6,11 @@ Clicking the `PopoverButton` will automatically open/close the `PopoverPanel`. W
 
 ```svelte
 <script>
-  import { Popover, PopoverButton, PopoverPanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Popover,
+    PopoverButton,
+    PopoverPanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Popover style="position: relative;">
@@ -40,7 +44,11 @@ For more sophisticated approaches, you might use a library like Popper JS. We re
 
 ```svelte
 <script>
-  import { Popover, PopoverButton, PopoverPanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Popover,
+    PopoverButton,
+    PopoverPanel,
+  } from "@rgossiaux/svelte-headlessui";
   import { createPopperActions } from "svelte-popperjs";
 
   const [popperRef, popperContent] = createPopperActions();
@@ -67,7 +75,6 @@ For more sophisticated approaches, you might use a library like Popper JS. We re
 </Popover>
 ```
 
-
 ## Styling
 
 See TODO for some general notes on styling the components in this library.
@@ -80,7 +87,11 @@ If you'd rather handle this yourself (perhaps because you need to add an extra w
 
 ```svelte
 <script>
-  import { Popover, PopoverButton, PopoverPanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Popover,
+    PopoverButton,
+    PopoverPanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Popover let:open>
@@ -104,7 +115,11 @@ To close a popover manually when clicking a child of its panel, render that chil
 
 ```svelte
 <script>
-  import { Popover, PopoverButton, PopoverPanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Popover,
+    PopoverButton,
+    PopoverPanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Popover>
@@ -120,16 +135,22 @@ Alternatively, `Popover` and `PopoverPanel` expose a `close()` slot prop which y
 
 ```svelte
 <script>
-  import { Popover, PopoverButton, PopoverPanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Popover,
+    PopoverButton,
+    PopoverPanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Popover>
   <PopoverButton>Solutions</PopoverButton>
   <PopoverPanel let:close>
-    <button on:click={async () => {
-      await fetch("/accept-terms", { method: "POST" });
-      close();
-    }}>
+    <button
+      on:click={async () => {
+        await fetch("/accept-terms", { method: "POST" });
+        close();
+      }}
+    >
       Read and accept
     </button>
     <!-- ... -->
@@ -145,12 +166,19 @@ If you'd like to style a backdrop over your application UI whenever you open a `
 
 ```svelte
 <script>
-  import { Popover, PopoverButton, PopoverOverlay, PopoverPanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Popover,
+    PopoverButton,
+    PopoverOverlay,
+    PopoverPanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Popover let:open>
   <PopoverButton>Solutions</PopoverButton>
-  <PopoverOverlay class={open ? "popover-overlay-open" : "popover-overlay-closed"} />
+  <PopoverOverlay
+    class={open ? "popover-overlay-open" : "popover-overlay-closed"}
+  />
   <PopoverPanel>
     <!-- ... -->
   </PopoverPanel>
@@ -188,7 +216,12 @@ To use the `Transition` component, all you need to do is wrap the `PopoverPanel`
 
 ```svelte
 <script>
-  import { Popover, PopoverButton, PopoverPanel, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Popover,
+    PopoverButton,
+    PopoverPanel,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Popover>
@@ -215,7 +248,11 @@ If you wish to animate your popovers using another technique (like Svelte's buil
 
 ```svelte
 <script>
-  import { Popover, PopoverButton, PopoverPanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Popover,
+    PopoverButton,
+    PopoverPanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Popover let:open>
@@ -238,7 +275,12 @@ When rendering several related `Popover`s, for example in a site's header naviga
 
 ```svelte
 <script>
-  import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Popover,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <PopoverGroup>
@@ -262,11 +304,26 @@ When rendering several related `Popover`s, for example in a site's header naviga
 
 Here's how `Popover` compares to other components from Headless UI:
 
-* <a href="menu">Menu</a>: `Popover`s are more general-purpose than `Menu`s. `Menu`s only support very restricted content and have specific accessibility semantics. Arrow keys also navigate a `Menu`'s items, unlike a `Popover`. `Menu`s are best for UI elements that resemble things like the menus you'd find in the title bar of most operating systems. If your floating panel has images or more markup than simple links, use a Popover.
+- <a href="menu">Menu</a>: `Popover`s are more general-purpose than `Menu`s.
+  `Menu`s only support very restricted content and have specific accessibility
+  semantics. Arrow keys also navigate a `Menu`'s items, unlike a `Popover`.
+  `Menu`s are best for UI elements that resemble things like the menus you'd
+  find in the title bar of most operating systems. If your floating panel has
+  images or more markup than simple links, use a Popover.
 
-* <a href="disclosure">Disclosure</a>: `Disclosure`s are useful for things that typically reflow the document, like an accordion. `Popover`s also have extra behavior on top of `Disclosure`s: they can render overlays, and are closed when the user either clicks the overlay (by clicking outside of the `Popover`'s content) or presses the Escape key. If your UI element needs this behavior, use a `Popover` instead of a `Disclosure`.
+- <a href="disclosure">Disclosure</a>: `Disclosure`s are useful for things that
+  typically reflow the document, like an accordion. `Popover`s also have extra
+  behavior on top of `Disclosure`s: they can render overlays, and are closed
+  when the user either clicks the overlay (by clicking outside of the
+  `Popover`'s content) or presses the Escape key. If your UI element needs this
+  behavior, use a `Popover` instead of a `Disclosure`.
 
-* <a href="dialog">Dialog</a>: `Dialog`s are meant to grab the user's full attention. They typically render a floating panel in the center of the screen, and use a backdrop to dim the rest of the application's contents. They also capture focus and prevent tabbing away from the `Dialog`'s contents until the `Dialog` is dismissed. Popovers are more contextual, and are usually positioned near the element that triggered them.
+- <a href="dialog">Dialog</a>: `Dialog`s are meant to grab the user's full
+  attention. They typically render a floating panel in the center of the screen,
+  and use a backdrop to dim the rest of the application's contents. They also
+  capture focus and prevent tabbing away from the `Dialog`'s contents until the
+  `Dialog` is dismissed. Popovers are more contextual, and are usually
+  positioned near the element that triggered them.
 
 ## Accessibility notes
 
@@ -280,12 +337,12 @@ Clicking a `PopoverButton` toggles a panel open and closed. Clicking anywhere ou
 
 ### Keyboard interaction
 
-| Command | Description |
-| ------- | ----------- |
-| `<Enter>` / `<Space>` when a `PopoverButton` is focused | Toggles panel |
-| `<Esc>` | Closes any open popovers |
-| `<Tab>` | Cycles through an open panel's contents. Tabbing out of an open panel will close that panel, and tabbing from one open panel to a sibling popover's button (within a `PopoverGroup`) closes the first panel |
-| `<Shift>` + `<Tab>` | Cycles backwards through an open panel's contents |
+| Command                                                 | Description                                                                                                                                                                                                 |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<Enter>` / `<Space>` when a `PopoverButton` is focused | Toggles panel                                                                                                                                                                                               |
+| `<Esc>`                                                 | Closes any open popovers                                                                                                                                                                                    |
+| `<Tab>`                                                 | Cycles through an open panel's contents. Tabbing out of an open panel will close that panel, and tabbing from one open panel to a sibling popover's button (within a `PopoverGroup`) closes the first panel |
+| `<Shift>` + `<Tab>`                                     | Cycles backwards through an open panel's contents                                                                                                                                                           |
 
 ### Other
 
@@ -299,65 +356,63 @@ All relevant ARIA attributes are automatically managed.
 
 The main popover component.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
+| Prop | Default | Type     | Description                                |
+| ---- | ------- | -------- | ------------------------------------------ |
 | `as` | `div`   | `string` | The element the `Popover` should render as |
 
-
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `open`    | `boolean` | Whether the popover is open |
-| `close`    | `(el?: HTMLElement) => void` | Closes the popover and focuses `el`, if passed, or the `PopoverButton` if not |
+| Slot prop | Type                         | Description                                                                   |
+| --------- | ---------------------------- | ----------------------------------------------------------------------------- |
+| `open`    | `boolean`                    | Whether the popover is open                                                   |
+| `close`   | `(el?: HTMLElement) => void` | Closes the popover and focuses `el`, if passed, or the `PopoverButton` if not |
 
 ### PopoverOverlay
 
 This can be used to create an overlay for your popover. Clicking on the overlay will close the popover.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
+| Prop | Default | Type     | Description                                       |
+| ---- | ------- | -------- | ------------------------------------------------- |
 | `as` | `div`   | `string` | The element the `PopoverOverlay` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                        |
+| --------- | --------- | ---------------------------------- |
 | `open`    | `boolean` | Whether or not the popover is open |
 
 ### PopoverButton
 
-This is the trigger button to toggle a popover. 
+This is the trigger button to toggle a popover.
 
 You can also use this `PopoverButton` component inside a `PopoverPanel`. If you do, it will behave as a close button and have the appropriate `aria-*` attributes.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `button`   | `string` | The element the `PopoverButton` should render as |
+| Prop | Default  | Type     | Description                                      |
+| ---- | -------- | -------- | ------------------------------------------------ |
+| `as` | `button` | `string` | The element the `PopoverButton` should render as |
 
-
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                        |
+| --------- | --------- | ---------------------------------- |
 | `open`    | `boolean` | Whether or not the popover is open |
 
 ### PopoverPanel
 
 This component contains the contents of your popover.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `string` | The element the `PopoverPanel` should render as |
-| `focus` | `false`   | `boolean` | Whether the `PopoverPanel` should trap focus. If `true`, focus will move inside the `PopoverPanel` when it is opened, and if focus leaves the `PopoverPanel` it will close. |
-| `static` | `false`   | `boolean` | Whether the element should ignore the internally managed open/closed state |
-| `unmount` | `true`   | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
+| Prop      | Default | Type      | Description                                                                                                                                                                 |
+| --------- | ------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`      | `div`   | `string`  | The element the `PopoverPanel` should render as                                                                                                                             |
+| `focus`   | `false` | `boolean` | Whether the `PopoverPanel` should trap focus. If `true`, focus will move inside the `PopoverPanel` when it is opened, and if focus leaves the `PopoverPanel` it will close. |
+| `static`  | `false` | `boolean` | Whether the element should ignore the internally managed open/closed state                                                                                                  |
+| `unmount` | `true`  | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state                                                                             |
 
 Note that `static` and `unmount` cannot be used together.
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `open`    | `boolean` | Whether or not the popover is open |
-| `close`    | `(el?: HTMLElement) => void` | Closes the popover and focuses `el`, if passed, or the `PopoverButton` if not |
+| Slot prop | Type                         | Description                                                                   |
+| --------- | ---------------------------- | ----------------------------------------------------------------------------- |
+| `open`    | `boolean`                    | Whether or not the popover is open                                            |
+| `close`   | `(el?: HTMLElement) => void` | Closes the popover and focuses `el`, if passed, or the `PopoverButton` if not |
 
 ### PopoverGroup
 
 This component links related `Popover`s. Tabbing out of one `PopoverPanel` will focus the next popover's `PopverButton`, and tabbing outside of the `PopoverGroup` completely will close all popovers inside the group.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
+| Prop | Default | Type     | Description                                     |
+| ---- | ------- | -------- | ----------------------------------------------- |
 | `as` | `div`   | `string` | The element the `PopoverGroup` should render as |

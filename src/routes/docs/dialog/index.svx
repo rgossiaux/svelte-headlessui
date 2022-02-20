@@ -6,11 +6,16 @@ When the dialog's `open` prop is `true`, the contents of the dialog will render.
 
 ```svelte
 <script>
-  import { Dialog, DialogOverlay, DialogTitle, DialogDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    DialogDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let isOpen = true;
 </script>
 
-<Dialog open={isOpen} on:close={() => isOpen = false}>
+<Dialog open={isOpen} on:close={() => (isOpen = false)}>
   <DialogOverlay />
 
   <DialogTitle>Deactivate account</DialogTitle>
@@ -19,12 +24,12 @@ When the dialog's `open` prop is `true`, the contents of the dialog will render.
   </DialogDescription>
 
   <p>
-    Are you sure you want to deactivate your account? All of your data will
-    be permanently removed. This action cannot be undone.
+    Are you sure you want to deactivate your account? All of your data will be
+    permanently removed. This action cannot be undone.
   </p>
 
-  <button on:click={() => isOpen = false}>Deactivate</button>
-  <button on:click={() => isOpen = false}>Cancel</button>
+  <button on:click={() => (isOpen = false)}>Deactivate</button>
+  <button on:click={() => (isOpen = false)}>Cancel</button>
 </Dialog>
 ```
 
@@ -36,12 +41,17 @@ The `close` event is fired when an open dialog is dismissed, which happens when 
 
 ```svelte
 <script>
-  import { Dialog, DialogOverlay, DialogTitle, DialogDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    DialogDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let isOpen = true;
 </script>
 
 <!-- Pass `isOpen` to the `open` prop and use the `on:close` handler to set it back to false when the user clicks outside of the dialog or presses the escape key. -->
-<Dialog open={isOpen} on:close={() => isOpen = false}>
+<Dialog open={isOpen} on:close={() => (isOpen = false)}>
   <DialogOverlay />
 
   <DialogTitle>Deactivate account</DialogTitle>
@@ -50,13 +60,13 @@ The `close` event is fired when an open dialog is dismissed, which happens when 
   </DialogDescription>
 
   <p>
-    Are you sure you want to deactivate your account? All of your data will
-    be permanently removed. This action cannot be undone.
+    Are you sure you want to deactivate your account? All of your data will be
+    permanently removed. This action cannot be undone.
   </p>
 
   <!-- You can render additional buttons to dismiss your dialog by setting `isOpen` to `false`. -->
-  <button on:click={() => isOpen = false}>Deactivate</button>
-  <button on:click={() => isOpen = false}>Cancel</button>
+  <button on:click={() => (isOpen = false)}>Deactivate</button>
+  <button on:click={() => (isOpen = false)}>Cancel</button>
 </Dialog>
 ```
 
@@ -70,7 +80,12 @@ If you'd like something other than the first focusable element to receive initia
 
 ```svelte
 <script>
-  import { Dialog, DialogOverlay, DialogTitle, DialogDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    DialogDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let isOpen = true;
   let completeButton = null;
 
@@ -79,17 +94,21 @@ If you'd like something other than the first focusable element to receive initia
   }
 </script>
 
-<Dialog open={isOpen} on:close={() => isOpen = false} initialFocus={completeButton}>
+<Dialog
+  open={isOpen}
+  on:close={() => (isOpen = false)}
+  initialFocus={completeButton}
+>
   <DialogOverlay />
 
   <DialogTitle>Complete your order</DialogTitle>
 
-  <p>
-    Your order is all ready!
-  </p>
+  <p>Your order is all ready!</p>
 
-  <button on:click={() => isOpen = false}>Cancel</button>
-  <button on:click={completeOrder} bind:this={completeButton}>Complete order</button>
+  <button on:click={() => (isOpen = false)}>Cancel</button>
+  <button on:click={completeOrder} bind:this={completeButton}
+    >Complete order</button
+  >
 </Dialog>
 ```
 
@@ -105,12 +124,19 @@ The overlay component accepts normal styling props like `style` and `class`, so 
 
 ```svelte
 <script>
-  import { Dialog, DialogOverlay, DialogTitle, DialogDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    DialogDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let isOpen = true;
 </script>
 
-<Dialog open={isOpen} on:close={() => isOpen = false}>
-  <DialogOverlay style={"position: fixed; top: 0; left: 0; background-color: rgb(0 0 0); opacity: 0.3;"}/>
+<Dialog open={isOpen} on:close={() => (isOpen = false)}>
+  <DialogOverlay
+    style={"position: fixed; top: 0; left: 0; background-color: rgb(0 0 0); opacity: 0.3;"}
+  />
   <!-- ... -->
 </Dialog>
 ```
@@ -125,11 +151,16 @@ For accessibility reasons, you should use the `DialogTitle` and `DialogDescripti
 
 ```svelte
 <script>
-  import { Dialog, DialogOverlay, DialogTitle, DialogDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    DialogDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let isOpen = true;
 </script>
 
-<Dialog open={isOpen} on:close={() => isOpen = false}>
+<Dialog open={isOpen} on:close={() => (isOpen = false)}>
   <DialogOverlay />
   <!-- Use the Title and Description components when appropriate to improve the accessibility of your custom dialogs. -->
   <DialogTitle>Deactivate account</DialogTitle>
@@ -159,7 +190,12 @@ To use the `Transition` component, all you need to do is wrap the `Dialog` in a 
 
 ```svelte
 <script>
-  import { Dialog, DialogOverlay, DialogTitle, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
   let isOpen = true;
 </script>
 
@@ -173,7 +209,7 @@ To use the `Transition` component, all you need to do is wrap the `Dialog` in a 
   leaveFrom="transform scale-100 opacity-100"
   leaveTo="transform scale-95 opacity-0"
 >
-  <Dialog on:close={() => isOpen = false}>
+  <Dialog on:close={() => (isOpen = false)}>
     <DialogOverlay />
     <DialogTitle>Deactivate account</DialogTitle>
 
@@ -186,14 +222,19 @@ To animate the dialog's overlay and contents separately, use `Transition` and `T
 
 ```svelte
 <script>
-  import { Dialog, DialogOverlay, DialogTitle, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
   let isOpen = true;
 </script>
 
 <!-- This example uses Tailwind's transition classes -->
 <!-- Use the `Transition` component at the root level -->
 <Transition show={isOpen}>
-  <Dialog on:close={() => isOpen = false}>
+  <Dialog on:close={() => (isOpen = false)}>
     <!-- Use one `TransitionChild` to apply one transition to the overlay... -->
     <TransitionChild
       enter="ease-out duration-300"
@@ -229,14 +270,19 @@ If you wish to animate your dialogs using another technique (like Svelte's built
 
 ```svelte
 <script>
-  import { Dialog, DialogOverlay, DialogTitle, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
   import { fade } from "svelte/transition";
   let isOpen = true;
 </script>
 
 {#if isOpen}
   <div transition:fade>
-    <Dialog open={isOpen} on:close={() => isOpen = false} static>
+    <Dialog open={isOpen} on:close={() => (isOpen = false)} static>
       <DialogOverlay />
       <DialogTitle>Deactivate account</DialogTitle>
 
@@ -262,10 +308,10 @@ No mouse interaction to open the `Dialog` is included out-of-the-box, though typ
 
 ### Keyboard interaction
 
-| Command | Description |
-| ------- | ----------- |
-| `<Esc>` | Closes any open dialogs |
-| `<Tab>` | Cycles through an open dialog's contents |
+| Command             | Description                                        |
+| ------------------- | -------------------------------------------------- |
+| `<Esc>`             | Closes any open dialogs                            |
+| `<Tab>`             | Cycles through an open dialog's contents           |
 | `<Shift>` + `<Tab>` | Cycles backwards through an open dialog's contents |
 
 ### Other
@@ -282,59 +328,58 @@ For a full reference on all accessibility features implemented in `Dialog`, see 
 
 The main dialog component.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `open` | -- | `boolean` | Whether the `Dialog` is open |
-| `initialFocus` | `null` | `HTMLElement | null` | The element that should receive focus when the `Dialog` is first opened |
-| `as` | `div`   | `string` | The element the `Dialog` should render as |
-| `static` | `false`   | `boolean` | Whether the element should ignore the internally managed open/closed state |
-| `unmount` | `true`   | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
+| Prop           | Default | Type         | Description                                                                                     |
+| -------------- | ------- | ------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `open`         | --      | `boolean`    | Whether the `Dialog` is open                                                                    |
+| `initialFocus` | `null`  | `HTMLElement | null`                                                                                           | The element that should receive focus when the `Dialog` is first opened |
+| `as`           | `div`   | `string`     | The element the `Dialog` should render as                                                       |
+| `static`       | `false` | `boolean`    | Whether the element should ignore the internally managed open/closed state                      |
+| `unmount`      | `true`  | `boolean`    | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
 
 Note that `static` and `unmount` cannot be used together.
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                       |
+| --------- | --------- | --------------------------------- |
 | `open`    | `boolean` | Whether or not the dialog is open |
 
 This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
 
-| Event name | Type of event `.detail` | Description |
-| --------- | ---- | ----------- |
-| `close`    | `null` | Emitted when the `Dialog` is dismissed (via the overlay or Escape key). Typically used to close the dialog by setting `open` to false. |
+| Event name | Type of event `.detail` | Description                                                                                                                            |
+| ---------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `close`    | `null`                  | Emitted when the `Dialog` is dismissed (via the overlay or Escape key). Typically used to close the dialog by setting `open` to false. |
 
 ### DialogOverlay
 
 This can be used to create an overlay for your dialog. Clicking on the overlay will close the dialog.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
+| Prop | Default | Type     | Description                                      |
+| ---- | ------- | -------- | ------------------------------------------------ |
 | `as` | `div`   | `string` | The element the `DialogOverlay` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                       |
+| --------- | --------- | --------------------------------- |
 | `open`    | `boolean` | Whether or not the dialog is open |
 
 ### DialogTitle
 
 This is the title for your dialog. When this is used, it will set the `aria-labelledby` on the dialog.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `h2`   | `string` | The element the `DialogTitle` should render as |
+| Prop | Default | Type     | Description                                    |
+| ---- | ------- | -------- | ---------------------------------------------- |
+| `as` | `h2`    | `string` | The element the `DialogTitle` should render as |
 
-
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                       |
+| --------- | --------- | --------------------------------- |
 | `open`    | `boolean` | Whether or not the dialog is open |
 
 ### DialogDescription
 
 This is the description for your dialog. When this is used, it will set the `aria-describedby` on the dialog.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `p`   | `string` | The element the `DialogDescription` should render as |
+| Prop | Default | Type     | Description                                          |
+| ---- | ------- | -------- | ---------------------------------------------------- |
+| `as` | `p`     | `string` | The element the `DialogDescription` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                       |
+| --------- | --------- | --------------------------------- |
 | `open`    | `boolean` | Whether or not the dialog is open |

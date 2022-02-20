@@ -6,7 +6,11 @@ Clicking the `DisclosureButton` will automatically open/close the `DisclosurePan
 
 ```svelte
 <script>
-  import { Disclosure, DisclosureButton, DisclosurePanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Disclosure>
@@ -28,7 +32,11 @@ See TODO for some general notes on styling the components in this library.
 
 ```svelte
 <script>
-  import { Disclosure, DisclosureButton, DisclosurePanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+  } from "@rgossiaux/svelte-headlessui";
   import { ChevronRightIcon } from "@rgossiaux/svelte-heroicons/solid";
 </script>
 
@@ -53,7 +61,11 @@ If you'd rather handle this yourself (perhaps because you need to add an extra w
 
 ```svelte
 <script>
-  import { Disclosure, DisclosureButton, DisclosurePanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Disclosure let:open>
@@ -63,7 +75,8 @@ If you'd rather handle this yourself (perhaps because you need to add an extra w
     <div>
       <!-- Using `static`, `DisclosurePanel` is always rendered and ignores the `open` state -->
       <DisclosurePanel static>
-        Yes! You can purchase a license that you can share with your entire team.
+        Yes! You can purchase a license that you can share with your entire
+        team.
       </DisclosurePanel>
     </div>
   {/if}
@@ -76,15 +89,17 @@ To close a disclosure manually when clicking a child of its panel, render that c
 
 ```svelte
 <script>
-  import { Disclosure, DisclosureButton, DisclosurePanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Disclosure>
   <DisclosureButton>Open mobile menu</DisclosureButton>
   <DisclosurePanel>
-    <DisclosureButton as="a" href="/home">
-        Home
-    </DisclosureButton>
+    <DisclosureButton as="a" href="/home">Home</DisclosureButton>
     <!-- ... -->
   </DisclosurePanel>
 </Disclosure>
@@ -96,16 +111,22 @@ Alternatively, `Disclosure` and `DisclosurePanel` expose a `close()` slot prop w
 
 ```svelte
 <script>
-  import { Disclosure, DisclosureButton, DisclosurePanel } from "@rgossiaux/svelte-headlessui";
+  import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Disclosure>
   <DisclosureButton>Solutions</DisclosureButton>
   <DisclosurePanel let:close>
-    <button on:click={async () => {
-      await fetch("/accept-terms", { method: "POST" });
-      close();
-    }}>
+    <button
+      on:click={async () => {
+        await fetch("/accept-terms", { method: "POST" });
+        close();
+      }}
+    >
       Read and accept
     </button>
     <!-- ... -->
@@ -125,7 +146,12 @@ To use the `Transition` component, all you need to do is wrap the `DisclosurePan
 
 ```svelte
 <script>
-  import { Disclosure, DisclosureButton, DisclosurePanel, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Disclosure>
@@ -150,7 +176,12 @@ The components in this library communicate with each other, so the Transition wi
 
 ```svelte
 <script>
-  import { Disclosure, DisclosureButton, DisclosurePanel, Transition } from "@rgossiaux/svelte-headlessui";
+  import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Disclosure let:open>
@@ -179,8 +210,12 @@ The last example above also provides a blueprint for using Svelte transitions:
 
 ```svelte
 <script>
-  import { Disclosure, DisclosureButton, DisclosurePanel } from "@rgossiaux/svelte-headlessui";
-  import { fade } from "svelte/transition"
+  import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+  } from "@rgossiaux/svelte-headlessui";
+  import { fade } from "svelte/transition";
 </script>
 
 <Disclosure let:open>
@@ -206,8 +241,8 @@ Clicking a `DisclosureButton` toggles the disclosure's panel open and closed.
 
 ### Keyboard interaction
 
-| Command | Description |
-| ------- | ----------- |
+| Command                                                    | Description   |
+| ---------------------------------------------------------- | ------------- |
 | `<Enter>` / `<Space>` when a `DisclosureButton` is focused | Toggles panel |
 
 ### Other
@@ -222,45 +257,43 @@ For a full reference on all accessibility features implemented in `Disclosure`, 
 
 The main disclosure component.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `string` | The element the `Disclosure` should render as |
-| `defaultOpen` | `false`   | `boolean` | Whether the `Disclosure` should be open by default |
+| Prop          | Default | Type      | Description                                        |
+| ------------- | ------- | --------- | -------------------------------------------------- |
+| `as`          | `div`   | `string`  | The element the `Disclosure` should render as      |
+| `defaultOpen` | `false` | `boolean` | Whether the `Disclosure` should be open by default |
 
-
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `open`    | `boolean` | Whether the disclosure is open |
-| `close`    | `(el?: HTMLElement) => void` | Closes the disclosure and focuses `el`, if passed, or the `DisclosureButton` if not |
+| Slot prop | Type                         | Description                                                                         |
+| --------- | ---------------------------- | ----------------------------------------------------------------------------------- |
+| `open`    | `boolean`                    | Whether the disclosure is open                                                      |
+| `close`   | `(el?: HTMLElement) => void` | Closes the disclosure and focuses `el`, if passed, or the `DisclosureButton` if not |
 
 ### DisclosureButton
 
-This is the trigger button to toggle a disclosure. 
+This is the trigger button to toggle a disclosure.
 
 You can also use this `DisclosureButton` component inside a `DisclosurePanel`. If you do, it will behave as a close button and have the appropriate `aria-*` attributes.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `button`   | `string` | The element the `DisclosureButton` should render as |
+| Prop | Default  | Type     | Description                                         |
+| ---- | -------- | -------- | --------------------------------------------------- |
+| `as` | `button` | `string` | The element the `DisclosureButton` should render as |
 
-
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop | Type      | Description                           |
+| --------- | --------- | ------------------------------------- |
 | `open`    | `boolean` | Whether or not the disclosure is open |
 
 ### DisclosurePanel
 
 This component contains the contents of your disclosure.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `string` | The element the `DisclosurePanel` should render as |
-| `static` | `false`   | `boolean` | Whether the element should ignore the internally managed open/closed state |
-| `unmount` | `true`   | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
+| Prop      | Default | Type      | Description                                                                                     |
+| --------- | ------- | --------- | ----------------------------------------------------------------------------------------------- |
+| `as`      | `div`   | `string`  | The element the `DisclosurePanel` should render as                                              |
+| `static`  | `false` | `boolean` | Whether the element should ignore the internally managed open/closed state                      |
+| `unmount` | `true`  | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
 
 Note that `static` and `unmount` cannot be used together.
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `open`    | `boolean` | Whether or not the disclosure is open |
-| `close`    | `(el?: HTMLElement) => void` | Closes the disclosure and focuses `el`, if passed, or the `DisclosureButton` if not |
+| Slot prop | Type                         | Description                                                                         |
+| --------- | ---------------------------- | ----------------------------------------------------------------------------------- |
+| `open`    | `boolean`                    | Whether or not the disclosure is open                                               |
+| `close`   | `(el?: HTMLElement) => void` | Closes the disclosure and focuses `el`, if passed, or the `DisclosureButton` if not |

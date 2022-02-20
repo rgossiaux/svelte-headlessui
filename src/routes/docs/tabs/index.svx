@@ -6,7 +6,13 @@ By default the first tab is selected, and clicking on any tab or selecting it wi
 
 ```svelte
 <script>
-  import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@rgossiaux/svelte-headlessui";
+  import {
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <TabGroup>
@@ -51,12 +57,12 @@ To style the active `Tab`, you can use the `selected` slot prop that it provides
   /* WARNING: This is just for demonstration. Using :global() in this way is a bad practice. See TODO for more. */
   :global(.tab-selected) {
     background-color: rgb(59 130 246);
-    color: rgb(255 255 255);  
+    color: rgb(255 255 255);
   }
 
   :global(.tab-unselected) {
     background-color: rgb(255 255 255);
-    color: rgb(0 0 0);  
+    color: rgb(0 0 0);
   }
 </style>
 ```
@@ -67,7 +73,13 @@ To disable a tab, use the `disabled` prop on the `Tab` component. Disabled tabs 
 
 ```svelte
 <script>
-  import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@rgossiaux/svelte-headlessui";
+  import {
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <TabGroup>
@@ -92,7 +104,13 @@ If you'd rather not change the current tab until the user presses Enter or Space
 
 ```svelte
 <script>
-  import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@rgossiaux/svelte-headlessui";
+  import {
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <TabGroup manual>
@@ -117,7 +135,13 @@ If you've styled your `TabList` to appear vertically, use the `vertical` prop to
 
 ```svelte
 <script>
-  import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@rgossiaux/svelte-headlessui";
+  import {
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <TabGroup vertical>
@@ -140,7 +164,13 @@ To change which tab is selected by default, use the `defaultIndex={number}` prop
 
 ```svelte
 <script>
-  import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@rgossiaux/svelte-headlessui";
+  import {
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <!-- Note that defaultIndex is 0-based -->
@@ -172,7 +202,13 @@ To run a function whenever the selected tab changes, use the `change` event on t
 
 ```svelte
 <script>
-  import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@rgossiaux/svelte-headlessui";
+  import {
+    Tab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    TabPanels,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <TabGroup on:change={(e) => console.log("Changed selected tab to:", e.detail)}>
@@ -199,13 +235,13 @@ Clicking a `Tab` will select that tab and display the corresponding `TabPanel`.
 
 All interactions apply when a `Tab` component is focused.
 
-| Command | Description |
-| ------- | ----------- |
-| `<ArrowLeft>` / `<ArrowRight>` | Selects the previous/next non-disabled tab |
+| Command                                            | Description                                |
+| -------------------------------------------------- | ------------------------------------------ |
+| `<ArrowLeft>` / `<ArrowRight>`                     | Selects the previous/next non-disabled tab |
 | `<ArrowUp>` / `<ArrowDown>` when `vertical` is set | Selects the previous/next non-disabled tab |
-| `<Home>` / `<PageUp>` | Selects the first non-disabled tab |
-| `<End>` / `<PageEnd>` | Selects the last non-disabled tab |
-| `<Enter>` / `<Space>` when `manual` is set | Activates the selected tab |
+| `<Home>` / `<PageUp>`                              | Selects the first non-disabled tab         |
+| `<End>` / `<PageEnd>`                              | Selects the last non-disabled tab          |
+| `<Enter>` / `<Space>` when `manual` is set         | Activates the selected tab                 |
 
 ### Other
 
@@ -219,69 +255,68 @@ For a full reference on all accessibility features implemented in `Tab`, see <a 
 
 The main tab group component.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `div`   | `string` | The element the `TabGroup` should render as |
-| `defaultIndex` | `0` | `number` | The index of the default selected tab |
-| `vertical` | `false` | `boolean` | Whether the orientation of the `TabList` is vertical instead of horizontal |
-| `manual` | `false` | `boolean` | Whether, in keyboard navigation, the `Enter` or `Space` key is necessary to change tabs. By default, the arrow keys will change tabs automatically without hitting `Enter`/`Space`. This has no impact on mouse behavior |
+| Prop           | Default | Type      | Description                                                                                                                                                                                                              |
+| -------------- | ------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `as`           | `div`   | `string`  | The element the `TabGroup` should render as                                                                                                                                                                              |
+| `defaultIndex` | `0`     | `number`  | The index of the default selected tab                                                                                                                                                                                    |
+| `vertical`     | `false` | `boolean` | Whether the orientation of the `TabList` is vertical instead of horizontal                                                                                                                                               |
+| `manual`       | `false` | `boolean` | Whether, in keyboard navigation, the `Enter` or `Space` key is necessary to change tabs. By default, the arrow keys will change tabs automatically without hitting `Enter`/`Space`. This has no impact on mouse behavior |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop       | Type     | Description                  |
+| --------------- | -------- | ---------------------------- |
 | `selectedIndex` | `number` | The currently selected index |
 
 This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
 
-| Event name | Type of event `.detail` | Description |
-| --------- | ---- | ----------- |
-| `change`    | `number` | Emitted whenever the active tab changes |
+| Event name | Type of event `.detail` | Description                             |
+| ---------- | ----------------------- | --------------------------------------- |
+| `change`   | `number`                | Emitted whenever the active tab changes |
 
 ### TabList
 
 The container for `Tab` components. The order of the `Tab` components it contains must correspond to the order of the `TabPanels`.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
+| Prop | Default | Type     | Description                                |
+| ---- | ------- | -------- | ------------------------------------------ |
 | `as` | `div`   | `string` | The element the `TabList` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop       | Type     | Description                  |
+| --------------- | -------- | ---------------------------- |
 | `selectedIndex` | `number` | The currently selected index |
-
 
 ### Tab
 
 This component wraps the selector for an individual tab. All `Tab`s will be rendered at once.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
-| `as` | `button`   | `string` | The element the `Tab` should render as |
-| `disabled` | `false`   | `boolean` | Whether the `Tab` is currently disabled |
+| Prop       | Default  | Type      | Description                             |
+| ---------- | -------- | --------- | --------------------------------------- |
+| `as`       | `button` | `string`  | The element the `Tab` should render as  |
+| `disabled` | `false`  | `boolean` | Whether the `Tab` is currently disabled |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
-| `selected`    | `boolean` | Whether the `Tab` is currently selected |
+| Slot prop  | Type      | Description                             |
+| ---------- | --------- | --------------------------------------- |
+| `selected` | `boolean` | Whether the `Tab` is currently selected |
 
 ### TabPanels
 
 The container for `TabPanel` components. The order of the `TabPanel` components it contains must correspond to the order of the `TabList`.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
+| Prop | Default | Type     | Description                                  |
+| ---- | ------- | -------- | -------------------------------------------- |
 | `as` | `div`   | `string` | The element the `TabPanels` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop       | Type     | Description                  |
+| --------------- | -------- | ---------------------------- |
 | `selectedIndex` | `number` | The currently selected index |
 
 ### TabPanel
 
 This component wraps the contents of an individual tab. Only one `TabPanel` will be visible at once.
 
-| Prop | Default | Type | Description |
-| ---- | ------- | ---- | ----------- |
+| Prop | Default | Type     | Description                                 |
+| ---- | ------- | -------- | ------------------------------------------- |
 | `as` | `div`   | `string` | The element the `TabPanel` should render as |
 
-| Slot prop | Type | Description |
-| --------- | ---- | ----------- |
+| Slot prop  | Type      | Description                                         |
+| ---------- | --------- | --------------------------------------------------- |
 | `selected` | `boolean` | Whether or not the `TabPanel` is currently selected |

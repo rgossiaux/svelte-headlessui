@@ -10,11 +10,16 @@ You can style the descendants of components from this library with the help of <
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption, RadioGroupDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
-<RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+<RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
   <RadioGroupLabel>Plan</RadioGroupLabel>
   <RadioGroupOption value="startup" let:checked>
     <span class:checked>Startup</span>
@@ -41,19 +46,33 @@ Slot props can be used to style any descendent components, but they cannot be us
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption, RadioGroupDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
-<RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+<RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
   <RadioGroupLabel>Plan</RadioGroupLabel>
-  <RadioGroupOption value="startup" class={({ checked }) => checked ? "checked" : undefined}>
+  <RadioGroupOption
+    value="startup"
+    class={({ checked }) => (checked ? "checked" : undefined)}
+  >
     <span class:checked>Startup</span>
   </RadioGroupOption>
-  <RadioGroupOption value="business" class={({ checked }) => checked ? "checked" : undefined}>
+  <RadioGroupOption
+    value="business"
+    class={({ checked }) => (checked ? "checked" : undefined)}
+  >
     <span class:checked>Business</span>
   </RadioGroupOption>
-  <RadioGroupOption value="enterprise" class={({ checked }) => checked ? "checked" : undefined}>
+  <RadioGroupOption
+    value="enterprise"
+    class={({ checked }) => (checked ? "checked" : undefined)}
+  >
     <span class:checked>Enterprise</span>
   </RadioGroupOption>
 </RadioGroup>
@@ -78,11 +97,16 @@ Svelte comes with an out-of-the-box solution for component styling: using the `<
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption, RadioGroupDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
-<RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+<RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
   <RadioGroupLabel>Plan</RadioGroupLabel>
   <RadioGroupOption value="startup" let:checked>
     <span class:checked>Startup</span>
@@ -102,24 +126,37 @@ Svelte comes with an out-of-the-box solution for component styling: using the `<
 </style>
 ```
 
-This works great for styling HTML elements. However, it (unfortunately) does **not** work for styling *components*. If you try to create the same example without the `<span>`s, it won't work:
-
+This works great for styling HTML elements. However, it (unfortunately) does **not** work for styling _components_. If you try to create the same example without the `<span>`s, it won't work:
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption, RadioGroupDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
-<RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+<RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
   <RadioGroupLabel>Plan</RadioGroupLabel>
-  <RadioGroupOption value="startup" class={({ checked }) => checked ? "checked" : ""}>
+  <RadioGroupOption
+    value="startup"
+    class={({ checked }) => (checked ? "checked" : "")}
+  >
     Startup
   </RadioGroupOption>
-  <RadioGroupOption value="business" class={({ checked }) => checked ? "checked" : ""}>
+  <RadioGroupOption
+    value="business"
+    class={({ checked }) => (checked ? "checked" : "")}
+  >
     Business
   </RadioGroupOption>
-  <RadioGroupOption value="enterprise" class={({ checked }) => checked ? "checked" : ""}>
+  <RadioGroupOption
+    value="enterprise"
+    class={({ checked }) => (checked ? "checked" : "")}
+  >
     Enterprise
   </RadioGroupOption>
 </RadioGroup>
@@ -134,7 +171,7 @@ This works great for styling HTML elements. However, it (unfortunately) does **n
 
 (Note that we also can no longer use the `class:checked` shorthand on a component)
 
-Why doesn't this work? When Svelte compiles our component, it adds in a special unique class to the CSS rules and to the HTML elements rendered by this component that are affected. But it does *not* add this special class to any child *components*. The result is that the `.checked` CSS rule will be generated with a second class that the `<RadioGroupOption>` components do not have, and it will not match.
+Why doesn't this work? When Svelte compiles our component, it adds in a special unique class to the CSS rules and to the HTML elements rendered by this component that are affected. But it does _not_ add this special class to any child _components_. The result is that the `.checked` CSS rule will be generated with a second class that the `<RadioGroupOption>` components do not have, and it will not match.
 
 Unfortunately there is no way in Svelte right now to pass this special class down to the `<RadioGroupOption>` components, and the framework does not have a good solution in general for this. Hopefully one day the Svelte maintainers will add some way of solving this problem. Until then, you can still style your components using one of the approaches below.
 
@@ -144,19 +181,33 @@ The `:global()` modifier opts your rule out of the default component style scopi
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption, RadioGroupDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
-<RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+<RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
   <RadioGroupLabel>Plan</RadioGroupLabel>
-  <RadioGroupOption value="startup" class={({ checked }) => checked ? "checked" : ""}>
+  <RadioGroupOption
+    value="startup"
+    class={({ checked }) => (checked ? "checked" : "")}
+  >
     Startup
   </RadioGroupOption>
-  <RadioGroupOption value="business" class={({ checked }) => checked ? "checked" : ""}>
+  <RadioGroupOption
+    value="business"
+    class={({ checked }) => (checked ? "checked" : "")}
+  >
     Business
   </RadioGroupOption>
-  <RadioGroupOption value="enterprise" class={({ checked }) => checked ? "checked" : ""}>
+  <RadioGroupOption
+    value="enterprise"
+    class={({ checked }) => (checked ? "checked" : "")}
+  >
     Enterprise
   </RadioGroupOption>
 </RadioGroup>
@@ -169,26 +220,40 @@ The `:global()` modifier opts your rule out of the default component style scopi
 </style>
 ```
 
-However, global CSS has one critical downside: it's global! The `.checked` rule above will now apply to *any* `.checked` CSS class in your application, even if it's in other components. In a larger application, this can get difficult to maintain.
+However, global CSS has one critical downside: it's global! The `.checked` rule above will now apply to _any_ `.checked` CSS class in your application, even if it's in other components. In a larger application, this can get difficult to maintain.
 
 You can scope this more narrowly if you have a wrapper element:
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption, RadioGroupDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
 <div>
-  <RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+  <RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
     <RadioGroupLabel>Plan</RadioGroupLabel>
-    <RadioGroupOption value="startup" class={({ checked }) => checked ? "checked" : ""}>
+    <RadioGroupOption
+      value="startup"
+      class={({ checked }) => (checked ? "checked" : "")}
+    >
       Startup
     </RadioGroupOption>
-    <RadioGroupOption value="business" class={({ checked }) => checked ? "checked" : ""}>
+    <RadioGroupOption
+      value="business"
+      class={({ checked }) => (checked ? "checked" : "")}
+    >
       Business
     </RadioGroupOption>
-    <RadioGroupOption value="enterprise" class={({ checked }) => checked ? "checked" : ""}>
+    <RadioGroupOption
+      value="enterprise"
+      class={({ checked }) => (checked ? "checked" : "")}
+    >
       Enterprise
     </RadioGroupOption>
   </RadioGroup>
@@ -206,9 +271,9 @@ In this case, this works perfectly.
 
 When using this scoped `* > :global()` approach, keep in mind these principles:
 
-* Your Headless UI components must be contained inside some element **that is rendered by your component**, like the wrapper `<div>` above. You need an element for the Svelte scoped class to be attached to.
-* Your rule will be scoped to your component **and any descendant**. In the example above this is not a problem, since the component has no `<slot>`s. But if your component *does* have `<slot>`s, you will still need to be careful for collisions.
-* This rule won't work properly inside a portal, which means that it won't work properly for a `<Dialog>`. To style the `<Dialog>`, you will need to either 1) use global styles without the `* >` scoping, 2) put a wrapper element inside the `<Dialog>` and style that instead, or 3) use one of the other styling approaches.
+- Your Headless UI components must be contained inside some element **that is rendered by your component**, like the wrapper `<div>` above. You need an element for the Svelte scoped class to be attached to.
+- Your rule will be scoped to your component **and any descendant**. In the example above this is not a problem, since the component has no `<slot>`s. But if your component _does_ have `<slot>`s, you will still need to be careful for collisions.
+- This rule won't work properly inside a portal, which means that it won't work properly for a `<Dialog>`. To style the `<Dialog>`, you will need to either 1) use global styles without the `* >` scoping, 2) put a wrapper element inside the `<Dialog>` and style that instead, or 3) use one of the other styling approaches.
 
 #### Inline styles
 
@@ -216,27 +281,44 @@ You can style any component using inline styles using the `style=...` prop:
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption, RadioGroupDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
   let plan = "startup";
 </script>
 
 <div>
-  <RadioGroup value={plan} on:change={(e) => plan = e.detail}>
+  <RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
     <RadioGroupLabel>Plan</RadioGroupLabel>
-    <RadioGroupOption value="startup" style={({ checked }) => checked ? "background-color: rgb(191 219 254)" : undefined}>
+    <RadioGroupOption
+      value="startup"
+      style={({ checked }) =>
+        checked ? "background-color: rgb(191 219 254)" : undefined}
+    >
       Startup
     </RadioGroupOption>
-    <RadioGroupOption value="business" style={({ checked }) => checked ? "background-color: rgb(191 219 254)" : undefined}>
+    <RadioGroupOption
+      value="business"
+      style={({ checked }) =>
+        checked ? "background-color: rgb(191 219 254)" : undefined}
+    >
       Business
     </RadioGroupOption>
-    <RadioGroupOption value="enterprise" style={({ checked }) => checked ? "background-color: rgb(191 219 254)" : undefined}>
+    <RadioGroupOption
+      value="enterprise"
+      style={({ checked }) =>
+        checked ? "background-color: rgb(191 219 254)" : undefined}
+    >
       Enterprise
     </RadioGroupOption>
   </RadioGroup>
 </div>
 ```
 
-As mentioned above, this prop accepts a function whose input will be the component's slot props, allowing you to apply conditional styles. 
+As mentioned above, this prop accepts a function whose input will be the component's slot props, allowing you to apply conditional styles.
 
 One downside of inline styles is that you cannot use them to style CSS psuedoselectors, like `:focus` and `:hover`. In general this library will provide you with states that make these psuedoselectors unnecessary, however.
 
@@ -250,13 +332,13 @@ This library will forward all events to the underlying elements, so you can add 
 
 ```svelte
 <script>
-  import { Switch } from '@rgossiaux/svelte-headlessui'
+  import { Switch } from "@rgossiaux/svelte-headlessui";
   let enabled = false;
 </script>
 
 <Switch
   checked={enabled}
-  on:change={(e) => enabled = e.detail}
+  on:change={(e) => (enabled = e.detail)}
   on:click={() => console.log("Clicked!")}
 >
   Toggle me!
@@ -268,13 +350,13 @@ You can also use event modifiers, but they must be separated by ! instead of the
 
 ```svelte
 <script>
-  import { Switch } from '@rgossiaux/svelte-headlessui'
+  import { Switch } from "@rgossiaux/svelte-headlessui";
   let enabled = false;
 </script>
 
 <Switch
   checked={enabled}
-  on:change={(e) => enabled = e.detail}
+  on:change={(e) => (enabled = e.detail)}
   on:click!once={() => console.log("Clicked!")}
 >
   Toggle me!
@@ -287,7 +369,7 @@ You can use [actions](https://svelte.dev/tutorial/actions) with this library as 
 
 ```svelte
 <script>
-  import { Switch } from '@rgossiaux/svelte-headlessui'
+  import { Switch } from "@rgossiaux/svelte-headlessui";
   import { action1, action2, action3 } from "./my-library";
   let action1options = {};
   let action3options = { foo: true };
@@ -297,7 +379,7 @@ You can use [actions](https://svelte.dev/tutorial/actions) with this library as 
 
 <Switch
   checked={enabled}
-  on:change={(e) => enabled = e.detail}
+  on:change={(e) => (enabled = e.detail)}
   use={[[action1, action1options], [action2], [action3, action3options]]}
 >
   Toggle me!
@@ -314,7 +396,12 @@ You're free to change the element that any component renders as using the `as` p
 
 ```svelte
 <script>
-  import { Menu, MenuButton, MenuItems, MenuItem } from "@rgossiaux/svelte-headlessui";
+  import {
+    Menu,
+    MenuButton,
+    MenuItems,
+    MenuItem,
+  } from "@rgossiaux/svelte-headlessui";
 </script>
 
 <Menu>
@@ -323,11 +410,13 @@ You're free to change the element that any component renders as using the `as` p
   <MenuItems as="ul">
     <!-- Render a `li` instead of an `a` -->
     <MenuItem as="li" let:active>
-      <a href="/account-settings" class={`${active ? "active" : "inactive"}`}>Account settings</a>
+      <a href="/account-settings" class={`${active ? "active" : "inactive"}`}
+        >Account settings</a
+      >
     </MenuItem>
     <!-- ... -->
   </MenuItems>
 </Menu>
 ```
 
-Due to technical limitations in Svelte, each one of these elements must be handled individually by the library. Most elements should be supported, but some uncommon ones might not be. If you find yourself wanting to use an element that is *not* currently supported, please [file a GitHub issue](https://github.com/rgossiaux/svelte-headlessui/issues).
+Due to technical limitations in Svelte, each one of these elements must be handled individually by the library. Most elements should be supported, but some uncommon ones might not be. If you find yourself wanting to use an element that is _not_ currently supported, please [file a GitHub issue](https://github.com/rgossiaux/svelte-headlessui/issues).
