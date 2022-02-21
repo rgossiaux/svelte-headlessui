@@ -73,7 +73,8 @@ If you'd rather handle this yourself (perhaps because you need to add an extra w
 
   {#if open}
     <div>
-      <!-- Using `static`, `DisclosurePanel` is always rendered and ignores the `open` state -->
+      <!-- Using `static`, `DisclosurePanel` is always rendered,
+            and ignores the `open` state -->
       <DisclosurePanel static>
         Yes! You can purchase a license that you can share with your entire
         team.

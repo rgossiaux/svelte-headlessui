@@ -10,6 +10,7 @@ Radio Groups are built using a combination of the `RadioGroup`, `RadioGroupOptio
     RadioGroupOption,
     RadioGroupDescription,
   } from "@rgossiaux/svelte-headlessui";
+
   let plan = "startup";
 </script>
 
@@ -48,6 +49,7 @@ To style the selected `RadioGroupOption`, you can use the `checked` slot prop th
     RadioGroupLabel,
     RadioGroupOption,
   } from "@rgossiaux/svelte-headlessui";
+
   let plan = "startup";
 </script>
 
@@ -78,12 +80,14 @@ To style the selected `RadioGroupOption`, you can use the `checked` slot prop th
     RadioGroupLabel,
     RadioGroupOption,
   } from "@rgossiaux/svelte-headlessui";
+
   let plan = "startup";
 </script>
 
 <RadioGroup value={plan} on:change={(e) => (plan = e.detail)}>
   <RadioGroupLabel>Plan</RadioGroupLabel>
-  <!-- Use both `active` and `checked` slot props to differentiate between the active and checked states -->
+  <!-- Use both `active` and `checked` slot props
+        to differentiate between the active and checked states -->
   <RadioGroupOption value="startup" let:active let:checked>
     <span class:active class:checked>Startup</span>
   </RadioGroupOption>
@@ -109,7 +113,13 @@ By default, `RadioGroupLabel` renders a `<label>` element and `RadioGroupDescrip
 
 ```svelte
 <script>
-  import { RadioGroup, RadioGroupLabel, RadioGroupOption, RadioGroupDescription } from "@rgossiaux/svelte-headlessui";
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
+
   let plan = "startup";
 </script>
 
@@ -119,13 +129,17 @@ By default, `RadioGroupLabel` renders a `<label>` element and `RadioGroupDescrip
 
   <RadioGroupOption value="startup" let:checked>
     <RadioGroupLabel as="span" class:checked>Startup</span>
-    <RadioGroupDescription as="span" class:checked>Up to 5 active job postings</RadioGroupDescription>
+    <RadioGroupDescription as="span" class:checked>
+      Up to 5 active job postings
+    </RadioGroupDescription>
   </RadioGroupOption>
   <!-- ... -->
 </RadioGroup>
 
 <style>
-  /* WARNING: This is just for demonstration. Using :global() in this way is a bad practice. See TODO for more. */
+  /* WARNING: This is just for demonstration.
+      Using :global() in this way can be risky.
+      See TODO for more. */
   :global(.checked) {
     /* Your styles here */
   }
@@ -158,11 +172,11 @@ For a full reference on all accessibility features implemented in `RadioGroup`, 
 
 The main Radio Group component.
 
-| Prop       | Default | Type      | Description                                                              |
-| ---------- | ------- | --------- | ------------------------------------------------------------------------ | ------------------------------------------------ |
-| `as`       | `div`   | `string`  | The element the `RadioGroup` should render as                            |
-| `disabled` | `false` | `boolean` | Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled |
-| `value`    | --      | `T        | undefined`                                                               | The currently selected value in the `RadioGroup` |
+| Prop       | Default | Type               | Description                                                              |
+| ---------- | ------- | ------------------ | ------------------------------------------------------------------------ |
+| `as`       | `div`   | `string`           | The element the `RadioGroup` should render as                            |
+| `disabled` | `false` | `boolean`          | Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled |
+| `value`    | --      | `T` \| `undefined` | The currently selected value in the `RadioGroup`                         |
 
 This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
 
@@ -174,11 +188,11 @@ This component also dispatches a custom event, which is listened to using the Sv
 
 The wrapper component for each selectable option.
 
-| Prop       | Default | Type      | Description                                         |
-| ---------- | ------- | --------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `as`       | `div`   | `string`  | The element the `RadioGroupOption` should render as |
-| `disabled` | `false` | `boolean` | Whether the `RadioGroupOption` is disabled          |
-| `value`    | --      | `T        | undefined`                                          | The value of the `RadioGroupOption`; the type should match the type of the `value` prop in the `RadioGroup` |
+| Prop       | Default | Type               | Description                                                                                                 |
+| ---------- | ------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| `as`       | `div`   | `string`           | The element the `RadioGroupOption` should render as                                                         |
+| `disabled` | `false` | `boolean`          | Whether the `RadioGroupOption` is disabled                                                                  |
+| `value`    | --      | `T` \| `undefined` | The value of the `RadioGroupOption`; the type should match the type of the `value` prop in the `RadioGroup` |
 
 | Slot prop  | Type      | Description                                                |
 | ---------- | --------- | ---------------------------------------------------------- |

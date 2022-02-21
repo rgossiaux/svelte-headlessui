@@ -105,10 +105,10 @@ If you'd like something other than the first focusable element to receive initia
 
   <p>Your order is all ready!</p>
 
-  <button on:click={() => (isOpen = false)}>Cancel</button>
-  <button on:click={completeOrder} bind:this={completeButton}
-    >Complete order</button
-  >
+  <button on:click={() => (isOpen = false)}> Cancel </button>
+  <button on:click={completeOrder} bind:this={completeButton}>
+    Complete order
+  </button>
 </Dialog>
 ```
 

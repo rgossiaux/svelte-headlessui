@@ -192,22 +192,22 @@ This is useful if you want something to transition in on initial page load, or w
 | `as`        | `div`   | `string`  | The element the `Transition` should render as                                                                                          |
 | `static`    | `false` | `boolean` | Whether the element should ignore the internally managed open/closed state                                                             |
 | `unmount`   | `true`  | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state                                        |
-| `enter`     | ""      | `string`  | Classes to add to the transitioning element during the entire enter phase                                                              |
-| `enterFrom` | ""      | `string`  | Classes to add to the transitioning element before the enter phase starts                                                              |
-| `enterTo`   | ""      | `string`  | Classes to add to the transitioning element immediately after the enter phase starts                                                   |
-| `entered`   | ""      | `string`  | Classes to add to the transitioning element once the transition is done. These classes will persist after that until the `leave` phase |
-| `leave`     | ""      | `string`  | Classes to add to the transitioning element during the entire leave phase                                                              |
-| `leaveFrom` | ""      | `string`  | Classes to add to the transitioning element before the leave phase starts                                                              |
-| `leaveTo`   | ""      | `string`  | Classes to add to the transitioning element immediately after the leave phase starts                                                   |
+| `enter`     | `""`    | `string`  | Classes to add to the transitioning element during the entire enter phase                                                              |
+| `enterFrom` | `""`    | `string`  | Classes to add to the transitioning element before the enter phase starts                                                              |
+| `enterTo`   | `""`    | `string`  | Classes to add to the transitioning element immediately after the enter phase starts                                                   |
+| `entered`   | `""`    | `string`  | Classes to add to the transitioning element once the transition is done. These classes will persist after that until the `leave` phase |
+| `leave`     | `""`    | `string`  | Classes to add to the transitioning element during the entire leave phase                                                              |
+| `leaveFrom` | `""`    | `string`  | Classes to add to the transitioning element before the leave phase starts                                                              |
+| `leaveTo`   | `""`    | `string`  | Classes to add to the transitioning element immediately after the leave phase starts                                                   |
 
 This component also dispatches the following custom events, which are listened to using the Svelte `on:` directive:
 
 | Event name    | Type of event `.detail` | Description                                     |
 | ------------- | ----------------------- | ----------------------------------------------- |
-| `beforeEnter` | null                    | Dispatched before we start the enter transition |
-| `afterEnter`  | null                    | Dispatched after we finish the enter transition |
-| `beforeLeave` | null                    | Dispatched before we start the leave transition |
-| `afterLeave`  | null                    | Dispatched after we finish the leave transition |
+| `beforeEnter` | `null`                  | Dispatched before we start the enter transition |
+| `afterEnter`  | `null`                  | Dispatched after we finish the enter transition |
+| `beforeLeave` | `null`                  | Dispatched before we start the leave transition |
+| `afterLeave`  | `null`                  | Dispatched after we finish the leave transition |
 
 ### TransitionChild
 
@@ -216,19 +216,19 @@ This component also dispatches the following custom events, which are listened t
 | `as`        | `div`   | `string`  | The element the `Transition` should render as                                                                                          |
 | `static`    | `false` | `boolean` | Whether the element should ignore the internally managed open/closed state                                                             |
 | `unmount`   | `true`  | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state                                        |
-| `enter`     | ""      | `string`  | Classes to add to the transitioning element during the entire enter phase                                                              |
-| `enterFrom` | ""      | `string`  | Classes to add to the transitioning element before the enter phase starts                                                              |
-| `enterTo`   | ""      | `string`  | Classes to add to the transitioning element immediately after the enter phase starts                                                   |
-| `entered`   | ""      | `string`  | Classes to add to the transitioning element once the transition is done. These classes will persist after that until the `leave` phase |
-| `leave`     | ""      | `string`  | Classes to add to the transitioning element during the entire leave phase                                                              |
-| `leaveFrom` | ""      | `string`  | Classes to add to the transitioning element before the leave phase starts                                                              |
-| `leaveTo`   | ""      | `string`  | Classes to add to the transitioning element immediately after the leave phase starts                                                   |
+| `enter`     | `""`    | `string`  | Classes to add to the transitioning element during the entire enter phase                                                              |
+| `enterFrom` | `""`    | `string`  | Classes to add to the transitioning element before the enter phase starts                                                              |
+| `enterTo`   | `""`    | `string`  | Classes to add to the transitioning element immediately after the enter phase starts                                                   |
+| `entered`   | `""`    | `string`  | Classes to add to the transitioning element once the transition is done. These classes will persist after that until the `leave` phase |
+| `leave`     | `""`    | `string`  | Classes to add to the transitioning element during the entire leave phase                                                              |
+| `leaveFrom` | `""`    | `string`  | Classes to add to the transitioning element before the leave phase starts                                                              |
+| `leaveTo`   | `""`    | `string`  | Classes to add to the transitioning element immediately after the leave phase starts                                                   |
 
 This component also dispatches the following custom events, which are listened to using the Svelte `on:` directive:
 
 | Event name    | Type of event `.detail` | Description                                     |
 | ------------- | ----------------------- | ----------------------------------------------- |
-| `beforeEnter` | null                    | Dispatched before we start the enter transition |
-| `afterEnter`  | null                    | Dispatched after we finish the enter transition |
-| `beforeLeave` | null                    | Dispatched before we start the leave transition |
-| `afterLeave`  | null                    | Dispatched after we finish the leave transition |
+| `beforeEnter` | `null`                  | Dispatched before we start the enter transition |
+| `afterEnter`  | `null`                  | Dispatched after we finish the enter transition |
+| `beforeLeave` | `null`                  | Dispatched before we start the leave transition |
+| `afterLeave`  | `null`                  | Dispatched after we finish the leave transition |

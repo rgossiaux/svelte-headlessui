@@ -163,7 +163,8 @@ If you'd rather handle this yourself (perhaps because you need to add an extra w
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   {#if open}
     <div>
-      <!-- Using `static`, the `ListboxOptions` is always rendered and ignores the internal `open` state -->
+      <!-- Using `static`, the `ListboxOptions` is always rendered
+            and ignores the internal `open` state -->
       <ListboxOptions static>
         {#each people as person (person.id)}
           <ListboxOption value={person}>
@@ -200,7 +201,8 @@ You can also choose to have the `Listbox` merely hide the `ListboxOptions` when 
 
 <Listbox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
-  <!-- Using `unmount={false}`, the `ListboxOptions` is kept in the DOM when the `Listbox` is closed -->
+  <!-- Using `unmount={false}`, the `ListboxOptions` is kept in the DOM
+        when the `Listbox` is closed -->
   <ListboxOptions unmount={false}>
     {#each people as person (person.id)}
       <ListboxOption value={person}>
