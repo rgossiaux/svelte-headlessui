@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-  <link rel="stylesheet" href="/prism-ghcolors.css" />
+  <link rel="stylesheet" href="/prism-one-light.css" />
 </svelte:head>
 
 <div class="flex">
@@ -23,7 +23,7 @@
       <a href="transition">Transition</a>
     </nav>
   </div>
-  <article class="prose" bind:this={el}>
+  <article class="prose max-w-3xl" bind:this={el}>
     <slot />
   </article>
   <div class="w-80 text-sm lg:block">
