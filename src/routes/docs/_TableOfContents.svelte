@@ -11,10 +11,12 @@
   let idToItem: { [id: string]: TocItem } = {};
   let visibleIds = new Set<string>();
 
+  $: flatItems = flattenItems(items);
+
   function offsetItemById(id: string, offset: number): TocItem | undefined {
     let item = idToItem[id];
     if (item) {
-      return items[item.index + offset];
+      return flatItems[item.index + offset];
     }
   }
 
@@ -41,12 +43,12 @@
             if (visibleIds.size > 0) {
               computeActiveId();
             } else {
-              let scrollingUp =
+              let scrollingDown =
                 entry.boundingClientRect.y < (entry.rootBounds?.y ?? 0);
-              // If scrolling up, this one should remain active: we're still in the contents of it
+              // If scrolling down, this one should remain active: we're still in the contents of it
               //  until we get to the next item below.
-              // If scrolling down, we should go to the previous item.
-              if (!scrollingUp) {
+              // If scrolling up, we should go to the previous item.
+              if (!scrollingDown) {
                 activeId = offsetItemById(entry.target.id, -1)?.id;
               }
             }
@@ -93,7 +95,7 @@
       return result;
     }
     for (let item of itemList) {
-      result = result.concat(result, [item], flattenItems(item.items));
+      result = result.concat([item], flattenItems(item.items));
     }
     return result;
   }
@@ -102,7 +104,7 @@
     if (!observer) {
       return;
     }
-    let ids = flattenItems(items).map((item) => item.id);
+    let ids = flatItems.map((item) => item.id);
     ids.forEach((id) => {
       let element = document.getElementById(id);
       if (element) {
