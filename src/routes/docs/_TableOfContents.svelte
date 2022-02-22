@@ -59,8 +59,10 @@
     );
   });
 
-  function generateItems(root: HTMLElement) {
-    let headings = Array.from(root.querySelectorAll("h1, h2, h3, h4, h5, h6"));
+  function generateItems(root: HTMLElement, ignoreH1 = true) {
+    let headings = Array.from(
+      root.querySelectorAll(`${ignoreH1 ? "" : "h1, "}h2, h3, h4, h5, h6`)
+    );
     let newItems: TocItem[] = [];
     let index = 0;
     for (const heading of headings) {

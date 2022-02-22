@@ -1,3 +1,5 @@
+# Popover
+
 ## Basic example
 
 Popovers are built using the `Popover`, `PopoverButton`, and `PopverPanel` components.

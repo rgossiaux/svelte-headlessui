@@ -1,3 +1,5 @@
+# Menu
+
 ## Basic example
 
 Menus are built using a combination of the `Menu`, `MenuButton`, `MenuItems`, and `MenuItem` components:

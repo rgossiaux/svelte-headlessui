@@ -1,3 +1,5 @@
+# Tabs
+
 ## Basic example
 
 Tabs are built using the `TabGroup`, `TabList`, `Tab`, `TabPanels`, and `TabPanel` components.

@@ -1,3 +1,5 @@
+# Dialog
+
 ## Basic example
 
 Dialogs are built using the `Dialog`, `DialogOverlay`, `DialogTitle`, and `DialogDescription` components.
@@ -174,11 +176,11 @@ For accessibility reasons, you should use the `DialogTitle` and `DialogDescripti
 
 ## Rendering to a Portal
 
-If you've ever implemented a dialog before, you've likely come across the concept of Portals. Portals let you insert components from one place in the component tree (for instance, deep within your application UI), but have them actually render to another place in the DOM entirely.
+If you've ever implemented a dialog before in another framework, you may have come across the concept of portals. Portals let you insert components from one place in the component tree (for instance, deep within your application UI), but have them actually render to another place in the DOM entirely.
 
 Since dialogs and their overlays take up the full page, you typically want to render them as a sibling to the root node of the page. That way, you can rely on natural DOM ordering to ensure that their content is rendered on top of your existing application UI. This also makes it easy to apply scroll locking to the rest of your application, as well as ensure that your Dialog's contents and overlay are unobstructed to receive focus and click events.
 
-Because of these accessibility concerns, Svelte Headless UI's `Dialog` actually uses a Portal under the hood. This way we can provide features like unobstructed event handling and making the rest of your application inert. That means that when using this `Dialog`, there's no need to use a Portal yourself--it's already taken care of.
+Because of these accessibility concerns, Svelte Headless UI's `Dialog` actually uses a portal under the hood. This way we can provide features like unobstructed event handling and making the rest of your application inert. That means that when using this `Dialog`, there's no need to use a portal yourself--it's already taken care of. You can put the `<Dialog>` anywhere in your component tree and it will render to the portal.
 
 ## Transitions
 

@@ -1,3 +1,5 @@
+# Disclosure
+
 ## Basic example
 
 Disclosures are built using the `Disclosure`, `DisclosureButton`, and `DisclosurePanel` components.

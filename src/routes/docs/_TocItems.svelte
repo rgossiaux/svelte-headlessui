@@ -29,4 +29,10 @@
   .active {
     @apply font-bold;
   }
+  li {
+    @apply pt-3;
+  }
+  a:hover {
+    @apply underline;
+  }
 </style>

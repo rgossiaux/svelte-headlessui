@@ -1,3 +1,5 @@
+# Transition
+
 ## About this component
 
 One of Svelte's strengths is its great support for transitions and animations. You are welcome and even encouraged to use them with this library when possible. So why bother with the `Transition` component?
