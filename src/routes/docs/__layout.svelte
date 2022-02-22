@@ -24,21 +24,22 @@
 </svelte:head>
 
 <div class="flex">
-  <div class="w-52 hidden md:block">
-    <nav title="Components" class="sticky top-20 flex flex-col">
+  <div class="w-52 min-w-fit hidden md:block">
+    <nav title="Components" class="sticky top-20 ml-6 flex flex-col">
       {#each components as component (component.url)}
         <a
           href={component.url}
           class:font-bold={$page.path.includes(component.url)}
-          class="hover:decoration-stone-400 hover:underline">{component.text}</a
+          class="py-1 hover:decoration-stone-400 hover:underline"
+          >{component.text}</a
         >
       {/each}
     </nav>
   </div>
-  <article class="prose max-w-3xl" bind:this={el}>
+  <article class="prose max-w-3xl mt-5" bind:this={el}>
     <slot />
   </article>
-  <div class="w-80 text-sm hidden lg:block">
+  <div class="mx-6 w-80 text-sm hidden lg:block">
     <div class="sticky top-20">
       {#key $page}
         <TableOfContents {el} />
@@ -46,3 +47,13 @@
     </div>
   </div>
 </div>
+
+<style lang="postcss">
+  article {
+    :global(h1),
+    :global(h2),
+    :global(h3) {
+      @apply before:h-20 before:-mt-20 before:block before:content-[""];
+    }
+  }
+</style>

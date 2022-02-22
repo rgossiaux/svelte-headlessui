@@ -30,7 +30,7 @@
     @apply font-bold;
   }
   li {
-    @apply pt-3;
+    @apply pt-1;
   }
   a:hover {
     @apply underline;
