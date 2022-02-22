@@ -30,7 +30,7 @@
         <a
           href={component.url}
           class:font-bold={$page.path.includes(component.url)}
-          >{component.text}</a
+          class="hover:decoration-stone-400 hover:underline">{component.text}</a
         >
       {/each}
     </nav>
