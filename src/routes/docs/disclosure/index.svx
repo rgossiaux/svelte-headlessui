@@ -1,5 +1,11 @@
 # Disclosure
 
+<script>
+  import Preview from "../_Preview.svelte";
+</script>
+
+<Preview url="examples/disclosure" code="" />
+
 ## Basic example
 
 Disclosures are built using the `Disclosure`, `DisclosureButton`, and `DisclosurePanel` components.

@@ -2,7 +2,7 @@
 
 Out of the box, these components are completely unstyled. This has some big advantages: you're free to make them look however you want, without having to fight against any pre-existing styles that don't fit in with the look and feel of your site. Instead of being constrained by an existing design system like Material Design or Carbon Components, you can fully customize your components' appearance--but letting the library take care of implementing all the keyboard and mouse interactions, accessibility features, and so on.
 
-The flipside of unstyled components, however, that you need to, well, style them. There are a number of ways of doing this.
+The flipside of unstyled components, however, is that you need to, well, style them. There are a number of ways of doing this.
 
 ### Styling children: slot props
 
@@ -324,7 +324,7 @@ One downside of inline styles is that you cannot use them to style CSS psuedosel
 
 #### Using a CSS framework
 
-You can always use the `class` prop as normal alongside a CSS framework like Bootstrap, Bulma, Tailwind, etc. The original version of this component library was written by the same team that maintains Tailwind.
+You can always use the `class` prop as normal alongside a CSS framework like Bootstrap, Bulma, Tailwind, etc. The original version of this component library was written by the same team that maintains Tailwind CSS.
 
 ## Event forwarding
 

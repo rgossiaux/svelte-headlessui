@@ -1,5 +1,11 @@
 # Menu
 
+<script>
+  import Preview from "../_Preview.svelte";
+</script>
+
+<Preview url="examples/menu" code="" />
+
 ## Basic example
 
 Menus are built using a combination of the `Menu`, `MenuButton`, `MenuItems`, and `MenuItem` components:

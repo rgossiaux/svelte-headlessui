@@ -1,5 +1,11 @@
 # Tabs
 
+<script>
+  import Preview from "../_Preview.svelte";
+</script>
+
+<Preview url="examples/tabs" code="" />
+
 ## Basic example
 
 Tabs are built using the `TabGroup`, `TabList`, `Tab`, `TabPanels`, and `TabPanel` components.

@@ -15,8 +15,6 @@
     { url: "tabs", text: "Tabs" },
     { url: "transition", text: "Transition" },
   ];
-
-  console.log($page);
 </script>
 
 <svelte:head>
@@ -52,7 +50,8 @@
   article {
     :global(h1),
     :global(h2),
-    :global(h3) {
+    :global(h3),
+    :global(h4) {
       @apply before:h-20 before:-mt-20 before:block before:content-[""];
     }
   }

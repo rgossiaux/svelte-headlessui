@@ -1,5 +1,11 @@
 # Dialog
 
+<script>
+  import Preview from "../_Preview.svelte";
+</script>
+
+<Preview url="examples/dialog" code="" />
+
 ## Basic example
 
 Dialogs are built using the `Dialog`, `DialogOverlay`, `DialogTitle`, and `DialogDescription` components.

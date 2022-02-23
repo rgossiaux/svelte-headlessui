@@ -33,6 +33,7 @@
   "devDependencies": {
     "@babel/cli": "^7.16.0",
     "@babel/preset-env": "^7.16.5",
+    "@rgossiaux/svelte-heroicons": "^0.1.2",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/kit": "next",
     "@tailwindcss/forms": "^0.4.0",

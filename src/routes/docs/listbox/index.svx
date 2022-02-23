@@ -1,5 +1,11 @@
 # Listbox
 
+<script>
+  import Preview from "../_Preview.svelte";
+</script>
+
+<Preview url="examples/listbox" code="" />
+
 ## Basic example
 
 Listboxes are built using a combination of the `Listbox`, `ListboxButton`, `ListboxOptions`, `ListboxOption`, and `ListboxLabel` components.

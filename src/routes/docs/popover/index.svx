@@ -1,5 +1,11 @@
 # Popover
 
+<script>
+  import Preview from "../_Preview.svelte";
+</script>
+
+<Preview url="examples/popover" code="" />
+
 ## Basic example
 
 Popovers are built using the `Popover`, `PopoverButton`, and `PopverPanel` components.

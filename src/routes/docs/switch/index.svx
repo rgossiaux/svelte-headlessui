@@ -1,5 +1,11 @@
 # Switch
 
+<script>
+  import Preview from "../_Preview.svelte";
+</script>
+
+<Preview url="examples/switch" code="" />
+
 ## Basic example
 
 Switches are built using the `Switch` component. You can toggle your switch by clicking directly on the component or by pressing the spacebar while it's focused.
