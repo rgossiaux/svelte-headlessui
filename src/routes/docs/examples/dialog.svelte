@@ -46,10 +46,6 @@
         <DialogOverlay class="fixed inset-0" />
       </TransitionChild>
 
-      <!-- This element is to trick the browser into centering the modal contents. -->
-      <span class="inline-block h-screen align-middle" aria-hidden="true">
-        &#8203;
-      </span>
       <TransitionChild
         enter="ease-out duration-300"
         enterFrom="opacity-0 scale-95"
@@ -58,6 +54,10 @@
         leaveFrom="opacity-100 scale-100"
         leaveTo="opacity-0 scale-95"
       >
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span class="inline-block h-screen align-middle" aria-hidden="true">
+          &#8203;
+        </span>
         <div
           class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
         >
