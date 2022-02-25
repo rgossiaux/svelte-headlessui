@@ -6,8 +6,6 @@
     isShowing = false;
     setTimeout(() => (isShowing = true), 500);
   }
-
-  $: console.log(isShowing);
 </script>
 
 <div class="flex flex-col items-center py-16">

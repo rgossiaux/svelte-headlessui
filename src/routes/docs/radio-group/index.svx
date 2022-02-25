@@ -4,7 +4,7 @@
   import Preview from "../_Preview.svelte";
 </script>
 
-<Preview url="examples/radio-group" code="" />
+<Preview url="examples/radio-group" code="" class="h-[380px] bg-teal-300"/>
 
 ## Basic example
 

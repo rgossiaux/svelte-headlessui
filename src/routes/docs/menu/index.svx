@@ -4,7 +4,7 @@
   import Preview from "../_Preview.svelte";
 </script>
 
-<Preview url="examples/menu" code="" />
+<Preview url="examples/menu" code="" class="h-[410px] bg-teal-300"/>
 
 ## Basic example
 

@@ -4,7 +4,7 @@
   import Preview from "../_Preview.svelte";
 </script>
 
-<Preview url="examples/disclosure" code="" />
+<Preview url="examples/disclosure" code="" class="h-[370px] bg-teal-300"/>
 
 ## Basic example
 
