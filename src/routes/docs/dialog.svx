@@ -339,7 +339,7 @@ The main dialog component.
 | Prop           | Default | Type         | Description                                                                                     |
 | -------------- | ------- | ------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | `open`         | --      | `boolean`    | Whether the `Dialog` is open                                                                    |
-| `initialFocus` | `null`  | `HTMLElement | null`                                                                                           | The element that should receive focus when the `Dialog` is first opened |
+| `initialFocus` | `null`  | `HTMLElement` \| `null`                                                                                           | The element that should receive focus when the `Dialog` is first opened |
 | `as`           | `div`   | `string`     | The element the `Dialog` should render as                                                       |
 | `static`       | `false` | `boolean`    | Whether the element should ignore the internally managed open/closed state                      |
 | `unmount`      | `true`  | `boolean`    | Whether the element should be unmounted, instead of just hidden, based on the open/closed state |
