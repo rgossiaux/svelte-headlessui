@@ -1,7 +1,7 @@
 # Disclosure
 
 <script>
-  import Preview from "../_Preview.svelte";
+  import Preview from "./_Preview.svelte";
 </script>
 
 <Preview url="examples/disclosure" code="" class="h-[370px] bg-teal-300"/>
