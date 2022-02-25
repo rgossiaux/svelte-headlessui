@@ -4,7 +4,7 @@
   import Preview from "./_Preview.svelte";
 </script>
 
-<Preview url="examples/transition" code="" class="h-[340px] bg-teal-300"/>
+<Preview url="examples/transition" code="" class="h-[340px] bg-rose-300"/>
 
 ## About this component
 

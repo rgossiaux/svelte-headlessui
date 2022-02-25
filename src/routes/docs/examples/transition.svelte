@@ -18,7 +18,7 @@
       leave="transform duration-200 transition ease-in-out"
       leaveFrom="opacity-100 rotate-0 scale-100 "
       leaveTo="opacity-0 scale-95 "
-      class="w-full h-full bg-stone-400 rounded-md shadow-lg"
+      class="w-full h-full bg-white rounded-md shadow-lg"
     />
   </div>
 
