@@ -22,7 +22,7 @@
 </svelte:head>
 
 <div class="flex">
-  <div class="w-52 min-w-fit hidden md:block">
+  <div class="w-52 min-w-fit hidden md:block flex-shrink-0">
     <nav title="Components" class="sticky top-20 ml-6 flex flex-col">
       {#each components as component (component.url)}
         <a
@@ -34,11 +34,13 @@
       {/each}
     </nav>
   </div>
-  <article class="prose max-w-3xl mt-5" bind:this={el}>
+  <article class="prose max-w-3xl min-w-0 mt-5 px-6" bind:this={el}>
     <slot />
   </article>
-  <div class="mx-6 w-80 text-sm hidden lg:block">
-    <div class="sticky top-20">
+  <div class="w-64 text-sm hidden flex-shrink-0 lg:block">
+    <div
+      class="sticky top-0 pt-20 pb-4 -mt-[61px] max-h-screen overflow-y-auto"
+    >
       {#key $page}
         <TableOfContents {el} />
       {/key}
