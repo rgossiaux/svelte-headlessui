@@ -53,6 +53,10 @@
     :global(h3),
     :global(h4) {
       @apply before:h-20 before:-mt-20 before:block before:content-[""];
+
+      :global(a) {
+        @apply no-underline hover:underline;
+      }
     }
   }
 </style>
