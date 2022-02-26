@@ -79,6 +79,15 @@
     !(features & Features.Static && $$props.static) &&
     features & Features.RenderStrategy &&
     !unmount;
+
+  $: propsWeControl = {
+    class: computedClass,
+    style:
+      `${computedStyle ?? ""}${hidden ? " display: none" : ""}` || undefined,
+  };
+  $: if (propsWeControl.style === undefined) {
+    delete propsWeControl.style;
+  }
 </script>
 
 {#if show}
@@ -87,9 +96,7 @@
     bind:el
     use={[...use, forwardEvents]}
     {...$$restProps}
-    class={computedClass}
-    style={`${computedStyle ?? ""}${hidden ? " display: none" : ""}` ||
-      undefined}
+    {...propsWeControl}
     hidden={hidden || undefined}
   >
     <slot />
