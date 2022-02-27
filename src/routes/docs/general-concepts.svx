@@ -347,7 +347,8 @@ This library will forward all events to the underlying elements, so you can add 
 </Switch>
 ```
 
-Note that the library already handles all of the keyboard and mouse events you'd need to implement the component functionality
+Note that the library already handles all of the keyboard and mouse events you'd need to implement the component functionality. You don't need to add a handler to e.g. open or close a popover when the popover button is clicked.
+
 You can also use event modifiers, but they must be separated by ! instead of the normal |, for technical reasons:
 
 ```svelte

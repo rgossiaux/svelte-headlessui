@@ -4,16 +4,26 @@
 
   let el: HTMLElement | null = null;
 
-  let components = [
-    { url: "dialog", text: "Dialog" },
-    { url: "disclosure", text: "Disclosure" },
-    { url: "listbox", text: "Listbox" },
-    { url: "menu", text: "Menu" },
-    { url: "popover", text: "Popover" },
-    { url: "radio-group", text: "Radio Group" },
-    { url: "switch", text: "Switch" },
-    { url: "tabs", text: "Tabs" },
-    { url: "transition", text: "Transition" },
+  $: isHome = $page.path.endsWith("docs");
+  $: base = isHome ? "docs/" : "";
+
+  $: pages = [
+    { url: "../docs", text: "Home" },
+    { url: `${base}general-concepts`, text: "General concepts" },
+    { url: `${base}tailwind-ui`, text: "Use with Tailwind UI" },
+    { url: `${base}version-history`, text: "Version history" },
+  ];
+
+  $: components = [
+    { url: `${base}dialog`, text: "Dialog" },
+    { url: `${base}disclosure`, text: "Disclosure" },
+    { url: `${base}listbox`, text: "Listbox" },
+    { url: `${base}menu`, text: "Menu" },
+    { url: `${base}popover`, text: "Popover" },
+    { url: `${base}radio-group`, text: "Radio Group" },
+    { url: `${base}switch`, text: "Switch" },
+    { url: `${base}tabs`, text: "Tabs" },
+    { url: `${base}transition`, text: "Transition" },
   ];
 </script>
 
@@ -23,7 +33,15 @@
 
 <div class="flex">
   <div class="w-52 min-w-fit hidden md:block flex-shrink-0">
-    <nav title="Components" class="sticky top-20 ml-6 flex flex-col">
+    <nav title="Pages" class="sticky top-20 ml-6 flex flex-col">
+      {#each pages as p (p.url)}
+        <a
+          href={p.url}
+          class:font-bold={$page.path.includes(p.url)}
+          class="py-1 hover:decoration-stone-400 hover:underline">{p.text}</a
+        >
+      {/each}
+      <hr class="w-24 my-4" />
       {#each components as component (component.url)}
         <a
           href={component.url}
@@ -38,13 +56,14 @@
     <slot />
   </article>
   <div class="w-64 text-sm hidden flex-shrink-0 lg:block">
-    <div
+    <nav
+      title="Table of contents"
       class="sticky top-0 pt-20 pb-4 -mt-[61px] max-h-screen overflow-y-auto"
     >
       {#key $page}
         <TableOfContents {el} />
       {/key}
-    </div>
+    </nav>
   </div>
 </div>
 
