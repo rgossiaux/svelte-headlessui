@@ -290,3 +290,46 @@ it('should be possible to force the Portal into a specific element using PortalG
     `"<div><main><aside id=\\"group-1\\">A<div>Next to A</div></aside> <section id=\\"group-2\\"><span>B</span></section>  </main></div><div id=\\"headlessui-portal-root\\"><div>I am in the portal root</div></div>"`
   )
 })
+
+it('should cleanup the Portal properly when Svelte would not detach it', async () => {
+  expect(getPortalRoot()).toBe(null)
+
+  render(svelte`
+    <script>
+      let render = false;
+    </script>
+    <main id="parent">
+      <button id="a" on:click={() => render = !render}>
+        Toggle
+      </button>
+      {#if render}
+        <div>
+          <Portal>
+            <p id="content1">Contents 1 ...</p>
+          </Portal>
+        </div>
+      {/if}
+    </main>
+    `)
+
+  let a = document.getElementById('a')
+
+  expect(getPortalRoot()).toBe(null)
+
+  // Let's render the first Portal
+  await click(a)
+
+  expect(getPortalRoot()).not.toBe(null)
+  expect(getPortalRoot().childNodes).toHaveLength(1)
+
+  // Let's remove the first portal
+  await click(a)
+
+  expect(getPortalRoot()).toBe(null)
+
+  // Let's render the first Portal again
+  await click(a)
+
+  expect(getPortalRoot()).not.toBe(null)
+  expect(getPortalRoot().childNodes).toHaveLength(1)
+})
