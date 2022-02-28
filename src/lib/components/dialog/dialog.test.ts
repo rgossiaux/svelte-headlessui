@@ -27,6 +27,7 @@ import { click, Keys, press } from "$lib/test-utils/interactions";
 import Transition from "$lib/components/transitions/TransitionRoot.svelte";
 import { tick } from "svelte";
 import svelte from "svelte-inline-compile";
+import { writable } from "svelte/store";
 
 let mockId = 0;
 jest.mock("../../hooks/use-id", () => {
@@ -134,19 +135,85 @@ describe("Rendering", () => {
 
     it('should be possible to always render the Dialog if we provide it a `static` prop (and enable focus trapping based on `open`)', async () => {
       let focusCounter = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Trigger"],
-          [Dialog, { open: true, onClose: console.log, static: true }, [
-            [P, {}, "Contents"],
-            [TestTabSentinel, { onFocus: focusCounter }]
-          ]],
-        ]
-      })
+      render(svelte`
+          <button id="trigger" on:click={() => isOpen = !isOpen}>
+            Trigger
+          </button>
+          <Dialog open={true} on:close={console.log} static>
+            <p>Contents</p>
+            <div tabindex={0} on:focus={focusCounter} />
+          </Dialog>
+        `)
 
       // Wait for the focus to take effect
       await tick();
+
+      // Let's verify that the Dialog is already there
+      expect(getDialog()).not.toBe(null)
+      expect(focusCounter).toHaveBeenCalledTimes(1)
+    })
+
+    it('should be possible to always render the Dialog if we provide it a `static` prop (and toggle focus trapping based on `open`)', async () => {
+      let focusCounter = jest.fn()
+      let isOpen = writable(false);
+      render(svelte`
+          <button id="trigger" on:click={() => isOpen = !isOpen}>
+            Trigger
+          </button>
+          <Dialog open={$isOpen} on:close={console.log} static>
+            <p>Contents</p>
+            <div tabindex={0} on:focus={focusCounter} />
+          </Dialog>
+        `)
+
+      // Wait for the focus to take effect
+      await tick();
+
+      // Let's verify that the Dialog is already there
+      expect(getDialog()).not.toBe(null)
+      expect(focusCounter).toHaveBeenCalledTimes(0)
+
+      isOpen.set(true);
+      // Wait for the store to trigger rerendering
+      await tick();
+
+      // Wait for the focus to take effect
+      await tick();
+
+      // Let's verify that the Dialog is already there
+      expect(getDialog()).not.toBe(null)
+      expect(focusCounter).toHaveBeenCalledTimes(1)
+    })
+
+    it('should be possible to always render the Dialog if we provide it a `static` prop (and enable focus trapping based on `open` with an if block)', async () => {
+      let focusCounter = jest.fn()
+      let isOpen = writable(false);
+      render(svelte`
+          <button id="trigger" on:click={() => isOpen = !isOpen}>
+            Trigger
+          </button>
+          <Dialog open={$isOpen} on:close={console.log} static>
+            {#if $isOpen}
+              <p>Contents</p>
+              <div tabindex={0} on:focus={focusCounter} />
+            {/if}
+          </Dialog>
+        `)
+
+      // Wait for the focus to take effect
+      await tick();
+
+      // Let's verify that the Dialog is already there
+      expect(getDialog()).not.toBe(null)
+      expect(focusCounter).toHaveBeenCalledTimes(0)
+
+      isOpen.set(true);
+      // Wait for the store to trigger rerendering
+      await tick();
+
+      // Wait for the focus to take effect
+      await tick();
+
       // Let's verify that the Dialog is already there
       expect(getDialog()).not.toBe(null)
       expect(focusCounter).toHaveBeenCalledTimes(1)

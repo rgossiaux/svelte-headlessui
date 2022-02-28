@@ -20,16 +20,12 @@
 
   let previousActiveElement: HTMLElement | null = null;
 
-  let initial = true;
   async function handleFocus() {
-    if (initial) {
-      await tick();
-      initial = false;
-    }
     if (!enabled) return;
     if (containers.size !== 1) return;
     let { initialFocus } = options;
 
+    await tick();
     let activeElement = document.activeElement as HTMLElement;
 
     if (initialFocus) {
