@@ -39,11 +39,11 @@ By default the first tab is selected, and clicking on any tab or selecting it wi
 
 ## Styling
 
-See TODO for some general notes on styling the components in this library.
+[See here](general-concepts#component-styling) for some general notes on styling the components in this library.
 
 ### The selected tab
 
-To style the active `Tab`, you can use the `selected` slot prop that it provides, which tells you whether or not that tab is currently selected. You can also access `selected` as an argument to a function passed to `class` (see TODO). You can use this state to conditionally apply whatever styles you wish.
+To style the active `Tab`, you can use the `selected` slot prop that it provides, which tells you whether or not that tab is currently selected. You can also access `selected` as an argument to a function passed to `class` ([see here](general-concepts#styling-the-components-themselves-class-and-style)). You can use this state to conditionally apply whatever styles you wish.
 
 ```svelte
 <script>
@@ -69,8 +69,7 @@ To style the active `Tab`, you can use the `selected` slot prop that it provides
 
 <style>
   /* WARNING: This is just for demonstration.
-      Using :global() in this way can be risky.
-      See TODO for more. */
+      Using :global() in this way can be risky. */
   :global(.tab-selected) {
     background-color: rgb(59 130 246);
     color: rgb(255 255 255);

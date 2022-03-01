@@ -46,7 +46,7 @@ The `ListboxButton` will automatically open/close the `ListboxOptions` when clic
 
 ## Styling
 
-See TODO for some general notes on styling the components in this library.
+[See here](general-concepts#component-styling) for some general notes on styling the components in this library.
 
 ### Active and selected items
 

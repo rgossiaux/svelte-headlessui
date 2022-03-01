@@ -80,7 +80,7 @@ Toggling the switch fires the `change` event with a negated version of the `chec
 
 ## Styling
 
-See TODO for some general notes on styling the components in this library.
+[See here](general-concepts#component-styling) for some general notes on styling the components in this library.
 
 ## Using a custom label
 

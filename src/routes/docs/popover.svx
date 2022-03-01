@@ -85,7 +85,7 @@ For more sophisticated approaches, you might use a library like Popper JS. We re
 
 ## Styling
 
-See TODO for some general notes on styling the components in this library.
+[See here](general-concepts#component-styling) for some general notes on styling the components in this library.
 
 ## Showing/hiding the popover
 
@@ -194,8 +194,8 @@ If you'd like to style a backdrop over your application UI whenever you open a `
 </Popover>
 
 <style>
-  /* WARNING: This is just for illustration.
-      See TODO for recommended styling practices */
+  /* WARNING: This is just for demonstration.
+      Using :global() in this way can be risky. */
   :global(.popover-overlay-open) {
     background-color: rgb(0 0 0);
     opacity: 0.3;

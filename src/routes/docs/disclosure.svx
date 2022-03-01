@@ -32,7 +32,7 @@ Clicking the `DisclosureButton` will automatically open/close the `DisclosurePan
 
 ## Styling
 
-See TODO for some general notes on styling the components in this library.
+[See here](general-concepts#component-styling) for some general notes on styling the components in this library.
 
 ### Open panels
 

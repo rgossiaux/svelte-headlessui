@@ -122,13 +122,13 @@ If you'd like something other than the first focusable element to receive initia
 
 ## Styling
 
-See TODO for some general notes on styling the components in this library.
+[See here](general-concepts#component-styling) for some general notes on styling the components in this library.
 
 ### Styling the overlay
 
 Typically modal dialogs will be rendered on top of a transparent dark background. You can style the `DialogOverlay` component to achieve this look.
 
-The overlay component accepts normal styling props like `style` and `class`, so you can style it using any technique you like (see TODO). Be sure to place it before the rest of your dialog's contents in the DOM so that it doesn't obscure the dialog's interactive elements.
+The overlay component accepts normal styling props like `style` and `class`, so you can style it using any technique you like. Be sure to place it before the rest of your dialog's contents in the DOM so that it doesn't obscure the dialog's interactive elements.
 
 ```svelte
 <script>

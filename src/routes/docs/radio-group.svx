@@ -44,7 +44,7 @@ Radio Groups are built using a combination of the `RadioGroup`, `RadioGroupOptio
 
 ## Styling
 
-See TODO for some general notes on styling the components in this library.
+[See here](general-concepts#component-styling) for some general notes on styling the components in this library.
 
 ### Checked option
 
@@ -146,8 +146,7 @@ By default, `RadioGroupLabel` renders a `<label>` element and `RadioGroupDescrip
 
 <style>
   /* WARNING: This is just for demonstration.
-      Using :global() in this way can be risky.
-      See TODO for more. */
+      Using :global() in this way can be risky. */
   :global(.checked) {
     /* Your styles here */
   }
