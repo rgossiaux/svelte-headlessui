@@ -2,6 +2,8 @@
 
 This is an unofficial, complete Svelte port of the Headless UI component library (https://headlessui.dev/). It contains **fully accessible, feature-rich, unstyled** UI components.
 
+Documentation for this library is available at https://svelte-headlessui.goss.io
+
 ## Who is this for?
 
 This library is for you if you fall into one of two categories:
