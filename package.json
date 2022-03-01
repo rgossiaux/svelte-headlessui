@@ -9,7 +9,7 @@
     "headless",
     "sveltejs"
   ],
-  "homepage": "https://github.com/rgossiaux/svelte-headlessui",
+  "homepage": "https://svelte-headlessui.goss.io",
   "bugs": {
     "url": "https://github.com/rgossiaux/svelte-headlessui/issues"
   },
