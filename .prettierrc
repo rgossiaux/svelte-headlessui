@@ -1,1 +1,8 @@
-{}
+{
+  "overrides": [
+    {
+      "files": "*.svx",
+      "options": { "parser": "mdx" }
+    }
+  ]
+}

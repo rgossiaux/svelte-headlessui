@@ -1,5 +1,5 @@
 const config = {
-  content: ["./src/**/*.{html,js,svelte,ts}"],
+  content: ["./src/**/*.{html,js,svelte,ts,svx}"],
 
   theme: {
     extend: {},
@@ -9,6 +9,7 @@ const config = {
     require("@tailwindcss/forms")({
       strategy: "class",
     }),
+    require("@tailwindcss/typography"),
   ],
 };
 
