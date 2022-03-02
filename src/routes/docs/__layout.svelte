@@ -12,7 +12,9 @@
 
 <div class="flex">
   <div class="w-52 min-w-fit hidden md:block flex-shrink-0">
-    <div class="sticky top-20">
+    <div
+      class="sticky top-0 pt-20 pb-4 -mt-[61px] max-h-screen overflow-y-auto"
+    >
       <Sidebar />
     </div>
   </div>

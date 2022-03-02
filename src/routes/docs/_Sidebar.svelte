@@ -29,7 +29,7 @@
     <a
       href={p.url}
       class:font-bold={$page.path.includes(p.url)}
-      class="py-1 hover:decoration-stone-400 hover:underline"
+      class="py-2 hover:decoration-stone-400 hover:underline"
     >
       {p.text}
     </a>
@@ -39,7 +39,7 @@
     <a
       href={component.url}
       class:font-bold={$page.path.includes(component.url)}
-      class="py-1 hover:decoration-stone-400 hover:underline"
+      class="py-2 hover:decoration-stone-400 hover:underline"
     >
       {component.text}
     </a>
