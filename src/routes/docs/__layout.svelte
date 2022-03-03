@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <article class="prose max-w-3xl min-w-0 mt-5 px-6 pb-8" bind:this={el}>
+  <article class="prose max-w-3xl min-w-0 mt-5 px-3 pb-8" bind:this={el}>
     <slot />
   </article>
   <div class="w-64 text-sm hidden flex-shrink-0 lg:block">
