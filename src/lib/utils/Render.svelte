@@ -46,6 +46,8 @@
   export let features: Features = Features.None;
   // The static and unmount props are only used in conjunction with the render strategies
   export let unmount = true;
+  let static_ = false;
+  export { static_ as static };
 
   let classProp: ((props: TSlotProps) => string) | string | undefined =
     undefined;
@@ -72,11 +74,11 @@
 
   $: show =
     visible ||
-    (features & Features.Static && $$props.static) ||
+    (features & Features.Static && static_) ||
     !(features & Features.RenderStrategy && unmount);
   $: hidden =
     !visible &&
-    !(features & Features.Static && $$props.static) &&
+    !(features & Features.Static && static_) &&
     features & Features.RenderStrategy &&
     !unmount;
 
