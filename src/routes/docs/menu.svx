@@ -362,6 +362,7 @@ For a full reference on all accessibility features implemented in `Menu`, see <a
 | --------- | --------- | ------------------------------- |
 | `open`    | `boolean` | Whether or not the menu is open |
 
+
 ### MenuButton
 
 | Prop | Default  | Type     | Description                                   |
@@ -371,6 +372,7 @@ For a full reference on all accessibility features implemented in `Menu`, see <a
 | Slot prop | Type      | Description                     |
 | --------- | --------- | ------------------------------- |
 | `open`    | `boolean` | Whether or not the menu is open |
+
 
 ### MenuItems
 
@@ -386,6 +388,7 @@ Note that `static` and `unmount` cannot be used together.
 | --------- | --------- | ------------------------------- |
 | `open`    | `boolean` | Whether or not the menu is open |
 
+
 ### MenuItem
 
 | Prop       | Default | Type      | Description                                                                   |
@@ -395,5 +398,5 @@ Note that `static` and `unmount` cannot be used together.
 
 | Slot prop  | Type      | Description                                                            |
 | ---------- | --------- | ---------------------------------------------------------------------- |
-| `open`     | `boolean` | Whether or not the menu is open                                        |
+| `active`   | `boolean` | Whether the option is active (using the mouse or keyboard)             |
 | `disabled` | `boolean` | Whether the item is disabled for keyboard navigation and ARIA purposes |
