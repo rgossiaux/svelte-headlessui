@@ -334,26 +334,3 @@ it('should cleanup the Portal properly when Svelte would not detach it', async (
   expect(getPortalRoot()).not.toBe(null)
   expect(getPortalRoot().childNodes).toHaveLength(1)
 })
-
-it('should move the Portal last during initial render', async () => {
-  expect(getPortalRoot()).toBe(null)
-
-  // We need to use a custom target because of the implementation of
-  // render() in the testing library
-  render(svelte`
-    <script>
-      let target = document.body.firstChild;
-    </script>
-
-    <PortalGroup {target}>
-      <Portal>Portal</Portal>
-    </PortalGroup>
-    <main>Main</main>
-    `)
-
-  await tick();
-
-  expect(document.body.innerHTML).toMatchInlineSnapshot(
-    `"<div> <main>Main</main><div>Portal</div></div>"`
-  )
-})
