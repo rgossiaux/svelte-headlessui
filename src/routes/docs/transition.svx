@@ -194,6 +194,8 @@ This is useful if you want something to transition in on initial page load, or w
 
 ### Transition
 
+This component is also exported as `TransitionRoot`, to maintain compatibility with some Tailwind UI snippets.
+
 | Prop        | Default | Type      | Description                                                                                                                            |
 | ----------- | ------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `show`      | --      | `boolean` | Whether the children should be shown or hidden                                                                                         |
