@@ -3,6 +3,7 @@ This is the release history of Svelte Headless UI and the correspondence with ve
 
 | Svelte Headless UI version | Date released | Headless UI version | Notes |
 | -------------------------- | ------------- | ------------------- | ----- |
+| 1.0.0-beta.12              | 2022-03-07    | 1.4.2               | Hotfix to replace an incorrect fix in 1.0.0-beta.11 |
 | 1.0.0-beta.11              | 2022-03-06    | 1.4.2               | |
 | 1.0.0-beta.10              | 2022-02-27    | 1.4.2               | |
 | 1.0.0-beta.9               | 2022-02-06    | 1.4.2               | |
