@@ -28,7 +28,7 @@
       class="sticky top-0 pt-20 pb-4 -mt-[61px] max-h-screen overflow-y-auto"
     >
       {#key $page}
-        <TableOfContents {el} />
+        <TableOfContents {el} rootMargin="-61px 0% -85% 0%" />
       {/key}
     </nav>
   </div>

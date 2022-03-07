@@ -4,6 +4,7 @@
   import TocItems, { type TocItem } from "./_TocItems.svelte";
 
   export let el: HTMLElement | null;
+  export let rootMargin = "0% 0% -80% 0%";
 
   let runWithCleanup = createRunWithCleanup();
   let activeId: string | undefined;
@@ -55,7 +56,7 @@
           }
         });
       },
-      { rootMargin: `0% 0% -80% 0%` }
+      { rootMargin }
     );
   });
 
