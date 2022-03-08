@@ -46,5 +46,9 @@
         @apply no-underline hover:underline;
       }
     }
+
+    :global(table) {
+      @apply mt-8;
+    }
   }
 </style>
