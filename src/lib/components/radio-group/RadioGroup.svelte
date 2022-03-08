@@ -48,7 +48,9 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** The currently selected value in the `RadioGroup` */
     value: StateDefinition["value"];
+    /** Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled */
     disabled?: boolean;
   };
 </script>

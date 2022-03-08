@@ -12,8 +12,15 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /**
+     * Whether the `PopoverPanel` should trap focus.
+     * If true, focus will move inside the `PopoverPanel` when it is opened,
+     * and if focus leaves the `PopoverPanel` it will close.
+     */
     focus?: boolean;
+    /** Whether the element should ignore the internally managed open/closed state */
     static?: boolean;
+    /** Whether the element should be unmounted, instead of just hidden, based on the open/closed state	*/
     unmount?: boolean;
   };
 </script>

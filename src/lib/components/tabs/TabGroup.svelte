@@ -41,8 +41,15 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** The index of the default selected tab */
     defaultIndex?: number;
+    /** Whether the orientation of the `TabList` is vertical instead of horizontal */
     vertical?: boolean;
+    /**
+     * Whether, in keyboard navigation, the Enter or Space key is necessary to change tabs.
+     * By default, the arrow keys will change tabs automatically without hitting Enter/Space.
+     * This has no impact on mouse behavior
+     */
     manual?: boolean;
   };
 </script>

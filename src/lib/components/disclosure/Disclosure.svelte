@@ -45,6 +45,7 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** Whether the `Disclosure` should be open by default */
     defaultOpen?: boolean;
   };
 </script>
