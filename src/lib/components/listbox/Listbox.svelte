@@ -50,12 +50,16 @@
 
     return context;
   }
+
   type TListboxProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** Whether the entire `Listbox` and its children should be disabled */
     disabled?: boolean;
+    /** Whether the entire `Listbox` should be oriented horizontally instead of vertically */
     horizontal?: boolean;
+    /** The selected value */
     value?: StateDefinition["value"];
   };
 </script>

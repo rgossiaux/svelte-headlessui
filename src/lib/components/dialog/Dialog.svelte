@@ -42,9 +42,13 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** Whether the `Dialog` is open */
     open?: boolean;
+    /** The element that should receive focus when the Dialog is first opened */
     initialFocus?: HTMLElement | null;
+    /** Whether the element should ignore the internally managed open/closed state */
     static?: boolean;
+    /** Whether the element should be unmounted, instead of just hidden, based on the open/closed state	*/
     unmount?: boolean;
   };
 </script>

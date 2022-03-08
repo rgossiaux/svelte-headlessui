@@ -3,7 +3,9 @@
     TAsProp extends SupportedAs,
     TDefaultAs
   > = TTransitionChildProps<TAsProp, TDefaultAs> & {
+    /** Whether the children should be shown */
     show?: boolean;
+    /** Whether the transition should run on initial mount */
     appear?: boolean;
   };
 </script>

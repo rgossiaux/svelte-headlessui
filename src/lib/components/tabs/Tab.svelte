@@ -3,6 +3,7 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "button"> & {
+    /** Whether the `Tab` is currently disabled */
     disabled?: boolean;
   };
 </script>

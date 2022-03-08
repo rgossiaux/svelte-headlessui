@@ -3,7 +3,9 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "li"> & {
+    /** The option value */
     value: unknown;
+    /** Whether the option should be disabled for keyboard navigation and ARIA purposes */
     disabled?: boolean;
   };
 </script>

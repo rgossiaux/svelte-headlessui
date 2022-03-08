@@ -3,7 +3,12 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /**
+     * The value of the `RadioGroupOption`.
+     * The type should match the type of the value prop in the `RadioGroup`
+     */
     value: unknown;
+    /** Whether the `RadioGroupOption` is disabled */
     disabled?: boolean;
   };
 </script>

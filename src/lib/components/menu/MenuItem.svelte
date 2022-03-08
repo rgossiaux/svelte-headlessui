@@ -2,7 +2,10 @@
   type TMenuItemProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp, "a"> & {};
+  > = TPassThroughProps<TSlotProps, TAsProp, "a"> & {
+    /** Whether the item should be disabled for keyboard navigation and ARIA purposes */
+    disabled?: boolean;
+  };
 </script>
 
 <script lang="ts">

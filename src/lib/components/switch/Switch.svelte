@@ -3,6 +3,7 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "button"> & {
+    /** Whether the switch is checked */
     checked: boolean;
   };
 </script>

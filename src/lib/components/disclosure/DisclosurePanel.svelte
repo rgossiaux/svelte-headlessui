@@ -9,8 +9,10 @@
     TSlotProps extends {},
     TAsProp extends SupportedAs
   > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
-    unmount?: boolean;
+    /** Whether the element should ignore the internally managed open/closed state */
     static?: boolean;
+    /** Whether the element should be unmounted, instead of just hidden, based on the open/closed state	*/
+    unmount?: boolean;
   };
 </script>
 
