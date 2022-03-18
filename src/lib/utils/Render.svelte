@@ -1,101 +1,19 @@
 <script lang="ts" context="module">
-  import type { SupportedAs, SupportedElement } from "$lib/internal/elements";
+  import type { SupportedAs } from "$lib/internal/elements";
   import { getElementComponent } from "$lib/internal/elements";
   import { get_current_component } from "svelte/internal";
-
-  export enum Features {
-    /** No features at all */
-    None = 0,
-
-    /**
-     * When used, this will allow us to use one of the render strategies.
-     *
-     * **The render strategies are:**
-     *    - **Unmount**   _(Will unmount the component.)_
-     *    - **Hidden**    _(Will hide the component using the [hidden] attribute.)_
-     */
-    RenderStrategy = 1,
-
-    /**
-     * When used, this will allow the user of our component to be in control. This can be used when
-     * you want to transition based on some state.
-     */
-    Static = 2,
-  }
 
   export enum RenderStrategy {
     Unmount,
     Hidden,
   }
-
-  type TRestProps<T> = T extends SupportedElement
-    ? Omit<
-        svelte.JSX.HTMLAttributes<HTMLElementTagNameMap[T]>,
-        "class" | "style"
-      >
-    : {};
-
-  type TResolveAs<TAsProp, TDefaultAs> = SupportedAs extends TAsProp
-    ? TDefaultAs
-    : TAsProp;
-  type TRenderProps<
-    TSlotProps extends {},
-    TAsProp extends SupportedAs,
-    TDefaultAs
-  > = TRestProps<TResolveAs<TAsProp, TDefaultAs>> & {
-    name: string;
-    slotProps: TSlotProps;
-    el?: HTMLElement | null;
-    visible?: boolean;
-    features?: Features;
-    as: TAsProp;
-    static?: boolean;
-    unmount?: boolean;
-    /**
-     * A list of actions to apply to the component's HTML element.
-     *
-     * Each action must take the form `[action]` or `[action, options]`:
-     *
-     * use={[[action1], [action2, action2Options], [action3]]}
-     */
-    use?: HTMLActionArray;
-    /**
-     * The class attribute for this component.
-     *
-     * In addition to a regular string, this may be a function that returns a string.
-     * In that case, the function will be passed this component's slot props as an argument,
-     * allowing you to conditionally apply classes. See the component's documentation for more.
-     */
-    class?: ((props: TSlotProps) => string) | string;
-    /**
-     * The style attribute for this component.
-     *
-     * In addition to a regular string, this may be a function that returns a string.
-     * In that case, the function will be passed this component's slot props as an argument,
-     * allowing you to conditionally apply styles. See the component's documentation for more.
-     */
-    style?: ((props: TSlotProps) => string) | string;
-  };
-
-  type TInternalProps = "name" | "slotProps" | "el" | "visible" | "features";
-
-  export type TPassThroughProps<
-    TSlotProps extends {},
-    TAsProp extends SupportedAs,
-    TDefaultAs
-  > = Omit<
-    TRenderProps<TSlotProps, TAsProp, TDefaultAs>,
-    TInternalProps | "as" | "static" | "unmount"
-  > & {
-    /** The HTML element the component should render as */
-    as?: TAsProp;
-  };
 </script>
 
 <script lang="ts">
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import type { SvelteComponent } from "svelte";
+  import { Features, type TRenderProps } from "$lib/types";
   const forwardEvents = forwardEventsBuilder(get_current_component());
 
   type TSlotProps = $$Generic<{}>;

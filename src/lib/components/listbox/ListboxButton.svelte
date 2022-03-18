@@ -15,8 +15,9 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import { get_current_component } from "svelte/internal";
-  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
+  import Render from "$lib/utils/Render.svelte";
   import { resolveButtonType } from "$lib/utils/resolve-button-type";
+  import type { TPassThroughProps } from "$lib/types";
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;

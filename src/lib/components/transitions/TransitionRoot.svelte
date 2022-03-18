@@ -1,13 +1,11 @@
 <script lang="ts" context="module">
-  export type TTransitionRootProps<
-    TAsProp extends SupportedAs,
-    TDefaultAs
-  > = TTransitionChildProps<TAsProp, TDefaultAs> & {
-    /** Whether the children should be shown */
-    show?: boolean;
-    /** Whether the transition should run on initial mount */
-    appear?: boolean;
-  };
+  export type TTransitionRootProps = TTransitionProps &
+    Omit<TRestProps<"div">, "as"> & {
+      /** Whether the children should be shown */
+      show?: boolean;
+      /** Whether the transition should run on initial mount */
+      appear?: boolean;
+    };
 </script>
 
 <script lang="ts">
@@ -16,7 +14,7 @@
   import { match } from "$lib/utils/match";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
   import TransitionChild, {
-    type TTransitionChildProps,
+    type TTransitionProps,
   } from "$lib/components/transitions/TransitionChild.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
@@ -33,6 +31,7 @@
     TreeStates,
     useNesting,
   } from "./common.svelte";
+  import type { TRestProps } from "$lib/types";
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
     "beforeEnter",
     "beforeLeave",
@@ -41,8 +40,7 @@
   ]);
 
   /***** Props *****/
-  type TAsProp = $$Generic<SupportedAs>;
-  type $$Props = TTransitionRootProps<TAsProp, "div">;
+  type $$Props = TTransitionRootProps;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];

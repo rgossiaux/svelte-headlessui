@@ -12,7 +12,8 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
-  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
+  import Render from "$lib/utils/Render.svelte";
+  import type { TPassThroughProps } from "$lib/types";
 
   export enum MenuStates {
     Open,

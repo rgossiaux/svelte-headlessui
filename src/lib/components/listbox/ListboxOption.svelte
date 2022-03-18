@@ -15,11 +15,12 @@
   import { ListboxStates, useListboxContext } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Focus } from "$lib/utils/calculate-active-index";
-  import Render, { type TPassThroughProps } from "$lib/utils/Render.svelte";
+  import Render from "$lib/utils/Render.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import type { SupportedAs } from "$lib/internal/elements";
   import { get_current_component } from "svelte/internal";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import type { TPassThroughProps } from "$lib/types";
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;

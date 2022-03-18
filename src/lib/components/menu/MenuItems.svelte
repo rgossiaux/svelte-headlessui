@@ -20,12 +20,10 @@
   import { tick } from "svelte";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import type { SupportedAs } from "$lib/internal/elements";
-  import Render, {
-    Features,
-    type TPassThroughProps,
-  } from "$lib/utils/Render.svelte";
+  import Render from "$lib/utils/Render.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
+  import { Features, type TPassThroughProps } from "$lib/types";
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;

@@ -1,9 +1,5 @@
 <script lang="ts" context="module">
-  export type TTransitionChildProps<
-    TAsProp extends SupportedAs,
-    TDefaultAs
-  > = Omit<TPassThroughProps<{}, TAsProp, TDefaultAs>, "class"> & {
-    /** Classes to add to the transitioning element during the entire enter phase */
+  export type TTransitionProps = {
     enter?: string;
     /** Classes to add to the transitioning element before the enter phase starts */
     enterFrom?: string;
@@ -22,9 +18,23 @@
     leaveTo?: string;
     /** Whether the element should be unmounted, instead of just hidden, based on the open/closed state */
     unmount?: boolean;
-    /** The class attribute for the transition element. These classes will always be present. */
+    /**
+     * A list of actions to apply to the component's HTML element.
+     *
+     * Each action must take the form `[action]` or `[action, options]`:
+     *
+     * use={[[action1], [action2, action2Options], [action3]]}
+     */
+    use?: HTMLActionArray;
+    /** The class attribute for this component. It will always be present. */
     class?: string;
+    /** The style attribute for this component. It will always be present. */
+    style?: string;
+    /** The element this component should render as */
+    as?: SupportedAs;
   };
+
+  type TTransitionChildProps = TTransitionProps & Omit<TRestProps<"div">, "as">;
 </script>
 
 <script lang="ts">
@@ -47,15 +57,11 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render, {
-    Features,
-    RenderStrategy,
-    type TPassThroughProps,
-  } from "$lib/utils/Render.svelte";
+  import Render, { RenderStrategy } from "$lib/utils/Render.svelte";
+  import { Features, type TRestProps } from "$lib/types";
 
   /***** Props *****/
-  type TAsProp = $$Generic<SupportedAs>;
-  type $$Props = TTransitionChildProps<TAsProp, "div">;
+  type $$Props = TTransitionChildProps;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
