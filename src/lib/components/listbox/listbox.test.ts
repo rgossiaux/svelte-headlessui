@@ -44,9 +44,6 @@ import {
 import { Transition } from "../transitions";
 import TransitionDebug from "$lib/components/disclosure/_TransitionDebug.svelte";
 import ManagedListbox from "./_ManagedListbox.svelte";
-import Button from "$lib/internal/elements/Button.svelte";
-import Div from "$lib/internal/elements/Div.svelte";
-import Span from "$lib/internal/elements/Span.svelte";
 import svelte from "svelte-inline-compile";
 import { writable } from "svelte/store";
 
@@ -3476,29 +3473,26 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to click outside of the listbox on another listbox button which should close the current listbox and open the new listbox',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Div, {}, [
-            [Listbox, { value: undefined, onChange: console.log }, [
-              [ListboxButton, {}, "Trigger"],
-              [ListboxOptions, {}, [
-                [ListboxOption, { value: "a" }, "Option A"],
-                [ListboxOption, { value: "b" }, "Option B"],
-                [ListboxOption, { value: "c" }, "Option C"],
-              ]]
-            ]],
-            [Listbox, { value: undefined, onChange: console.log }, [
-              [ListboxButton, {}, "Trigger"],
-              [ListboxOptions, {}, [
-                [ListboxOption, { value: "a" }, "Option A"],
-                [ListboxOption, { value: "b" }, "Option B"],
-                [ListboxOption, { value: "c" }, "Option C"],
-              ]]
-            ]],
-          ]]
-        ]
-      })
+      render(svelte`
+        <div>
+          <Listbox value={undefined} on:change={console.log}>
+            <ListboxButton>Trigger</ListboxButton>
+            <ListboxOptions>
+              <ListboxOption value="a">Option A</ListboxOption>
+              <ListboxOption value="b">Option B</ListboxOption>
+              <ListboxOption value="c">Option C</ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+          <Listbox value={undefined} on:change={console.log}>
+            <ListboxButton>Trigger</ListboxButton>
+            <ListboxOptions>
+              <ListboxOption value="a">Option A</ListboxOption>
+              <ListboxOption value="b">Option B</ListboxOption>
+              <ListboxOption value="c">Option C</ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+        </div>
+        `)
 
       let [button1, button2] = getListboxButtons()
 
@@ -3557,24 +3551,21 @@ describe('Mouse interactions', () => {
     'should be possible to click outside of the listbox, on an element which is within a focusable element, which closes the listbox',
     suppressConsoleLogs(async () => {
       let focusFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Div, {}, [
-            [Listbox, { value: undefined, onChange: console.log }, [
-              [ListboxButton, { onFocus: focusFn }, "Trigger"],
-              [ListboxOptions, {}, [
-                [ListboxOption, { value: "a" }, "Option A"],
-                [ListboxOption, { value: "b" }, "Option B"],
-                [ListboxOption, { value: "c" }, "Option C"],
-              ]]
-            ]],
-            [Button, { id: "btn" }, [
-              [Span, {}, "Next"]
-            ]],
-          ]]
-        ]
-      })
+      render(svelte`
+        <div>
+          <Listbox value={undefined} on:change={console.log}>
+            <ListboxButton on:focus={focusFn}>Trigger</ListboxButton>
+            <ListboxOptions>
+              <ListboxOption value="a">Option A</ListboxOption>
+              <ListboxOption value="b">Option B</ListboxOption>
+              <ListboxOption value="c">Option C</ListboxOption>
+            </ListboxOptions>
+          </Listbox>
+          <button id="btn">
+            <span>Next</span>
+          </button>
+        </div>
+        `)
 
       // Click the listbox button
       await click(getListboxButton())

@@ -8,9 +8,6 @@ import {
   getSwitchLabel,
   SwitchState,
 } from "$lib/test-utils/accessibility-assertions";
-import Button from "$lib/internal/elements/Button.svelte";
-import Div from "$lib/internal/elements/Div.svelte";
-import Span from "$lib/internal/elements/Span.svelte";
 import ManagedSwitch from "./_ManagedSwitch.svelte";
 import { click, Keys, press } from "$lib/test-utils/interactions";
 import svelte from "svelte-inline-compile";
@@ -60,13 +57,11 @@ describe("Rendering", () => {
   });
 
   it("should be possible to use the switch contents as the label", () => {
-    render(TestRenderer, {
-      allProps: [
-        Switch,
-        { checked: false, onChange: console.log },
-        [Span, {}, "Enable notifications"],
-      ],
-    });
+    render(svelte`
+      <Switch checked={false} on:change={console.log}>
+        <span>Enable notifications</span>
+      </Switch>
+    `)
     assertSwitch({ state: SwitchState.Off, label: "Enable notifications" });
   });
 
@@ -269,16 +264,12 @@ describe("Keyboard interactions", () => {
 
   describe("`Tab` key", () => {
     it("should be possible to tab away from the Switch", async () => {
-      render(TestRenderer, {
-        allProps: [
-          Div,
-          {},
-          [
-            [Switch, { checked: false, onChange: console.log }],
-            [Button, { id: "btn" }, "Other element"],
-          ],
-        ],
-      });
+      render(svelte`
+        <div>
+          <Switch checked={false} on:change={console.log} />
+          <button id="btn">Other element</button>
+        </div>
+      `)
 
       // Ensure checkbox is off
       assertSwitch({ state: SwitchState.Off });

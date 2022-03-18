@@ -6,10 +6,6 @@ import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
 import { click, focus, Keys, MouseButton, mouseLeave, mouseMove, press, shift, type, word } from "$lib/test-utils/interactions";
 import { Transition, TransitionChild } from "../transitions";
 import TransitionDebug from "$lib/components/disclosure/_TransitionDebug.svelte";
-import Button from "$lib/internal/elements/Button.svelte";
-import Div from "$lib/internal/elements/Div.svelte";
-import Form from "$lib/internal/elements/Form.svelte";
-import Span from "$lib/internal/elements/Span.svelte";
 import svelte from "svelte-inline-compile";
 import { writable } from "svelte/store";
 
@@ -489,36 +485,32 @@ describe('Rendering composition', () => {
   it(
     'should mark all the elements between MenuItems and MenuItem with role none',
     suppressConsoleLogs(async () => {
-      render
-      render(
-        TestRenderer, {
-        allProps: [
-          [Menu, {}, [
-            [MenuButton, {}, "Trigger"],
-            [Div, { class: "outer" }, [
-              [MenuItems, {}, [
-                [Div, { class: "py-1 inner" }, [
-                  [MenuItem, { as: "button" }, "Item A"],
-                  [MenuItem, { as: "button" }, "Item B"],
-                ]],
-                [Div, { class: "py-1 inner" }, [
-                  [MenuItem, { as: "button" }, "Item C"],
-                  [MenuItem, {}, [
-                    [Div, {}, [
-                      [Div, { class: "outer" }, "Item D"]
-                    ]]
-                  ]]
-                ]],
-                [Div, { class: "py-1 inner" }, [
-                  [Form, { class: "inner" }, [
-                    [MenuItem, { as: "button" }, "Item E"]
-                  ]]
-                ]]
-              ]]
-            ]]
-          ]],
-        ]
-      })
+      render(svelte`
+        <Menu>
+          <MenuButton>Trigger</MenuButton>
+          <div class="outer">
+            <MenuItems>
+              <div class="py-1 inner">
+                <MenuItem as="button">Item A</MenuItem>
+                <MenuItem as="button">Item B</MenuItem>
+              </div>
+              <div class="py-1 inner">
+                <MenuItem as="button">Item C</MenuItem>
+                <MenuItem>
+                  <div>
+                    <div class="outer">Item D</div>
+                  </div>
+                </MenuItem>
+              </div>
+              <div class="py-1 inner">
+                <form class="inner">
+                  <MenuItem as="button">Item E</MenuItem>
+                </form>
+              </div>
+            </MenuItems>
+          </div>
+        </Menu>
+      `)
 
       // Open menu
       await click(getMenuButton())
@@ -2960,29 +2952,26 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to click outside of the menu on another menu button which should close the current menu and open the new menu',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Div, {}, [
-            [Menu, {}, [
-              [MenuButton, {}, "Trigger"],
-              [MenuItems, {}, [
-                [MenuItem, { as: "a" }, "Item A"],
-                [MenuItem, { as: "a" }, "Item B"],
-                [MenuItem, { as: "a" }, "Item C"],
-              ]]
-            ]],
-            [Menu, {}, [
-              [MenuButton, {}, "Trigger"],
-              [MenuItems, {}, [
-                [MenuItem, { as: "a" }, "Item A"],
-                [MenuItem, { as: "a" }, "Item B"],
-                [MenuItem, { as: "a" }, "Item C"],
-              ]]
-            ]],
-          ]]
-        ]
-      })
+      render(svelte`
+        <div>
+          <Menu>
+            <MenuButton>Trigger</MenuButton>
+            <MenuItems>
+              <MenuItem as="a">Item A</MenuItem>
+              <MenuItem as="a">Item B</MenuItem>
+              <MenuItem as="a">Item C</MenuItem>
+            </MenuItems>
+          </Menu>
+          <Menu>
+            <MenuButton>Trigger</MenuButton>
+            <MenuItems>
+              <MenuItem as="a">Item A</MenuItem>
+              <MenuItem as="a">Item B</MenuItem>
+              <MenuItem as="a">Item C</MenuItem>
+            </MenuItems>
+          </Menu>
+        </div>
+      `)
 
       let [button1, button2] = getMenuButtons()
 
@@ -3008,24 +2997,21 @@ describe('Mouse interactions', () => {
     'should be possible to click outside of the menu, on an element which is within a focusable element, which closes the menu',
     suppressConsoleLogs(async () => {
       let focusFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Div, {}, [
-            [Menu, {}, [
-              [MenuButton, { onFocus: focusFn }, "Trigger"],
-              [MenuItems, {}, [
-                [MenuItem, { as: "a" }, "Item A"],
-                [MenuItem, { as: "a" }, "Item B"],
-                [MenuItem, { as: "a" }, "Item C"],
-              ]]
-            ]],
-            [Button, { id: "btn" }, [
-              [Span, {}, "Next"]
-            ]]
-          ]]
-        ]
-      })
+      render(svelte`
+        <div>
+          <Menu>
+            <MenuButton on:focus={focusFn}>Trigger</MenuButton>
+            <MenuItems>
+              <MenuItem as="a">Item A</MenuItem>
+              <MenuItem as="a">Item B</MenuItem>
+              <MenuItem as="a">Item C</MenuItem>
+            </MenuItems>
+          </Menu>
+          <button id="btn">
+            <span>Next</span>
+          </button>
+        </div>
+      `)
 
       // Click the menu button
       await click(getMenuButton())
@@ -3433,21 +3419,18 @@ describe('Mouse interactions', () => {
     suppressConsoleLogs(async () => {
       let clickHandler = jest.fn()
 
-      render(
-        TestRenderer, {
-        allProps: [
-          [Menu, {}, [
-            [MenuButton, {}, "Trigger"],
-            [MenuItems, {}, [
-              [MenuItem, { as: "a", onClick: clickHandler }, "Item A"],
-              [MenuItem, { as: "a", onClick: clickHandler, disabled: true }, "Item B"],
-              [MenuItem, { disabled: true }, [
-                [Button, { onClick: clickHandler }, "Item C"],
-              ]]
-            ]]
-          ]],
-        ]
-      })
+      render(svelte`
+        <Menu>
+          <MenuButton>Trigger</MenuButton>
+          <MenuItems>
+            <MenuItem as="a" on:click={clickHandler}>Item A</MenuItem>
+            <MenuItem as="a" on:click={clickHandler} disabled>Item B</MenuItem>
+            <MenuItem disabled>
+              <button on:click={clickHandler}>Item C</button>
+            </MenuItem>
+          </MenuItems>
+        </Menu>
+      `)
 
       // Open menu
       await click(getMenuButton())
