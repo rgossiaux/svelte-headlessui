@@ -30,7 +30,6 @@
   if (passive) delete allProps["onClick"];
 </script>
 
-<!-- svelte-ignore a11y-label-has-associated-control -->
 <Render
   {...allProps}
   name={"Label"}
