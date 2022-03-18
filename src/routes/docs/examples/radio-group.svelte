@@ -36,7 +36,6 @@
       <div class="space-y-2">
         {#each plans as plan (plan.name)}
           <RadioGroupOption
-            key={plan.name}
             value={plan}
             class={({ active, checked }) =>
               `${
