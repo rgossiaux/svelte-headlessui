@@ -12,5 +12,5 @@ pnpm install -D @rgossiaux/svelte-headlessui
 
 Install using **yarn**:
 ```shell
-yarn add @rgossiaux/svelte-headlessui
+yarn add -D @rgossiaux/svelte-headlessui
 ```
