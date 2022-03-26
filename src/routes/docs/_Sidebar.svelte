@@ -6,6 +6,7 @@
 
   $: pages = [
     { url: "../docs", text: "Home" },
+    { url: `${base}installation`, text: "Installation" },
     { url: `${base}general-concepts`, text: "General concepts" },
     { url: `${base}tailwind-ui`, text: "Use with Tailwind UI" },
     { url: `${base}version-history`, text: "Version history" },

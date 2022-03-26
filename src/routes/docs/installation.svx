@@ -1,0 +1,16 @@
+# Installation
+
+Install using **npm**:
+```shell
+npm install -D @rgossiaux/svelte-headlessui
+```
+
+Install using **pnpm**:
+```shell
+pnpm install -D @rgossiaux/svelte-headlessui
+```
+
+Install using **yarn**:
+```shell
+yarn add @rgossiaux/svelte-headlessui
+```
