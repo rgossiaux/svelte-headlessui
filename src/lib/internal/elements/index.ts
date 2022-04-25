@@ -1,49 +1,13 @@
-import type { SvelteComponent } from "svelte";
-const components = [
-  "a",
-  "address",
-  "article",
-  "aside",
-  "b",
-  "bdi",
-  "bdo",
-  "blockquote",
-  "button",
-  "cite",
-  "code",
-  "data",
-  "datalist",
-  "dd",
-  "dl",
-  "dt",
-  "div",
-  "em",
-  "footer",
-  "form",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "header",
-  "i",
-  "input",
-  "label",
-  "li",
-  "main",
-  "nav",
-  "ol",
-  "p",
-  "section",
-  "span",
-  "strong",
-  "ul",
-] as const;
+import { SvelteComponent } from "svelte/internal";
 
-export type SupportedElement = typeof components[number];
+// We can't use svelte.JSX.IntrinsicElements like in React, since
+// svelte.JSX.IntrinsicElements allows any string as the key
+export type SupportedElement = (keyof HTMLElementTagNameMap)
 export type SupportedAs = SupportedElement | typeof SvelteComponent;
 
-export function isValidElement(element: SupportedAs) {
-  return !(typeof element === "string" && !components.includes(element));
+export function isValidElement(element: SupportedAs): boolean {
+  if (!element) return false
+  if (typeof element === 'string') return true  // Is a HTML element
+  if (element.prototype instanceof SvelteComponent) return true  // Is a Svelte component
+  return false
 }
