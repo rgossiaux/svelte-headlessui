@@ -1,7 +1,9 @@
 import { SvelteComponent } from "svelte/internal";
 
-type HTMLElement = (keyof HTMLElementTagNameMap)
-export type SupportedAs = HTMLElement | typeof SvelteComponent;
+// We can't use svelte.JSX.IntrinsicElements like in React, since
+// svelte.JSX.IntrinsicElements allows any string as the key
+export type SupportedElement = (keyof HTMLElementTagNameMap)
+export type SupportedAs = SupportedElement | typeof SvelteComponent;
 
 export function isValidElement(element: SupportedAs): boolean {
   if (!element) return false

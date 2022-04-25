@@ -87,6 +87,7 @@
       <slot />
     </svelte:element>
   {:else}
+    <!-- workaround for forwarding events in components -->
     <svelte:component
       this={as}
       bind:el
