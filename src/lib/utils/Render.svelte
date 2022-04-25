@@ -74,15 +74,28 @@
 </script>
 
 {#if show}
-  <svelte:element
-    this={as}
-    bind:this={el}
-    use:useActions={use}
-    use:forwardEvents
-    {...$$restProps}
-    {...propsWeControl}
-    hidden={hidden || undefined}
+  {#if typeof as === "string"}
+    <svelte:element
+      this={as}
+      bind:this={el}
+      use:useActions={use}
+      use:forwardEvents
+      {...$$restProps}
+      {...propsWeControl}
+      hidden={hidden || undefined}
     >
-    <slot/>
-  </svelte:element>
+      <slot />
+    </svelte:element>
+  {:else}
+    <svelte:component
+      this={as}
+      bind:el
+      use={[...use, forwardEvents]}
+      {...$$restProps}
+      {...propsWeControl}
+      hidden={hidden || undefined}
+    >
+      <slot />
+    </svelte:component>
+  {/if}
 {/if}
