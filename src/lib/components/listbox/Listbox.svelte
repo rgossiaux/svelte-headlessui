@@ -66,7 +66,7 @@
     horizontal?: boolean;
     /** The selected value */
     value?: StateDefinition["value"];
-    /** Wether the `Listbox` should allow mutliple selections */
+    /** Whether the `Listbox` should allow mutliple selections */
     multiple?: boolean;
   };
 </script>
