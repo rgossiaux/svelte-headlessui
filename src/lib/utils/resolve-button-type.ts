@@ -7,6 +7,6 @@ export function resolveButtonType(
   let tag = props.as ?? "button";
   if (typeof tag === "string" && tag.toLowerCase() === "button")
     return "button";
-  if (ref instanceof HTMLButtonElement) return "button";
+  if (ref && ref instanceof HTMLButtonElement) return "button";
   return undefined;
 }
