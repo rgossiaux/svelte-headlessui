@@ -9,10 +9,7 @@ import {
 import { render } from "@testing-library/svelte";
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from ".";
 import { suppressConsoleLogs } from "$lib/test-utils/suppress-console-logs";
-import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
 import { click, Keys, press, shift } from "$lib/test-utils/interactions";
-import Button from "$lib/internal/elements/Button.svelte";
-import ManagedRadioGroup from "./_ManagedRadioGroup.svelte";
 import svelte from "svelte-inline-compile";
 
 let mockId = 0;
@@ -42,17 +39,14 @@ describe('Safe guards', () => {
   it(
     'should be possible to render a RadioGroup without crashing',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [RadioGroup, { value: undefined, onChange: console.log }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-        ]
-      })
+      render(svelte`
+        <RadioGroup value={undefined} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+      `);
 
       assertRadioGroupLabel({ textContent: 'Pizza Delivery' })
     })
@@ -65,17 +59,14 @@ describe('Safe guards', () => {
 
 describe('Rendering', () => {
   it('should be possible to render a RadioGroup, where the first element is tabbable (value is undefined)', async () => {
-    render(
-      TestRenderer, {
-      allProps: [
-        [RadioGroup, { value: undefined, onChange: console.log }, [
-          [RadioGroupLabel, {}, "Pizza Delivery"],
-          [RadioGroupOption, { value: "pickup" }, "Pickup"],
-          [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-          [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-        ]],
-      ]
-    })
+    render(svelte`
+      <RadioGroup value={undefined} on:change={console.log}>
+        <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+        <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+        <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+        <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+      </RadioGroup>
+    `);
 
     expect(getRadioGroupOptions()).toHaveLength(3)
 
@@ -85,17 +76,14 @@ describe('Rendering', () => {
   })
 
   it('should be possible to render a RadioGroup, where the first element is tabbable (value is null)', async () => {
-    render(
-      TestRenderer, {
-      allProps: [
-        [RadioGroup, { value: null, onChange: console.log }, [
-          [RadioGroupLabel, {}, "Pizza Delivery"],
-          [RadioGroupOption, { value: "pickup" }, "Pickup"],
-          [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-          [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-        ]],
-      ]
-    })
+    render(svelte`
+      <RadioGroup value={null} on:change={console.log}>
+        <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+        <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+        <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+        <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+      </RadioGroup>
+    `);
 
     expect(getRadioGroupOptions()).toHaveLength(3)
 
@@ -105,17 +93,14 @@ describe('Rendering', () => {
   })
 
   it('should be possible to render a RadioGroup with an active value', async () => {
-    render(
-      TestRenderer, {
-      allProps: [
-        [RadioGroup, { value: "home-delivery", onChange: console.log }, [
-          [RadioGroupLabel, {}, "Pizza Delivery"],
-          [RadioGroupOption, { value: "pickup" }, "Pickup"],
-          [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-          [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-        ]],
-      ]
-    })
+    render(svelte`
+      <RadioGroup value={"home-delivery"} on:change={console.log}>
+        <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+        <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+        <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+        <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+      </RadioGroup>
+    `);
 
     expect(getRadioGroupOptions()).toHaveLength(3)
 
@@ -282,17 +267,14 @@ describe('Rendering', () => {
 describe('Keyboard interactions', () => {
   describe('`Tab` key', () => {
     it('should be possible to tab to the first item', async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [RadioGroup, { value: undefined, onChange: console.log }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-        ]
-      })
+      render(svelte`
+        <RadioGroup value={undefined} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+      `);
 
       await press(Keys.Tab)
 
@@ -301,17 +283,14 @@ describe('Keyboard interactions', () => {
 
     it('should not change the selected element on focus', async () => {
       let changeFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [RadioGroup, { value: undefined, onChange: changeFn }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-        ]
-      })
+      render(svelte`
+        <RadioGroup value={undefined} on:change={changeFn}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+      `);
 
       await press(Keys.Tab)
 
@@ -321,17 +300,14 @@ describe('Keyboard interactions', () => {
     })
 
     it('should be possible to tab to the active item', async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [RadioGroup, { value: "home-delivery", onChange: console.log }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-        ]
-      })
+      render(svelte`
+        <RadioGroup value={"home-delivery"} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+      `);
 
       await press(Keys.Tab)
 
@@ -340,17 +316,14 @@ describe('Keyboard interactions', () => {
 
     it('should not change the selected element on focus (when selecting the active item)', async () => {
       let changeFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [RadioGroup, { value: "home-delivery", onChange: changeFn }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-        ]
-      })
+      render(svelte`
+        <RadioGroup value={"home-delivery"} on:change={changeFn}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+      `);
 
       await press(Keys.Tab)
 
@@ -360,19 +333,16 @@ describe('Keyboard interactions', () => {
     })
 
     it('should be possible to tab out of the radio group (no selected value)', async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [RadioGroup, { value: undefined, onChange: console.log }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <button>Before</button>
+        <RadioGroup value={undefined} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
       await press(Keys.Tab)
       assertActiveElement(getByText('Before'))
@@ -385,19 +355,16 @@ describe('Keyboard interactions', () => {
     })
 
     it('should be possible to tab out of the radio group (selected value)', async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [RadioGroup, { value: "home-delivery", onChange: console.log }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <button>Before</button>
+        <RadioGroup value={"home-delivery"} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       await press(Keys.Tab)
@@ -413,18 +380,15 @@ describe('Keyboard interactions', () => {
 
   describe('`Shift+Tab` key', () => {
     it('should be possible to tab to the first item', async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [RadioGroup, { value: undefined, onChange: console.log }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <RadioGroup value={undefined} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       getByText('After')?.focus()
@@ -436,18 +400,15 @@ describe('Keyboard interactions', () => {
 
     it('should not change the selected element on focus', async () => {
       let changeFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [RadioGroup, { value: undefined, onChange: changeFn }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <RadioGroup value={undefined} on:change={changeFn}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       getByText('After')?.focus()
@@ -460,18 +421,15 @@ describe('Keyboard interactions', () => {
     })
 
     it('should be possible to tab to the active item', async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [RadioGroup, { value: "home-delivery", onChange: console.log }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <RadioGroup value={"home-delivery"} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       getByText('After')?.focus()
@@ -483,18 +441,15 @@ describe('Keyboard interactions', () => {
 
     it('should not change the selected element on focus (when selecting the active item)', async () => {
       let changeFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [RadioGroup, { value: "home-delivery", onChange: changeFn }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"]
-        ]
-      })
+      render(svelte`
+        <RadioGroup value={"home-delivery"} on:change={changeFn}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
       getByText('After')?.focus()
 
@@ -506,19 +461,16 @@ describe('Keyboard interactions', () => {
     })
 
     it('should be possible to tab out of the radio group (no selected value)', async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [RadioGroup, { value: undefined, onChange: console.log }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <button>Before</button>
+        <RadioGroup value={undefined} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       getByText('After')?.focus()
@@ -531,19 +483,16 @@ describe('Keyboard interactions', () => {
     })
 
     it('should be possible to tab out of the radio group (selected value)', async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [RadioGroup, { value: "home-delivery", onChange: console.log }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <button>Before</button>
+        <RadioGroup value={"home-delivery"} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       getByText('After')?.focus()
@@ -559,19 +508,16 @@ describe('Keyboard interactions', () => {
   describe('`ArrowLeft` key', () => {
     it('should go to the previous item when pressing the ArrowLeft key', async () => {
       let changeFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [RadioGroup, { value: undefined, onChange: (e: CustomEvent) => changeFn(e.detail) }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <button>Before</button>
+        <RadioGroup value={undefined} on:change={(e) => changeFn(e.detail)}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       // Focus the "Before" button
@@ -597,19 +543,16 @@ describe('Keyboard interactions', () => {
   describe('`ArrowUp` key', () => {
     it('should go to the previous item when pressing the ArrowUp key', async () => {
       let changeFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [RadioGroup, { value: undefined, onChange: (e: CustomEvent) => changeFn(e.detail) }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <button>Before</button>
+        <RadioGroup value={undefined} on:change={(e) => changeFn(e.detail)}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       // Focus the "Before" button
@@ -635,19 +578,16 @@ describe('Keyboard interactions', () => {
   describe('`ArrowRight` key', () => {
     it('should go to the next item when pressing the ArrowRight key', async () => {
       let changeFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [RadioGroup, { value: undefined, onChange: (e: CustomEvent) => changeFn(e.detail) }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <button>Before</button>
+        <RadioGroup value={undefined} on:change={(e) => changeFn(e.detail)}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       // Focus the "Before" button
@@ -677,19 +617,16 @@ describe('Keyboard interactions', () => {
   describe('`ArrowDown` key', () => {
     it('should go to the next item when pressing the ArrowDown key', async () => {
       let changeFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [RadioGroup, { value: undefined, onChange: (e: CustomEvent) => changeFn(e.detail) }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <button>Before</button>
+        <RadioGroup value={undefined} on:change={(e) => changeFn(e.detail)}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       // Focus the "Before" button
@@ -719,19 +656,16 @@ describe('Keyboard interactions', () => {
   describe('`Space` key', () => {
     it('should select the current option when pressing space', async () => {
       let changeFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [RadioGroup, { value: undefined, onChange: (e: CustomEvent) => changeFn(e.detail) }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <button>Before</button>
+        <RadioGroup value={undefined} on:change={(e) => changeFn(e.detail)}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
 
       // Focus the "Before" button
@@ -752,19 +686,20 @@ describe('Keyboard interactions', () => {
     it('should select the current option only once when pressing space', async () => {
       let changeFn = jest.fn()
 
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Before"],
-          [ManagedRadioGroup, { value: undefined, onChange: (e: CustomEvent) => changeFn(e.detail) }, [
-            [RadioGroupLabel, {}, "Pizza Delivery"],
-            [RadioGroupOption, { value: "pickup" }, "Pickup"],
-            [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-            [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-          ]],
-          [Button, {}, "After"],
-        ]
-      })
+      render(svelte`
+        <script>
+          let value;
+        </script>
+
+        <button>Before</button>
+        <RadioGroup {value} on:change={(e) => { value = e.detail; changeFn(e.detail)} }>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button>After</button>
+      `);
 
       // Focus the "Before" button
       await press(Keys.Tab)
@@ -790,19 +725,16 @@ describe('Keyboard interactions', () => {
 describe('Mouse interactions', () => {
   it('should be possible to change the current radio group value when clicking on a radio option', async () => {
     let changeFn = jest.fn()
-    render(
-      TestRenderer, {
-      allProps: [
-        [Button, {}, "Before"],
-        [RadioGroup, { value: undefined, onChange: (e: CustomEvent) => changeFn(e.detail) }, [
-          [RadioGroupLabel, {}, "Pizza Delivery"],
-          [RadioGroupOption, { value: "pickup" }, "Pickup"],
-          [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-          [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-        ]],
-        [Button, {}, "After"],
-      ]
-    })
+    render(svelte`
+      <button>Before</button>
+      <RadioGroup value={undefined} on:change={(e) => changeFn(e.detail)}>
+        <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+        <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+        <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+        <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+      </RadioGroup>
+      <button>After</button>
+    `);
 
     await click(getByText('Home delivery'))
 
@@ -814,19 +746,20 @@ describe('Mouse interactions', () => {
   it('should be a no-op when clicking on the same item', async () => {
     let changeFn = jest.fn()
 
-    render(
-      TestRenderer, {
-      allProps: [
-        [Button, {}, "Before"],
-        [ManagedRadioGroup, { value: undefined, onChange: (e: CustomEvent) => changeFn(e.detail) }, [
-          [RadioGroupLabel, {}, "Pizza Delivery"],
-          [RadioGroupOption, { value: "pickup" }, "Pickup"],
-          [RadioGroupOption, { value: "home-delivery" }, "Home delivery"],
-          [RadioGroupOption, { value: "dine-in" }, "Dine in"],
-        ]],
-        [Button, {}, "After"],
-      ]
-    })
+    render(svelte`
+      <script>
+        let value;
+      </script>
+
+      <button>Before</button>
+      <RadioGroup {value} on:change={(e) => { value = e.detail; changeFn(e.detail)} }>
+        <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+        <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+        <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+        <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+      </RadioGroup>
+      <button>After</button>
+    `);
 
     await click(getByText('Home delivery'))
     await click(getByText('Home delivery'))

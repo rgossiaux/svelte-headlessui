@@ -3,6 +3,7 @@ This is the release history of Svelte Headless UI and the correspondence with ve
 
 | Svelte Headless UI version | Date released | Headless UI version | Notes |
 | -------------------------- | ------------- | ------------------- | ----- |
+| 1.0.1                      | 2022-05-16    | 1.4.2               | Fixes a SSR error when using the `as` prop on buttons |
 | 1.0.0                      | 2022-05-06    | 1.4.2               | Much improved TypeScript support; much smaller bundle size |
 | 1.0.0-beta.12              | 2022-03-07    | 1.4.2               | Hotfix to replace an incorrect fix in 1.0.0-beta.11 |
 | 1.0.0-beta.11              | 2022-03-06    | 1.4.2               | |
