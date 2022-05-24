@@ -26,7 +26,7 @@ export enum Features {
 
 export type TRestProps<T> = T extends SupportedElement
   ? Omit<
-    svelte.JSX.HTMLAttributes<HTMLElementTagNameMap[T]>,
+    svelteHTML.IntrinsicElements[T],
     "class" | "style"
   >
   : {};
