@@ -32,7 +32,7 @@
     clearSearch(): void;
     registerOption(id: string, dataRef: ListboxOptionDataRef): void;
     unregisterOption(id: string): void;
-    select(value: unknown): void;
+    select(newValue: unknown): void;
   };
 
   const LISTBOX_CONTEXT_NAME = "headlessui-listbox-context";
@@ -69,7 +69,7 @@
     Focus,
     calculateActiveIndex,
   } from "$lib/utils/calculate-active-index";
-  import { createEventDispatcher, getContext, setContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   import type { Readable, Writable } from "svelte/store";
   import { writable } from "svelte/store";
   import { match } from "$lib/utils/match";
@@ -92,13 +92,7 @@
   export let value: StateDefinition["value"];
 
   /***** Events *****/
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "change",
-  ]);
-
-  const dispatch = createEventDispatcher<{
-    change: any;
-  }>();
+  const forwardEvents = forwardEventsBuilder(get_current_component());
 
   /***** Component *****/
   $: orientation = (
@@ -229,9 +223,9 @@
         return nextOptions.indexOf(currentActiveOption);
       })();
     },
-    select(value: unknown) {
+    select(newValue: unknown) {
       if (disabled) return;
-      dispatch("change", value);
+      value = newValue;
     },
   });
   setContext(LISTBOX_CONTEXT_NAME, api);

@@ -43,7 +43,7 @@ import {
 import { Transition } from "../transitions";
 import TransitionDebug from "$lib/components/disclosure/_TransitionDebug.svelte";
 import svelte from "svelte-inline-compile";
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 
 let mockId = 0;
 jest.mock('../../hooks/use-id', () => {
@@ -88,7 +88,7 @@ describe('safeguards', () => {
     'should be possible to render a Listbox without crashing',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -113,7 +113,7 @@ describe('Rendering', () => {
       'should render a Listbox using slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} let:open>
+          <Listbox value={undefined} let:open>
             <ListboxButton>Trigger</ListboxButton>
             {#if open}
               <ListboxOptions>
@@ -145,7 +145,7 @@ describe('Rendering', () => {
       'should be possible to disable a Listbox',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} disabled={true}>
+          <Listbox value={undefined} disabled={true}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -185,7 +185,7 @@ describe('Rendering', () => {
       'should be possible to render a ListboxLabel using slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxLabel let:open let:disabled>{JSON.stringify({ open, disabled })}</ListboxLabel>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
@@ -222,7 +222,7 @@ describe('Rendering', () => {
       'should be possible to render a ListboxLabel with slot props and an `as` prop',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxLabel as="p" let:open let:disabled>{JSON.stringify({ open, disabled })}</ListboxLabel>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
@@ -256,7 +256,7 @@ describe('Rendering', () => {
       'should render a ListboxButton with slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton let:open let:disabled>{JSON.stringify({ open, disabled})}</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A </ListboxOption>
@@ -288,7 +288,7 @@ describe('Rendering', () => {
       'should be possible to render a ListboxButton using slot props and an `as` prop',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton as="div" role="button" let:open let:disabled>
               {JSON.stringify({ open, disabled })}
             </ListboxButton>
@@ -322,7 +322,7 @@ describe('Rendering', () => {
       'should be possible to render a ListboxButton and a ListboxLabel and see them linked together',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxLabel>Label</ListboxLabel>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
@@ -348,7 +348,7 @@ describe('Rendering', () => {
     describe('`type` attribute', () => {
       it('should set the `type` to "button" by default', async () => {
         render(svelte`
-          <Listbox value={null} on:change={console.log}>
+          <Listbox value={null}>
             <ListboxButton>Trigger</ListboxButton>
           </Listbox>
         `);
@@ -358,7 +358,7 @@ describe('Rendering', () => {
 
       it('should not set the `type` to "button" if it already contains a `type`', async () => {
         render(svelte`
-          <Listbox value={null} on:change={console.log}>
+          <Listbox value={null}>
             <ListboxButton type="submit">Trigger</ListboxButton>
           </Listbox>
         `);
@@ -368,7 +368,7 @@ describe('Rendering', () => {
 
       it('should not set the type if the "as" prop is not a "button"', async () => {
         render(svelte`
-          <Listbox value={null} on:change={console.log}>
+          <Listbox value={null}>
             <ListboxButton as="div">Trigger</ListboxButton>
           </Listbox>
         `);
@@ -384,7 +384,7 @@ describe('Rendering', () => {
       'should render ListboxOptions with slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions let:open>
               <ListboxOption value="a">{JSON.stringify({ open })}</ListboxOption>
@@ -414,7 +414,7 @@ describe('Rendering', () => {
 
     it('should be possible to always render the ListboxOptions if we provide it a `static` prop', () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions static={true}>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -430,7 +430,7 @@ describe('Rendering', () => {
 
     it('should be possible to use a different render strategy for the ListboxOptions', async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions unmount={false}>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -454,7 +454,7 @@ describe('Rendering', () => {
       'should render a ListboxOption with slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" let:active let:selected let:disabled>
@@ -486,17 +486,17 @@ describe('Rendering', () => {
     it('should guarantee the listbox option order after a few unmounts', async () => {
       let showFirst = writable(false);
       render(svelte`
-      <Listbox value={undefined}>
-        <ListboxButton>Trigger</ListboxButton>
-        <ListboxOptions>
-          {#if $showFirst}
-            <ListboxOption value="a">Option A</ListboxOption>
-          {/if}
-          <ListboxOption value="b">Option B</ListboxOption>
-          <ListboxOption value="c">Option C</ListboxOption>
-        </ListboxOptions>
-      </Listbox>
-    `)
+        <Listbox value={undefined}>
+          <ListboxButton>Trigger</ListboxButton>
+          <ListboxOptions>
+            {#if $showFirst}
+              <ListboxOption value="a">Option A</ListboxOption>
+            {/if}
+            <ListboxOption value="b">Option B</ListboxOption>
+            <ListboxOption value="c">Option C</ListboxOption>
+          </ListboxOptions>
+        </Listbox>
+      `)
 
       assertListboxButton({
         state: ListboxState.InvisibleUnmounted,
@@ -545,7 +545,7 @@ describe('Rendering composition', () => {
     'should be possible to conditionally render classNames (aka class can be a function?!)',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a" class={(bag) => JSON.stringify(bag)}>Option A</ListboxOption>
@@ -614,7 +614,7 @@ describe('Rendering composition', () => {
     'should be possible to swap the Listbox option with a button for example',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a" as="button">Option A</ListboxOption>
@@ -646,7 +646,7 @@ describe('Composition', () => {
     suppressConsoleLogs(async () => {
       let orderFn = jest.fn()
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <TransitionDebug name="Listbox" fn={orderFn} />
           <Transition>
@@ -701,7 +701,7 @@ describe('Keyboard interactions', () => {
       'should be possible to open the listbox with Enter',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -747,7 +747,7 @@ describe('Keyboard interactions', () => {
       'should not be possible to open the listbox with Enter when the button is disabled',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} disabled={true}>
+          <Listbox value={undefined} disabled={true}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -782,7 +782,7 @@ describe('Keyboard interactions', () => {
       'should be possible to open the listbox with Enter, and focus the selected option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value="b" on:change={console.log}>
+          <Listbox value="b">
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -827,7 +827,7 @@ describe('Keyboard interactions', () => {
       'should be possible to open the listbox with Enter, and focus the selected option (when using the `hidden` render strategy)',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value="b" on:change={console.log}>
+          <Listbox value="b">
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions unmount={false}>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -893,7 +893,7 @@ describe('Keyboard interactions', () => {
           { id: 'c', name: 'Option C' },
         ]
         render(svelte`
-          <Listbox value={myOptions[1]} on:change={console.log}>
+          <Listbox value={myOptions[1]}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value={myOptions[0]}>Option A</ListboxOption>
@@ -938,7 +938,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option when there are no listbox options at all',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions />
           </Listbox>
@@ -962,7 +962,7 @@ describe('Keyboard interactions', () => {
       'should focus the first non disabled listbox option when opening with Enter',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -995,7 +995,7 @@ describe('Keyboard interactions', () => {
       'should focus the first non disabled listbox option when opening with Enter (jump over multiple disabled ones)',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -1028,7 +1028,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option upon Enter key press, when there are no non-disabled listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -1058,7 +1058,7 @@ describe('Keyboard interactions', () => {
       'should be possible to close the listbox with Enter when there is no active listboxoption',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1095,10 +1095,9 @@ describe('Keyboard interactions', () => {
     it(
       'should be possible to close the listbox with Enter and choose the active listbox option',
       suppressConsoleLogs(async () => {
-        let handleChange = jest.fn()
-        let value = writable();
+        let value = writable(null);
         render(svelte`
-          <Listbox value={$value} on:change={(e) => { value.set(e.detail); handleChange(e.detail) } }>
+          <Listbox bind:value={$value}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1131,9 +1130,8 @@ describe('Keyboard interactions', () => {
         assertListboxButton({ state: ListboxState.InvisibleUnmounted })
         assertListbox({ state: ListboxState.InvisibleUnmounted })
 
-        // Verify we got the change event
-        expect(handleChange).toHaveBeenCalledTimes(1)
-        expect(handleChange).toHaveBeenCalledWith('a')
+        // Verify the value changed
+        expect(get(value)).toEqual("a");
 
         // Verify the button is focused again
         assertActiveElement(getListboxButton())
@@ -1152,7 +1150,7 @@ describe('Keyboard interactions', () => {
       'should be possible to open the listbox with Space',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1195,7 +1193,7 @@ describe('Keyboard interactions', () => {
       'should not be possible to open the listbox with Space when the button is disabled',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} disabled>
+          <Listbox value={undefined} disabled>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1230,7 +1228,7 @@ describe('Keyboard interactions', () => {
       'should be possible to open the listbox with Space, and focus the selected option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value="b" on:change={console.log}>
+          <Listbox value="b">
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1275,7 +1273,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option when there are no listbox options at all',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions />
           </Listbox>
@@ -1299,7 +1297,7 @@ describe('Keyboard interactions', () => {
       'should focus the first non disabled listbox option when opening with Space',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -1332,7 +1330,7 @@ describe('Keyboard interactions', () => {
       'should focus the first non disabled listbox option when opening with Space (jump over multiple disabled ones)',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -1365,7 +1363,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option upon Space key press, when there are no non-disabled listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -1394,10 +1392,9 @@ describe('Keyboard interactions', () => {
     it(
       'should be possible to close the listbox with Space and choose the active listbox option',
       suppressConsoleLogs(async () => {
-        let handleChange = jest.fn()
-        let value = writable();
+        let value = writable(null);
         render(svelte`
-          <Listbox value={$value} on:change={(e) => { value.set(e.detail); handleChange(e.detail) } }>
+          <Listbox bind:value={$value}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1431,9 +1428,8 @@ describe('Keyboard interactions', () => {
         assertListboxButton({ state: ListboxState.InvisibleUnmounted })
         assertListbox({ state: ListboxState.InvisibleUnmounted })
 
-        // Verify we got the change event
-        expect(handleChange).toHaveBeenCalledTimes(1)
-        expect(handleChange).toHaveBeenCalledWith('a')
+        // Verify the value changed
+        expect(get(value)).toEqual("a");
 
         // Verify the button is focused again
         assertActiveElement(getListboxButton())
@@ -1452,7 +1448,7 @@ describe('Keyboard interactions', () => {
       'should be possible to close an open listbox with Escape',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1495,7 +1491,7 @@ describe('Keyboard interactions', () => {
       'should focus trap when we use Tab',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1546,7 +1542,7 @@ describe('Keyboard interactions', () => {
       'should focus trap when we use Shift+Tab',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1599,7 +1595,7 @@ describe('Keyboard interactions', () => {
       'should be possible to open the listbox with ArrowDown',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1643,7 +1639,7 @@ describe('Keyboard interactions', () => {
       'should not be possible to open the listbox with ArrowDown when the button is disabled',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} disabled>
+          <Listbox value={undefined} disabled>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1678,7 +1674,7 @@ describe('Keyboard interactions', () => {
       'should be possible to open the listbox with ArrowDown, and focus the selected option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value="b" on:change={console.log}>
+          <Listbox value="b">
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1723,7 +1719,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option when there are no listbox options at all',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions />
           </Listbox>
@@ -1747,7 +1743,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use ArrowDown to navigate the listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1792,7 +1788,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use ArrowDown to navigate the listbox options and skip the first disabled one',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -1830,7 +1826,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use ArrowDown to navigate the listbox options and jump to the first non-disabled one',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -1866,7 +1862,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use ArrowRight to navigate the listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} horizontal>
+          <Listbox value={undefined} horizontal>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1914,7 +1910,7 @@ describe('Keyboard interactions', () => {
       'should be possible to open the listbox with ArrowUp and the last option should be active',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1959,7 +1955,7 @@ describe('Keyboard interactions', () => {
       'should not be possible to open the listbox with ArrowUp and the last option should be active when the button is disabled',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} disabled>
+          <Listbox value={undefined} disabled>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -1994,7 +1990,7 @@ describe('Keyboard interactions', () => {
       'should be possible to open the listbox with ArrowUp, and focus the selected option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value="b" on:change={console.log}>
+          <Listbox value="b">
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2039,7 +2035,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option when there are no listbox options at all',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions />
           </Listbox>
@@ -2063,7 +2059,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use ArrowUp to navigate the listbox options and jump to the first non-disabled one',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2097,7 +2093,7 @@ describe('Keyboard interactions', () => {
       'should not be possible to navigate up or down if there is only a single non-disabled option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -2139,7 +2135,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use ArrowUp to navigate the listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2196,7 +2192,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use ArrowLeft to navigate the listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} horizontal>
+          <Listbox value={undefined} horizontal>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2254,7 +2250,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the End key to go to the last listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2285,7 +2281,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the End key to go to the last non disabled listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2317,7 +2313,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the End key to go to the first listbox option if that is the only non-disabled listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2346,7 +2342,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option upon End key press, when there are no non-disabled listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -2376,7 +2372,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the PageDown key to go to the last listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2407,7 +2403,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the PageDown key to go to the last non disabled listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2439,7 +2435,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the PageDown key to go to the first listbox option if that is the only non-disabled listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2468,7 +2464,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option upon PageDown key press, when there are no non-disabled listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -2498,7 +2494,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the Home key to go to the first listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2529,7 +2525,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the Home key to go to the first non disabled listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -2560,7 +2556,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the Home key to go to the last listbox option if that is the only non-disabled listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -2589,7 +2585,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option upon Home key press, when there are no non-disabled listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -2619,7 +2615,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the PageUp key to go to the first listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -2650,7 +2646,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the PageUp key to go to the first non disabled listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -2681,7 +2677,7 @@ describe('Keyboard interactions', () => {
       'should be possible to use the PageUp key to go to the last listbox option if that is the only non-disabled listbox option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -2710,7 +2706,7 @@ describe('Keyboard interactions', () => {
       'should have no active listbox option upon PageUp key press, when there are no non-disabled listbox options',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a" disabled>Option A</ListboxOption>
@@ -2740,7 +2736,7 @@ describe('Keyboard interactions', () => {
       'should be possible to type a full word that has a perfect match',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="alice">alice</ListboxOption>
@@ -2773,7 +2769,7 @@ describe('Keyboard interactions', () => {
       'should be possible to type a partial of a word',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="alice">alice</ListboxOption>
@@ -2812,7 +2808,7 @@ describe('Keyboard interactions', () => {
       'should be possible to type words with spaces',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">value a</ListboxOption>
@@ -2851,7 +2847,7 @@ describe('Keyboard interactions', () => {
       'should not be possible to search for a disabled option',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="alice">alice</ListboxOption>
@@ -2884,7 +2880,7 @@ describe('Keyboard interactions', () => {
       'should be possible to search for a word (case insensitive)',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="alice">alice</ListboxOption>
@@ -2917,7 +2913,7 @@ describe('Keyboard interactions', () => {
       'should be possible to search for the next occurence',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">alice</ListboxOption>
@@ -2960,7 +2956,7 @@ describe('Mouse interactions', () => {
     'should focus the ListboxButton when we click the ListboxLabel',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxLabel>Label</ListboxLabel>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
@@ -2986,7 +2982,7 @@ describe('Mouse interactions', () => {
     'should not focus the ListboxButton when we right click the ListboxLabel',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxLabel>Label</ListboxLabel>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
@@ -3012,7 +3008,7 @@ describe('Mouse interactions', () => {
     'should be possible to open the listbox on click',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3051,7 +3047,7 @@ describe('Mouse interactions', () => {
     'should not be possible to open the listbox on right click',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3079,7 +3075,7 @@ describe('Mouse interactions', () => {
     'should not be possible to open the listbox on click when the button is disabled',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log} disabled>
+        <Listbox value={undefined} disabled>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3111,7 +3107,7 @@ describe('Mouse interactions', () => {
     'should be possible to open the listbox on click, and focus the selected option',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value="b" on:change={console.log}>
+        <Listbox value="b">
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3153,7 +3149,7 @@ describe('Mouse interactions', () => {
     'should be possible to close a listbox on click',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3182,7 +3178,7 @@ describe('Mouse interactions', () => {
     'should be a no-op when we click outside of a closed listbox',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3207,7 +3203,7 @@ describe('Mouse interactions', () => {
     'should be possible to click outside of the listbox which should close the listbox',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3238,7 +3234,7 @@ describe('Mouse interactions', () => {
     suppressConsoleLogs(async () => {
       render(svelte`
         <div>
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -3246,7 +3242,7 @@ describe('Mouse interactions', () => {
               <ListboxOption value="c">Option C</ListboxOption>
             </ListboxOptions>
           </Listbox>
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -3280,7 +3276,7 @@ describe('Mouse interactions', () => {
     'should be possible to click outside of the listbox which should close the listbox (even if we press the listbox button)',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3313,7 +3309,7 @@ describe('Mouse interactions', () => {
       let focusFn = jest.fn()
       render(svelte`
         <div>
-          <Listbox value={undefined} on:change={console.log}>
+          <Listbox value={undefined}>
             <ListboxButton on:focus={focusFn}>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -3351,7 +3347,7 @@ describe('Mouse interactions', () => {
     'should be possible to hover an option and make it active',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3383,7 +3379,7 @@ describe('Mouse interactions', () => {
     'should make a listbox option active when you move the mouse over it',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3407,7 +3403,7 @@ describe('Mouse interactions', () => {
     'should be a no-op when we move the mouse and the listbox option is already active',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3437,7 +3433,7 @@ describe('Mouse interactions', () => {
     'should be a no-op when we move the mouse and the listbox option is disabled',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3461,7 +3457,7 @@ describe('Mouse interactions', () => {
     'should not be possible to hover an option that is disabled',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3488,7 +3484,7 @@ describe('Mouse interactions', () => {
     'should be possible to mouse leave an option and make it inactive',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3530,7 +3526,7 @@ describe('Mouse interactions', () => {
     'should be possible to mouse leave a disabled option and be a no-op',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3557,10 +3553,9 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to click a listbox option, which closes the listbox',
     suppressConsoleLogs(async () => {
-      let handleChange = jest.fn()
-      let value = writable();
+      let value = writable(null);
       render(svelte`
-        <Listbox value={$value} on:change={(e) => { value.set(e.detail); handleChange(e.detail) } }>
+        <Listbox bind:value={$value}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3580,8 +3575,7 @@ describe('Mouse interactions', () => {
       // We should be able to click the first option
       await click(options[1])
       assertListbox({ state: ListboxState.InvisibleUnmounted })
-      expect(handleChange).toHaveBeenCalledTimes(1)
-      expect(handleChange).toHaveBeenCalledWith('b')
+      expect(get(value)).toEqual("b");
 
       // Verify the button is focused again
       assertActiveElement(getListboxButton())
@@ -3597,10 +3591,9 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to click a disabled listbox option, which is a no-op',
     suppressConsoleLogs(async () => {
-      let handleChange = jest.fn()
-      let value = writable();
+      let value = writable(null);
       render(svelte`
-        <Listbox value={$value} on:change={(e) => { value.set(e.detail); handleChange(e.detail) } }>
+        <Listbox bind:value={$value}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3622,7 +3615,7 @@ describe('Mouse interactions', () => {
       await click(options[1])
       assertListbox({ state: ListboxState.Visible })
       assertActiveElement(getListbox())
-      expect(handleChange).toHaveBeenCalledTimes(0)
+      expect(get(value)).toBeNull();
 
       // Close the listbox
       await click(getListboxButton())
@@ -3639,7 +3632,7 @@ describe('Mouse interactions', () => {
     'should be possible focus a listbox option, so that it becomes active',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>
@@ -3669,7 +3662,7 @@ describe('Mouse interactions', () => {
     'should not be possible to focus a listbox option which is disabled',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Listbox value={undefined} on:change={console.log}>
+        <Listbox value={undefined}>
           <ListboxButton>Trigger</ListboxButton>
           <ListboxOptions>
             <ListboxOption value="a">Option A</ListboxOption>

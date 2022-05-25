@@ -32,12 +32,7 @@
 <div class="flex justify-center w-screen h-full p-12 bg-gray-50">
   <div class="w-full max-w-xs mx-auto">
     <div class="space-y-1">
-      <Listbox
-        value={active}
-        on:change={(event) => {
-          active = event.detail;
-        }}
-      >
+      <Listbox bind:value={active}>
         <ListboxLabel class="block text-sm font-medium leading-5 text-gray-700">
           Assigned to
         </ListboxLabel>

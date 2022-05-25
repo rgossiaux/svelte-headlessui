@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
   import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
   import LabelProvider from "$lib/components/label/LabelProvider.svelte";
-  import { createEventDispatcher, getContext, setContext } from "svelte";
+  import { getContext, setContext } from "svelte";
   import type { Readable, Writable } from "svelte/store";
   import { writable } from "svelte/store";
   import { Focus, focusIn, FocusResult } from "$lib/utils/focus-management";
@@ -74,12 +74,7 @@
   export let disabled = false;
 
   /***** Events *****/
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "change",
-  ]);
-  const dispatch = createEventDispatcher<{
-    change: any;
-  }>();
+  const forwardEvents = forwardEventsBuilder(get_current_component());
 
   /***** Component *****/
   let radioGroupRef: HTMLElement | null = null;
@@ -102,7 +97,7 @@
         (option) => option.propsRef.value === nextValue
       )?.propsRef;
       if (nextOption?.disabled) return false;
-      dispatch("change", nextValue);
+      value = nextValue;
       return true;
     },
     registerOption(action: Option) {

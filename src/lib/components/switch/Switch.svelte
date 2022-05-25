@@ -14,7 +14,6 @@
   import { useDescriptionContext } from "$lib/components/description/DescriptionProvider.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Keys } from "$lib/utils/keyboard";
-  import { createEventDispatcher } from "svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
@@ -32,12 +31,7 @@
   export let checked = false;
 
   /***** Events *****/
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "change",
-  ]);
-  const dispatch = createEventDispatcher<{
-    change: boolean;
-  }>();
+  const forwardEvents = forwardEventsBuilder(get_current_component());
 
   /***** Component *****/
   let api = useSwitchContext();
@@ -47,7 +41,7 @@
   $: switchStore = $api?.switchStore;
 
   function toggle() {
-    dispatch("change", !checked);
+    checked = !checked;
   }
 
   function handleClick(e: CustomEvent) {

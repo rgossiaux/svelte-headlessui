@@ -1,0 +1,20 @@
+
+This is the release history of Svelte Headless UI and the correspondence with versions of Headless UI.
+
+| Svelte Headless UI version | Date released | Headless UI version | Notes |
+| -------------------------- | ------------- | ------------------- | ----- |
+| 1.0.2                      | 2022-05-25    | 1.4.2               | Fixes TypeScript errors with some attributes |
+| 1.0.1                      | 2022-05-16    | 1.4.2               | Fixes a SSR error when using the `as` prop on buttons |
+| 1.0.0                      | 2022-05-06    | 1.4.2               | Much improved TypeScript support; much smaller bundle size |
+| 1.0.0-beta.12              | 2022-03-07    | 1.4.2               | Hotfix to replace an incorrect fix in 1.0.0-beta.11 |
+| 1.0.0-beta.11              | 2022-03-06    | 1.4.2               | |
+| 1.0.0-beta.10              | 2022-02-27    | 1.4.2               | |
+| 1.0.0-beta.9               | 2022-02-06    | 1.4.2               | |
+| 1.0.0-beta.8               | 2022-01-21    | 1.4.2               | |
+| 1.0.0-beta.7               | 2021-12-31    | 1.4.2               | |
+| 1.0.0-beta.6               | 2021-12-29    | 1.4.2               | |
+| 1.0.0-beta.5               | 2021-12-28    | 1.4.2               | |
+| 1.0.0-beta.4               | 2021-12-26    | 1.4.2               | |
+| 1.0.0-beta.3               | 2021-12-24    | 1.4.2               | Initial public release |
+
+Full release notes and changelogs can be [found on GitHub](https://github.com/tailwindlabs/headlessui/releases).

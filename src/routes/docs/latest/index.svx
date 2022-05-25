@@ -1,0 +1,17 @@
+Svelte Headless UI is an unofficial, complete Svelte port of the [Headless UI](https://headlessui.dev/) component library.
+
+These are high-quality, unstyled Svelte components which are:
+
+* Completely **unstyled**
+* Fully **accessible**
+* Extensively **tested**
+* Fully **typed** with TypeScript
+* SvelteKit compatible
+
+These components can serve as the basis for your own components or design system. They handle accessibility, keyboard and mouse interactions, focus management, and other things you would normally need to worry about when building your own components. You can simply add your own CSS and the rest will be managed for you.
+
+The original Headless UI library was written by Tailwind Labs and is maintained by them. This project is a direct port, but it is not affiliated with Tailwind Labs and is neither endorsed by, nor supported by, them; it is a community port.
+
+Headless UI was written originally to support the paid component library called [Tailwind UI](https://tailwindui.com/). This port was done with this use case in mind, and you can [use this with Tailwind UI](docs/tailwind-ui).
+
+This library works very well with [Tailwind CSS](https://tailwindcss.com/) as a styling system, but it is not a requirement & there is nothing Tailwind-specific in the library. [See here](docs/general-concepts#component-styling) for different methods to style these components with Svelte.

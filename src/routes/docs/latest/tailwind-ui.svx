@@ -1,0 +1,284 @@
+# Using Tailwind UI
+
+The original Headless UI libraries for React & Vue were made by Tailwind Labs in order to serve as a foundation for [Tailwind UI](https://tailwindui.com/), a paid set of component templates. While this Svelte port has no affiliation with Tailwind Labs or Tailwind UI, one of the main motivations behind it is to make it easy to use Tailwind UI with Svelte. This page contains tips and instructions for converting their provided snippets to work with Svelte.
+
+You can convert either the React or the Vue templates to Svelte, if you are more familiar with one or the other framework. If you are unfamiliar with both React and Vue, below are some more comprehensive instructions for converting the React snippets.
+
+## General concerns
+
+### Heroicons
+
+Many Tailwind UI examples use the [heroicons](https://heroicons.com/) icon library. This library has official wrappers for React and Vue, but not for Svelte. For Svelte, you can use the wrapper library [@rgossiaux/svelte-heroicons](https://github.com/rgossiaux/svelte-heroicons), which provides the same API and component names as the official Tailwind wrappers, making it faster to convert Tailwind UI code to Svelte. Of course, you are free to use any other library you wish instead, if you prefer.
+
+## Differences from React
+
+### Component names
+
+The React library uses a `.` in the names of many components: `Tab.Group`, `Listbox.Button`, etc. The Svelte library does not use this pattern and instead exports every component under its own name with no dot: `TabGroup`, `ListboxButton`, etc.
+
+### `useState`
+
+State declared with `useState` in React becomes just a normal variable in Svelte:
+
+```jsx
+import { useState } from 'react'
+import { Switch } from '@headlessui/react'
+
+function MyToggle() {
+  const [enabled, setEnabled] = useState(false)
+
+  return (
+    <Switch checked={enabled} onChange={setEnabled}>
+      // ...
+    </Switch>
+  )
+}
+```
+
+becomes
+
+```svelte
+<script>
+  import { Switch } from '@rgossiaux/svelte-headlessui'
+  let enabled = false;
+</script>
+
+<Switch bind:checked={enabled}>
+  <!-- ... -->
+</Switch>
+```
+
+### JSX camelCased attribute names
+
+In React, some HTML attributes have different names from the standard ones that are used in Svelte. These are covered in the [React documentation](https://reactjs.org/docs/dom-elements.html#differences-in-attributes), but we repeat the most important differences here:
+
+* `className` in React becomes `class` in Svelte
+* `htmlFor` in React becomes `for` in Svelte
+* SVG attributes in React like `strokeWidth`, `strokeLinecap`, etc. become `stroke-width`, `stroke-linecap`, etc. in Svelte
+
+### Event handlers
+
+In React, you pass event handlers using camelCased names:
+
+```jsx
+import { useState } from 'react'
+import { Dialog } from '@headlessui/react'
+
+function MyDialog() {
+  let [isOpen, setIsOpen] = useState(true)
+
+  return (
+    <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+      <Dialog.Overlay />
+
+      <Dialog.Title>Deactivate account</Dialog.Title>
+      <Dialog.Description>
+        This will permanently deactivate your account
+      </Dialog.Description>
+
+      <p>
+        Are you sure you want to deactivate your account? All of your data will
+        be permanently removed. This action cannot be undone.
+      </p>
+
+      <button onClick={() => setIsOpen(false)}>Deactivate</button>
+      <button onClick={() => setIsOpen(false)}>Cancel</button>
+    </Dialog>
+  )
+}
+```
+
+In Svelte, you instead use the `on:` directive:
+
+```svelte
+<script>
+  import {
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
+    DialogDescription,
+  } from "@rgossiaux/svelte-headlessui";
+  let isOpen = true;
+</script>
+
+<Dialog open={isOpen} on:close={() => (isOpen = false)}>
+  <DialogOverlay />
+
+  <DialogTitle>Deactivate account</DialogTitle>
+  <DialogDescription>
+    This will permanently deactivate your account
+  </DialogDescription>
+
+  <p>
+    Are you sure you want to deactivate your account? All of your data will be
+    permanently removed. This action cannot be undone.
+  </p>
+
+  <button on:click={() => (isOpen = false)}>Deactivate</button>
+  <button on:click={() => (isOpen = false)}>Cancel</button>
+</Dialog>
+```
+
+Furthermore, in the React library, event handlers will be called with the their data directly:
+
+```jsx
+<Listbox value={selectedPerson} onChange={setSelectedPerson}>
+  // ...
+</Listbox>
+```
+
+In the Svelte version, your handler will be passed a `CustomEvent` object, and you need to look at its `.detail` property:
+```svelte
+<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
+  <!-- ... -->
+</Listbox>
+```
+
+### Render props
+
+The React components make use of render props:
+
+```jsx
+<Popover.Panel>
+  {({ close }) => (
+    <button
+      onClick={async () => {
+        await fetch('/accept-terms', { method: 'POST' });
+        close();
+      }}
+    >
+      Read and accept
+    </button>
+  )}
+</Popover.Panel>
+```
+
+The Svelte equivalent of this pattern is to use [slot props](https://svelte.dev/tutorial/slot-props):
+
+```svelte
+<PopoverPanel let:close>
+  <button
+    on:click={async () => {
+      await fetch('/accept-terms', { method: 'POST' })
+      close()
+    }}
+  >
+    Read and accept
+  </button>
+</PopoverPanel>
+```
+
+### Conditional rendering
+
+The standard way to do conditional rendering in React is with the `&&` operator:
+
+```jsx
+<Disclosure>
+  {({ open }) => (
+    <>
+      <Disclosure.Button>Is team pricing available?</Disclosure.Button>
+
+      {open && (
+        <div>
+          {/*
+            Using `static`, `Disclosure.Panel` is always rendered and
+            ignores the `open` state.
+          */}
+          <Disclosure.Panel static>{/* ... */}</Disclosure.Panel>
+        </div>
+      )}
+    </>
+  )}
+</Disclosure>
+```
+
+In Svelte, you use the `{#if}` templating syntax instead:
+
+```svelte
+<Disclosure let:open>
+  <DisclosureButton>Is team pricing available?</DisclosureButton>
+
+  {#if open}
+    <div>
+        <!-- Using `static`, `DisclosurePanel` is always rendered and -->
+        <!-- ignores the `open` state. -->
+      <DisclosurePanel static> <!-- ... --></DisclosurePanel>
+    </div>
+  {/if}
+</Disclosure>
+```
+
+### Iteration / mapping
+
+Tailwind UI frequenty does iteration using `Array.prototype.map()`:
+
+```jsx
+<Listbox value={selectedPerson} onChange={setSelectedPerson}>
+  <Listbox.Button>{selectedPerson.name}</Listbox.Button>
+  <Listbox.Options>
+    {people.map((person) => (
+      <Listbox.Option
+        key={person.id}
+        value={person}
+        disabled={person.unavailable}
+      >
+        {person.name}
+      </Listbox.Option>
+    ))}
+  </Listbox.Options>
+</Listbox>
+```
+
+In Svelte, you accomplish this by using the `{#each}` template syntax:
+
+```svelte
+<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
+  <ListboxButton>{selectedPerson.name}</ListboxButton>
+  <ListboxOptions>
+    {#each people as person (person.id)}
+      <ListboxOption
+        value={person}
+        disabled={person.unavailable}
+      >
+        {person.name}
+      </ListboxOption>
+    {/each}
+  </ListboxOptions>
+</Listbox>
+```
+
+Note that the key moves from the `key=` prop in React into the `{#each}` statement in Svelte. Don't forget to add this!
+
+### Using a dynamic component
+
+In React, you can use a variable as a tag name:
+
+```jsx
+{solutions.map((item) => (
+  // ...
+  <item.icon aria-hidden="true" />
+  // ...
+))}
+```
+
+In Svelte, you use `<svelte:component>` instead:
+
+```jsx
+{#each solutions as item}
+   <!-- ... -->
+  <svelte:component this={item.icon} aria-hidden="true" />
+   <!-- ... -->
+{/each}
+```
+
+### Fragments
+
+You may see the empty `<>` fragment tag in Tailwind UI snippets. You can generally simply delete this in Svelte.
+
+You may also see the `as={Fragment}` prop on some components. In the React library, you can choose render a component as a fragment, meaning that it will not render anything at all and will instead set props on its *child* component or element. This is currently impossible in Svelte, so every component in this library must always render an element. When you see `as={Fragment}`, you should just delete it.
+
+Unfortunately, it some cases this can cause some visual differences. For example, templates that use z-index might require copying some classes into the component (usually a transition) that used to have `as={Fragment}`, due to changes in the [stacking context](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context).
+
+Modal components that have `{/* This element is to trick the browser into centering the modal contents. */}` above a `Transition` might require moving that element inside the `Transition`.
+
+If you run into problems related to this that aren't mentioned here, please [report them on GitHub](https://github.com/rgossiaux/svelte-headlessui/issues) so that we can improve the documentation.
