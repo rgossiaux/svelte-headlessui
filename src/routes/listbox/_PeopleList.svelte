@@ -32,13 +32,7 @@
 
 <div class="w-64">
   <div class="space-y-1">
-    <Listbox
-      value={active}
-      on:change={(event) => {
-        console.log("value:", event.detail);
-        active = event.detail;
-      }}
-    >
+    <Listbox bind:value={active}>
       <ListboxLabel class="block text-sm font-medium leading-5 text-gray-700">
         Assigned to
       </ListboxLabel>
