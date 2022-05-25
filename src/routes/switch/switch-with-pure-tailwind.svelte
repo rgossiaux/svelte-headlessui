@@ -14,8 +14,7 @@
 
     <Switch
       as="button"
-      checked={state}
-      on:change={(event) => (state = event.detail)}
+      bind:checked={state}
       class={({ checked }) =>
         classNames(
           "relative inline-flex flex-shrink-0 h-6 border-2 border-transparent rounded-full cursor-pointer w-11 focus:outline-none focus:shadow-outline transition-colors ease-in-out duration-200",
