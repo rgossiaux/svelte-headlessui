@@ -4,7 +4,6 @@ import ManagedDialog from "./_ManagedDialog.svelte";
 import NestedTestComponent from "./_NestedTestComponent.svelte";
 import { suppressConsoleLogs } from "$lib/test-utils/suppress-console-logs";
 import { render } from "@testing-library/svelte";
-import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
 import {
   assertActiveElement,
   assertDialog,
@@ -90,9 +89,9 @@ describe("Rendering", () => {
       "should complain when an `open` prop is not a boolean",
       suppressConsoleLogs(async () => {
         expect(() =>
-          render(TestRenderer, {
-            allProps: [Dialog, { open: null, onClose: console.log, as: "div" }],
-          })
+          render(svelte`
+            <Dialog open={null} on:close={console.log} as="div" />
+           `)
         ).toThrowErrorMatchingInlineSnapshot(
           `"You provided an \`open\` prop to the \`Dialog\`, but the value is not a boolean. Received: null"`
         );
@@ -359,17 +358,14 @@ describe('Composition', () => {
   it(
     'should be possible to open the Dialog via a Transition component',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          Transition, { show: true }, [
-            Dialog, { onClose: console.log }, [
-              [DialogDescription, {}, "Description"],
-              [TestTabSentinel]
-            ]
-          ]
-        ]
-      })
+      render(svelte`
+        <Transition show={true}>
+          <Dialog on:close={console.log}>
+            <DialogDescription>Description</DialogDescription>
+            <TestTabSentinel />
+          </Dialog>
+        </Transition>
+      `)
 
       assertDialog({ state: DialogState.Visible })
       assertDialogDescription({
@@ -382,17 +378,14 @@ describe('Composition', () => {
   it(
     'should be possible to close the Dialog via a Transition component',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          Transition, { show: false }, [
-            Dialog, { onClose: console.log }, [
-              [DialogDescription, {}, "Description"],
-              [TestTabSentinel]
-            ]
-          ]
-        ]
-      })
+      render(svelte`
+        <Transition show={false}>
+          <Dialog on:close={console.log}>
+            <DialogDescription>Description</DialogDescription>
+            <TestTabSentinel />
+          </Dialog>
+        </Transition>
+      `)
 
       assertDialog({ state: DialogState.InvisibleUnmounted })
     })
@@ -404,15 +397,12 @@ describe('Keyboard interactions', () => {
     it(
       'should be possible to close the dialog with Escape',
       async () => {
-        render(
-          TestRenderer, {
-          allProps: [
-            [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-              "Contents",
-              [TestTabSentinel],
-            ]],
-          ]
-        })
+        render(svelte`
+          <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+            Contents
+            <TestTabSentinel />
+          </ManagedDialog>
+        `)
 
         assertDialog({ state: DialogState.InvisibleUnmounted })
 
@@ -498,16 +488,13 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to close a Dialog using a click on the DialogOverlay',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-            [DialogOverlay],
-            "Contents",
-            [TestTabSentinel],
-          ]],
-        ]
-      })
+      render(svelte`
+        <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+          <DialogOverlay />
+          Contents
+          <TestTabSentinel />
+        </ManagedDialog>
+      `)
 
       // Open dialog
       await click(document.getElementById('trigger'))
@@ -553,15 +540,12 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to close the dialog, and re-focus the button when we click outside on the body element',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-            "Contents",
-            [TestTabSentinel],
-          ]],
-        ]
-      })
+      render(svelte`
+        <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+          Contents
+          <TestTabSentinel />
+        </ManagedDialog>
+      `)
 
       // Open dialog
       await click(getByText('Trigger'))
