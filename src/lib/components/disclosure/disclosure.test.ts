@@ -309,7 +309,7 @@ describe("Rendering", () => {
       render(svelte`
         <Disclosure>
           <DisclosureButton>Trigger</DisclosureButton>
-          <DisclosurePanel static="true">Contents</DisclosurePanel>
+          <DisclosurePanel static>Contents</DisclosurePanel>
         </Disclosure>
       `)
 
@@ -498,7 +498,7 @@ describe('Keyboard interactions', () => {
       suppressConsoleLogs(async () => {
         render(svelte`
           <Disclosure>
-            <DisclosureButton disabled={true}>Trigger</DisclosureButton>
+            <DisclosureButton disabled>Trigger</DisclosureButton>
             <DisclosurePanel>Contents</DisclosurePanel>
           </Disclosure>
         `)
@@ -600,7 +600,7 @@ describe('Keyboard interactions', () => {
       suppressConsoleLogs(async () => {
         render(svelte`
           <Disclosure>
-            <DisclosureButton disabled={true}>Trigger</DisclosureButton>
+            <DisclosureButton disabled>Trigger</DisclosureButton>
             <DisclosurePanel>Contents</DisclosurePanel>
           </Disclosure>
         `)
@@ -728,7 +728,7 @@ describe('Mouse interactions', () => {
     suppressConsoleLogs(async () => {
       render(svelte`
         <Disclosure>
-          <DisclosureButton disabled={true}>Trigger</DisclosureButton>
+          <DisclosureButton disabled>Trigger</DisclosureButton>
           <DisclosurePanel>Contents</DisclosurePanel>
         </Disclosure>
       `)

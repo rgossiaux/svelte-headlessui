@@ -145,7 +145,7 @@ describe('Rendering', () => {
       'should be possible to disable a Listbox',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} disabled={true}>
+          <Listbox value={undefined} on:change={console.log} disabled>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>
@@ -416,7 +416,7 @@ describe('Rendering', () => {
       render(svelte`
         <Listbox value={undefined} on:change={console.log}>
           <ListboxButton>Trigger</ListboxButton>
-          <ListboxOptions static={true}>
+          <ListboxOptions static>
             <ListboxOption value="a">Option A</ListboxOption>
             <ListboxOption value="b">Option B</ListboxOption>
             <ListboxOption value="c">Option C</ListboxOption>
@@ -747,7 +747,7 @@ describe('Keyboard interactions', () => {
       'should not be possible to open the listbox with Enter when the button is disabled',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Listbox value={undefined} on:change={console.log} disabled={true}>
+          <Listbox value={undefined} on:change={console.log} disabled>
             <ListboxButton>Trigger</ListboxButton>
             <ListboxOptions>
               <ListboxOption value="a">Option A</ListboxOption>

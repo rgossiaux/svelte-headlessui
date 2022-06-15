@@ -129,7 +129,7 @@ describe("Rendering", () => {
           <button id="trigger" on:click={() => isOpen = !isOpen}>
             Trigger
           </button>
-          <Dialog open={true} on:close={console.log} static>
+          <Dialog open on:close={console.log} static>
             <p>Contents</p>
             <div tabindex={0} on:focus={focusCounter} />
           </Dialog>
@@ -312,7 +312,7 @@ describe("Rendering", () => {
       'DialogTitle should have slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
-            <Dialog open={true} on:close={console.log}>
+            <Dialog open on:close={console.log}>
               <DialogTitle let:open>{JSON.stringify({ open })}</DialogTitle>
               <TestTabSentinel />
             </Dialog>
@@ -335,7 +335,7 @@ describe("Rendering", () => {
       'DialogDescription should have slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Dialog open={true} on:close={console.log}>
+          <Dialog open on:close={console.log}>
             <DialogDescription let:open>{JSON.stringify({ open })}</DialogDescription>
             <TestTabSentinel />
           </Dialog>
@@ -359,7 +359,7 @@ describe('Composition', () => {
     'should be possible to open the Dialog via a Transition component',
     suppressConsoleLogs(async () => {
       render(svelte`
-        <Transition show={true}>
+        <Transition show>
           <Dialog on:close={console.log}>
             <DialogDescription>Description</DialogDescription>
             <TestTabSentinel />
@@ -598,7 +598,7 @@ describe('Mouse interactions', () => {
       let wrapperFn = jest.fn()
       render(svelte`
         <div on:click={wrapperFn}>
-          <ManagedDialog initialOpen={true}>
+          <ManagedDialog initialOpen>
             Contents
             <DialogOverlay />
             <TestTabSentinel />
@@ -628,7 +628,7 @@ describe('Mouse interactions', () => {
     suppressConsoleLogs(async () => {
       let submitFn = jest.fn()
       render(svelte`
-        <ManagedDialog initialOpen={true}>
+        <ManagedDialog initialOpen>
           <form on:submit={submitFn}>
             <input type="hidden" value="abc">
             <button type="submit">Submit</button>
@@ -654,7 +654,7 @@ describe('Mouse interactions', () => {
       let wrapperFn = jest.fn()
       render(svelte`
         <div on:click={wrapperFn}>
-          <ManagedDialog initialOpen={true} buttonInside={true} buttonText="Inside">
+          <ManagedDialog initialOpen buttonInside buttonText="Inside">
             Contents
             <TestTabSentinel />
           </ManagedDialog>
