@@ -12,7 +12,11 @@
 
 <script lang="ts">
   import { onDestroy, onMount, tick } from "svelte";
-  import { ListboxStates, useListboxContext } from "./Listbox.svelte";
+  import {
+    ListboxStates,
+    useListboxContext,
+    ValueMode,
+  } from "./Listbox.svelte";
   import { useId } from "$lib/hooks/use-id";
   import { Focus } from "$lib/utils/calculate-active-index";
   import Render from "$lib/utils/Render.svelte";
@@ -21,6 +25,7 @@
   import { get_current_component } from "svelte/internal";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import type { TPassThroughProps } from "$lib/types";
+  import { match } from "$lib/utils/match";
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;
@@ -39,13 +44,26 @@
   let id = `headlessui-listbox-option-${useId()}`;
 
   let buttonRef = $api.buttonRef;
+  let isFirstSelected = false;
 
   $: active =
     $api.activeOptionIndex !== null
       ? $api.options[$api.activeOptionIndex].id === id
       : false;
 
-  $: selected = $api.value === value;
+  $: selected = match($api.mode, {
+    [ValueMode.Single]: () => $api.value === value,
+    [ValueMode.Multi]: () => ($api.value as unknown[]).includes(value),
+  });
+
+  $: isFirstSelected = match($api.mode, {
+    [ValueMode.Single]: () => selected,
+    [ValueMode.Multi]: () =>
+      $api.options.find((option: unknown) =>
+        ($api.value as unknown[]).includes(option)
+      )?.id === id,
+  });
+
   $: dataRef = {
     disabled,
     value,
@@ -75,7 +93,14 @@
     await tick();
     if (newState !== oldState || newSelected !== oldSelected) {
       if (newState === ListboxStates.Open && newSelected) {
-        $api.goToOption(Focus.Specific, id);
+        match($api.mode, {
+          [ValueMode.Multi]: () => {
+            if (isFirstSelected) $api.goToOption(Focus.Specific, id);
+          },
+          [ValueMode.Single]: () => {
+            $api.goToOption(Focus.Specific, id);
+          },
+        });
       }
     }
     if (newState !== oldState || newActive !== oldActive) {

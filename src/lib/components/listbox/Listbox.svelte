@@ -3,6 +3,10 @@
     Open,
     Closed,
   }
+  export enum ValueMode {
+    Single,
+    Multi,
+  }
   export type ListboxOptionDataRef = {
     textValue: string;
     disabled: boolean;
@@ -14,6 +18,7 @@
     listboxState: ListboxStates;
     value: unknown;
     orientation: "vertical" | "horizontal";
+    mode: ValueMode;
 
     labelRef: Writable<HTMLLabelElement | null>;
     buttonRef: Writable<HTMLButtonElement | null>;
@@ -61,6 +66,8 @@
     horizontal?: boolean;
     /** The selected value */
     value?: StateDefinition["value"];
+    /** Whether the `Listbox` should allow mutliple selections */
+    multiple?: boolean;
   };
 </script>
 
@@ -89,6 +96,7 @@
   export let use: HTMLActionArray = [];
   export let disabled = false;
   export let horizontal = false;
+  export let multiple = false;
   export let value: StateDefinition["value"];
 
   /***** Events *****/
@@ -112,6 +120,9 @@
   let options: StateDefinition["options"] = [];
   let searchQuery: StateDefinition["searchQuery"] = "";
   let activeOptionIndex: StateDefinition["activeOptionIndex"] = null;
+  let mode: StateDefinition["mode"] = multiple
+    ? ValueMode.Multi
+    : ValueMode.Single;
 
   let api = writable<StateDefinition>({
     listboxState,
@@ -124,6 +135,7 @@
     activeOptionIndex,
     disabled,
     orientation,
+    mode,
     closeListbox() {
       if (disabled) return;
       if (listboxState === ListboxStates.Closed) return;
@@ -231,7 +243,25 @@
     },
     select(value: unknown) {
       if (disabled) return;
-      dispatch("change", value);
+      dispatch(
+        "change",
+        match(mode, {
+          [ValueMode.Single]: () => value,
+          [ValueMode.Multi]: () => {
+            let copy = ($api.value as unknown[]).slice();
+            let raw = value;
+
+            let idx = copy.indexOf(raw);
+            if (idx === -1) {
+              copy.push(raw);
+            } else {
+              copy.splice(idx, 1);
+            }
+
+            return copy;
+          },
+        })
+      );
     },
   });
   setContext(LISTBOX_CONTEXT_NAME, api);
@@ -256,6 +286,7 @@
       activeOptionIndex,
       disabled,
       orientation,
+      mode,
     };
   });
 

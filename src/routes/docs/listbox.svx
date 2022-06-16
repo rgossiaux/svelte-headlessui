@@ -99,6 +99,44 @@ You can use these states to conditionally apply whatever active/focus styles you
 </Listbox>
 ```
 
+## Multiple Values
+
+To allow selecting multiple values in your listbox, use the `multiple` prop and pass an array to `value` instead of a single option.
+
+```svelte
+<script>
+  import {
+    Listbox,
+    ListboxButton,
+    ListboxLabel,
+    ListboxOptions,
+    ListboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: "Durward Reynolds" },
+    { id: 2, name: "Kenton Towne" },
+    { id: 3, name: "Therese Wunsch" },
+    { id: 4, name: "Benedict Kessler" },
+    { id: 5, name: "Katelyn Rohan" },
+  ];
+
+  let selectedPeople = [people[0], people[1]];
+</script>
+
+<Listbox value={selectedPeople} on:change={(e) => (selectedPeople = e.detail)} multiple>
+  <ListboxLabel>Assignee:</ListboxLabel>
+  <ListboxButton>{selectedPeople.map((person) => person.name).join(', ')}</ListboxButton>
+  <ListboxOptions>
+    {#each people as person (person.id)}
+      <ListboxOption value={person}>
+        {person.name}
+      </ListboxOption>
+    {/each}
+  </ListboxOptions>
+</Listbox>
+```
+
 ## Using a custom label
 
 By default, the `Listbox` will use the `<ListboxButton>` contents as the label for screenreaders. If you'd like more control over what is announced to assistive technologies, use the `ListboxLabel` component:
