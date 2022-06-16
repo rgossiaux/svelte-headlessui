@@ -58,7 +58,7 @@ To style the active `Tab`, you can use the `selected` slot prop that it provides
 
 <TabGroup>
   <TabList>
-    <Tab class={({selected}) => "tab-selected" : "tab-unselected"}>Tab 1</Tab>
+    <Tab class={({selected}) => selected ? "tab-selected" : "tab-unselected"}>Tab 1</Tab>
     <!-- ... -->
   </TabList>
   <TabPanels>
