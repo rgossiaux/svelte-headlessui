@@ -60,7 +60,7 @@
   {...{ ...$$restProps, ...propsWeControl }}
   {as}
   use={[...use, forwardEvents]}
-  name={"TabPanel"}
+  componentName={"TabPanel"}
   {slotProps}
   bind:el={$elementRef}
   visible={selected}

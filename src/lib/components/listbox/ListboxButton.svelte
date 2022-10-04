@@ -97,6 +97,7 @@
       : $api.listboxState === ListboxStates.Open,
     "aria-labelledby": $labelRef ? [$labelRef?.id, id].join(" ") : undefined,
     disabled: $api.disabled === true ? true : undefined,
+    name: $api.name,
   };
 
   $: slotProps = {
@@ -111,7 +112,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"ListboxButton"}
+  componentName={"ListboxButton"}
   bind:el={$buttonRef}
   on:click={handleClick}
   on:keydown={handleKeyDown}

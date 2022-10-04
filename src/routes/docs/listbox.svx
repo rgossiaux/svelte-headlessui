@@ -490,6 +490,7 @@ The main listbox component.
 | `disabled`   | `false` | `boolean` | Whether the entire `Listbox` and its children should be disabled                   |
 | `horizontal` | `false` | `boolean` | Whether the entire `Listbox` should be oriented horizontally instead of vertically |
 | `value`      | --      | `T`       | The selected value                                                                 |
+| `name`       | --      | `string`  | The name used when using this component inside a form.                             |
 
 | Slot prop  | Type      | Description                            |
 | ---------- | --------- | -------------------------------------- |

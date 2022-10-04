@@ -51,7 +51,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"DialogOverlay"}
+  componentName={"DialogOverlay"}
   on:click={handleClick}
 >
   <slot {...slotProps} />

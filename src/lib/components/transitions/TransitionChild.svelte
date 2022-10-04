@@ -241,7 +241,7 @@
   {as}
   use={[...use, forwardEvents]}
   slotProps={{}}
-  name={"TransitionChild"}
+  componentName={"TransitionChild"}
   bind:el={container}
   class={classes}
   visible={state === TreeStates.Visible}

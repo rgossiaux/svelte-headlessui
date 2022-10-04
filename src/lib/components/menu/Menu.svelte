@@ -219,7 +219,7 @@
   use={[...use, forwardEvents]}
   {as}
   {slotProps}
-  name={"Menu"}
+  componentName={"Menu"}
 >
   <slot {...slotProps} />
 </Render>

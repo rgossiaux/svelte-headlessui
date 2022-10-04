@@ -10,6 +10,8 @@
     value: unknown;
     /** Whether the `RadioGroupOption` is disabled */
     disabled?: boolean;
+    /** The name used when using this component inside a form. */
+    name?: string;
   };
 </script>
 
@@ -35,6 +37,7 @@
   export let use: HTMLActionArray = [];
   export let value: unknown;
   export let disabled: boolean = false;
+  export let name: string | null = null;
 
   /***** Events *****/
   const forwardEvents = forwardEventsBuilder(get_current_component());
@@ -88,6 +91,7 @@
     "aria-checked": checked ? ("true" as const) : ("false" as const),
     "aria-disabled": isDisabled ? true : undefined,
     tabIndex: tabIndex,
+    name,
   };
 
   $: slotProps = {
@@ -104,7 +108,7 @@
       {as}
       {slotProps}
       use={[...use, forwardEvents]}
-      name={"RadioGroupOption"}
+      componentName={"RadioGroupOption"}
       bind:el={optionRef}
       aria-labelledby={labelledby}
       aria-describedby={describedby}

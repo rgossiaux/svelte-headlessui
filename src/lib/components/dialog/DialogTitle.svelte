@@ -46,7 +46,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"DialogTitle"}
+  componentName={"DialogTitle"}
 >
   <slot {...slotProps} />
 </Render>

@@ -200,6 +200,7 @@ The wrapper component for each selectable option.
 | `as`       | `div`   | `string`           | The element the `RadioGroupOption` should render as                                                         |
 | `disabled` | `false` | `boolean`          | Whether the `RadioGroupOption` is disabled                                                                  |
 | `value`    | --      | `T` \| `undefined` | The value of the `RadioGroupOption`; the type should match the type of the `value` prop in the `RadioGroup` |
+| `name`     | --      | `string`           | The name used when using this component inside a form.                                                      |
 
 | Slot prop  | Type      | Description                                                |
 | ---------- | --------- | ---------------------------------------------------------- |

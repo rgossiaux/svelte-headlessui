@@ -48,7 +48,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"ListboxLabel"}
+  componentName={"ListboxLabel"}
   bind:el={$labelRef}
   on:click={handleClick}
 >

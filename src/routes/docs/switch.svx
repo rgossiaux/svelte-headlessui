@@ -274,10 +274,12 @@ For a full reference on all accessibility features implemented in `Switch`, see 
 
 The main switch component.
 
-| Prop      | Default  | Type      | Description                               |
-| --------- | -------- | --------- | ----------------------------------------- |
-| `as`      | `button` | `string`  | The element the `Switch` should render as |
-| `checked` | `false`  | `boolean` | Whether the switch is checked             |
+| Prop      | Default  | Type      | Description                                            |
+| --------- | -------- | --------- | -------------------------------------------------------|
+| `as`      | `button` | `string`  | The element the `Switch` should render as              |
+| `checked` | `false`  | `boolean` | Whether the switch is checked                          |
+| `name`    | --       | `string`  | The name used when using this component inside a form. |
+
 
 | Slot prop | Type      | Description                   |
 | --------- | --------- | ----------------------------- |

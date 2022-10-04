@@ -42,7 +42,7 @@
   {slotProps}
   bind:el={$listRef}
   use={[...use, forwardEvents]}
-  name={"TabList"}
+  componentName={"TabList"}
 >
   <slot {...slotProps} />
 </Render>

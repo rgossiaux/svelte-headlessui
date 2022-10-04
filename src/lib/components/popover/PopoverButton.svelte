@@ -211,7 +211,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"PopoverButton"}
+  componentName={"PopoverButton"}
   bind:el={$ourStore}
   on:click={handleClick}
   on:keydown={handleKeyDown}

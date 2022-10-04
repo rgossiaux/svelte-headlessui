@@ -62,7 +62,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"DisclosurePanel"}
+  componentName={"DisclosurePanel"}
   bind:el={$panelStore}
   {visible}
   features={Features.RenderStrategy | Features.Static}

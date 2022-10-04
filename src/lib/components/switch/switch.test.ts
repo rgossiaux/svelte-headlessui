@@ -89,6 +89,24 @@ describe("Rendering", () => {
       expect(getSwitch()).not.toHaveAttribute("type");
     });
   });
+
+  describe("`name` attribute", () => {
+    it('should set the `name` to "switch-name"', async () => {
+      render(svelte`
+        <Switch name="switch-name" checked={false} on:change={console.log} as={"div"}>Trigger</Switch>
+      `);
+
+      expect(getSwitch()).toHaveAttribute("name", "switch-name");
+    });
+
+    it('should not set the name if no "name" prop is passed', async () => {
+      render(svelte`
+        <Switch checked={false} on:change={console.log} as={"div"}>Trigger</Switch>
+      `);
+
+      expect(getSwitch()).not.toHaveAttribute("name");
+    });
+  });
 });
 
 describe("Render composition", () => {

@@ -300,7 +300,7 @@
               {as}
               {slotProps}
               use={[...use, forwardEvents]}
-              name={"Dialog"}
+              componentName={"Dialog"}
               bind:el={internalDialogRef}
               aria-describedby={describedby}
               on:click={handleClick}

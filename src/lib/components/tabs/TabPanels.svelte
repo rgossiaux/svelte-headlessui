@@ -34,7 +34,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"TabPanels"}
+  componentName={"TabPanels"}
 >
   <slot {...slotProps} />
 </Render>

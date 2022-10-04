@@ -112,7 +112,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"MenuButton"}
+  componentName={"MenuButton"}
   bind:el={$buttonStore}
   on:click={handleClick}
   on:keydown={handleKeyDown}

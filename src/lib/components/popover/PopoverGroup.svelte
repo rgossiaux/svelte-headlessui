@@ -87,7 +87,7 @@
   {as}
   use={[...use, forwardEvents]}
   {slotProps}
-  name={"PopoverGroup"}
+  componentName={"PopoverGroup"}
   bind:el={groupRef}
 >
   <slot {...slotProps} />

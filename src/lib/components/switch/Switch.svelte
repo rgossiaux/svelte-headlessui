@@ -5,6 +5,8 @@
   > = TPassThroughProps<TSlotProps, TAsProp, "button"> & {
     /** Whether the switch is checked */
     checked: boolean;
+    /** The name used when using this component inside a form. */
+    name?: string;
   };
 </script>
 
@@ -30,6 +32,7 @@
   export let as: SupportedAs = "button";
   export let use: HTMLActionArray = [];
   export let checked = false;
+  export let name: string | null = null;
 
   /***** Events *****/
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
@@ -73,6 +76,7 @@
     role: "switch",
     type: resolveButtonType({ type: $$props.type, as }, $switchStore),
     tabIndex: 0,
+    name,
     "aria-checked": checked,
     "aria-labelledby": $labelContext?.labelIds,
     "aria-describedby": $descriptionContext?.descriptionIds,
@@ -88,7 +92,7 @@
     {as}
     {slotProps}
     use={[...use, forwardEvents]}
-    name={"Switch"}
+    componentName={"Switch"}
     bind:el={$switchStore}
     on:click={handleClick}
     on:keyup={handleKeyUp}
@@ -102,7 +106,7 @@
     {as}
     {slotProps}
     use={[...use, forwardEvents]}
-    name={"Switch"}
+    componentName={"Switch"}
     on:click={handleClick}
     on:keyup={handleKeyUp}
     on:keypress={handleKeyPress}

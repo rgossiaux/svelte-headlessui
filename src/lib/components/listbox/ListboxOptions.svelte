@@ -146,7 +146,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"ListboxOptions"}
+  componentName={"ListboxOptions"}
   bind:el={$optionsRef}
   on:keydown={handleKeyDown}
   {visible}

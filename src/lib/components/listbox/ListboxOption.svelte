@@ -132,7 +132,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"ListboxOption"}
+  componentName={"ListboxOption"}
   on:click={handleClick}
   on:focus={handleFocus}
   on:pointermove={handleMove}

@@ -228,7 +228,7 @@
       {as}
       use={[...use, forwardEvents]}
       {slotProps}
-      name={"RadioGroup"}
+      componentName={"RadioGroup"}
       bind:el={radioGroupRef}
       aria-labelledby={labelledby}
       aria-describedby={describedby}

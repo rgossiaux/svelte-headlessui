@@ -771,3 +771,37 @@ describe('Mouse interactions', () => {
     expect(changeFn).toHaveBeenCalledTimes(1)
   })
 })
+
+describe("`name` attribute", () => {
+  it('should set the `name` to "radio-option-name"', async () => {
+    render(svelte`
+        <RadioGroup value={undefined} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption name="radio-option-name" value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption name="radio-option-name" value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption name="radio-option-name" value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+    `);
+
+    let options = getRadioGroupOptions();    
+    for (let option of options)
+      expect(option).toHaveAttribute("name", "radio-option-name");
+
+  });
+
+  it('should not set the name if no "name" prop is passed', async () => {
+    render(svelte`
+        <RadioGroup value={undefined} on:change={console.log}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+    `);
+
+    let options = getRadioGroupOptions();    
+    for (let option of options)
+      expect(option).not.toHaveAttribute("name");    
+      
+  });
+});

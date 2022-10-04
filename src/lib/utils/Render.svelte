@@ -18,7 +18,7 @@
   type TAsProp = $$Generic<SupportedAs>;
   type $$Props = TRenderProps<TSlotProps, TAsProp, TAsProp>;
 
-  export let name: string;
+  export let componentName: string;
   export let as: TAsProp;
   export let slotProps: TSlotProps;
 
@@ -40,12 +40,14 @@
     undefined;
 
   if (!as) {
-    throw new Error(`<${name}> did not provide an \`as\` value to <Render>`);
+    throw new Error(
+      `<${componentName}> did not provide an \`as\` value to <Render>`
+    );
   }
 
   if (!isValidElement(as)) {
     throw new Error(
-      `<${name}> has an invalid or unsupported \`as\` prop: ${as}`
+      `<${componentName}> has an invalid or unsupported \`as\` prop: ${as}`
     );
   }
 

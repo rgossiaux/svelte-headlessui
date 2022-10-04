@@ -126,7 +126,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"Tab"}
+  componentName={"Tab"}
   bind:el={tabRef}
   on:keydown={handleKeyDown}
   on:click={handleSelection}

@@ -118,7 +118,7 @@
     {as}
     {slotProps}
     use={[...use, forwardEvents]}
-    name={"DisclosureButton"}
+    componentName={"DisclosureButton"}
     bind:el={$ourStore}
     on:click={handleClick}
     on:keydown={handleKeyDown}
@@ -131,7 +131,7 @@
     {as}
     {slotProps}
     use={[...use, forwardEvents]}
-    name={"DisclosureButton"}
+    componentName={"DisclosureButton"}
     bind:el={$ourStore}
     on:click={handleClick}
     on:keydown={handleKeyDown}

@@ -52,7 +52,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"PopoverOverlay"}
+  componentName={"PopoverOverlay"}
   on:click={handleClick}
   aria-hidden
   {visible}

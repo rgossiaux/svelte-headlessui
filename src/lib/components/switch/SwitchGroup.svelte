@@ -59,7 +59,7 @@
   {as}
   use={[...use, forwardEvents]}
   {slotProps}
-  name={"SwitchGroup"}
+  componentName={"SwitchGroup"}
 >
   <DescriptionProvider name="SwitchDescription">
     <LabelProvider name="SwitchLabel" {onClick}>

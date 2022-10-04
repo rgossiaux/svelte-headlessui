@@ -200,7 +200,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"TabGroup"}
+  componentName={"TabGroup"}
 >
   <slot {...slotProps} />
 </Render>

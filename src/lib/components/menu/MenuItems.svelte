@@ -167,7 +167,7 @@
   {slotProps}
   use={[...use, forwardEvents]}
   bind:el={$itemsStore}
-  name={"MenuItems"}
+  componentName={"MenuItems"}
   on:keydown={handleKeyDown}
   on:keyup={handleKeyUp}
   {visible}

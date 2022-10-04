@@ -178,6 +178,28 @@ describe('Rendering', () => {
         assertListbox({ state: ListboxState.InvisibleUnmounted })
       })
     )
+    
+    describe("`name` attribute", () => {
+      it('should set the `name` to "listbox-name"', async () => {
+        render(svelte`
+          <Listbox name="listbox-name" value={null} on:change={console.log}>
+            <ListboxButton>Trigger</ListboxButton>
+          </Listbox>
+        `);
+
+        expect(getListboxButton()).toHaveAttribute('name', 'listbox-name')
+      })
+
+      it('should not set the name if no "name" prop is passed', async () => {
+        render(svelte`
+          <Listbox value={null} on:change={console.log}>
+            <ListboxButton as="div">Trigger</ListboxButton>
+          </Listbox>
+        `);
+
+        expect(getListboxButton()).not.toHaveAttribute('name')
+      })
+    }) 
   })
 
   describe('ListboxLabel', () => {

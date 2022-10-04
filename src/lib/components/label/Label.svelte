@@ -32,7 +32,7 @@
 
 <Render
   {...allProps}
-  name={"Label"}
+  componentName={"Label"}
   {as}
   {slotProps}
   use={[...use, forwardEvents]}

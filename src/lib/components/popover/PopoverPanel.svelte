@@ -165,7 +165,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"PopoverPanel"}
+  componentName={"PopoverPanel"}
   bind:el={$panelStore}
   on:keydown={handleKeydown}
   {visible}

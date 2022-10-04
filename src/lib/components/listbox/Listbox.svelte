@@ -23,6 +23,7 @@
     options: { id: string; dataRef: ListboxOptionDataRef }[];
     searchQuery: string;
     activeOptionIndex: number | null;
+    name: string;
 
     // State mutators
     closeListbox(): void;
@@ -61,6 +62,8 @@
     horizontal?: boolean;
     /** The selected value */
     value?: StateDefinition["value"];
+    /** The name used when using this component inside a form. */
+    name?: string;
   };
 </script>
 
@@ -90,6 +93,7 @@
   export let disabled = false;
   export let horizontal = false;
   export let value: StateDefinition["value"];
+  export let name: string | null = null;
 
   /***** Events *****/
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
@@ -124,6 +128,7 @@
     activeOptionIndex,
     disabled,
     orientation,
+    name,
     closeListbox() {
       if (disabled) return;
       if (listboxState === ListboxStates.Closed) return;
@@ -281,7 +286,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"Listbox"}
+  componentName={"Listbox"}
 >
   <slot {...slotProps} />
 </Render>

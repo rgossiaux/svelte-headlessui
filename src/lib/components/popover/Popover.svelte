@@ -191,7 +191,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"Popover"}
+  componentName={"Popover"}
 >
   <slot {...slotProps} />
 </Render>

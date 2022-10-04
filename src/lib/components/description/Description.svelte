@@ -26,7 +26,7 @@
 </script>
 
 <Render
-  name={"Description"}
+  componentName={"Description"}
   {...$$restProps}
   {as}
   {slotProps}

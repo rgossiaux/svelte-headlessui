@@ -146,7 +146,7 @@
   {as}
   {slotProps}
   use={[...use, forwardEvents]}
-  name={"Disclosure"}
+  componentName={"Disclosure"}
 >
   <slot {...slotProps} />
 </Render>

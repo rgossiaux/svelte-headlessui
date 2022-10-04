@@ -107,7 +107,7 @@
   use={[...use, forwardEvents]}
   {as}
   {slotProps}
-  name={"MenuItem"}
+  componentName={"MenuItem"}
   bind:el={elementRef}
   on:click={handleClick}
   on:focus={handleFocus}
