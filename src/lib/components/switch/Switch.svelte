@@ -5,6 +5,10 @@
   > = TPassThroughProps<TSlotProps, TAsProp, "button"> & {
     /** Whether the switch is checked */
     checked: boolean;
+    /** The name used when using this component inside a form. */
+    name?: string;
+    /** The value used when using this component inside a form, if it is checked. */
+    value?: string;
   };
 </script>
 
@@ -22,6 +26,7 @@
   import Render from "$lib/utils/Render.svelte";
   import { resolveButtonType } from "$lib/utils/resolve-button-type";
   import type { TPassThroughProps } from "$lib/types";
+  import Hidden, { Features as HiddenFeatures } from "$lib/internal/Hidden.svelte";
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;
@@ -30,6 +35,8 @@
   export let as: SupportedAs = "button";
   export let use: HTMLActionArray = [];
   export let checked = false;
+  export let name: string | null = null;
+  export let value: string | null = null;
 
   /***** Events *****/
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
@@ -81,6 +88,18 @@
   $: slotProps = { checked };
 </script>
 
+{#if name != null && checked}
+  <Hidden
+    features={HiddenFeatures.Hidden}
+    as="input"
+    type="checkbox"
+    hidden
+    readonly
+    {name}
+    bind:checked
+    bind:value
+  />
+{/if}
 <!-- TODO: I'm sure there's a better way of doing this -->
 {#if switchStore}
   <Render

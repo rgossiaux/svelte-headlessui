@@ -153,6 +153,42 @@ By default, `RadioGroupLabel` renders a `<label>` element and `RadioGroupDescrip
 </style>
 ```
 
+## Using with HTML forms
+
+If you add the `name` prop to your listbox, hidden `input` elements will be rendered and kept in sync with your selected value.
+
+```svelte
+<script>
+  import {
+    RadioGroup,
+    RadioGroupLabel,
+    RadioGroupOption,
+    RadioGroupDescription,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const plans = ['startup', 'business', 'enterprise']
+
+  let selectedPlan = plans[0];
+</script>
+
+<RadioGroup value={selectedPlan} on:change={(e) => (selectedPlan = e.detail)} name="plan">
+  <RadioGroupLabel>Plan</RadioGroupLabel>
+  {#each plans as plan}
+    <RadioGroupOption value={plan} let:checked>
+      <span>{plan}</span>
+    </RadioGroupOption>
+  {/each}  
+</RadioGroup>
+```
+
+This lets you use a radio group inside a native HTML `<form>` and make traditional form submissions as if your radio group was a native HTML form control.
+
+Basic values like strings will be rendered as a single hidden input containing that value, but complex values like objects will be encoded into multiple inputs using a square bracket notation for the names.
+
+```svelte
+<input type="hidden" name="plan" value="startup" />
+```
+
 ## Accessibility notes
 
 ### Mouse interaction
@@ -184,6 +220,7 @@ The main Radio Group component.
 | `as`       | `div`   | `string`           | The element the `RadioGroup` should render as                            |
 | `disabled` | `false` | `boolean`          | Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled |
 | `value`    | --      | `T` \| `undefined` | The currently selected value in the `RadioGroup`                         |
+| `name`     | --      | `string`           | The name used when using this component inside a form.                   |
 
 This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
 
