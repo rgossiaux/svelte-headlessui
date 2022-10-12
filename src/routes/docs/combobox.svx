@@ -1,0 +1,1111 @@
+# ComboBox
+
+<script>
+  import Preview from "./_Preview.svelte";
+</script>
+
+<Preview url="examples/combobox" code="" class="h-[410px] bg-rose-300"/>
+
+## Basic example
+
+Comboboxes are built using the `Combobox`, `ComboboxInput`, `ComboboxButton`, `ComboboxOptions`, `ComboboxOption` and `ComboboxLabel` components.
+
+The `ComboboxInput` will automatically open/close the `ComboboxOptions` when searching.
+
+You are completely in charge of how you filter the results, whether it be with a fuzzy search library client-side or by making server-side requests to an API. In this example we will keep the logic simple for demo purposes.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    'Durward Reynolds',
+    'Kenton Towne',
+    'Therese Wunsch',
+    'Benedict Kessler',
+    'Katelyn Rohan',
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.toLowerCase().includes(query.toLowerCase())
+        })
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
+  <ComboboxInput on:change={(e) => query = e.detail} />
+  <ComboboxOptions>
+    {#each filteredPeople as person (person)}
+      <ComboboxOption value={person}>
+        {person}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+
+```
+
+In the previous example we used a list of `string` values as data, but you can also use objects with additional information. The only caveat is that you have to provide a `displayValue` to the input. This is important so that a string based version of your object can be rendered in the `ComboboxInput`.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds', unavailable: false },
+    { id: 2, name: 'Kenton Towne', unavailable: false },
+    { id: 3, name: 'Therese Wunsch', unavailable: false },
+    { id: 4, name: 'Benedict Kessler', unavailable: true },
+    { id: 5, name: 'Katelyn Rohan', unavailable: false },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+  <ComboboxOptions>
+    {#each filteredPeople as person (person)}
+      <ComboboxOption value={person} disabled={person.unavailable}>
+        {person.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+
+```
+
+## Styling different states
+
+Headless UI keeps track of a lot of state about each component, like which combobox option is currently selected, whether a popover is open or closed, or which item in a combobox is currently active via the keyboard.
+
+But because the components are headless and completely unstyled out of the box, you can't see this information in your UI until you provide the styles you want for each state yourself.
+
+## Using slots
+
+Each component exposes information about its current state via slot props that you can use to conditionally apply different styles or render different content.
+
+For example, the `ComboboxOption` component exposes an `active` state, which tells you if the item is currently focused via the mouse or keyboard.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+  import { CheckIcon } from "@rgossiaux/svelte-heroicons/solid";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds', unavailable: false },
+    { id: 2, name: 'Kenton Towne', unavailable: false },
+    { id: 3, name: 'Therese Wunsch', unavailable: false },
+    { id: 4, name: 'Benedict Kessler', unavailable: true },
+    { id: 5, name: 'Katelyn Rohan', unavailable: false },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+  <ComboboxOptions>
+    <!-- Use the `active` state to conditionally style the active option. -->
+    <!-- Use the `selected` state to conditionally style the selected option. -->
+    {#each filteredPeople as person (person)}
+      <ComboboxOption 
+        value={person} 
+        disabled={person.unavailable} 
+        let:active 
+        let:selected
+        class={({ active }) => (active ? "bg-blue-500 text-white" : "bg-white text-black")}
+      >
+        {person.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+
+```
+
+## Binding objects as values
+
+Unlike native HTML form controls which only allow you to provide strings as values, Headless UI supports binding complex objects as well.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds', unavailable: false },
+    { id: 2, name: 'Kenton Towne', unavailable: false },
+    { id: 3, name: 'Therese Wunsch', unavailable: false },
+    { id: 4, name: 'Benedict Kessler', unavailable: true },
+    { id: 5, name: 'Katelyn Rohan', unavailable: false },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+  <ComboboxOptions>
+    {#each filteredPeople as person (person)}
+      <ComboboxOption value={person} disabled={person.unavailable}>
+        {person.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+
+```
+
+When binding objects as values, it's important to make sure that you use the same instance of the object as both the `value` of the `Combobox` as well as the corresponding `ComboboxOption`, otherwise they will fail to be equal and cause the combobox to behave incorrectly.
+
+To make it easier to work with different instances of the same object, you can use the `by` prop to compare the objects by a particular field instead of comparing object identity:
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const departments = [
+    { id: 1, name: 'Marketing', contact: 'Durward Reynolds' },
+    { id: 2, name: 'HR', contact: 'Kenton Towne' },
+    { id: 3, name: 'Sales', contact: 'Therese Wunsch' },
+    { id: 4, name: 'Finance', contact: 'Benedict Kessler' },
+    { id: 5, name: 'Customer service', contact: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedDepartment;
+
+  $:filteredDepartments = query === ''
+      ? departments
+      : departments.filter((department) => {
+          return department.name
+            .toLowerCase()
+            .includes(query.toLowerCase())
+        })  
+  
+</script>
+
+<Combobox 
+    value={selectedDepartment} 
+    on:change={(e) => (selectedDepartment = e.detail)}
+    by="id"
+>
+  <ComboboxInput on:change={(e) => query = e.detail} />
+  <ComboboxOptions>
+    {#each filteredDepartments as department (department)}
+      <ComboboxOption value={department}>
+        {department.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+
+```
+
+You can also pass your own comparison function to the `by` prop if you'd like complete control over how objects are compared:
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const departments = [
+    { id: 1, name: 'Marketing', contact: 'Durward Reynolds' },
+    { id: 2, name: 'HR', contact: 'Kenton Towne' },
+    { id: 3, name: 'Sales', contact: 'Therese Wunsch' },
+    { id: 4, name: 'Finance', contact: 'Benedict Kessler' },
+    { id: 5, name: 'Customer service', contact: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedDepartment;
+
+  $:filteredDepartments = query === ''
+      ? departments
+      : departments.filter((department) => {
+          return department.name
+            .toLowerCase()
+            .includes(query.toLowerCase())
+        })
+
+  function compareDepartments(a, b) {
+    return a.name.toLowerCase() === b.name.toLowerCase()
+  }
+  
+</script>
+
+<Combobox 
+    value={selectedDepartment} 
+    on:change={(e) => (selectedDepartment = e.detail)}
+    by={compareDepartments}
+>
+  <ComboboxInput on:change={(e) => query = e.detail} />
+  <ComboboxOptions>
+    {#each filteredDepartments as department (department)}
+      <ComboboxOption value={department}>
+        {department.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+
+```
+
+## Selecting multiple values
+
+The Combobox component allows you to select multiple values. You can enable this by providing an array of values instead of a single value.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let selectedPeople = [people[0], people[1]];
+</script>
+
+<Combobox value={selectedPeople} on:change={(e) => (selectedPeople = e.detail)} multiple>
+  {#if selectedPeople.length > 0}
+    <ul>
+      {#each selectedPeople as person (person)}
+        <li>
+          {{ person.name }}
+        </li>
+      {/each}
+    </ul>
+  {/if}
+  <ComboboxInput displayValue={(person) => person.name} />
+  <ComboboxOptions>
+    {#each people as person (person)}
+      <ComboboxOption value={person}>
+        {person.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+
+```
+
+This will keep the combobox open when you are selecting options, and choosing an option will toggle it in place.
+
+Your `on:change` handler will be called with an array containing all selected options any time an option is added or removed.
+
+## Using a custom label
+
+By default the `Combobox` will use the input contents as the label for screenreaders. If you'd like more control over what is announced to assistive technologies, use the `ComboboxLabel` component.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>
+  <ComboboxLabel>Assignee:</ComboboxLabel>
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+  <ComboboxOptions>
+    {#each filteredPeople as person (person)}
+      <ComboboxOption value={person}>
+        {person.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+
+```
+
+## Using with HTML forms
+
+If you add the `name` prop to your combobox, hidden `input` elements will be rendered and kept in sync with your selected value.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+  
+</script>
+
+<form action="/projects/1/assignee" method="post">
+  <Combobox name="assignee" value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>    
+    <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+    <ComboboxOptions>
+      {#each filteredPeople as person (person)}
+        <ComboboxOption value={person}>
+          {person.name}
+        </ComboboxOption>
+      {/each}
+    </ComboboxOptions>
+  </Combobox>
+  <button>Submit</button>
+</form>
+```
+
+This lets you use a combobox inside a native HTML `<form>` and make traditional form submissions as if your combobox was a native HTML form control.
+
+Basic values like strings will be rendered as a single hidden input containing that value, but complex values like objects will be encoded into multiple inputs using a square bracket notation for the names:
+
+```svelte
+<input type="hidden" name="assignee[id]" value="1" />
+<input type="hidden" name="assignee[name]" value="Durward Reynolds" />
+```
+
+## Using as an uncontrolled component
+
+If you provide a `defaultValue` prop to the `Combobox` instead of a `value`, Headless UI will track its state internally for you, allowing you to use it as an uncontrolled component.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+  
+</script>
+
+<form action="/projects/1/assignee" method="post">
+  <Combobox name="assignee" defaultValue={people[0]}>    
+    <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+    <ComboboxOptions>
+      {#each filteredPeople as person (person)}
+        <ComboboxOption value={person}>
+          {person.name}
+        </ComboboxOption>
+      {/each}
+    </ComboboxOptions>
+  </Combobox>
+  <button>Submit</button>
+</form>
+```
+
+This can simplify your code when using the combobox with HTML forms or with form APIs that collect their state using FormData instead of tracking it using React state.
+
+Any `on:change` prop you provide will still be called when the component's value changes in case you need to run any side effects, but you won't need to use it to track the component's state yourself.
+
+## Allowing custom values
+
+You can allow users to enter their own value that doesn't exist in the list by including a dynamic `ComboboxOption` based on the `query` value.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+
+  $:queryPerson = query === '' ? null : { id: null, name: query.value }
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>  
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+  <ComboboxOptions>
+    {#if queryPerson}
+      <ComboboxOption value={queryPerson}>
+          Create "{query}"
+      </ComboboxOption>
+    {/if}
+    {#each filteredPeople as person (person)}
+      <ComboboxOption value={person}>
+        {person.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+
+```
+
+## Rendering the active option on the side
+
+Depending on what you're building it can sometimes make sense to render additional information about the active option outside of the `<ComboboxOptions>`. For example, a preview of the active option within the context of a command palette. In these situations you can read the `activeOption` slot prop argument to access this information.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+
+  $:queryPerson = query === '' ? null : { id: null, name: query.value }
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)} let:activeOption>  
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+  <ComboboxOptions>    
+    {#each filteredPeople as person (person)}
+      <ComboboxOption value={person}>
+        {person.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+
+  {#if activeOption}
+    <div>
+        The current active user is: {{ activeOption.name }}
+    </div>
+  {/if}
+</Combobox>
+```
+
+The `activeOption` will be the `value` of the current active `ComboboxOption`.
+
+## Showing/hiding the combobox
+
+By default, your `ComboboxOptions` instance will be shown/hidden automatically based on the internal `open` state tracked within the `Combobox` component itself.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>  
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+
+  <!--
+    By default, the `ComboboxOptions` will automatically show/hide when
+    typing in the `ComboboxInput`, or when pressing the `ComboboxButton`.
+  -->
+  <ComboboxOptions>    
+    {#each filteredPeople as person (person)}
+      <ComboboxOption value={person}>
+        {person.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+```
+
+If you'd rather handle this yourself (perhaps because you need to add an extra wrapper element for one reason or another), you can add a `static` prop to the `ComboboxOptions` instance to tell it to always render, and inspect the `open` slot prop provided by the `Combobox` to control which element is shown/hidden yourself.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)} let:open>  
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+
+  {#if open}
+    <!--
+      Using the `static` prop, the `ComboboxOptions` are always
+      rendered and the `open` state is ignored.
+    -->
+    <ComboboxOptions static>    
+      {#each filteredPeople as person (person)}
+        <ComboboxOption value={person}>
+          {person.name}
+        </ComboboxOption>
+      {/each}
+    </ComboboxOptions>
+  {/if}
+</Combobox>
+```
+
+## Disabling an option
+
+Use the `disabled` prop to disable a `ComboboxOption`. This will make it unselectable via mouse and keyboard, and it will be skipped when pressing the up/down arrows.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds', unavailable: true },
+    { id: 2, name: 'Kenton Towne', unavailable: false },
+    { id: 3, name: 'Therese Wunsch', unavailable: false },
+    { id: 4, name: 'Benedict Kessler', unavailable: true },
+    { id: 5, name: 'Katelyn Rohan', unavailable: false },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>  
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+  
+  <ComboboxOptions>    
+    {#each filteredPeople as person (person)}
+      <ComboboxOption value={person} disabled={person.unavailable}>
+        <span class:opacity-75={person.unavailable}>
+          {{ person.name }}
+        </span>
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+```
+
+## Allowing empty values
+
+By default, once you've selected a value in a combobox there is no way to clear the combobox back to an empty value — when you clear the input and tab away, the value returns to the previously selected value.
+
+If you want to support empty values in your combobox, use the `nullable` prop.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds', unavailable: true },
+    { id: 2, name: 'Kenton Towne', unavailable: false },
+    { id: 3, name: 'Therese Wunsch', unavailable: false },
+    { id: 4, name: 'Benedict Kessler', unavailable: true },
+    { id: 5, name: 'Katelyn Rohan', unavailable: false },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)} nullable>  
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person?.name} />
+  
+  <ComboboxOptions>    
+    {#each filteredPeople as person (person)}
+      <ComboboxOption value={person} disabled={person.unavailable}>
+        <span class:opacity-75={person.unavailable}>
+          {{ person.name }}
+        </span>
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>
+</Combobox>
+```
+
+When the `nullable` prop is used, clearing the input and navigating away from the element will update your `value` binding and invoke your `displayValue` callback with `null`.
+
+This prop doesn't do anything when allowing multiple values because options are toggled on and off, resulting in an empty array (rather than null) if nothing is selected.
+
+## Transitions
+
+To animate the opening and closing of the Combobox, you can use [this library's Transition component](/docs/transition) or Svelte's built-in transition engine. See that page for a comparison.
+
+### Using the `Transition` component
+To animate the opening/closing of the combobox panel, use the provided `Transition` component. All you need to do is wrap the `ComboboxOptions` in a `<Transition>`, and the transition will be applied automatically.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+    Transition,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })  
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)}>  
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+  <!-- Example using Tailwind CSS transition classes -->
+  <Transition
+    enter="transition duration-100 ease-out"
+    enterFrom="transform scale-95 opacity-0"
+    enterTo="transform scale-100 opacity-100"
+    leave="transition duration-75 ease-out"
+    leaveFrom="transform scale-100 opacity-100"
+    leaveTo="transform scale-95 opacity-0"
+  >
+    <ComboboxOptions>    
+      {#each filteredPeople as person (person)}
+        <ComboboxOption value={person}>
+          {person.name}
+        </ComboboxOption>
+      {/each}
+    </ComboboxOptions>
+  </Transition>
+</Combobox>
+
+```
+
+The components in this library communicate with each other, so the Transition will be managed automatically when the Combobox is opened/closed.
+
+### Using Svelte transitions
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,    
+  } from "@rgossiaux/svelte-headlessui";
+  import { fade } from "svelte/transition";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })  
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)} let:open>  
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+  {#if open}
+    <div transition:fade>
+    <!-- When controlling the transition manually, make sure to use `static` -->
+      <ComboboxOptions static>    
+        {#each filteredPeople as person (person)}
+          <ComboboxOption value={person}>
+            {person.name}
+          </ComboboxOption>
+        {/each}
+      </ComboboxOptions>
+    </div>
+  {/if}
+</Combobox>
+
+```
+
+Make sure to use the `static` prop, or else the exit transitions won't work correctly.
+
+## Rendering a different element for a component
+
+By default, the `Combobox` and its subcomponents each render a default element that is sensible for that component.
+
+For example, `ComboboxLabel` renders a `label` by default, `ComboboxInput` renders an `input`, `ComboboxButton` renders a `button`, `ComboboxOptions` renders a `ul`, and `ComboboxOption` renders a `li`. By contrast, `Combobox` does not render an element, and instead renders its children directly.
+
+This is easy to change using the `as` prop, which exists on every component.
+
+```svelte
+<script>
+  import {
+    Combobox,
+    ComboboxLabel
+    ComboboxInput,
+    ComboboxOptions,
+    ComboboxOption,
+  } from "@rgossiaux/svelte-headlessui";
+
+  const people = [
+    { id: 1, name: 'Durward Reynolds' },
+    { id: 2, name: 'Kenton Towne' },
+    { id: 3, name: 'Therese Wunsch' },
+    { id: 4, name: 'Benedict Kessler' },
+    { id: 5, name: 'Katelyn Rohan' },
+  ]
+
+  let query = ''
+  let selectedPerson = people[0];
+
+  $:filteredPeople = query === ''
+      ? people
+      : people.filter((person) => {
+          return person.name.toLowerCase().includes(query.toLowerCase())
+        })
+  
+</script>
+
+<Combobox value={selectedPerson} on:change={(e) => (selectedPerson = e.detail)} as="div">  
+  <ComboboxInput on:change={(e) => query = e.detail} displayValue={(person) => person.name} />
+
+  <!-- Render a `div` instead of a `ul` -->
+  <ComboboxOptions as="div">    
+    {#each filteredPeople as person (person)}
+      <!-- Render a `span` instead of a `li` -->
+      <ComboboxOption value={person} as="span">
+        {person.name}
+      </ComboboxOption>
+    {/each}
+  </ComboboxOptions>  
+</Combobox>
+```
+
+## Accessibility notes
+
+### Focus management
+
+When a `Combobox` is toggled open, the `ComboboxInput` stays focused.
+
+The `ComboboxButton` is ignored for the default tab flow, this means that pressing `Tab` in the `ComboboxInput` will skip passed the `ComboboxButton`.
+
+### Mouse interaction
+
+Clicking a `ComboboxButton` toggles the options list open and closed. Clicking anywhere outside of the options list will close the combobox.
+
+### Keyboard interaction
+
+| Command                                                                               | Description                                                       |
+| ------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `<ArrowUp>` / `<ArrowDown>` when ComboboxInput is focused                             | Opens combobox and focuses the selected item                      |
+| `<Enter>` / `<Space>` / `<ArrowUp>` / `<ArrowDown>` when `ComboboxButton ` is focused | Opens combobox, focuses the input and selects the selected item   |
+| `<Esc>` when combobox is open                                                         | Closes combobox and restores the selected item in the input field |                               |
+| `<ArrowDown>` / `<ArrowUp>` when combobox is open                                     | Focuses previous/next non-disabled item                           |
+| `<Home>` / `<End>` when combobox is open                                              | Focuses first/last non-disabled item                              |
+| `<Enter>` when combobox is open                                                       | Selects the current item                                          |
+| `<Tab>` when combobox is open                                                         | Selects the current active item and closes the combobox           |
+| `<A-Za-z>` when combobox is open                                                      | Calls the onChange which allows you to filter the list            |
+
+### Other
+
+All relevant ARIA attributes are automatically managed.
+
+## Component API
+
+### Combobox
+
+The main Combobox component.
+
+| Prop            | Default | Type                                  | Description                                                                                                                                 |
+| --------------- | ------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`            | `div`   | `string`                              | The element the `Combobox` should render as                                                                                                 |
+| `value`         | --      | `T`                                   | The selected value                                                                                                                          |
+| `defaultValue`  | --      | `T`                                   | The default value when using as an uncontrolled component.                                                                                  |
+| `by`            | --      | `keyof T` \| `((a: T, z: T) => boolean)` |  Use this to compare objects by a particular field, or pass your own comparison function for complete control over how objects are compared.|                                              |
+| `disabled`      | `false` | `boolean`                             | Use this to disable the entire combobox component & related children.                                                                       |
+| `name`          | --      | `string`                              | The name used when using this component inside a form.                                                                                      |
+| `nullable`      | --      | `Boolean`                             | Whether you can clear the combobox or not.                                                                                                  |
+| `multiple`      | `false` | `Boolean`                             | Whether multiple options can be selected or not.                                                                                            |
+
+
+| Slot prop  | Type      | Description                             |
+| ---------- | --------- | --------------------------------------- |
+| `value` | `T` | The selected value.                              |
+| `open` | `Boolean` | Whether or not the combobox is open.        |
+| `disabled` | `boolean` | Whether or not the Combobox is disabled |
+| `activeIndex` | `Number` \| `null` | The index of the active option or null if none is active. |
+| `activeOption` | `T` \| `null` | The active option or null if none is active. |
+
+
+This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
+
+| Event name | Type of event `.detail` | Description                                                                                                   |
+| ---------- | ----------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `change`   | `T`                     | Dispatched when a `ComboboxOption` is selected; the event `detail` contains the `value` of the selected option |
+
+
+### ComboboxInput
+
+The Combobox's input.
+
+| Prop            | Default | Type                                  | Description                                                                                                                                 |
+| --------------- | ------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`            | `input` | `string`                              | The element or component the ComboboxInput should render as.                                                                                                |
+| `displayValue`  | --      | `(item: T) => string`                 | The string representation of your value.                                                                                                                        |
+| `defaultValue`  | --      | `T`                                   | The default value when using as an uncontrolled component.                                                                                  |
+
+| Slot prop  | Type      | Description                           |
+| ---------- | --------- | --------------------------------------- |
+| `open`     | `Boolean` | Whether or not the combobox is open.    |
+| `disabled` | `boolean` | Whether or not the Combobox is disabled |
+
+### ComboboxLabel
+
+A label that can be used for more control over the text your Combobox will announce to screenreaders. Its `id` attribute will be automatically generated and linked to the root `Combobox` component via the `aria-labelledby` attribute.
+
+| Prop            | Default | Type                                  | Description                                                                                                                                 |
+| --------------- | ------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`            | `label` | `string`                              | The element or component the `ComboboxLabel` should render as.                                                                                                |
+
+| Render prop  | Type      | Description                           |
+| ---------- | --------- | --------------------------------------- |
+| `open`     | `Boolean` | Whether or not the Combobox is open.    |
+| `disabled` | `boolean` | Whether or not the Combobox is disabled |
+
+### ComboboxOptions
+
+The component that directly wraps the list of options in your custom Combobox.
+
+| Prop            | Default | Type                                  | Description                                                                                           |
+| --------------- | ------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `as`            | `ul`    | `string`                              | The element or component the `ComboboxOptions` should render as.                                      |
+| `static`        | `false` | `Boolean`                             | Whether the element should ignore the internally managed open/closed state.                           |
+| `unmount`       | `true`  | `Boolean`                             | Whether the element should be unmounted or hidden based on the open/closed state.                     |
+| `hold`          | `false` | `Boolean`                             | Whether or not the active option should stay active even when the mouse leaves the active option.     |
+
+| Render prop  | Type      | Description                           |
+| ---------- | --------- | --------------------------------------- |
+| `open`     | `Boolean` | Whether or not the Combobox is open.    |
+
+### ComboboxOption
+
+Used to wrap each item within your Combobox.
+
+| Prop            | Default | Type                                  | Description                                                                          |
+| --------------- | ------- | ------------------------------------- | ------------------------------------------------------------------------------------ |
+| `value`         | `T`     | `Boolean`                             | The option value.                                                                    |
+| `as`            | `li`    | `string`                              | The element or component the `ComboboxOption` should render as.                      |
+| `disabled`      | `false` | `Boolean`                             | Whether or not the option should be disabled for keyboard navigation and ARIA purposes.    |
+
+| Render prop  | Type      | Description                           |
+| ---------- | --------- | --------------------------------------- |
+| `active`     | `Boolean` | Whether or not the option is the active/focused option.    |
+| `selected`     | `Boolean` | Whether or not the option is the selected option.    |
+| `disabled`     | `Boolean` | Whether or not the option is the disabled for keyboard navigation and ARIA purposes.    |

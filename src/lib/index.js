@@ -8,3 +8,4 @@ export * from "./components/switch";
 export * from "./components/tabs";
 export * from "./components/transitions";
 export * from "./components/portal";
+export * from "./components/combobox";

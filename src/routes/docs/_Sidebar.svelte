@@ -12,6 +12,7 @@
   ];
 
   $: components = [
+    { url: `${base}combobox`, text: "Combobox" },
     { url: `${base}dialog`, text: "Dialog" },
     { url: `${base}disclosure`, text: "Disclosure" },
     { url: `${base}listbox`, text: "Listbox" },
