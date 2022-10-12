@@ -495,8 +495,6 @@
 
 <svelte:window on:mousedown={handleMousedown} />
 
-{$api.activeOptionIndex} | {activeOptionIndex}
-
 {#if name != null && value != null}
   {@const options = objectToFormEntries({ [name]: value })}
   {#each options as [optionName, optionValue], index (index)}        
