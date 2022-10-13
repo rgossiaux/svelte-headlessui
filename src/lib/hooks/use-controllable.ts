@@ -8,23 +8,19 @@ export function useControllable<T>(
   let internalValue = defaultValue;
   let isControlled = controlledValue !== undefined;
 
-  //console.log("useControllable", isControlled, controlledValue, internalValue);
-
-  const managedValue: Writable<T> = writable(
+  const valueStore: Writable<T> = writable(
     isControlled ? controlledValue : internalValue
   );
 
   return [
-    managedValue,
+    valueStore,
     function (value: unknown) {
-      //console.log("useControllable function(value)", value);
-
       if (isControlled) {
-        managedValue.set(controlledValue as T);
+        valueStore.set(value as T);
         return onChange?.(value as T);
       } else {
         internalValue = value as T;
-        managedValue.set(internalValue as T);
+        valueStore.set(internalValue);
         return onChange?.(value as T);
       }
     },

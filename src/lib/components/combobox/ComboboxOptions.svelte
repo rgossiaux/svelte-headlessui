@@ -13,16 +13,16 @@
 </script>
 
 <script lang="ts">
-  import { ComboboxStates, useComboboxContext } from "./Combobox.svelte";
-  import { useId } from "$lib/hooks/use-id";
-  import Render from "$lib/utils/Render.svelte";
-  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
-  import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import { get_current_component } from "svelte/internal";
-  import { Features, type TPassThroughProps } from "$lib/types";
-  import { State, useOpenClosed } from "$lib/internal/open-closed";
+  import { useId } from "$lib/hooks/use-id";
   import { treeWalker } from "$lib/hooks/use-tree-walker";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import { State, useOpenClosed } from "$lib/internal/open-closed";
+  import { Features, type TPassThroughProps } from "$lib/types";
+  import Render from "$lib/utils/Render.svelte";
+  import { get_current_component } from "svelte/internal";
+  import { ComboboxStates, useComboboxContext } from "./Combobox.svelte";
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;
@@ -30,8 +30,8 @@
 
   export let as: SupportedAs = "ul";
   export let hold: boolean = false;
-  let _static: boolean = false;
-  export { _static as static };
+  let static_ = false;
+  export { static_ as static };
   export let use: HTMLActionArray = [];
 
   /***** Events *****/
@@ -46,7 +46,7 @@
   let optionsRef = $api.optionsRef;
   let optionsPropsRef = $api.optionsPropsRef;
 
-  $: $optionsPropsRef.static = _static;
+  $: $optionsPropsRef.static = static_;
   $: $optionsPropsRef.hold = hold;
 
   let usesOpenClosedState = useOpenClosed();
@@ -76,7 +76,8 @@
         : $api.options[$api.activeOptionIndex]?.id,
     "aria-labelledby": $labelRef?.id ?? $buttonRef?.id,
     id,
-    role: "listbox",    
+    role: "listbox",
+    static: static_    
   };
 
   $: slotProps = {

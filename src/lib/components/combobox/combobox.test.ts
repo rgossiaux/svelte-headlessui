@@ -207,7 +207,7 @@ describe("Rendering", () => {
             <Combobox value={options[1]} on:change={console.log}>
               <ComboboxButton>Trigger</ComboboxButton>
               <ComboboxOptions>
-              {#each options as option}
+              {#each options as option, idx (option)}
                   <ComboboxOption                    
                     value={option}
                     class={(info) => JSON.stringify(info)}
@@ -243,7 +243,7 @@ describe("Rendering", () => {
             <Combobox value={null} on:change={console.log} by="id">
               <ComboboxButton>Trigger</ComboboxButton>
               <ComboboxOptions>
-                {#each options as option}
+                {#each options as option, idx (option)}
                   <ComboboxOption                    
                     value={option}
                     class={(info) => JSON.stringify(info)}
@@ -291,7 +291,7 @@ describe("Rendering", () => {
             >
               <ComboboxButton>Trigger</ComboboxButton>
               <ComboboxOptions>
-                {#each options as option}
+                {#each options as option, idx (option)}
                   <ComboboxOption                    
                     value={option}
                     class={(info) => JSON.stringify(info)}
@@ -335,7 +335,7 @@ describe("Rendering", () => {
             >
               <ComboboxButton>Trigger</ComboboxButton>
               <ComboboxOptions>
-              {#each options as option}
+              {#each options as option, idx (option)}
                   <ComboboxOption                    
                     value={option}
                     class={(info) => JSON.stringify(info)}
@@ -542,7 +542,7 @@ describe("ComboboxInput", () => {
       `);
 
       // Focus the input
-      await focus(getComboboxInput());
+      getComboboxInput()?.focus();
 
       // Type in it
       await type(word("A"), getComboboxInput());
@@ -1056,7 +1056,9 @@ describe("ComboboxOption", () => {
 });
 
 it("should guarantee the order of DOM nodes when performing actions", async () => {
-  const { rerender } = render(svelte`
+  // Not sure I can just rerender components like this. Might have to create a component and render that instead
+  const { rerender } = render(
+    svelte`
     <script>        
         let hide = false        
     </script>
@@ -1072,16 +1074,18 @@ it("should guarantee the order of DOM nodes when performing actions", async () =
         <ComboboxOption value="c">Option 3</ComboboxOption>
       </ComboboxOptions>
     </Combobox>
-    `);
+    `,
+    { hide: false }
+  );
 
   // Open the Combobox
   await click(getByText("Trigger"));
 
-  rerender({hide: true}) // Remove Combobox.Option 2
-  await nextFrame()
+  rerender({ hide: true }); // Remove Combobox.Option 2
+  await nextFrame();
 
-  rerender({hide: false}) // Re-add Combobox.Option 2
-  await nextFrame()
+  rerender({ hide: false }); // Re-add Combobox.Option 2
+  await nextFrame();
 
   assertComboboxList({ state: ComboboxState.Visible });
 
@@ -1107,7 +1111,7 @@ describe("Uncontrolled", () => {
 
     render(svelte`        
         <form
-          on:submit={(e) => {
+            on:submit|preventDefault={(e) => {
             e.preventDefault();
             handleSubmission(
               Object.fromEntries(new FormData(e.target))
@@ -1334,7 +1338,7 @@ describe("Rendering composition", () => {
         </Combobox>
       `);
 
-      await nextFrame()
+      await nextFrame();
 
       assertComboboxButton({
         state: ComboboxState.InvisibleUnmounted,
@@ -1460,63 +1464,63 @@ describe("Rendering composition", () => {
   );
 });
 
-// describe("Composition", () => { 
+describe("Composition", () => {
 
-//   it(
-//     "should be possible to wrap the ComboboxOptions with a Transition component",
-//     suppressConsoleLogs(async () => {
-//       let orderFn = jest.fn();
-//       render(svelte`
-//         <Combobox value="test" on:change={console.log}>          
-//           <TransitionDebug name="Combobox" fn={orderFn} />
-//           <ComboboxInput on:change={NOOP} />
-//           <ComboboxButton>Trigger</ComboboxButton>          
-//           <Transition>                        
-//             <TransitionDebug name="Transition" fn={orderFn} />
-//             <ComboboxOptions>
-//               <ComboboxOption value="a" let:active let:selected let:disabled>                
-//                 <TransitionDebug name="ComboboxOption" fn={orderFn} />
-//                 {JSON.stringify({active, selected, disabled})}                                  
-//               </ComboboxOption>
-//             </ComboboxOptions>
-//           </Transition>
-//         </Combobox>
-//       `);
+  it(
+    "should be possible to wrap the ComboboxOptions with a Transition component",
+    suppressConsoleLogs(async () => {
+      let orderFn = jest.fn();
+      render(svelte`
+        <Combobox value="test" on:change={console.log}>
+          <TransitionDebug name="Combobox" fn={orderFn} />
+          <ComboboxInput on:change={NOOP} />
+          <ComboboxButton>Trigger</ComboboxButton>
+          <Transition>
+            <TransitionDebug name="Transition" fn={orderFn} />
+            <ComboboxOptions>
+              <ComboboxOption value="a" let:active let:selected let:disabled>
+                <TransitionDebug name="ComboboxOption" fn={orderFn} />
+                {JSON.stringify({active, selected, disabled})}
+              </ComboboxOption>
+            </ComboboxOptions>
+          </Transition>
+        </Combobox>
+      `);
 
-//       assertComboboxButton({
-//         state: ComboboxState.InvisibleUnmounted,
-//         attributes: { id: "headlessui-combobox-button-2" },
-//       });
-//       assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
+      assertComboboxButton({
+        state: ComboboxState.InvisibleUnmounted,
+        attributes: { id: "headlessui-combobox-button-2" },
+      });
+      assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
-//       await click(getComboboxButton());
+      await click(getComboboxButton());
 
-//       assertComboboxButton({
-//         state: ComboboxState.Visible,
-//         attributes: { id: "headlessui-combobox-button-2" },
-//       });
-//       assertComboboxList({
-//         state: ComboboxState.Visible,
-//         textContent: JSON.stringify({
-//           active: true,
-//           selected: false,
-//           disabled: false,
-//         }),
-//       });
+      assertComboboxButton({
+        state: ComboboxState.Visible,
+        attributes: { id: "headlessui-combobox-button-2" },
+      });
+      assertComboboxList({
+        state: ComboboxState.Visible,
+        textContent: JSON.stringify({
+          active: true,
+          selected: false,
+          disabled: false,
+        }),
+      });
 
-//       await click(getComboboxButton());
+      await click(getComboboxButton());
 
-//       // Verify that we tracked the `mounts` and `unmounts` in the correct order
-//       expect(orderFn.mock.calls).toEqual([
-//         ["Mounting - Combobox"],
-//         ["Mounting - Transition"],
-//         ["Mounting - ComboboxOption"],
-//         ["Unmounting - Transition"],
-//         ["Unmounting - ComboboxOption"],
-//       ]);
-//     })
-//   );
-// });
+      // Verify that we tracked the `mounts` and `unmounts` in the correct order
+      expect(orderFn.mock.calls).toEqual([
+        ["Mounting - Combobox"],
+        ["Mounting - Transition"],
+        ["Mounting - ComboboxOption"],
+        ["Unmounting - Transition"],
+        ["Unmounting - ComboboxOption"],
+      ]);
+    })
+  );
+});
 
 describe("Keyboard interactions", () => {
   describe("Button", () => {
@@ -1543,12 +1547,11 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          //await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.Enter);
-
-          await nextFrame()
 
           // Verify we moved focus to the input field
           assertActiveElement(getComboboxInput());
@@ -1596,7 +1599,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Try to focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Try to open the combobox
           await press(Keys.Enter);
@@ -1632,7 +1635,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.Enter);
@@ -1683,7 +1686,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleHidden });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.Enter);
@@ -1730,7 +1733,7 @@ describe("Keyboard interactions", () => {
 
       it(
         "should be possible to open the combobox with Enter, and focus the selected option (with a list of objects)",
-        suppressConsoleLogs(async () => {          
+        suppressConsoleLogs(async () => {
           render(svelte`
             <script>
             let myOptions = [
@@ -1745,7 +1748,7 @@ describe("Keyboard interactions", () => {
               <ComboboxInput on:change={NOOP} />
               <ComboboxButton>Trigger</ComboboxButton>
               <ComboboxOptions>
-                {#each myOptions as myOption}                
+                {#each myOptions as myOption, idx (myOption)}                
                   <ComboboxOption value={myOption}>
                     {myOption.name}
                   </ComboboxOption>
@@ -1761,7 +1764,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.Enter);
@@ -1804,7 +1807,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.Enter);
@@ -1843,7 +1846,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.Space);
@@ -1890,7 +1893,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Try to open the combobox
           await press(Keys.Space);
@@ -1928,7 +1931,7 @@ describe("Keyboard interactions", () => {
           });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.Space);
@@ -1970,7 +1973,7 @@ describe("Keyboard interactions", () => {
           });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.Space);
@@ -2011,7 +2014,7 @@ describe("Keyboard interactions", () => {
           });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.Space);
@@ -2050,7 +2053,7 @@ describe("Keyboard interactions", () => {
           assertComboboxButtonLinkedWithCombobox();
 
           // Re-focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
           assertActiveElement(getComboboxButton());
 
           // Close combobox
@@ -2113,7 +2116,7 @@ describe("Keyboard interactions", () => {
           `);
 
           // Focus the input field
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Close combobox
           await press(Keys.Escape);
@@ -2147,7 +2150,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.ArrowDown);
@@ -2193,7 +2196,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Try to open the combobox
           await press(Keys.ArrowDown);
@@ -2229,7 +2232,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.ArrowDown);
@@ -2269,7 +2272,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.ArrowDown);
@@ -2304,7 +2307,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -2350,7 +2353,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Try to open the combobox
           await press(Keys.ArrowUp);
@@ -2386,7 +2389,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -2426,7 +2429,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -2463,7 +2466,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the button
-          await focus(getComboboxButton());
+          getComboboxButton()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -2490,23 +2493,23 @@ describe("Keyboard interactions", () => {
           let query = ""
         </script>
         <Combobox
-              value={value}
-              on:change={(event) => {
-                value = event.detail
-                handleChange(event.detail);
-              }}
-              nullable
-            >
-              <ComboboxInput
-                on:change={(event) => query=(event.target.value)}
-              />
-              <ComboboxButton>Trigger</ComboboxButton>
-              <ComboboxOptions>
-                <ComboboxOption value="alice">Alice</ComboboxOption>
-                <ComboboxOption value="bob">Bob</ComboboxOption>
-                <ComboboxOption value="charlie">Charlie</ComboboxOption>
-              </ComboboxOptions>
-            </Combobox>
+          value={value}
+          on:change={(event) => {
+            value = event.detail
+            handleChange(event.detail);
+          }}
+          nullable
+        >
+          <ComboboxInput
+            on:change={(event) => query = event.detail}
+          />
+          <ComboboxButton>Trigger</ComboboxButton>
+          <ComboboxOptions>
+            <ComboboxOption value="alice">Alice</ComboboxOption>
+            <ComboboxOption value="bob">Bob</ComboboxOption>
+            <ComboboxOption value="charlie">Charlie</ComboboxOption>
+          </ComboboxOptions>
+        </Combobox>
         `);
 
         // Open combobox
@@ -2558,20 +2561,20 @@ describe("Keyboard interactions", () => {
             let value
           </script>
           <Combobox
-                value={value}
-                on:change={(event) => {
-                  value = event.detail
-                  handleChange(value);
-                }}
-              >
-                <ComboboxInput on:change={NOOP} />
-                <ComboboxButton>Trigger</ComboboxButton>
-                <ComboboxOptions>
-                  <ComboboxOption value="a">Option A</ComboboxOption>
-                  <ComboboxOption value="b">Option B</ComboboxOption>
-                  <ComboboxOption value="c">Option C</ComboboxOption>
-                </ComboboxOptions>
-              </Combobox>
+            value={value}
+            on:change={(event) => {
+              value = event.detail
+              handleChange(value);
+            }}
+          >
+            <ComboboxInput on:change={NOOP} />
+            <ComboboxButton>Trigger</ComboboxButton>
+            <ComboboxOptions>
+              <ComboboxOption value="a">Option A</ComboboxOption>
+              <ComboboxOption value="b">Option B</ComboboxOption>
+              <ComboboxOption value="c">Option C</ComboboxOption>
+            </ComboboxOptions>
+          </Combobox>
           `);
 
           assertComboboxButton({
@@ -2647,8 +2650,8 @@ describe("Keyboard interactions", () => {
           `);
 
           // Focus the input field
-          await focus(getComboboxInput());
-          await nextFrame()
+          getComboboxInput()?.focus();
+          await nextFrame();
           assertActiveElement(getComboboxInput());
 
           // Press enter (which should submit the form)
@@ -2951,7 +2954,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowDown);
@@ -2997,7 +3000,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Try to open the combobox
           await press(Keys.ArrowDown);
@@ -3033,7 +3036,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowDown);
@@ -3073,7 +3076,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowDown);
@@ -3268,7 +3271,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -3314,7 +3317,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Try to open the combobox
           await press(Keys.ArrowUp);
@@ -3350,7 +3353,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -3390,7 +3393,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -3427,7 +3430,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -3509,7 +3512,7 @@ describe("Keyboard interactions", () => {
           assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -3842,7 +3845,7 @@ describe("Keyboard interactions", () => {
           `);
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -3986,7 +3989,7 @@ describe("Keyboard interactions", () => {
           `);
 
           // Focus the input
-          await focus(getComboboxInput());
+          getComboboxInput()?.focus();
 
           // Open combobox
           await press(Keys.ArrowUp);
@@ -4126,7 +4129,7 @@ describe("Keyboard interactions", () => {
             let value
             let query = ""
 
-            let filteredPeople =
+            $:filteredPeople =
             query === ""
               ? people
               : people.filter((person) =>
@@ -4136,11 +4139,11 @@ describe("Keyboard interactions", () => {
             </script>
             <Combobox value={value} on:change={(event) => value = event.detail}>
             <ComboboxInput
-              on:change={(event) => query = (event.target.value)}
+              on:change={(event) => query = event.detail}
             />
             <ComboboxButton>Trigger</ComboboxButton>
             <ComboboxOptions>
-              {#each filteredPeople as person}              
+              {#each filteredPeople as person, idx (person)}              
                 <ComboboxOption                  
                   value={person.value}
                   disabled={person.disabled}
@@ -4201,7 +4204,7 @@ describe("Keyboard interactions", () => {
             let value
             let query = ""
 
-            let filteredPeople =
+            $:filteredPeople =
             query === ""
               ? people
               : people.filter((person) =>
@@ -4211,11 +4214,11 @@ describe("Keyboard interactions", () => {
           </script>
           <Combobox value={value} on:change={(event) => value = event.detail}>
             <ComboboxInput
-              on:change={(event) => query = (event.target.value)}
+              on:change={(event) => query = (event.detail)}
             />
             <ComboboxButton>Trigger</ComboboxButton>
             <ComboboxOptions>
-            {#each filteredPeople as person}
+            {#each filteredPeople as person, idx (person)}
                 <ComboboxOption                  
                   value={person.value}
                   disabled={person.disabled}
@@ -4271,7 +4274,7 @@ describe("Keyboard interactions", () => {
             let value
             let query = ""
 
-            let filteredPeople =
+            $:filteredPeople =
             query === ""
               ? people
               : people.filter((person) =>
@@ -4285,7 +4288,7 @@ describe("Keyboard interactions", () => {
             />
             <ComboboxButton>Trigger</ComboboxButton>
             <ComboboxOptions>
-            {#each filteredPeople as person}
+            {#each filteredPeople as person, idx (person)}
                 <ComboboxOption                  
                   value={person.value}
                   disabled={person.disabled}
@@ -4341,7 +4344,7 @@ describe("Keyboard interactions", () => {
           let value
           let query = ""
 
-          let filteredPeople =
+          $:filteredPeople =
           query === ""
             ? people
             : people.filter((person) =>
@@ -4355,7 +4358,7 @@ describe("Keyboard interactions", () => {
           />
           <ComboboxButton>Trigger</ComboboxButton>
           <ComboboxOptions>
-          {#each filteredPeople as person}
+          {#each filteredPeople as person, idx (person)}
               <ComboboxOption                
                 value={person.value}
                 disabled={person.disabled}
@@ -4392,7 +4395,7 @@ describe("Keyboard interactions", () => {
           let value
           let query = ""
 
-          let filteredPeople =
+          $:filteredPeople =
           query === ""
             ? people
             : people.filter((person) =>
@@ -4406,7 +4409,7 @@ describe("Keyboard interactions", () => {
           />
           <ComboboxButton>Trigger</ComboboxButton>
           <ComboboxOptions>
-          {#each filteredPeople as person}
+          {#each filteredPeople as person, idx (person)}
               <ComboboxOption                
                 value={person.value}
                 disabled={person.disabled}
@@ -4825,7 +4828,7 @@ describe("Mouse interactions", () => {
       render(svelte`
         <div>
           <Combobox value="test" on:change={console.log}>
-            <ComboboxInput on:change={NOOP} onFocus={focusFn} />
+            <ComboboxInput on:change={NOOP} on:focus={focusFn} />
             <ComboboxButton>Trigger</ComboboxButton>
             <ComboboxOptions>
               <ComboboxOption value="alice">alice</ComboboxOption>
@@ -5113,7 +5116,7 @@ describe("Mouse interactions", () => {
   it(
     "should be possible to click a combobox option, which closes the combobox",
     suppressConsoleLogs(async () => {
-      let handleChange = jest.fn();      
+      let handleChange = jest.fn();
 
       render(svelte`
       <script>
@@ -5145,7 +5148,7 @@ describe("Mouse interactions", () => {
       let options = getComboboxOptions();
 
       // We should be able to click the first option
-      await click(options[1]);
+      options[1].click();
       assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
       expect(handleChange).toHaveBeenCalledTimes(1);
       expect(handleChange).toHaveBeenCalledWith("bob");
@@ -5154,7 +5157,7 @@ describe("Mouse interactions", () => {
       assertActiveElement(getComboboxInput());
 
       // Open combobox again
-      await click(getComboboxButton());
+      getComboboxButton()?.click();
 
       // Verify the active option is the previously selected one
       assertActiveComboboxOption(getComboboxOptions()[1]);
@@ -5164,7 +5167,7 @@ describe("Mouse interactions", () => {
   it(
     "should be possible to click a disabled combobox option, which is a no-op",
     suppressConsoleLogs(async () => {
-      let handleChange = jest.fn();     
+      let handleChange = jest.fn();
 
       render(svelte`
       <script>
@@ -5182,7 +5185,7 @@ describe("Mouse interactions", () => {
         <ComboboxButton>Trigger</ComboboxButton>
         <ComboboxOptions>
           <ComboboxOption value="alice">alice</ComboboxOption>
-          <ComboboxOption value="bob" disabled>bob</ComboboxOption>
+          <ComboboxOption value="bob" disabled={true}>bob</ComboboxOption>
           <ComboboxOption value="charlie">charlie</ComboboxOption>
         </ComboboxOptions>
       </Combobox>
@@ -5340,8 +5343,7 @@ describe("Mouse interactions", () => {
 
   it(
     "should sync the input field correctly and reset it when resetting the value from outside",
-    suppressConsoleLogs(async () => {     
-
+    suppressConsoleLogs(async () => {
       render(svelte`
       <script>
         let value = "bob"
@@ -5382,7 +5384,7 @@ describe("Mouse interactions", () => {
 
   it(
     "should sync the input field correctly and reset it when resetting the value from outside (when using displayValue)",
-    suppressConsoleLogs(async () => {      
+    suppressConsoleLogs(async () => {
       render(svelte`
         <script>
           let people = [
@@ -5402,7 +5404,7 @@ describe("Mouse interactions", () => {
         />
         <ComboboxButton>Trigger</ComboboxButton>
         <ComboboxOptions>
-          {#each people as person}          
+          {#each people as person, idx (person)}          
             <ComboboxOption value={person}>
               {person.name}
             </ComboboxOption>
@@ -5434,8 +5436,7 @@ describe("Mouse interactions", () => {
 describe("Multi-select", () => {
   it(
     "should be possible to pass multiple values to the Combobox component",
-    suppressConsoleLogs(async () => {      
-
+    suppressConsoleLogs(async () => {
       render(svelte`
         <script>
           let value = ["bob", "charlie"]
@@ -5476,8 +5477,7 @@ describe("Multi-select", () => {
 
   it(
     "should make the first selected option the active item",
-    suppressConsoleLogs(async () => {             
-
+    suppressConsoleLogs(async () => {
       render(svelte`
         <script>
           let value = ["bob", "charlie"]
@@ -5508,8 +5508,7 @@ describe("Multi-select", () => {
 
   it(
     "should keep the combobox open when selecting an item via the keyboard",
-    suppressConsoleLogs(async () => {      
-
+    suppressConsoleLogs(async () => {
       render(svelte`
         <script>
           let value = ["bob", "charlie"]
@@ -5657,7 +5656,7 @@ describe("Form compatibility", () => {
   });
 
   it("should be possible to submit a form with a complex value object", async () => {
-    let submits = jest.fn();    
+    let submits = jest.fn();
 
     render(svelte`
       <script>
@@ -5705,7 +5704,7 @@ describe("Form compatibility", () => {
     `);
 
     // Open combobox
-    await click(getComboboxButton());
+    getComboboxButton()?.click();
 
     // Submit the form
     await click(getByText("Submit"));
@@ -5718,10 +5717,9 @@ describe("Form compatibility", () => {
       ["delivery[extra][info]", "Some extra info"],
     ]);
 
-    // Open combobox
+    // Open combobox again
     await click(getComboboxButton());
 
-    await nextFrame()
     // Choose home delivery
     await click(getByText("Home delivery"));
 
@@ -5737,7 +5735,7 @@ describe("Form compatibility", () => {
     ]);
 
     // Open combobox
-    await click(getComboboxButton());
+    getComboboxButton()?.click();
 
     // Choose pickup
     await click(getByText("Pickup"));

@@ -207,37 +207,16 @@
 
       activeOptionIndex = activeOptionIndex
     }
-  
-  let isControlled = value !== undefined;  
-  value = isControlled ? value : defaultValue  
-
-  let oldValue:unknown
-  function valueChanged<T>(controlledValue: T | undefined, internalValue?: T) {  
-
-    let isControlled = value !== undefined;
-    value = (isControlled ? controlledValue : internalValue)!;    
-
-    if (oldValue == value)
-      return
-    
-    if (isControlled) {
-      dispatch("change", value);
-    } else {
-      defaultValue = value;
-      dispatch("change", value);
-    }
-
-    oldValue = value
-  }
 
   let [controlledValue, theirOnChange] = useControllable<any>(
     value,
-    (value: unknown) => {
-      valueChanged(value, defaultValue)            
-      //dispatch("change", value)      
+    (value: unknown) => {          
+      dispatch("change", value)            
     },
     defaultValue
   )
+
+  $: value = $controlledValue
 
   let api = writable<StateDefinition>({
     comboboxState,
@@ -495,6 +474,7 @@
 
 <svelte:window on:mousedown={handleMousedown} />
 
+{name != null && value != null}
 {#if name != null && value != null}
   {@const options = objectToFormEntries({ [name]: value })}
   {#each options as [optionName, optionValue], index (index)}        

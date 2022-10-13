@@ -26,7 +26,17 @@ export function shift(event: Partial<KeyboardEvent>) {
 }
 
 export function word(input: string): Partial<KeyboardEvent>[] {
-  return input.split("").map((key) => ({ key }));
+  let result = input.split("").map((key) => ({ key }));
+
+  let element = document.activeElement;
+
+  if (element instanceof HTMLInputElement) {
+    fireEvent.change(element, {
+      target: Object.assign({}, element, { value: input }),
+    });
+  }
+
+  return result;
 }
 
 let Default = Symbol();
@@ -72,6 +82,10 @@ let order: Record<
     async function keypress(element, event) {
       return await fireEvent.keyPress(element, event);
     },
+    async function input(element, event) {
+      // TODO: This should only fire when the element's value changes
+      return await fireEvent.input(element, event);
+    },
     async function keyup(element, event) {
       return await fireEvent.keyUp(element, event);
     },
@@ -114,6 +128,34 @@ let order: Record<
     },
     async function blurAndfocus(_element, event) {
       return focusNext(event);
+    },
+    async function keyup(element, event) {
+      return await fireEvent.keyUp(element, event);
+    },
+  ],
+  [Keys.Escape.key!]: [
+    async function keydown(element, event) {
+      return await fireEvent.keyDown(element, event);
+    },
+    async function keypress(element, event) {
+      return await fireEvent.keyPress(element, event);
+    },
+    async function keyup(element, event) {
+      return await fireEvent.keyUp(element, event);
+    },
+  ],
+  [Keys.Backspace.key!]: [
+    async function keydown(element, event) {
+      if (element instanceof HTMLInputElement) {
+        let ev = Object.assign({}, event, {
+          target: Object.assign({}, event.target, {
+            value: element.value.slice(0, -1),
+          }),
+        });
+        return await fireEvent.keyDown(element, ev);
+      }
+
+      return await fireEvent.keyDown(element, event);
     },
     async function keyup(element, event) {
       return await fireEvent.keyUp(element, event);
