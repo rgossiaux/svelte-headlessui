@@ -474,7 +474,6 @@
 
 <svelte:window on:mousedown={handleMousedown} />
 
-{name != null && value != null}
 {#if name != null && value != null}
   {@const options = objectToFormEntries({ [name]: value })}
   {#each options as [optionName, optionValue], index (index)}        

@@ -5148,7 +5148,7 @@ describe("Mouse interactions", () => {
       let options = getComboboxOptions();
 
       // We should be able to click the first option
-      options[1].click();
+      await click(options[1]);
       assertComboboxList({ state: ComboboxState.InvisibleUnmounted });
       expect(handleChange).toHaveBeenCalledTimes(1);
       expect(handleChange).toHaveBeenCalledWith("bob");
