@@ -1056,37 +1056,36 @@ describe("ComboboxOption", () => {
 });
 
 it("should guarantee the order of DOM nodes when performing actions", async () => {
-  // Not sure I can just rerender components like this. Might have to create a component and render that instead
-  const { rerender } = render(
+  const component = render(
     svelte`
-    <script>        
-        let hide = false        
-    </script>
-
-    <Combobox value="test" on:change={console.log}>
-      <ComboboxInput on:change={NOOP} />
-      <ComboboxButton>Trigger</ComboboxButton>
-      <ComboboxOptions>
-        <ComboboxOption value="a">Option 1</ComboboxOption>
-        {#if !hide}
-          <ComboboxOption value="b">Option 2</ComboboxOption>
-        {/if}
-        <ComboboxOption value="c">Option 3</ComboboxOption>
-      </ComboboxOptions>
-    </Combobox>
-    `,
-    { hide: false }
+  <script>        
+      let hide = false        
+  </script>
+  <Combobox value="test" on:change={console.log}>
+    <ComboboxInput on:change={NOOP} />
+    <ComboboxButton>Trigger</ComboboxButton>
+    <ComboboxOptions>
+      <ComboboxOption value="a">Option 1</ComboboxOption>
+      {#if !hide}
+        <ComboboxOption value="b">Option 2</ComboboxOption>
+      {/if}
+      <ComboboxOption value="c">Option 3</ComboboxOption>
+    </ComboboxOptions>
+  </Combobox>
+  `,
+    { props: { hide: false } }
   );
 
   // Open the Combobox
   await click(getByText("Trigger"));
+  assertComboboxList({ state: ComboboxState.Visible });
 
-  rerender({ hide: true }); // Remove Combobox.Option 2
-  await nextFrame();
+  component.rerender({ props: { hide: false } }); // Remove Combobox.Option 2
 
-  rerender({ hide: false }); // Re-add Combobox.Option 2
-  await nextFrame();
+  component.rerender({ props: { hide: false } }); // Re-add Combobox.Option 2
 
+  // Rerendering closes the Combobox so we need to click open again
+  await click(getByText("Trigger"));
   assertComboboxList({ state: ComboboxState.Visible });
 
   let options = getComboboxOptions();
@@ -1465,7 +1464,6 @@ describe("Rendering composition", () => {
 });
 
 describe("Composition", () => {
-
   it(
     "should be possible to wrap the ComboboxOptions with a Transition component",
     suppressConsoleLogs(async () => {
@@ -1509,6 +1507,9 @@ describe("Composition", () => {
       });
 
       await click(getComboboxButton());
+
+      // Wait for all transitions to finish
+      await nextFrame();
 
       // Verify that we tracked the `mounts` and `unmounts` in the correct order
       expect(orderFn.mock.calls).toEqual([
@@ -5157,10 +5158,12 @@ describe("Mouse interactions", () => {
       assertActiveElement(getComboboxInput());
 
       // Open combobox again
-      getComboboxButton()?.click();
+      await click(getComboboxButton());
+      assertComboboxList({ state: ComboboxState.Visible });
 
+      options = getComboboxOptions();
       // Verify the active option is the previously selected one
-      assertActiveComboboxOption(getComboboxOptions()[1]);
+      assertActiveComboboxOption(options[1]);
     })
   );
 
@@ -5657,6 +5660,7 @@ describe("Form compatibility", () => {
 
   it("should be possible to submit a form with a complex value object", async () => {
     let submits = jest.fn();
+    let handleChange = jest.fn();
 
     render(svelte`
       <script>
@@ -5687,7 +5691,12 @@ describe("Form compatibility", () => {
           submits([...new FormData(event.currentTarget).entries()]);
         }}
       >
-        <Combobox value={value} on:change={(e) => value = e.detail} name="delivery">
+        <Combobox value={value} 
+          on:change={(e) => {
+            value = e.detail
+            handleChange(e.detail)
+          }}
+          name="delivery">
           <ComboboxInput on:change={console.log} />
           <ComboboxButton>Trigger</ComboboxButton>
           <ComboboxLabel>Pizza Delivery</ComboboxLabel>
@@ -5704,7 +5713,7 @@ describe("Form compatibility", () => {
     `);
 
     // Open combobox
-    getComboboxButton()?.click();
+    await click(getComboboxButton());
 
     // Submit the form
     await click(getByText("Submit"));
@@ -5719,9 +5728,19 @@ describe("Form compatibility", () => {
 
     // Open combobox again
     await click(getComboboxButton());
+    assertComboboxList({ state: ComboboxState.Visible });
+
+    let options = getComboboxOptions();
 
     // Choose home delivery
-    await click(getByText("Home delivery"));
+    await click(options[1]);
+
+    expect(handleChange).toHaveBeenNthCalledWith(1, {
+      id: 2,
+      value: "home-delivery",
+      label: "Home delivery",
+      extra: { info: "Some extra info" },
+    });
 
     // Submit the form again
     await click(getByText("Submit"));
@@ -5735,10 +5754,19 @@ describe("Form compatibility", () => {
     ]);
 
     // Open combobox
-    getComboboxButton()?.click();
+    await click(getComboboxButton());
+    assertComboboxList({ state: ComboboxState.Visible });
 
+    options = getComboboxOptions();
     // Choose pickup
-    await click(getByText("Pickup"));
+    await click(options[0]);
+
+    expect(handleChange).toHaveBeenNthCalledWith(2, {
+      id: 1,
+      value: "pickup",
+      label: "Pickup",
+      extra: { info: "Some extra info" },
+    });
 
     // Submit the form again
     await click(getByText("Submit"));

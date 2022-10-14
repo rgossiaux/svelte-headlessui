@@ -425,11 +425,13 @@
 
     if (comboboxState !== ComboboxStates.Open) return;
     if ($buttonRef?.contains(target)) return;
-
+    if ($inputRef?.contains(target)) return
     if (!$optionsRef?.contains(target)) $api.closeCombobox();
+
     if (active !== document.body && active?.contains(target)) return; // Keep focus on newly clicked/focused element
+    
     if (!event.defaultPrevented) {
-      $buttonRef?.focus({ preventScroll: true });
+      $inputRef?.focus({ preventScroll: true });
     }
   }
 
