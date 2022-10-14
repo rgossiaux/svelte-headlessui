@@ -1059,7 +1059,7 @@ it("should guarantee the order of DOM nodes when performing actions", async () =
   const component = render(
     svelte`
   <script>        
-      let hide = false        
+      export let hide = false        
   </script>
   <Combobox value="test" on:change={console.log}>
     <ComboboxInput on:change={NOOP} />
