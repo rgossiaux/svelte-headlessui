@@ -1,10 +1,19 @@
-# ComboBox
-
 <script>
-  import Preview from "./_Preview.svelte";
+  import Combobox from '../examples/combobox.svelte'
+  import Preview from "../_CodePreview.svelte";
 </script>
 
-<Preview url="examples/combobox" code="" class="h-[410px] bg-rose-300"/>
+# ComboBox
+
+<Preview class="h-[410px] w-full bg-rose-300">
+  Combobox in whyframe Preview
+  <Combobox />
+</Preview>
+
+<iframe data-why title="Hello" class="h-[410px] w-full bg-rose-300">
+  Combobox in whyframe
+  <Combobox />
+</iframe>
 
 ## Basic example
 
@@ -14,7 +23,7 @@ The `ComboboxInput` will automatically open/close the `ComboboxOptions` when sea
 
 You are completely in charge of how you filter the results, whether it be with a fuzzy search library client-side or by making server-side requests to an API. In this example we will keep the logic simple for demo purposes.
 
-```svelte
+```svelte {0-9}
 <script>
   import {
     Combobox,
@@ -52,7 +61,6 @@ You are completely in charge of how you filter the results, whether it be with a
     {/each}
   </ComboboxOptions>
 </Combobox>
-
 ```
 
 In the previous example we used a list of `string` values as data, but you can also use objects with additional information. The only caveat is that you have to provide a `displayValue` to the input. This is important so that a string based version of your object can be rendered in the `ComboboxInput`.
@@ -95,7 +103,6 @@ In the previous example we used a list of `string` values as data, but you can a
     {/each}
   </ComboboxOptions>
 </Combobox>
-
 ```
 
 ## Styling different states
@@ -157,7 +164,6 @@ For example, the `ComboboxOption` component exposes an `active` state, which tel
     {/each}
   </ComboboxOptions>
 </Combobox>
-
 ```
 
 ## Binding objects as values
@@ -202,7 +208,6 @@ Unlike native HTML form controls which only allow you to provide strings as valu
     {/each}
   </ComboboxOptions>
 </Combobox>
-
 ```
 
 When binding objects as values, it's important to make sure that you use the same instance of the object as both the `value` of the `Combobox` as well as the corresponding `ComboboxOption`, otherwise they will fail to be equal and cause the combobox to behave incorrectly.
@@ -253,7 +258,6 @@ To make it easier to work with different instances of the same object, you can u
     {/each}
   </ComboboxOptions>
 </Combobox>
-
 ```
 
 You can also pass your own comparison function to the `by` prop if you'd like complete control over how objects are compared:
@@ -306,7 +310,6 @@ You can also pass your own comparison function to the `by` prop if you'd like co
     {/each}
   </ComboboxOptions>
 </Combobox>
-
 ```
 
 ## Selecting multiple values
@@ -338,7 +341,7 @@ The Combobox component allows you to select multiple values. You can enable this
     <ul>
       {#each selectedPeople as person (person)}
         <li>
-          {{ person.name }}
+          { person.name }
         </li>
       {/each}
     </ul>
@@ -352,7 +355,6 @@ The Combobox component allows you to select multiple values. You can enable this
     {/each}
   </ComboboxOptions>
 </Combobox>
-
 ```
 
 This will keep the combobox open when you are selecting options, and choosing an option will toggle it in place.
@@ -403,7 +405,6 @@ By default the `Combobox` will use the input contents as the label for screenrea
     {/each}
   </ComboboxOptions>
 </Combobox>
-
 ```
 
 ## Using with HTML forms
@@ -562,7 +563,6 @@ You can allow users to enter their own value that doesn't exist in the list by i
     {/each}
   </ComboboxOptions>
 </Combobox>
-
 ```
 
 ## Rendering the active option on the side
@@ -612,7 +612,7 @@ Depending on what you're building it can sometimes make sense to render addition
 
   {#if activeOption}
     <div>
-        The current active user is: {{ activeOption.name }}
+        The current active user is: { activeOption.name }
     </div>
   {/if}
 </Combobox>
@@ -760,7 +760,7 @@ Use the `disabled` prop to disable a `ComboboxOption`. This will make it unselec
     {#each filteredPeople as person (person)}
       <ComboboxOption value={person} disabled={person.unavailable}>
         <span class:opacity-75={person.unavailable}>
-          {{ person.name }}
+          { person.name }
         </span>
       </ComboboxOption>
     {/each}
@@ -810,7 +810,7 @@ If you want to support empty values in your combobox, use the `nullable` prop.
     {#each filteredPeople as person (person)}
       <ComboboxOption value={person} disabled={person.unavailable}>
         <span class:opacity-75={person.unavailable}>
-          {{ person.name }}
+          { person.name }
         </span>
       </ComboboxOption>
     {/each}
@@ -879,7 +879,6 @@ To animate the opening/closing of the combobox panel, use the provided `Transiti
     </ComboboxOptions>
   </Transition>
 </Combobox>
-
 ```
 
 The components in this library communicate with each other, so the Transition will be managed automatically when the Combobox is opened/closed.
@@ -931,7 +930,6 @@ The components in this library communicate with each other, so the Transition wi
     </div>
   {/if}
 </Combobox>
-
 ```
 
 Make sure to use the `static` prop, or else the exit transitions won't work correctly.
@@ -1005,13 +1003,13 @@ Clicking a `ComboboxButton` toggles the options list open and closed. Clicking a
 | Command                                                                               | Description                                                       |
 | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `<ArrowUp>` / `<ArrowDown>` when ComboboxInput is focused                             | Opens combobox and focuses the selected item                      |
-| `<Enter>` / `<Space>` / `<ArrowUp>` / `<ArrowDown>` when `ComboboxButton ` is focused | Opens combobox, focuses the input and selects the selected item   |
-| `<Esc>` when combobox is open                                                         | Closes combobox and restores the selected item in the input field |                               |
+| `<Enter>` / `<Space>` / `<ArrowUp>` / `<ArrowDown>` when `ComboboxButton` is focused  | Opens combobox, focuses the input and selects the selected item   |
+| `<Esc>` when combobox is open                                                         | Closes combobox and restores the selected item in the input field |
 | `<ArrowDown>` / `<ArrowUp>` when combobox is open                                     | Focuses previous/next non-disabled item                           |
 | `<Home>` / `<End>` when combobox is open                                              | Focuses first/last non-disabled item                              |
 | `<Enter>` when combobox is open                                                       | Selects the current item                                          |
 | `<Tab>` when combobox is open                                                         | Selects the current active item and closes the combobox           |
-| `<A-Za-z>` when combobox is open                                                      | Calls the onChange which allows you to filter the list            |
+| `<A-Za-z>` when combobox is open                                                      | Calls the on:change which allows you to filter the list           |
 
 ### Other
 
@@ -1023,16 +1021,16 @@ All relevant ARIA attributes are automatically managed.
 
 The main Combobox component.
 
-| Prop            | Default | Type                                  | Description                                                                                                                                 |
-| --------------- | ------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`            | `div`   | `string`                              | The element the `Combobox` should render as                                                                                                 |
-| `value`         | --      | `T`                                   | The selected value                                                                                                                          |
-| `defaultValue`  | --      | `T`                                   | The default value when using as an uncontrolled component.                                                                                  |
-| `by`            | --      | `keyof T` \| `((a: T, z: T) => boolean)` |  Use this to compare objects by a particular field, or pass your own comparison function for complete control over how objects are compared.|                                              |
-| `disabled`      | `false` | `boolean`                             | Use this to disable the entire combobox component & related children.                                                                       |
-| `name`          | --      | `string`                              | The name used when using this component inside a form.                                                                                      |
-| `nullable`      | --      | `Boolean`                             | Whether you can clear the combobox or not.                                                                                                  |
-| `multiple`      | `false` | `Boolean`                             | Whether multiple options can be selected or not.                                                                                            |
+| Prop            | Default | Type                                     | Description                                                                                                                                 |
+| --------------- | ------- | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------|
+| `as`            | `div`   | `string`                                 | The element the `Combobox` should render as                                                                                                 |
+| `value`         | --      | `T`                                      | The selected value                                                                                                                          |
+| `defaultValue`  | --      | `T`                                      | The default value when using as an uncontrolled component.                                                                                  |
+| `by`            | --      | `keyof T` \| `((a: T, z: T) => boolean)` |  Use this to compare objects by a particular field, or pass your own comparison function for complete control over how objects are compared.|                                              
+| `disabled`      | `false` | `boolean`                                | Use this to disable the entire combobox component & related children.                                                                       |
+| `name`          | --      | `string`                                 | The name used when using this component inside a form.                                                                                      |
+| `nullable`      | --      | `Boolean`                                | Whether you can clear the combobox or not.                                                                                                  |
+| `multiple`      | `false` | `Boolean`                                | Whether multiple options can be selected or not.                                                                                            |
 
 
 | Slot prop  | Type      | Description                             |
@@ -1057,8 +1055,8 @@ The Combobox's input.
 
 | Prop            | Default | Type                                  | Description                                                                                                                                 |
 | --------------- | ------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`            | `input` | `string`                              | The element or component the ComboboxInput should render as.                                                                                                |
-| `displayValue`  | --      | `(item: T) => string`                 | The string representation of your value.                                                                                                                        |
+| `as`            | `input` | `string`                              | The element or component the ComboboxInput should render as.                                                                                |
+| `displayValue`  | --      | `(item: T) => string`                 | The string representation of your value.                                                                                                    |
 | `defaultValue`  | --      | `T`                                   | The default value when using as an uncontrolled component.                                                                                  |
 
 | Slot prop  | Type      | Description                           |
@@ -1072,7 +1070,7 @@ A label that can be used for more control over the text your Combobox will annou
 
 | Prop            | Default | Type                                  | Description                                                                                                                                 |
 | --------------- | ------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`            | `label` | `string`                              | The element or component the `ComboboxLabel` should render as.                                                                                                |
+| `as`            | `label` | `string`                              | The element or component the `ComboboxLabel` should render as.                                                                              |
 
 | Render prop  | Type      | Description                           |
 | ---------- | --------- | --------------------------------------- |

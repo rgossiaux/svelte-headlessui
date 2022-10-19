@@ -1,4 +1,6 @@
 <script lang="ts">
+  throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
+
   import Dialog from "$lib/components/dialog/Dialog.svelte";
   import DialogOverlay from "$lib/components/dialog/DialogOverlay.svelte";
 

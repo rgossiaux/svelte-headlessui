@@ -2,8 +2,8 @@
   import { Popover, PopoverButton, PopoverPanel, Transition } from "$lib";
   import { ChevronDownIcon } from "@rgossiaux/svelte-heroicons/solid";
   import PopoverIconOne from "./_PopoverIconOne.svelte";
-  import PopoverIconTwo from "./_PopoverIconTwo.svelte";
   import PopoverIconThree from "./_PopoverIconThree.svelte";
+  import PopoverIconTwo from "./_PopoverIconTwo.svelte";
 
   const solutions = [
     {
