@@ -61,6 +61,7 @@
     "prettier-plugin-svelte": "^2.4.0",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-slug": "^5.0.1",
+    "shiki": "^0.11.1",
     "shiki-twoslash": "^3.1.0",
     "svelte": "^3.44.0",
     "svelte-check": "^2.4.1",

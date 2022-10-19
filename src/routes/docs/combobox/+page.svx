@@ -1,19 +1,16 @@
 <script>
+  import ComboboxSource from '../examples/combobox.svelte?raw'
   import Combobox from '../examples/combobox.svelte'
   import Preview from "../_CodePreview.svelte";
 </script>
 
 # ComboBox
 
-<Preview class="h-[410px] w-full bg-rose-300">
-  Combobox in whyframe Preview
-  <Combobox />
+<Preview class="h-[410px] w-full bg-rose-300" source={ComboboxSource}>
+  <div class="flex items-center justify-center">
+    <Combobox/>
+  </div>
 </Preview>
-
-<iframe data-why title="Hello" class="h-[410px] w-full bg-rose-300">
-  Combobox in whyframe
-  <Combobox />
-</iframe>
 
 ## Basic example
 
@@ -23,7 +20,7 @@ The `ComboboxInput` will automatically open/close the `ComboboxOptions` when sea
 
 You are completely in charge of how you filter the results, whether it be with a fuzzy search library client-side or by making server-side requests to an API. In this example we will keep the logic simple for demo purposes.
 
-```svelte {0-9}
+```svelte {1-7, 15}
 <script>
   import {
     Combobox,

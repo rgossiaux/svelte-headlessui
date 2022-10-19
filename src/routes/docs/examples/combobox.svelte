@@ -4,7 +4,6 @@
     ComboboxButton,
     ComboboxInput, ComboboxOption, ComboboxOptions, Transition
   } from "$lib";
-  import "../../../app.css";
 
   import { CheckIcon, SelectorIcon } from "@rgossiaux/svelte-heroicons/solid";
 
