@@ -16,7 +16,7 @@
 
   export type ComboboxOptionData = {
     disabled: boolean;
-    value: unknown;
+    value: Writable<unknown>;
     domRef: Writable<HTMLElement | null>;
   };
 
@@ -259,7 +259,7 @@
       
       // Check if we have a selected value that we can make active.
       let optionIdx = options.findIndex((option) => {
-        let optionValue = option.dataRef.value;
+        let optionValue = get(option.dataRef.value);
         let selected = match(mode, {
           [ValueMode.Single]: () => $api.compare($api.value, optionValue),
           [ValueMode.Multi]: () =>
@@ -324,15 +324,16 @@
       let option = options.find((item) => item.id === id);
       if (!option) return;
 
+      
       let { dataRef } = option;
       theirOnChange(        
         match(mode, {
           [ValueMode.Single]: () => {             
-            return dataRef.value
+            return get(dataRef.value);
           },
           [ValueMode.Multi]: () => {
             let copy = ($api.value as unknown[]).slice();
-            let raw = dataRef.value;
+            let raw = get(dataRef.value);
 
             let idx = copy.findIndex((value) => $api.compare(raw, value))            
             if (idx === -1) {
@@ -351,10 +352,10 @@
       let { dataRef, id } = options[$api.activeOptionIndex];
       theirOnChange(        
         match(mode, {
-          [ValueMode.Single]: () => dataRef.value,
+          [ValueMode.Single]: () => get(dataRef.value),
           [ValueMode.Multi]: () => {
             let copy = ($api.value as unknown[]).slice();
-            let raw = dataRef.value;
+            let raw = get(dataRef.value);
 
             let idx = copy.findIndex((value) => $api.compare(raw, value))            
             if (idx === -1) {
@@ -378,7 +379,7 @@
       
       // Check if we have a selected value that we can make active.
       if (activeOptionIndex === null) {
-        let optionValue = (dataRef as any).value;        
+        let optionValue = get(dataRef.value);        
 
         let selected = match(mode, {
           [ValueMode.Single]: () => $api.compare($api.value, optionValue),

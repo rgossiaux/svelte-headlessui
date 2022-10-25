@@ -11,23 +11,23 @@
 </script>
 
 <script lang="ts">
+  import type { HTMLActionArray } from "$lib/hooks/use-actions";
+  import { useId } from "$lib/hooks/use-id";
+  import type { SupportedAs } from "$lib/internal/elements";
+  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
+  import type { TPassThroughProps } from "$lib/types";
+  import { Focus } from "$lib/utils/calculate-active-index";
+  import { match } from "$lib/utils/match";
+  import Render from "$lib/utils/Render.svelte";
+  import { get_current_component, onMount, tick } from "svelte/internal";
+  import { writable, type Writable } from "svelte/store";
   import {
     ActivationTrigger,
     ComboboxStates,
     useComboboxContext,
     ValueMode,
-    type ComboboxOptionData,
+    type ComboboxOptionData
   } from "./Combobox.svelte";
-  import { useId } from "$lib/hooks/use-id";
-  import Render from "$lib/utils/Render.svelte";
-  import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
-  import type { SupportedAs } from "$lib/internal/elements";
-  import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import { get_current_component, onMount, tick } from "svelte/internal";
-  import type { TPassThroughProps } from "$lib/types";
-  import { writable, type Writable } from "svelte/store";
-  import { match } from "$lib/utils/match";
-  import { Focus } from "$lib/utils/calculate-active-index";
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;
@@ -47,6 +47,8 @@
 
   let internalOptionRef: Writable<HTMLElement | null> = writable(null);
   let optionsPropsRef = $api.optionsPropsRef;
+  let internalValue: Writable<Object | string | number | boolean> =
+    writable(value);
 
   $: active =
     $api.activeOptionIndex !== null
@@ -59,11 +61,13 @@
       ($api.value as unknown[]).some((v) => $api.compare(v, value)),
   });
 
-  $: dataRef = {
+  $: internalValue.set(value)
+  let dataRef: ComboboxOptionData;
+  $: (dataRef = {
     disabled: disabled,
-    value: value,
+    value: internalValue,
     domRef: internalOptionRef,
-  } as ComboboxOptionData;
+  }) as ComboboxOptionData;
 
   onMount(() => {
     $api.registerOption(id, dataRef);
@@ -91,6 +95,7 @@
   function handleClick(e: CustomEvent) {
     let event = e as any as KeyboardEvent;
     if (disabled) return event.preventDefault();
+
     $api.selectOption(id);
     if ($api.mode === ValueMode.Single) {
       $api.closeCombobox();
