@@ -1,6 +1,6 @@
 {
-  "name": "@rgossiaux/svelte-headlessui",
-  "description": "A complete, full-featured, unofficial Svelte port of Headless UI, an unstyled, fully accessible UI component library.",
+  "name": "svelte-headlessui-combobox-temporary",
+  "description": "A fork of rgossiaux/svelte-headlessui with some updates",
   "keywords": [
     "svelte",
     "headlessui",
@@ -11,15 +11,15 @@
   ],
   "homepage": "https://svelte-headlessui.goss.io",
   "bugs": {
-    "url": "https://github.com/rgossiaux/svelte-headlessui/issues"
+    "url": "https://github.com/NoelOConnell/svelte-headlessui/issues"
   },
   "license": "MIT",
-  "repository": "github:rgossiaux/svelte-headlessui",
-  "version": "1.0.2",
+  "repository": "github:NoelOConnell/svelte-headlessui",
+  "version": "0.0.4",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "package": "svelte-kit package && find package/ -type f -exec sed -i '' -e 's/process.env.NODE_ENV/\"production\"/' {} \\;",
+    "package": "svelte-package",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
@@ -34,7 +34,7 @@
     "@babel/cli": "^7.16.0",
     "@babel/preset-env": "^7.16.5",
     "@rgossiaux/svelte-heroicons": "^0.1.2",
-    "@sveltejs/adapter-auto": "^1.0.0-next.83",    
+    "@sveltejs/adapter-auto": "^1.0.0-next.83",
     "@sveltejs/kit": "^1.0.0-next.517",
     "@sveltejs/package": "^1.0.0-next.5",
     "@tailwindcss/forms": "^0.4.0",
