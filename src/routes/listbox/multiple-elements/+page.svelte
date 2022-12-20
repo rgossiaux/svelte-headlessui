@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PeopleList from "./_PeopleList.svelte";
+  import PeopleList from "../_PeopleList.svelte";
 </script>
 
 <div class="flex justify-center w-screen h-full p-12 space-x-4 bg-gray-50">
