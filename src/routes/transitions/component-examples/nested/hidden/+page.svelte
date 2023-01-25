@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Transition } from "$lib";
-  import Box from "./_Box.svelte";
+  import Box from "../_Box.svelte";
 
   let isOpen = false;
 </script>
@@ -17,7 +17,7 @@
       </button>
     </span>
 
-    <Transition show={isOpen} unmount={true}>
+    <Transition show={isOpen} unmount={false}>
       <Box>
         <Box>
           <Box>

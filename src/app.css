@@ -8,3 +8,11 @@ button:focus {
   outline: 1px dotted;
   outline: 5px auto -webkit-focus-ring-color;
 }
+
+.language-id {
+  display: none;
+}
+
+.line.highlight {
+  @apply bg-white bg-opacity-20
+}
