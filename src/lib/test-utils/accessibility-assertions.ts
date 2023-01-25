@@ -1512,3 +1512,447 @@ export function getByText(text: string): HTMLElement | null {
 
   return null;
 }
+// ---
+
+export function getComboboxLabel(): HTMLElement | null {
+  return document.querySelector('label,[id^="headlessui-combobox-label"]')
+}
+
+export function getComboboxButton(): HTMLElement | null {
+  return document.querySelector('button,[role="button"],[id^="headlessui-combobox-button-"]')
+}
+
+export function getComboboxButtons(): HTMLElement[] {
+  return Array.from(document.querySelectorAll('button,[role="button"]'))
+}
+
+export function getComboboxInput(): HTMLInputElement | null {
+  return document.querySelector('[role="combobox"]')
+}
+
+export function getCombobox(): HTMLElement | null {
+  return document.querySelector('[role="listbox"]')
+}
+
+export function getComboboxInputs(): HTMLElement[] {
+  return Array.from(document.querySelectorAll('[role="combobox"]'))
+}
+
+export function getComboboxes(): HTMLElement[] {
+  return Array.from(document.querySelectorAll('[role="listbox"]'))
+}
+
+export function getComboboxOptions(): HTMLElement[] {
+  return Array.from(document.querySelectorAll('[role="option"]'))
+}
+
+// ---
+
+export enum ComboboxState {
+  /** The combobox is visible to the user. */
+  Visible,
+
+  /** The combobox is **not** visible to the user. It's still in the DOM, but it is hidden. */
+  InvisibleHidden,
+
+  /** The combobox is **not** visible to the user. It's not in the DOM, it is unmounted. */
+  InvisibleUnmounted,
+}
+
+export enum ComboboxMode {
+  /** The combobox is in the `single` mode. */
+  Single,
+
+  /** The combobox is in the `multiple` mode. */
+  Multiple,
+}
+
+export function assertCombobox(
+  options: {
+    attributes?: Record<string, string | null>
+    textContent?: string
+    state: ComboboxState
+    mode?: ComboboxMode
+  },
+  combobox = getComboboxInput()
+) {
+  try {
+    switch (options.state) {
+      case ComboboxState.InvisibleHidden:
+        if (combobox === null) return expect(combobox).not.toBe(null)
+
+        assertHidden(combobox)
+
+        expect(combobox).toHaveAttribute('role', 'combobox')
+
+        if (options.textContent) expect(combobox).toHaveTextContent(options.textContent)
+
+        for (let attributeName in options.attributes) {
+          expect(combobox).toHaveAttribute(attributeName, options.attributes[attributeName])
+        }
+        break
+
+      case ComboboxState.Visible:
+        if (combobox === null) return expect(combobox).not.toBe(null)
+
+        assertVisible(combobox)
+
+        expect(combobox).toHaveAttribute('role', 'combobox')
+
+        if (options.mode && options.mode === ComboboxMode.Multiple) {
+          expect(combobox).toHaveAttribute('aria-multiselectable', 'true')
+        }
+
+        if (options.textContent) expect(combobox).toHaveTextContent(options.textContent)
+
+        for (let attributeName in options.attributes) {
+          expect(combobox).toHaveAttribute(attributeName, options.attributes[attributeName])
+        }
+        break
+
+      case ComboboxState.InvisibleUnmounted:
+        expect(combobox).toBe(null)
+        break
+
+      default:
+        assertNever(options.state)
+    }
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertCombobox)
+    throw err
+  }
+}
+
+export function assertComboboxInput(
+  options: {
+    attributes?: Record<string, string | null>
+    state: ComboboxState
+  },
+  input = getComboboxInput()
+) {
+  try {
+    if (input === null) return expect(input).not.toBe(null)
+
+    // Ensure combobox input has these properties
+    expect(input).toHaveAttribute('id')
+
+    switch (options.state) {
+      case ComboboxState.Visible:
+        expect(input).toHaveAttribute('aria-controls')
+        expect(input).toHaveAttribute('aria-expanded', 'true')
+        break
+
+      case ComboboxState.InvisibleHidden:
+        expect(input).toHaveAttribute('aria-controls')
+        if (input.hasAttribute('disabled')) {
+          expect(input).not.toHaveAttribute('aria-expanded')
+        } else {
+          expect(input).toHaveAttribute('aria-expanded', 'false')
+        }
+        break
+
+      case ComboboxState.InvisibleUnmounted:
+        expect(input).not.toHaveAttribute('aria-controls')
+        if (input.hasAttribute('disabled')) {
+          expect(input).not.toHaveAttribute('aria-expanded')
+        } else {
+          expect(input).toHaveAttribute('aria-expanded', 'false')
+        }
+        break
+
+      default:
+        assertNever(options.state)
+    }
+
+    // Ensure combobox input has the following attributes
+    for (let attributeName in options.attributes) {
+      expect(input).toHaveAttribute(attributeName, options.attributes[attributeName])
+    }
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertComboboxInput)
+    throw err
+  }
+}
+
+export function assertComboboxList(
+  options: {
+    attributes?: Record<string, string | null>
+    textContent?: string
+    state: ComboboxState
+  },
+  listbox = getCombobox()
+) {
+  try {
+    switch (options.state) {
+      case ComboboxState.InvisibleHidden:
+        if (listbox === null) return expect(listbox).not.toBe(null)
+
+        assertHidden(listbox)
+
+        expect(listbox).toHaveAttribute('aria-labelledby')
+        expect(listbox).toHaveAttribute('role', 'listbox')
+
+        if (options.textContent) expect(listbox).toHaveTextContent(options.textContent)
+
+        for (let attributeName in options.attributes) {
+          expect(listbox).toHaveAttribute(attributeName, options.attributes[attributeName])
+        }
+        break
+
+      case ComboboxState.Visible:
+        if (listbox === null) return expect(listbox).not.toBe(null)
+
+        assertVisible(listbox)
+
+        expect(listbox).toHaveAttribute('aria-labelledby')
+        expect(listbox).toHaveAttribute('role', 'listbox')
+
+        if (options.textContent) expect(listbox).toHaveTextContent(options.textContent)
+
+        for (let attributeName in options.attributes) {
+          expect(listbox).toHaveAttribute(attributeName, options.attributes[attributeName])
+        }
+        break
+
+      case ComboboxState.InvisibleUnmounted:
+        expect(listbox).toBe(null)
+        break
+
+      default:
+        assertNever(options.state)
+    }
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertCombobox)
+    throw err
+  }
+}
+
+export function assertComboboxButton(
+  options: {
+    attributes?: Record<string, string | null>
+    textContent?: string
+    state: ComboboxState
+  },
+  button = getComboboxButton()
+) {
+  try {
+    if (button === null) return expect(button).not.toBe(null)
+
+    // Ensure menu button have these properties
+    expect(button).toHaveAttribute('id')
+    expect(button).toHaveAttribute('aria-haspopup')
+
+    switch (options.state) {
+      case ComboboxState.Visible:
+        expect(button).toHaveAttribute('aria-controls')
+        expect(button).toHaveAttribute('aria-expanded', 'true')
+        break
+
+      case ComboboxState.InvisibleHidden:
+        expect(button).toHaveAttribute('aria-controls')
+        if (button.hasAttribute('disabled')) {
+          expect(button).not.toHaveAttribute('aria-expanded')
+        } else {
+          expect(button).toHaveAttribute('aria-expanded', 'false')
+        }
+        break
+
+      case ComboboxState.InvisibleUnmounted:
+        expect(button).not.toHaveAttribute('aria-controls')
+        if (button.hasAttribute('disabled')) {
+          expect(button).not.toHaveAttribute('aria-expanded')
+        } else {
+          expect(button).toHaveAttribute('aria-expanded', 'false')
+        }
+        break
+
+      default:
+        assertNever(options.state)
+    }
+
+    if (options.textContent) {
+      expect(button).toHaveTextContent(options.textContent)
+    }
+
+    // Ensure menu button has the following attributes
+    for (let attributeName in options.attributes) {
+      expect(button).toHaveAttribute(attributeName, options.attributes[attributeName])
+    }
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertComboboxButton)
+    throw err
+  }
+}
+
+export function assertComboboxLabel(
+  options: {
+    attributes?: Record<string, string | null>
+    tag?: string
+    textContent?: string
+  },
+  label = getComboboxLabel()
+) {
+  try {
+    if (label === null) return expect(label).not.toBe(null)
+
+    // Ensure menu button have these properties
+    expect(label).toHaveAttribute('id')
+
+    if (options.textContent) {
+      expect(label).toHaveTextContent(options.textContent)
+    }
+
+    if (options.tag) {
+      expect(label.tagName.toLowerCase()).toBe(options.tag)
+    }
+
+    // Ensure menu button has the following attributes
+    for (let attributeName in options.attributes) {
+      expect(label).toHaveAttribute(attributeName, options.attributes[attributeName])
+    }
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertComboboxLabel)
+    throw err
+  }
+}
+
+export function assertComboboxButtonLinkedWithCombobox(
+  button = getComboboxButton(),
+  combobox = getCombobox()
+) {
+  try {
+    if (button === null) return expect(button).not.toBe(null)
+    if (combobox === null) return expect(combobox).not.toBe(null)
+
+    // Ensure link between button & combobox is correct
+    expect(button).toHaveAttribute('aria-controls', combobox.getAttribute('id'))
+    expect(combobox).toHaveAttribute('aria-labelledby', button.getAttribute('id'))
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertComboboxButtonLinkedWithCombobox)
+    throw err
+  }
+}
+
+export function assertComboboxLabelLinkedWithCombobox(
+  label = getComboboxLabel(),
+  combobox = getComboboxInput()
+) {
+  try {
+    if (label === null) return expect(label).not.toBe(null)
+    if (combobox === null) return expect(combobox).not.toBe(null)
+
+    expect(combobox).toHaveAttribute('aria-labelledby', label.getAttribute('id'))
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertComboboxLabelLinkedWithCombobox)
+    throw err
+  }
+}
+
+export function assertComboboxButtonLinkedWithComboboxLabel(
+  button = getComboboxButton(),
+  label = getComboboxLabel()
+) {
+  try {
+    if (button === null) return expect(button).not.toBe(null)
+    if (label === null) return expect(label).not.toBe(null)
+
+    // Ensure link between button & label is correct
+    expect(button).toHaveAttribute('aria-labelledby', `${label.id} ${button.id}`)
+  } catch (err) {
+    if (err instanceof Error)
+      Error.captureStackTrace(err, assertComboboxButtonLinkedWithComboboxLabel)
+    throw err
+  }
+}
+
+export function assertActiveComboboxOption(
+  item: HTMLElement | null,
+  combobox = getComboboxInput()
+) {
+  try {
+    if (combobox === null) return expect(combobox).not.toBe(null)
+    if (item === null) return expect(item).not.toBe(null)
+
+    // Ensure link between combobox & combobox item is correct
+    expect(combobox).toHaveAttribute('aria-activedescendant', item.getAttribute('id'))
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertActiveComboboxOption)
+    throw err
+  }
+}
+
+export function assertNotActiveComboboxOption(
+  item: HTMLElement | null,
+  combobox = getComboboxInput()
+) {
+  try {
+    if (combobox === null) return expect(combobox).not.toBe(null)
+    if (item === null) return expect(item).not.toBe(null)
+
+    // Ensure link between combobox & combobox item does not exist
+    expect(combobox).not.toHaveAttribute('aria-activedescendant', item.getAttribute('id'))
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertNotActiveComboboxOption)
+    throw err
+  }
+}
+
+export function assertNoActiveComboboxOption(combobox = getComboboxInput()) {
+  try {
+    if (combobox === null) return expect(combobox).not.toBe(null)
+
+    // Ensure we don't have an active combobox
+    expect(combobox).not.toHaveAttribute('aria-activedescendant')
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertNoActiveComboboxOption)
+    throw err
+  }
+}
+
+export function assertNoSelectedComboboxOption(items = getComboboxOptions()) {
+  try {
+    for (let item of items) expect(item).toHaveAttribute('aria-selected', 'false')
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertNoSelectedComboboxOption)
+    throw err
+  }
+}
+
+export function assertComboboxOption(
+  item: HTMLElement | null,
+  options?: {
+    tag?: string
+    attributes?: Record<string, string | null>
+    selected?: boolean
+  }
+) {
+  try {
+    if (item === null) return expect(item).not.toBe(null)
+
+    // Check that some attributes exists, doesn't really matter what the values are at this point in
+    // time, we just require them.
+    expect(item).toHaveAttribute('id')
+
+    // Check that we have the correct values for certain attributes
+    expect(item).toHaveAttribute('role', 'option')
+    if (!item.getAttribute('aria-disabled')) expect(item).toHaveAttribute('tabindex', '-1')
+
+    // Ensure combobox button has the following attributes
+    if (!options) return
+
+    for (let attributeName in options.attributes) {
+      expect(item).toHaveAttribute(attributeName, options.attributes[attributeName])
+    }
+
+    if (options.tag) {
+      expect(item.tagName.toLowerCase()).toBe(options.tag)
+    }
+
+    if (options.selected != null) {
+      return expect(item).toHaveAttribute('aria-selected', options.selected ? 'true' : 'false')
+    }
+  } catch (err) {
+    if (err instanceof Error) Error.captureStackTrace(err, assertComboboxOption)
+    throw err
+  }
+}

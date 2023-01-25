@@ -771,3 +771,45 @@ describe('Mouse interactions', () => {
     expect(changeFn).toHaveBeenCalledTimes(1)
   })
 })
+
+describe("`Enter`", () => {
+  it("should submit the form on `Enter`", async () => {    
+    let submitFn = jest.fn();
+    
+    render(svelte`   
+      <script>
+        let selected = "home-delivery"
+      </script>
+    
+      <form on:submit={(event) => {
+        event.preventDefault()
+        submitFn([...new FormData(event.currentTarget).entries()])
+      }}>
+        <RadioGroup value={selected} name="option" on:change={(e) => selected = e.detail}>
+          <RadioGroupLabel>Pizza Delivery</RadioGroupLabel>
+          <RadioGroupOption value="pickup">Pickup</RadioGroupOption>
+          <RadioGroupOption value="home-delivery">Home delivery</RadioGroupOption>
+          <RadioGroupOption value="dine-in">Dine in</RadioGroupOption>
+        </RadioGroup>
+        <button type="submit">Submit</button>
+      </form>
+    `);
+
+    // Submit the form
+    await click(getByText('Submit'))   
+
+    // Verify the form was submitted with the home-delivery option
+    expect(submitFn).toHaveBeenCalledTimes(1);
+    expect(submitFn).toHaveBeenCalledWith([["option", "home-delivery"]]);
+
+    // Select the Pickup option
+    await click(getByText("Pickup"));
+
+    // Submit the form
+    await click(getByText('Submit'))   
+
+    // Verify the form was submitted with the pickup option
+    expect(submitFn).toHaveBeenCalledTimes(2);
+    expect(submitFn).toHaveBeenCalledWith([["option", "pickup"]]);
+  });
+});

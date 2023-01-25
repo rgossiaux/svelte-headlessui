@@ -52,6 +52,8 @@
     value: StateDefinition["value"];
     /** Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled */
     disabled?: boolean;
+    /** The name used when using this component inside a form. */
+    name?: string;
   };
 </script>
 
@@ -63,6 +65,8 @@
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
   import type { TPassThroughProps } from "$lib/types";
+  import Hidden, { Features as HiddenFeatures } from "$lib/internal/Hidden.svelte";
+  import { objectToFormEntries } from "$lib/utils/form";
 
   /***** Props *****/
   type TAsProp = $$Generic<SupportedAs>;
@@ -72,6 +76,7 @@
   export let use: HTMLActionArray = [];
   export let value: StateDefinition["value"];
   export let disabled = false;
+  export let name: string | null = null;
 
   /***** Events *****/
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
@@ -223,6 +228,21 @@
 
 <DescriptionProvider name="RadioGroupDescription" let:describedby>
   <LabelProvider name="RadioGroupLabel" let:labelledby>
+    {#if name != null && value != null}
+      {@const options = objectToFormEntries({ [name]: value })}
+      {#each options as [optionName, optionValue], index (index)}      
+        <Hidden
+          features={HiddenFeatures.Hidden}
+          as="input"
+          type="hidden"
+          hidden
+          readonly
+          name={optionName}
+          value={optionValue}
+        />
+      {/each}
+    {/if}  
+
     <Render
       {...{ ...$$restProps, ...propsWeControl }}
       {as}
