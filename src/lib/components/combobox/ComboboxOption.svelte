@@ -2,10 +2,9 @@
   type TComboboxOptionProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp, "li"> &
-    Omit<TAsProp, "value"> & {
+  > = Omit<TPassThroughProps<TSlotProps, TAsProp, "li">, "value"> & {
       /** The option value */
-      value: Object | string | number | boolean | null;
+      value: unknown;
       /** Whether the option should be disabled for keyboard navigation and ARIA purposes */
       disabled?: boolean;
     };
