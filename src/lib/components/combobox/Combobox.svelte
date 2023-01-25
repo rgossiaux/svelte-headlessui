@@ -23,7 +23,7 @@
   type StateDefinition = {
     // State
     comboboxState: ComboboxStates;
-    value: unknown;
+    value: Object | string | number | boolean | null;
 
     mode: ValueMode;
     nullable: boolean;

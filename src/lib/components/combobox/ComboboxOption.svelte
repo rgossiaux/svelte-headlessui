@@ -2,12 +2,13 @@
   type TComboboxOptionProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp, "li"> & {
-    /** The option value */
-    value: unknown;
-    /** Whether the option should be disabled for keyboard navigation and ARIA purposes */
-    disabled?: boolean;
-  };
+  > = TPassThroughProps<TSlotProps, TAsProp, "li"> &
+    Omit<TAsProp, "value"> & {
+      /** The option value */
+      value: Object | string | number | boolean | null;
+      /** Whether the option should be disabled for keyboard navigation and ARIA purposes */
+      disabled?: boolean;
+    };
 </script>
 
 <script lang="ts">
@@ -34,7 +35,7 @@
   type $$Props = TComboboxOptionProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "li";
-  export let value: Object | string | number | boolean;
+  export let value: Object | string | number | boolean | null;
   export let disabled: boolean = false;
   export let use: HTMLActionArray = [];
 
@@ -61,7 +62,7 @@
       ($api.value as unknown[]).some((v) => $api.compare(v, value)),
   });
 
-  $: internalValue.set(value)
+  $: internalValue.set(value);
   let dataRef: ComboboxOptionData;
   $: (dataRef = {
     disabled: disabled,

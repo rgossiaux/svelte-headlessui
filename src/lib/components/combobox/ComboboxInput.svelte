@@ -155,12 +155,28 @@
         });
 
       case Keys.Home:
+        if (event.shiftKey) {
+          break;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        return $api.goToOption(Focus.First);
+
       case Keys.PageUp:
         event.preventDefault();
         event.stopPropagation();
         return $api.goToOption(Focus.First);
 
       case Keys.End:
+        if (event.shiftKey) {
+          break;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        return $api.goToOption(Focus.Last);
+
       case Keys.PageDown:
         event.preventDefault();
         event.stopPropagation();
