@@ -1,3 +1,10 @@
+<script lang="ts" context="module">
+  type TListboxButtonProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "button"> & {};
+</script>
+
 <script lang="ts">
   import { tick } from "svelte";
   import { ListboxStates, useListboxContext } from "./Listbox.svelte";
@@ -10,11 +17,19 @@
   import { get_current_component } from "svelte/internal";
   import Render from "$lib/utils/Render.svelte";
   import { resolveButtonType } from "$lib/utils/resolve-button-type";
+  import type { TPassThroughProps } from "$lib/types";
 
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TListboxButtonProps<typeof slotProps, TAsProp>;
+
   export let as: SupportedAs = "button";
   export let use: HTMLActionArray = [];
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let api = useListboxContext("ListboxButton");
   let id = `headlessui-listbox-button-${useId()}`;
   let buttonRef = $api.buttonRef;

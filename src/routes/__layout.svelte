@@ -1,14 +1,30 @@
 <script>
+  import { MenuAlt2Icon } from "@rgossiaux/svelte-heroicons/outline";
+
   import "../app.css";
+  import MobileSidebar from "./docs/_MobileSidebar.svelte";
+
+  let sidebarOpen = false;
 </script>
 
+<MobileSidebar bind:sidebarOpen />
 <div
   class="sticky top-0 px-6 text-xl text-stone-500 w-full backdrop-blur border-b z-20"
 >
-  <div class="py-4 pr-4 flex justify-between">
-    <a href="/docs">
-      <span class="text-amber-600">Svelte</span> Headless UI
-    </a>
+  <div class="py-4 pr-4 flex justify-between items-center">
+    <div class="flex items-center space-x-4 md:space-x-0">
+      <button
+        type="button"
+        class="pr-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+        on:click={() => (sidebarOpen = true)}
+      >
+        <span class="sr-only">Open sidebar</span>
+        <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
+      </button>
+      <a href="/docs">
+        <span class="text-amber-600">Svelte</span> Headless UI
+      </a>
+    </div>
     <a
       href="https://github.com/rgossiaux/svelte-headlessui"
       class="hover:text-black"

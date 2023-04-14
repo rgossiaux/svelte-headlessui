@@ -1,9 +1,21 @@
+<script lang="ts" context="module">
+  export type TTransitionRootProps = TTransitionProps &
+    Omit<TRestProps<"div">, "as"> & {
+      /** Whether the children should be shown */
+      show?: boolean;
+      /** Whether the transition should run on initial mount */
+      appear?: boolean;
+    };
+</script>
+
 <script lang="ts">
   import { onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
   import { match } from "$lib/utils/match";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
-  import TransitionChild from "$lib/components/transitions/TransitionChild.svelte";
+  import TransitionChild, {
+    type TTransitionProps,
+  } from "$lib/components/transitions/TransitionChild.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
@@ -19,6 +31,7 @@
     TreeStates,
     useNesting,
   } from "./common.svelte";
+  import type { TRestProps } from "$lib/types";
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
     "beforeEnter",
     "beforeLeave",
@@ -26,12 +39,17 @@
     "afterLeave",
   ]);
 
+  /***** Props *****/
+  type $$Props = TTransitionRootProps;
+
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
-
   export let show: boolean | undefined = undefined;
   export let appear = false;
 
+  /***** Events *****/
+
+  /***** Component *****/
   let openClosedState = useOpenClosed();
 
   function computeShow(

@@ -5,8 +5,6 @@ import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
 import { Popover, PopoverButton, PopoverGroup, PopoverOverlay, PopoverPanel } from ".";
 import { click, Keys, MouseButton, press, shift } from "$lib/test-utils/interactions";
 import A from "$lib/internal/elements/A.svelte";
-import Button from "$lib/internal/elements/Button.svelte";
-import Span from "$lib/internal/elements/Span.svelte";
 import { Transition, TransitionChild } from "$lib/components/transitions";
 import TransitionDebug from "$lib/components/disclosure/_TransitionDebug.svelte";
 import Portal from "$lib/components/portal/Portal.svelte";
@@ -1972,16 +1970,13 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to close the popover, and re-focus the button when we click outside on a non-focusable element',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Popover, {}, [
-            [PopoverButton, {}, "Trigger"],
-            [PopoverPanel, {}, "Contents"]
-          ]],
-          [Span, {}, "I am just text"],
-        ]
-      })
+      render(svelte`
+        <Popover>
+          <PopoverButton>Trigger</PopoverButton>
+          <PopoverPanel>Contents</PopoverPanel>
+        </Popover>
+        <span>I am just text</span>
+      `)
 
       // Open popover
       await click(getPopoverButton())
@@ -2003,16 +1998,13 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to close the popover, by clicking outside the popover on another focusable element',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Popover, {}, [
-            [PopoverButton, {}, "Trigger"],
-            [PopoverPanel, {}, "Contents"]
-          ]],
-          [Button, {}, "Different button"],
-        ]
-      })
+      render(svelte`
+        <Popover>
+          <PopoverButton>Trigger</PopoverButton>
+          <PopoverPanel>Contents</PopoverPanel>
+        </Popover>
+        <button>Different button</button>
+      `)
 
       // Open popover
       await click(getPopoverButton())
@@ -2035,18 +2027,15 @@ describe('Mouse interactions', () => {
     'should be possible to close the popover, by clicking outside the popover on another element inside a focusable element',
     suppressConsoleLogs(async () => {
       let focusFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Popover, {}, [
-            [PopoverButton, { onFocus: focusFn }, "Trigger"],
-            [PopoverPanel, {}, "Contents"]
-          ]],
-          [Button, { id: "btn" }, [
-            [Span, {}, "Different button"],
-          ]]
-        ]
-      })
+      render(svelte`
+        <Popover>
+          <PopoverButton on:focus={focusFn}>Trigger</PopoverButton>
+          <PopoverPanel>Contents</PopoverPanel>
+        </Popover>
+        <button id="btn">
+          <span>Different button</span>
+        </button>
+      `)
 
       // Open popover
       await click(getPopoverButton())
@@ -2108,17 +2097,14 @@ describe('Mouse interactions', () => {
     suppressConsoleLogs(async () => {
       let clickFn = jest.fn()
 
-      render(
-        TestRenderer, {
-        allProps: [
-          [Popover, {}, [
-            [PopoverButton, {}, "Open"],
-            [PopoverPanel, { static: true }, [
-              [Button, { onClick: clickFn }, "btn"],
-            ]],
-          ]],
-        ]
-      })
+      render(svelte`
+        <Popover>
+          <PopoverButton>Open</PopoverButton>
+          <PopoverPanel static>
+            <button on:click={clickFn}>btn</button>
+          </PopoverPanel>
+        </Popover>
+      `)
 
       // Open the popover
       await click(getPopoverButton())
@@ -2137,17 +2123,14 @@ describe('Mouse interactions', () => {
   it(
     'should not close the Popover when clicking on a non-focusable element inside a static PopoverPanel',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Popover, {}, [
-            [PopoverButton, {}, "Open"],
-            [PopoverPanel, { static: true }, [
-              [Span, {}, "element"],
-            ]],
-          ]],
-        ]
-      })
+      render(svelte`
+        <Popover>
+          <PopoverButton>Open</PopoverButton>
+          <PopoverPanel static>
+            <span>element</span>
+          </PopoverPanel>
+        </Popover>
+      `)
 
       // Open the popover
       await click(getPopoverButton())
@@ -2163,17 +2146,14 @@ describe('Mouse interactions', () => {
   it(
     'should close the Popover when clicking outside of a static PopoverPanel',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Popover, {}, [
-            [PopoverButton, {}, "Open"],
-            [PopoverPanel, { static: true }, [
-              [Span, {}, "element"],
-            ]],
-          ]],
-        ]
-      })
+      render(svelte`
+        <Popover>
+          <PopoverButton>Open</PopoverButton>
+          <PopoverPanel static>
+            <span>element</span>
+          </PopoverPanel>
+        </Popover>
+      `)
 
       // Open the popover
       await click(getPopoverButton())

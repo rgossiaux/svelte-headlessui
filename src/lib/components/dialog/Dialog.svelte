@@ -37,6 +37,20 @@
     }
     return context;
   }
+
+  type TDialogProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** Whether the `Dialog` is open */
+    open?: boolean;
+    /** The element that should receive focus when the Dialog is first opened */
+    initialFocus?: HTMLElement | null;
+    /** Whether the element should ignore the internally managed open/closed state */
+    static?: boolean;
+    /** Whether the element should be unmounted, instead of just hidden, based on the open/closed state	*/
+    unmount?: boolean;
+  };
 </script>
 
 <script lang="ts">
@@ -60,20 +74,27 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render, { Features } from "$lib/utils/Render.svelte";
+  import Render from "$lib/utils/Render.svelte";
+  import { Features, type TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TDialogProps<typeof slotProps, TAsProp>;
+
+  export let as: SupportedAs = "div";
+  export let use: HTMLActionArray = [];
+  export let open: boolean | undefined = undefined;
+  export let initialFocus: HTMLElement | null = null;
+
+  /***** Events *****/
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
     "close",
   ]);
-  export let as: SupportedAs = "div";
-  export let use: HTMLActionArray = [];
-
-  export let open: Boolean | undefined = undefined;
-  export let initialFocus: HTMLElement | null = null;
-
   const dispatch = createEventDispatcher<{
     close: boolean;
   }>();
 
+  /***** Component *****/
   let containers: Set<HTMLElement> = new Set();
   let openClosedState = useOpenClosed();
 

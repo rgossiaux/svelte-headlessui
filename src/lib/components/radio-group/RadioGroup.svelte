@@ -43,6 +43,16 @@
 
     return context;
   }
+
+  type TRadioGroupProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** The currently selected value in the `RadioGroup` */
+    value: StateDefinition["value"];
+    /** Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled */
+    disabled?: boolean;
+  };
 </script>
 
 <script lang="ts">
@@ -52,23 +62,30 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "change",
-  ]);
+  import type { TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TRadioGroupProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
-
-  export let disabled = false;
   export let value: StateDefinition["value"];
+  export let disabled = false;
+
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "change",
+  ]);
+  const dispatch = createEventDispatcher<{
+    change: any;
+  }>();
+
+  /***** Component *****/
   let radioGroupRef: HTMLElement | null = null;
   let options: StateDefinition["options"] = [];
 
   let id = `headlessui-radiogroup-${useId()}`;
-
-  const dispatch = createEventDispatcher<{
-    change: any;
-  }>();
 
   let api = writable<StateDefinition>({
     options,
@@ -200,6 +217,8 @@
     id,
     role: "radiogroup",
   };
+
+  $: slotProps = {};
 </script>
 
 <DescriptionProvider name="RadioGroupDescription" let:describedby>
@@ -208,14 +227,14 @@
       {...{ ...$$restProps, ...propsWeControl }}
       {as}
       use={[...use, forwardEvents]}
-      slotProps={{}}
+      {slotProps}
       name={"RadioGroup"}
       bind:el={radioGroupRef}
       aria-labelledby={labelledby}
       aria-describedby={describedby}
       on:keydown={handleKeyDown}
     >
-      <slot />
+      <slot {...slotProps} />
     </Render>
   </LabelProvider>
 </DescriptionProvider>

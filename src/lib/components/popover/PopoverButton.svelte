@@ -1,3 +1,12 @@
+<script lang="ts" context="module">
+  type TPopoverButtonProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "button"> & {
+    disabled?: boolean;
+  };
+</script>
+
 <script lang="ts">
   import { Keys } from "$lib/utils/keyboard";
   import {
@@ -15,12 +24,20 @@
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
   import { resolveButtonType } from "$lib/utils/resolve-button-type";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  import type { TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TPopoverButtonProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "button";
   export let use: HTMLActionArray = [];
+  export let disabled: boolean = false;
 
-  export let disabled: Boolean = false;
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let api = usePopoverContext("PopoverButton");
 
   let apiButton = $api.button;

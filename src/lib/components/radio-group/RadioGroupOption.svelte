@@ -1,3 +1,18 @@
+<script lang="ts" context="module">
+  type TRadioGroupOptionProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /**
+     * The value of the `RadioGroupOption`.
+     * The type should match the type of the value prop in the `RadioGroup`
+     */
+    value: unknown;
+    /** Whether the `RadioGroupOption` is disabled */
+    disabled?: boolean;
+  };
+</script>
+
 <script lang="ts">
   import { onDestroy } from "svelte";
   import DescriptionProvider from "$lib/components/description/DescriptionProvider.svelte";
@@ -10,18 +25,26 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  import type { TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TRadioGroupOptionProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
+  export let value: unknown;
+  export let disabled: boolean = false;
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   enum OptionState {
     Empty = 1 << 0,
     Active = 1 << 1,
   }
 
-  export let value: unknown;
-  export let disabled: boolean = false;
   let api = useRadioGroupContext("RadioGroupOption");
   let id = `headlessui-radiogroup-option-${useId()}`;
   let optionRef: HTMLElement | null = null;

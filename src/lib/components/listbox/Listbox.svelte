@@ -50,6 +50,18 @@
 
     return context;
   }
+
+  type TListboxProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** Whether the entire `Listbox` and its children should be disabled */
+    disabled?: boolean;
+    /** Whether the entire `Listbox` should be oriented horizontally instead of vertically */
+    horizontal?: boolean;
+    /** The selected value */
+    value?: StateDefinition["value"];
+  };
 </script>
 
 <script lang="ts">
@@ -67,22 +79,31 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "change",
-  ]);
+  import type { TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TListboxProps<typeof slotProps, TAsProp>;
+
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
-
   export let disabled = false;
   export let horizontal = false;
   export let value: StateDefinition["value"];
-  $: orientation = (
-    horizontal ? "horizontal" : "vertical"
-  ) as StateDefinition["orientation"];
+
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "change",
+  ]);
 
   const dispatch = createEventDispatcher<{
     change: any;
   }>();
+
+  /***** Component *****/
+  $: orientation = (
+    horizontal ? "horizontal" : "vertical"
+  ) as StateDefinition["orientation"];
 
   let listboxState: StateDefinition["listboxState"] = ListboxStates.Closed;
   let labelRef: StateDefinition["labelRef"] = writable(null);

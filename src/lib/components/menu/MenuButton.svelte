@@ -1,3 +1,12 @@
+<script lang="ts" context="module">
+  type TMenuButtonProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "button"> & {
+    disabled?: boolean;
+  };
+</script>
+
 <script lang="ts">
   import { useMenuContext, MenuStates } from "./Menu.svelte";
   import { useId } from "$lib/hooks/use-id";
@@ -10,11 +19,20 @@
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import { resolveButtonType } from "$lib/utils/resolve-button-type";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  import type { TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TMenuButtonProps<typeof slotProps, TAsProp>;
+
   export let as: SupportedAs = "button";
   export let use: HTMLActionArray = [];
-
   export let disabled = false;
+
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   const api = useMenuContext("MenuButton");
   const id = `headlessui-menu-button-${useId()}`;
 
@@ -84,7 +102,9 @@
     "aria-expanded": disabled ? undefined : $api.menuState === MenuStates.Open,
   };
 
-  $: slotProps = { open: $api.menuState === MenuStates.Open };
+  $: slotProps = {
+    open: $api.menuState === MenuStates.Open,
+  };
 </script>
 
 <Render

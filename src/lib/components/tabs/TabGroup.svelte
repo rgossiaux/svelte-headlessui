@@ -36,6 +36,22 @@
 
     return context;
   }
+
+  type TTabGroupProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** The index of the default selected tab */
+    defaultIndex?: number;
+    /** Whether the orientation of the `TabList` is vertical instead of horizontal */
+    vertical?: boolean;
+    /**
+     * Whether, in keyboard navigation, the Enter or Space key is necessary to change tabs.
+     * By default, the arrow keys will change tabs automatically without hitting Enter/Space.
+     * This has no impact on mouse behavior
+     */
+    manual?: boolean;
+  };
 </script>
 
 <script lang="ts">
@@ -53,9 +69,11 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "change",
-  ]);
+  import type { TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TTabGroupProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
@@ -63,12 +81,17 @@
   export let vertical = false;
   export let manual = false;
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "change",
+  ]);
+  const dispatch = createEventDispatcher();
+
+  /***** Component *****/
   let selectedIndex: StateDefinition["selectedIndex"] = null;
   let tabs: StateDefinition["tabs"] = [];
   let panels: StateDefinition["panels"] = [];
   let listRef: StateDefinition["listRef"] = writable(null);
-
-  const dispatch = createEventDispatcher();
 
   let api = writable<StateDefinition>({
     selectedIndex,

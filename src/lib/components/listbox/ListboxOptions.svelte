@@ -1,3 +1,15 @@
+<script lang="ts" context="module">
+  type TListboxOptionsProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "ul"> & {
+    /** Whether the element should ignore the internally managed open/closed state */
+    static?: boolean;
+    /** Whether the element should be unmounted, instead of just hidden, based on the open/closed state	*/
+    unmount?: boolean;
+  };
+</script>
+
 <script lang="ts">
   import { tick } from "svelte";
   import { ListboxStates, useListboxContext } from "./Listbox.svelte";
@@ -6,16 +18,24 @@
   import { Keys } from "$lib/utils/keyboard";
   import { Focus } from "$lib/utils/calculate-active-index";
   import { State, useOpenClosed } from "$lib/internal/open-closed";
-  import Render, { Features } from "$lib/utils/Render.svelte";
+  import Render from "$lib/utils/Render.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import { get_current_component } from "svelte/internal";
+  import { Features, type TPassThroughProps } from "$lib/types";
 
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TListboxOptionsProps<typeof slotProps, TAsProp>;
+
   export let as: SupportedAs = "ul";
   export let use: HTMLActionArray = [];
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let api = useListboxContext("ListboxOptions");
   let id = `headlessui-listbox-options-${useId()}`;
   let optionsRef = $api.optionsRef;

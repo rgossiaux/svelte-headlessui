@@ -1,3 +1,13 @@
+<script lang="ts" context="module">
+  type TMenuItemProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "a"> & {
+    /** Whether the item should be disabled for keyboard navigation and ARIA purposes */
+    disabled?: boolean;
+  };
+</script>
+
 <script lang="ts">
   import type { MenuItemData } from "./Menu.svelte";
   import { useMenuContext, MenuStates } from "./Menu.svelte";
@@ -9,12 +19,22 @@
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    { name: "click", shouldExclude: () => disabled },
-  ]);
+  import type { TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TMenuItemProps<typeof slotProps, TAsProp>;
+
   export let as: SupportedAs = "a";
   export let use: HTMLActionArray = [];
   export let disabled = false;
+
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    { name: "click", shouldExclude: () => disabled },
+  ]);
+
+  /***** Component *****/
   const api = useMenuContext("MenuItem");
   const id = `headlessui-menu-item-${useId()}`;
 

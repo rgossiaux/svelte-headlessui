@@ -1810,24 +1810,21 @@ describe('Mouse interactions', () => {
 it('should trigger the `on:change` when the tab changes', async () => {
   let changes = jest.fn()
 
-  render(
-    TestRenderer, {
-    allProps: [
-      [TabGroup, { onChange: (e: CustomEvent) => changes(e.detail) }, [
-        [TabList, {}, [
-          [Tab, {}, "Tab 1"],
-          [Tab, {}, "Tab 2"],
-          [Tab, {}, "Tab 3"],
-        ]],
-        [TabPanels, {}, [
-          [TabPanel, {}, "Content 1"],
-          [TabPanel, {}, "Content 2"],
-          [TabPanel, {}, "Content 3"],
-        ]],
-      ]],
-      [Button, {}, "after"],
-    ]
-  })
+  render(svelte`
+    <TabGroup on:change={(e) => changes(e.detail)}>
+      <TabList>
+        <Tab>Tab 1</Tab>
+        <Tab>Tab 2</Tab>
+        <Tab>Tab 3</Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel>Content 1</TabPanel>
+        <TabPanel>Content 2</TabPanel>
+        <TabPanel>Content 3</TabPanel>
+      </TabPanels>
+    </TabGroup>
+    <Button>After</Button>
+  `);
 
   await click(getByText('Tab 2'))
   await click(getByText('Tab 3'))

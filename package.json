@@ -9,13 +9,13 @@
     "headless",
     "sveltejs"
   ],
-  "homepage": "https://github.com/rgossiaux/svelte-headlessui",
+  "homepage": "https://svelte-headlessui.goss.io",
   "bugs": {
     "url": "https://github.com/rgossiaux/svelte-headlessui/issues"
   },
   "license": "MIT",
   "repository": "github:rgossiaux/svelte-headlessui",
-  "version": "1.0.0-beta.10",
+  "version": "1.0.2",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
@@ -63,7 +63,7 @@
     "svelte-jester": "^2.1.5",
     "svelte-popperjs": "^1.2.7",
     "svelte-preprocess": "^4.9.8",
-    "svelte2tsx": "^0.4.13",
+    "svelte2tsx": "^0.5.0",
     "tailwindcss": "^3.0.0",
     "ts-jest": "^27.1.2",
     "tslib": "^2.3.1",

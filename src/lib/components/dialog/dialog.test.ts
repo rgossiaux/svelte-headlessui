@@ -4,12 +4,6 @@ import ManagedDialog from "./_ManagedDialog.svelte";
 import NestedTestComponent from "./_NestedTestComponent.svelte";
 import { suppressConsoleLogs } from "$lib/test-utils/suppress-console-logs";
 import { render } from "@testing-library/svelte";
-import TestRenderer from "$lib/test-utils/TestRenderer.svelte";
-import Button from "$lib/internal/elements/Button.svelte";
-import Div from "$lib/internal/elements/Div.svelte";
-import Form from "$lib/internal/elements/Form.svelte";
-import P from "$lib/internal/elements/P.svelte";
-import Input from "$lib/internal/elements/Input.svelte";
 import {
   assertActiveElement,
   assertDialog,
@@ -62,19 +56,15 @@ describe("Safe guards", () => {
   it(
     "should be possible to render a Dialog without crashing",
     suppressConsoleLogs(async () => {
-      render(TestRenderer, {
-        allProps: [
-          Dialog,
-          { open: false, onClose: console.log },
-          [
-            [Button, {}, "Trigger"],
-            [DialogOverlay],
-            [DialogTitle],
-            [P, {}, "Contents"],
-            [DialogDescription],
-          ],
-        ],
-      });
+      render(svelte`
+        <Dialog open={false} on:close={console.log}>
+          <button>Trigger</button>
+          <DialogOverlay />
+          <DialogTitle />
+          <p>Contents</p>
+          <DialogDescription />
+        </Dialog>
+      `)
 
       assertDialog({ state: DialogState.InvisibleUnmounted });
     })
@@ -99,9 +89,9 @@ describe("Rendering", () => {
       "should complain when an `open` prop is not a boolean",
       suppressConsoleLogs(async () => {
         expect(() =>
-          render(TestRenderer, {
-            allProps: [Dialog, { open: null, onClose: console.log, as: "div" }],
-          })
+          render(svelte`
+            <Dialog open={null} on:close={console.log} as="div" />
+           `)
         ).toThrowErrorMatchingInlineSnapshot(
           `"You provided an \`open\` prop to the \`Dialog\`, but the value is not a boolean. Received: null"`
         );
@@ -139,7 +129,7 @@ describe("Rendering", () => {
           <button id="trigger" on:click={() => isOpen = !isOpen}>
             Trigger
           </button>
-          <Dialog open={true} on:close={console.log} static>
+          <Dialog open on:close={console.log} static>
             <p>Contents</p>
             <div tabindex={0} on:focus={focusCounter} />
           </Dialog>
@@ -221,16 +211,13 @@ describe("Rendering", () => {
 
     it('should be possible to always render the Dialog if we provide it a `static` prop (and disable focus trapping based on `open`)', () => {
       let focusCounter = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Trigger"],
-          [Dialog, { open: false, onClose: console.log, static: true }, [
-            [P, {}, "Contents"],
-            [TestTabSentinel, { onFocus: focusCounter }]
-          ]],
-        ]
-      })
+      render(svelte`
+        <button>Trigger</button>
+        <Dialog open={false} on:close={console.log} static>
+          <p>Contents</p>
+          <TestTabSentinel onFocus={focusCounter} />
+        </Dialog>
+      `)
 
 
       // Let's verify that the Dialog is already there
@@ -240,14 +227,11 @@ describe("Rendering", () => {
 
     it('should be possible to use a different render strategy for the Dialog', async () => {
       let focusCounter = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [ManagedDialog, { unmount: false, buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-            [Input, { onFocus: focusCounter }],
-          ]],
-        ]
-      })
+      render(svelte`
+          <ManagedDialog unmount={false} buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+            <input on:focus={focusCounter}>
+          </ManagedDialog>
+        `)
 
       assertDialog({ state: DialogState.InvisibleHidden })
       expect(focusCounter).toHaveBeenCalledTimes(0)
@@ -268,17 +252,13 @@ describe("Rendering", () => {
     it(
       'should add a scroll lock to the html tag',
       suppressConsoleLogs(async () => {
-        render(
-          TestRenderer, {
-          allProps: [
-            [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-              [Input, { id: "a", type: "text" }],
-              [Input, { id: "b", type: "text" }],
-              [Input, { id: "c", type: "text" }],
-            ]],
-          ]
-        })
-
+        render(svelte`
+          <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+            <input id="a" type="text">
+            <input id="b" type="text">
+            <input id="c" type="text">
+          </ManagedDialog>
+        `)
 
         // No overflow yet
         expect(document.documentElement.style.overflow).toBe('')
@@ -332,7 +312,7 @@ describe("Rendering", () => {
       'DialogTitle should have slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
-            <Dialog open={true} on:close={console.log}>
+            <Dialog open on:close={console.log}>
               <DialogTitle let:open>{JSON.stringify({ open })}</DialogTitle>
               <TestTabSentinel />
             </Dialog>
@@ -355,7 +335,7 @@ describe("Rendering", () => {
       'DialogDescription should have slot props',
       suppressConsoleLogs(async () => {
         render(svelte`
-          <Dialog open={true} on:close={console.log}>
+          <Dialog open on:close={console.log}>
             <DialogDescription let:open>{JSON.stringify({ open })}</DialogDescription>
             <TestTabSentinel />
           </Dialog>
@@ -378,17 +358,14 @@ describe('Composition', () => {
   it(
     'should be possible to open the Dialog via a Transition component',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          Transition, { show: true }, [
-            Dialog, { onClose: console.log }, [
-              [DialogDescription, {}, "Description"],
-              [TestTabSentinel]
-            ]
-          ]
-        ]
-      })
+      render(svelte`
+        <Transition show>
+          <Dialog on:close={console.log}>
+            <DialogDescription>Description</DialogDescription>
+            <TestTabSentinel />
+          </Dialog>
+        </Transition>
+      `)
 
       assertDialog({ state: DialogState.Visible })
       assertDialogDescription({
@@ -401,17 +378,14 @@ describe('Composition', () => {
   it(
     'should be possible to close the Dialog via a Transition component',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          Transition, { show: false }, [
-            Dialog, { onClose: console.log }, [
-              [DialogDescription, {}, "Description"],
-              [TestTabSentinel]
-            ]
-          ]
-        ]
-      })
+      render(svelte`
+        <Transition show={false}>
+          <Dialog on:close={console.log}>
+            <DialogDescription>Description</DialogDescription>
+            <TestTabSentinel />
+          </Dialog>
+        </Transition>
+      `)
 
       assertDialog({ state: DialogState.InvisibleUnmounted })
     })
@@ -423,15 +397,12 @@ describe('Keyboard interactions', () => {
     it(
       'should be possible to close the dialog with Escape',
       async () => {
-        render(
-          TestRenderer, {
-          allProps: [
-            [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-              "Contents",
-              [TestTabSentinel],
-            ]],
-          ]
-        })
+        render(svelte`
+          <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+            Contents
+            <TestTabSentinel />
+          </ManagedDialog>
+        `)
 
         assertDialog({ state: DialogState.InvisibleUnmounted })
 
@@ -455,16 +426,13 @@ describe('Keyboard interactions', () => {
     it(
       'should be possible to close the dialog with Escape, when a field is focused',
       suppressConsoleLogs(async () => {
-        render(
-          TestRenderer, {
-          allProps: [
-            [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-              "Contents",
-              [Input, { id: "name" }],
-              [TestTabSentinel],
-            ]],
-          ]
-        })
+        render(svelte`
+          <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+            Contents
+            <input id="name">
+            <TestTabSentinel />
+          </ManagedDialog>
+        `)
 
         assertDialog({ state: DialogState.InvisibleUnmounted })
 
@@ -488,16 +456,13 @@ describe('Keyboard interactions', () => {
     it(
       'should not be possible to close the dialog with Escape, when a field is focused but cancels the event',
       async () => {
-        render(
-          TestRenderer, {
-          allProps: [
-            [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-              "Contents",
-              [Input, { id: "name", onKeydown: (e: CustomEvent) => { e.preventDefault(); e.stopPropagation(); } }],
-              [TestTabSentinel],
-            ]],
-          ]
-        })
+        render(svelte`
+          <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+            Contents
+            <input id="name" on:keydown={(e) => { e.preventDefault(); e.stopPropagation(); } }>
+            <TestTabSentinel />
+          </ManagedDialog>
+        `)
 
         assertDialog({ state: DialogState.InvisibleUnmounted })
 
@@ -523,16 +488,13 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to close a Dialog using a click on the DialogOverlay',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-            [DialogOverlay],
-            "Contents",
-            [TestTabSentinel],
-          ]],
-        ]
-      })
+      render(svelte`
+        <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+          <DialogOverlay />
+          Contents
+          <TestTabSentinel />
+        </ManagedDialog>
+      `)
 
       // Open dialog
       await click(document.getElementById('trigger'))
@@ -551,18 +513,15 @@ describe('Mouse interactions', () => {
   it(
     'should not close the Dialog when clicking on contents of the DialogOverlay',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-            [DialogOverlay, {}, [
-              [Button, {}, "hi"]
-            ]],
-            "Contents",
-            [TestTabSentinel],
-          ]],
-        ]
-      })
+      render(svelte`
+        <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+          <DialogOverlay>
+            <button>hi</button>
+          </DialogOverlay>
+          Contents
+          <TestTabSentinel />
+        </ManagedDialog>
+      `)
 
       // Open dialog
       await click(document.getElementById('trigger'))
@@ -581,15 +540,12 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to close the dialog, and re-focus the button when we click outside on the body element',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-            "Contents",
-            [TestTabSentinel],
-          ]],
-        ]
-      })
+      render(svelte`
+        <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+          Contents
+          <TestTabSentinel />
+        </ManagedDialog>
+      `)
 
       // Open dialog
       await click(getByText('Trigger'))
@@ -611,16 +567,13 @@ describe('Mouse interactions', () => {
   it(
     'should be possible to close the dialog, and keep focus on the focusable element',
     suppressConsoleLogs(async () => {
-      render(
-        TestRenderer, {
-        allProps: [
-          [Button, {}, "Hello"],
-          [ManagedDialog, { buttonText: "Trigger", buttonProps: { id: "trigger" } }, [
-            "Contents",
-            [TestTabSentinel],
-          ]],
-        ]
-      })
+      render(svelte`
+        <button>Hello</button>
+        <ManagedDialog buttonText="Trigger" buttonProps={{ id: "trigger" }}>
+          Contents
+          <TestTabSentinel />
+        </ManagedDialog>
+      `)
 
       // Open dialog
       await click(getByText('Trigger'))
@@ -643,18 +596,15 @@ describe('Mouse interactions', () => {
     'should stop propagating click events when clicking on the DialogOverlay',
     suppressConsoleLogs(async () => {
       let wrapperFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Div, { onClick: wrapperFn }, [
-            [ManagedDialog, { initialOpen: true }, [
-              "Contents",
-              [DialogOverlay],
-              [TestTabSentinel],
-            ]],
-          ]]
-        ]
-      })
+      render(svelte`
+        <div on:click={wrapperFn}>
+          <ManagedDialog initialOpen>
+            Contents
+            <DialogOverlay />
+            <TestTabSentinel />
+          </ManagedDialog>
+        </div>
+      `)
 
       // Verify it is open
       assertDialog({ state: DialogState.Visible })
@@ -677,18 +627,15 @@ describe('Mouse interactions', () => {
     'should be possible to submit a form inside a Dialog',
     suppressConsoleLogs(async () => {
       let submitFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [ManagedDialog, { initialOpen: true }, [
-            [Form, { onSubmit: submitFn }, [
-              [Input, { type: "hidden", value: "abc" }],
-              [Button, { type: "submit" }, "Submit"]
-            ]],
-            [TestTabSentinel],
-          ]],
-        ]
-      })
+      render(svelte`
+        <ManagedDialog initialOpen>
+          <form on:submit={submitFn}>
+            <input type="hidden" value="abc">
+            <button type="submit">Submit</button>
+          </form>
+          <TestTabSentinel />
+        </ManagedDialog>
+      `)
 
       // Verify it is open
       assertDialog({ state: DialogState.Visible })
@@ -705,17 +652,14 @@ describe('Mouse interactions', () => {
     'should stop propagating click events when clicking on an element inside the Dialog',
     suppressConsoleLogs(async () => {
       let wrapperFn = jest.fn()
-      render(
-        TestRenderer, {
-        allProps: [
-          [Div, { onClick: wrapperFn }, [
-            [ManagedDialog, { initialOpen: true, buttonInside: true, buttonText: "Inside" }, [
-              "Contents",
-              [TestTabSentinel],
-            ]],
-          ]]
-        ]
-      })
+      render(svelte`
+        <div on:click={wrapperFn}>
+          <ManagedDialog initialOpen buttonInside buttonText="Inside">
+            Contents
+            <TestTabSentinel />
+          </ManagedDialog>
+        </div>
+      `)
 
       // Verify it is open
       assertDialog({ state: DialogState.Visible })

@@ -1,3 +1,15 @@
+<script lang="ts" context="module">
+  type TMenuItemsProps<
+    TSlotProp extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProp, TAsProp, "div"> & {
+    /** Whether the element should ignore the internally managed open/closed state */
+    static?: boolean;
+    /** Whether the element should be unmounted, instead of just hidden, based on the open/closed state	*/
+    unmount?: boolean;
+  };
+</script>
+
 <script lang="ts">
   import { useMenuContext, MenuStates } from "./Menu.svelte";
   import { useId } from "$lib/hooks/use-id";
@@ -8,13 +20,22 @@
   import { tick } from "svelte";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import type { SupportedAs } from "$lib/internal/elements";
-  import Render, { Features } from "$lib/utils/Render.svelte";
+  import Render from "$lib/utils/Render.svelte";
   import { forwardEventsBuilder } from "$lib/internal/forwardEventsBuilder";
   import { get_current_component } from "svelte/internal";
+  import { Features, type TPassThroughProps } from "$lib/types";
 
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TMenuItemsProps<typeof slotProps, TAsProp>;
+
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
+
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   const api = useMenuContext("MenuItems");
   const id = `headlessui-menu-items-${useId()}`;
   let searchDebounce: ReturnType<typeof setTimeout> | null = null;
@@ -135,7 +156,9 @@
     role: "menu",
     tabIndex: 0,
   };
-  $: slotProps = { open: $api.menuState === MenuStates.Open };
+  $: slotProps = {
+    open: $api.menuState === MenuStates.Open,
+  };
 </script>
 
 <Render

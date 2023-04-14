@@ -3,7 +3,6 @@
   import { useActions } from "$lib/hooks/use-actions";
   import { get_current_component } from "svelte/internal";
   import { forwardEventsBuilder } from "../forwardEventsBuilder";
-
   export let use: ActionArray = [];
   export let el: HTMLButtonElement | null = null;
   const forwardEvents = forwardEventsBuilder(get_current_component());

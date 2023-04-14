@@ -40,6 +40,14 @@
 
     return context;
   }
+
+  type TDisclosureProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /** Whether the `Disclosure` should be open by default */
+    defaultOpen?: boolean;
+  };
 </script>
 
 <script lang="ts">
@@ -51,12 +59,20 @@
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import Render from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  import type { TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TDisclosureProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
-
   export let defaultOpen = false;
+
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let buttonId = `headlessui-disclosure-button-${useId()}`;
   let panelId = `headlessui-disclosure-panel-${useId()}`;
 

@@ -1,3 +1,42 @@
+<script lang="ts" context="module">
+  export type TTransitionProps = {
+    enter?: string;
+    /** Classes to add to the transitioning element before the enter phase starts */
+    enterFrom?: string;
+    /** Classes to add to the transitioning element immediately after the enter phase starts */
+    enterTo?: string;
+    /**
+     * Classes to add to the transitioning element once the transition is done.
+     * These classes will persist after that until the leave phase
+     */
+    entered?: string;
+    /** Classes to add to the transitioning element during the entire leave phase */
+    leave?: string;
+    /** Classes to add to the transitioning element before the leave phase starts */
+    leaveFrom?: string;
+    /** Classes to add to the transitioning element immediately after the leave phase starts */
+    leaveTo?: string;
+    /** Whether the element should be unmounted, instead of just hidden, based on the open/closed state */
+    unmount?: boolean;
+    /**
+     * A list of actions to apply to the component's HTML element.
+     *
+     * Each action must take the form `[action]` or `[action, options]`:
+     *
+     * use={[[action1], [action2, action2Options], [action3]]}
+     */
+    use?: HTMLActionArray;
+    /** The class attribute for this component. It will always be present. */
+    class?: string;
+    /** The style attribute for this component. It will always be present. */
+    style?: string;
+    /** The element this component should render as */
+    as?: SupportedAs;
+  };
+
+  type TTransitionChildProps = TTransitionProps & Omit<TRestProps<"div">, "as">;
+</script>
+
 <script lang="ts">
   import { createEventDispatcher, onMount, setContext } from "svelte";
   import { writable } from "svelte/store";
@@ -18,13 +57,11 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render, { Features, RenderStrategy } from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "beforeEnter",
-    "beforeLeave",
-    "afterEnter",
-    "afterLeave",
-  ]);
+  import Render, { RenderStrategy } from "$lib/utils/Render.svelte";
+  import { Features, type TRestProps } from "$lib/types";
+
+  /***** Props *****/
+  type $$Props = TTransitionChildProps;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
@@ -37,6 +74,7 @@
   export let leaveFrom = "";
   export let leaveTo = "";
 
+  /***** Events *****/
   const dispatch = createEventDispatcher<{
     afterEnter: null;
     afterLeave: null;
@@ -44,6 +82,14 @@
     beforeLeave: null;
   }>();
 
+  const forwardEvents = forwardEventsBuilder(get_current_component(), [
+    "beforeEnter",
+    "beforeLeave",
+    "afterEnter",
+    "afterLeave",
+  ]);
+
+  /***** Component *****/
   let container: HTMLElement | null = null;
 
   let transitionContext = useTransitionContext();

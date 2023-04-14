@@ -194,10 +194,13 @@ This is useful if you want something to transition in on initial page load, or w
 
 ### Transition
 
+This component is also exported as `TransitionRoot`, to maintain compatibility with some Tailwind UI snippets.
+
 | Prop        | Default | Type      | Description                                                                                                                            |
 | ----------- | ------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `show`      | --      | `boolean` | Whether the children should be shown or hidden                                                                                         |
+| `show`      | --      | `boolean` | Whether the children should be shown |
 | `as`        | `div`   | `string`  | The element the `Transition` should render as                                                                                          |
+| `appear`    | `false` | `boolean` | Whether the transition should run on initial mount. |
 | `static`    | `false` | `boolean` | Whether the element should ignore the internally managed open/closed state                                                             |
 | `unmount`   | `true`  | `boolean` | Whether the element should be unmounted, instead of just hidden, based on the open/closed state                                        |
 | `enter`     | `""`    | `string`  | Classes to add to the transitioning element during the entire enter phase                                                              |

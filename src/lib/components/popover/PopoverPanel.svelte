@@ -7,6 +7,22 @@
     | undefined {
     return getContext(POPOVER_PANEL_CONTEXT_NAME);
   }
+
+  type TPopoverPanelProps<
+    TSlotProps extends {},
+    TAsProp extends SupportedAs
+  > = TPassThroughProps<TSlotProps, TAsProp, "div"> & {
+    /**
+     * Whether the `PopoverPanel` should trap focus.
+     * If true, focus will move inside the `PopoverPanel` when it is opened,
+     * and if focus leaves the `PopoverPanel` it will close.
+     */
+    focus?: boolean;
+    /** Whether the element should ignore the internally managed open/closed state */
+    static?: boolean;
+    /** Whether the element should be unmounted, instead of just hidden, based on the open/closed state	*/
+    unmount?: boolean;
+  };
 </script>
 
 <script lang="ts">
@@ -25,14 +41,21 @@
   import { get_current_component } from "svelte/internal";
   import type { SupportedAs } from "$lib/internal/elements";
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
-  import Render, { Features } from "$lib/utils/Render.svelte";
-  const forwardEvents = forwardEventsBuilder(get_current_component());
+  import Render from "$lib/utils/Render.svelte";
+  import { Features, type TPassThroughProps } from "$lib/types";
+
+  /***** Props *****/
+  type TAsProp = $$Generic<SupportedAs>;
+  type $$Props = TPopoverPanelProps<typeof slotProps, TAsProp>;
 
   export let as: SupportedAs = "div";
   export let use: HTMLActionArray = [];
-
   export let focus = false;
 
+  /***** Events *****/
+  const forwardEvents = forwardEventsBuilder(get_current_component());
+
+  /***** Component *****/
   let api = usePopoverContext("PopoverPanel");
   setContext(POPOVER_PANEL_CONTEXT_NAME, $api.panelId);
 
