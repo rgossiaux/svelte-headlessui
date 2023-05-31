@@ -1,7 +1,7 @@
 <script lang="ts">
-  import TableOfContents from "./_TableOfContents.svelte";
+  import TableOfContents from "./TableOfContents.svelte";
   import { page } from "$app/stores";
-  import Sidebar from "./_Sidebar.svelte";
+  import Sidebar from "./Sidebar.svelte";
 
   let el: HTMLElement | null = null;
 </script>

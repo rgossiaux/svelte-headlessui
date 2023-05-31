@@ -18,17 +18,6 @@ const config = {
 
   kit: {
     adapter: adapter(),
-    package: {
-      exports: (filepath) => {
-        return filepath.endsWith("index.js");
-      },
-      files: (filepath) => {
-        return !filepath.endsWith(".test.ts");
-      },
-    },
-
-    // hydrate the <div id="svelte"> element in src/app.html
-    target: "#svelte",
   },
 };
 

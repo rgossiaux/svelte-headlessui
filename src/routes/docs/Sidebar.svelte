@@ -1,7 +1,14 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { onMount } from "svelte";
 
-  $: isHome = $page.path.endsWith("docs");
+  let path: string | undefined;
+
+  onMount(() => {
+    path = window.location.pathname;
+  });
+
+  $: isHome = path?.endsWith("docs");
   $: base = isHome ? "docs/" : "";
 
   $: pages = [
@@ -28,7 +35,7 @@
   {#each pages as p (p.url)}
     <a
       href={p.url}
-      class:font-bold={$page.path.includes(p.url)}
+      class:font-bold={path?.includes(p.url)}
       class="py-2 hover:decoration-stone-400 hover:underline"
     >
       {p.text}
@@ -38,7 +45,7 @@
   {#each components as component (component.url)}
     <a
       href={component.url}
-      class:font-bold={$page.path.includes(component.url)}
+      class:font-bold={path?.includes(component.url)}
       class="py-2 hover:decoration-stone-400 hover:underline"
     >
       {component.text}

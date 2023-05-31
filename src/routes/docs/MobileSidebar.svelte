@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { Dialog, DialogOverlay, Transition, TransitionChild } from "$lib";
+  import { Transition, TransitionChild } from "$lib";
   import { XIcon } from "@rgossiaux/svelte-heroicons/outline";
-  import Sidebar from "./_Sidebar.svelte";
+  import Sidebar from "./Sidebar.svelte";
+  import Dialog from "$lib/components/dialog/Dialog.svelte";
+  import DialogOverlay from "$lib/components/dialog/DialogOverlay.svelte";
   export let sidebarOpen = false;
 </script>
 

@@ -1,5 +1,5 @@
 <script>
-  import { PopoverButton } from "$lib";
+  import PopoverButton from "$lib/components/popover/PopoverButton.svelte";
 </script>
 
 <PopoverButton

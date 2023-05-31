@@ -10,8 +10,8 @@
   import Portal from "$lib/components/portal/Portal.svelte";
 
   import { createPopperActions } from "svelte-popperjs";
-  import Button from "./_Button.svelte";
-  import Link from "./_Link.svelte";
+  import Button from "./Button.svelte";
+  import Link from "./Link.svelte";
 
   let options = {
     placement: "bottom-start",

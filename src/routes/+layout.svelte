@@ -2,7 +2,7 @@
   import { MenuAlt2Icon } from "@rgossiaux/svelte-heroicons/outline";
 
   import "../app.css";
-  import MobileSidebar from "./docs/_MobileSidebar.svelte";
+  import MobileSidebar from "./docs/MobileSidebar.svelte";
 
   let sidebarOpen = false;
 </script>

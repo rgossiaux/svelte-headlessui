@@ -6,6 +6,6 @@
 </script>
 
 <div class:rounded-xl={true} class={_class}>
-  <iframe src={url} class="w-full h-full" />
+  <iframe title="Preview component" src={url} class="w-full h-full" />
 </div>
 <p>{code}</p>

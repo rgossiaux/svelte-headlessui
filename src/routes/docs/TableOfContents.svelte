@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createRunWithCleanup } from "$lib/utils/run-with-cleanup";
   import { onMount } from "svelte";
-  import TocItems, { type TocItem } from "./_TocItems.svelte";
+  import TocItems, { type TocItem } from "./TocItems.svelte";
 
   export let el: HTMLElement | null;
   export let rootMargin = "0% 0% -80% 0%";

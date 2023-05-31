@@ -1,10 +1,8 @@
 <script>
-  import {
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    Transition,
-  } from "$lib";
+  import { Transition } from "$lib";
+  import Disclosure from "$lib/components/disclosure/Disclosure.svelte";
+  import DisclosureButton from "$lib/components/disclosure/DisclosureButton.svelte";
+  import DisclosurePanel from "$lib/components/disclosure/DisclosurePanel.svelte";
 </script>
 
 <div class="flex justify-center w-screen h-full p-12 bg-gray-50">

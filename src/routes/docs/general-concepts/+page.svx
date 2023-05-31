@@ -122,10 +122,8 @@ Svelte comes with an out-of-the-box solution for component styling: using the `<
 </RadioGroup>
 
 <style>
-  .checked {
-    background-color: rgb(191 219 254);
-  }
-</style>
+  .checked { background-color: rgb(191 219 254); }
+</\style>
 ```
 
 This works great for styling HTML elements. However, it (unfortunately) does **not** work for styling _components_. If you try to create the same example without the `<span>`s, it won't work:
@@ -168,7 +166,7 @@ This works great for styling HTML elements. However, it (unfortunately) does **n
   .checked {
     background-color: rgb(191 219 254);
   }
-</style>
+<\/style>
 ```
 
 (Note that we also can no longer use the `class:checked` shorthand on a component)
@@ -219,7 +217,7 @@ The `:global()` modifier opts your rule out of the default component style scopi
   :global(.checked) {
     background-color: rgb(191 219 254);
   }
-</style>
+<\/style>
 ```
 
 However, global CSS has one critical downside: it's global! The `.checked` rule above will now apply to _any_ `.checked` CSS class in your application, even if it's in other components. In a larger application, this can get difficult to maintain.
@@ -266,7 +264,7 @@ You can scope this more narrowly if you have a wrapper element:
   * > :global(.checked) {
     background-color: rgb(191 219 254);
   }
-</style>
+<\/style>
 ```
 
 In this case, this works perfectly.
@@ -423,3 +421,5 @@ You're free to change the element that any component renders as using the `as` p
 ```
 
 Due to technical limitations in Svelte, each one of these elements must be handled individually by the library. Most elements should be supported, but some uncommon ones might not be. If you find yourself wanting to use an element that is _not_ currently supported, please [file a GitHub issue](https://github.com/rgossiaux/svelte-headlessui/issues).
+
+
