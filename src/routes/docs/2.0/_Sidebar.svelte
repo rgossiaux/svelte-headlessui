@@ -1,9 +1,9 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
-  $: isHome = $page.path.endsWith("docs/latest");
-  $: base = isHome ? "latest/" : "";
-  $: homeUrl = isHome ? "" : "../latest";
+  $: isHome = $page.path.endsWith("docs/2.0");
+  $: base = isHome ? "2.0/" : "";
+  $: homeUrl = isHome ? "" : "../2.0";
 
   $: pages = [
     { url: homeUrl, text: "Home" },

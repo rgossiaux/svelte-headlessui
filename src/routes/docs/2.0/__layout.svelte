@@ -28,7 +28,7 @@
         <span class="sr-only">Open sidebar</span>
         <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
       </button>
-      <a href="/docs/latest">
+      <a href="/docs/2.0">
         <span class="text-amber-600">Svelte</span> Headless UI
         <span class="text-base">v2.0</span>
       </a>
