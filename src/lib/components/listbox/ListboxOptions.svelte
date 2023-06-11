@@ -12,7 +12,7 @@
 
 <script lang="ts">
   import { tick } from "svelte";
-  import { ListboxStates, useListboxContext } from "./Listbox.svelte";
+  import { ListboxStates, ValueMode, useListboxContext } from './Listbox.svelte';
   import { useId } from "$lib/hooks/use-id";
   import { match } from "$lib/utils/match";
   import { Keys } from "$lib/utils/keyboard";
@@ -64,9 +64,9 @@
           let { dataRef } = $api.options[$api.activeOptionIndex];
           $api.select(dataRef.value);
         }
-        $api.closeListbox();
+        if ($api.mode === ValueMode.Single) $api.closeListbox();
         await tick();
-        $buttonRef?.focus({ preventScroll: true });
+        if ($api.mode === ValueMode.Single) $buttonRef?.focus({ preventScroll: true });
         break;
 
       case match($api.orientation, {
