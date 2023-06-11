@@ -16,6 +16,26 @@ Many Tailwind UI examples use the [heroicons](https://heroicons.com/) icon libra
 
 The React library uses a `.` in the names of many components: `Tab.Group`, `Listbox.Button`, etc. The Svelte library does not use this pattern and instead exports every component under its own name with no dot: `TabGroup`, `ListboxButton`, etc.
 
+### Managing component state
+
+A few components in this library use the `bind:` directive to bind data from the component. For example, a `Switch` has a `checked` prop which the component will modify when the Switch is toggled. As React does not have two-way binding, React code instead uses a `onChange` callback function.
+
+```jsx
+// React example
+<Switch checked={enabled} onChange={setEnabled}>
+  // ...
+</Switch>
+```
+
+becomes:
+
+```svelte
+<!-- Svelte equivalent -->
+<Switch bind:checked={enabled}>
+  // ...
+</Switch>
+```
+
 ### `useState`
 
 State declared with `useState` in React becomes just a normal variable in Svelte:
@@ -47,6 +67,8 @@ becomes
   <!-- ... -->
 </Switch>
 ```
+
+This is new in version 2.0 of this library. The previous version also used an event callback to set this data.
 
 ### JSX camelCased attribute names
 
@@ -117,21 +139,6 @@ In Svelte, you instead use the `on:` directive:
   <button on:click={() => (isOpen = false)}>Deactivate</button>
   <button on:click={() => (isOpen = false)}>Cancel</button>
 </Dialog>
-```
-
-Furthermore, in the React library, event handlers will be called with the their data directly:
-
-```jsx
-<Listbox value={selectedPerson} onChange={setSelectedPerson}>
-  // ...
-</Listbox>
-```
-
-In the Svelte version, your handler will be passed a `CustomEvent` object, and you need to look at its `.detail` property:
-```svelte
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
-  <!-- ... -->
-</Listbox>
 ```
 
 ### Render props
@@ -232,7 +239,7 @@ Tailwind UI frequenty does iteration using `Array.prototype.map()`:
 In Svelte, you accomplish this by using the `{#each}` template syntax:
 
 ```svelte
-<Listbox value={selectedPerson} on:change={(e) => selectedPerson = e.detail}>
+<Listbox bind:value={selectedPerson}>
   <ListboxButton>{selectedPerson.name}</ListboxButton>
   <ListboxOptions>
     {#each people as person (person.id)}
