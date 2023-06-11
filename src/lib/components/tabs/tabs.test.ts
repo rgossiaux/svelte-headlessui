@@ -83,6 +83,45 @@ describe('Rendering', () => {
     assertTabs({ active: 0 })
   })
 
+  it('should guarantee the order of DOM nodes when performing actions', async () => {
+    render(svelte`
+      <script>
+        let hide = false;
+      </script>
+
+      <button on:click={() => hide = !hide}>toggle</button>
+      <TabGroup>
+        <TabList>
+          <Tab>Tab 1</Tab>
+          {#if !hide}
+            <Tab>Tab 2</Tab>
+          {/if}
+          <Tab>Tab 3</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>Content 1</TabPanel>
+          {#if !hide}
+            <TabPanel>Content 2</TabPanel>
+          {/if}
+          <TabPanel>Content 3</TabPanel>
+        </TabPanels>
+      </TabGroup>
+    `)
+
+    await click(getByText('toggle')) // Remove Tab 2
+    await click(getByText('toggle')) // Re-add Tab 2
+
+    await press(Keys.Tab)
+    assertTabs({ active: 0 })
+
+    await press(Keys.ArrowRight)
+    assertTabs({ active: 1 })
+
+    await press(Keys.ArrowRight)
+    assertTabs({ active: 2 })
+  })
+
   describe('`slot props`', () => {
     it('should expose the `selectedIndex` on the `TabGroup` component', async () => {
       render(svelte`
