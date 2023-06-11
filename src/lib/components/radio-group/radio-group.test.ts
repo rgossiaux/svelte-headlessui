@@ -259,7 +259,7 @@ describe('Rendering', () => {
     // Try to click one a few options
     await click(document.querySelector('[data-value="slot-prop"]'))
 
-    // Make sure that the onChange handler got called
+    // Make sure that the value changed
     expect(get(value)).toEqual("slot-prop");
   })
 

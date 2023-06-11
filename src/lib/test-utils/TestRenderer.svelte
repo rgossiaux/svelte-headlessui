@@ -1,7 +1,6 @@
 <script lang="ts" context="module">
   type HandlerType = (event?: CustomEvent) => any;
   interface ComponentProps {
-    onChange?: HandlerType;
     onClose?: HandlerType;
     onFocus?: HandlerType;
     onKeydown?: HandlerType;
@@ -34,7 +33,6 @@
   export let allProps: TestRendererProps;
 
   let spreadProps = {};
-  let onChange: HandlerType = () => {};
   let onClose: HandlerType = () => {};
   let onFocus: HandlerType = () => {};
   let onKeydown: HandlerType = () => {};
@@ -42,7 +40,6 @@
   let onClick: HandlerType = () => {};
   if (allProps && typeof allProps !== "string" && isSingleComponent(allProps)) {
     ({
-      onChange = onChange,
       onClose = onClose,
       onFocus = onFocus,
       onKeydown = onKeydown,
@@ -61,7 +58,6 @@
       <svelte:component
         this={allProps[0]}
         {...spreadProps}
-        on:change={onChange}
         on:close={onClose}
         on:focus={onFocus}
         on:keydown={onKeydown}
