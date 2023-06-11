@@ -3,9 +3,10 @@
 
   $: isHome = $page.path.endsWith("docs/latest");
   $: base = isHome ? "latest/" : "";
+  $: homeUrl = isHome ? "" : "../latest";
 
   $: pages = [
-    { url: "../latest", text: "Home" },
+    { url: homeUrl, text: "Home" },
     { url: `${base}general-concepts`, text: "General concepts" },
     { url: `${base}tailwind-ui`, text: "Use with Tailwind UI" },
     { url: `${base}version-history`, text: "Version history" },
