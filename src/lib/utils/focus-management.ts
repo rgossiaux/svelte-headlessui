@@ -16,10 +16,10 @@ let focusableSelector = [
   .map(
     process.env.NODE_ENV === "test"
       ? // TODO: Remove this once JSDOM fixes the issue where an element that is
-        // "hidden" can be the document.activeElement, because this is not possible
-        // in real browsers.
-        (selector) =>
-          `${selector}:not([tabindex='-1']):not([style*='display: none'])`
+      // "hidden" can be the document.activeElement, because this is not possible
+      // in real browsers.
+      (selector) =>
+        `${selector}:not([tabindex='-1']):not([style*='display: none'])`
       : (selector) => `${selector}:not([tabindex='-1'])`
   )
   .join(",");
@@ -100,7 +100,13 @@ export function focusElement(element: HTMLElement | null) {
 
 export function focusIn(container: HTMLElement | HTMLElement[], focus: Focus) {
   let elements = Array.isArray(container)
-    ? container
+    ? container.slice().sort((a, b) => {
+      let position = a.compareDocumentPosition(b)
+
+      if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
+      if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
+      return 0
+    })
     : getFocusableElements(container);
   let active = document.activeElement as HTMLElement;
 
