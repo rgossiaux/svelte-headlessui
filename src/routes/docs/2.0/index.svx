@@ -1,4 +1,4 @@
-*This is the documentation for the **current version** of this library. For other versions, see the [version history](version-history).*
+*This is the documentation for the **current version** of this library. For other versions, see the [version history](2.0/version-history).*
 
 Svelte Headless UI is an unofficial, complete Svelte port of the [Headless UI](https://headlessui.dev/) component library.
 
