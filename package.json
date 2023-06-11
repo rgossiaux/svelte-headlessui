@@ -28,7 +28,7 @@
     "test": "jest"
   },
   "peerDependencies": {
-    "svelte": "^3.44.0"
+    "svelte": "^3.47.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
