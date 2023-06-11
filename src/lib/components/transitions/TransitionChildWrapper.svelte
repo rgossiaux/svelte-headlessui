@@ -10,10 +10,10 @@
   import type { HTMLActionArray } from "$lib/hooks/use-actions";
   import { hasTransitionContext } from "./common.svelte";
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "beforeEnter",
-    "beforeLeave",
-    "afterEnter",
-    "afterLeave",
+    "introstart",
+    "introend",
+    "outrostart",
+    "outroend",
   ]);
 
   /***** Props *****/
@@ -35,10 +35,10 @@
     {...$$props}
     {as}
     use={[...use, forwardEvents]}
-    on:afterEnter
-    on:afterLeave
-    on:beforeEnter
-    on:beforeLeave
+    on:introstart
+    on:introend
+    on:outrostart
+    on:outroend
   >
     <slot />
   </TransitionRoot>
@@ -47,10 +47,10 @@
     {...$$props}
     {as}
     use={[...use, forwardEvents]}
-    on:afterEnter
-    on:afterLeave
-    on:beforeEnter
-    on:beforeLeave
+    on:introstart
+    on:introend
+    on:outrostart
+    on:outroend
   >
     <slot />
   </TransitionChild>

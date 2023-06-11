@@ -215,10 +215,12 @@ This component also dispatches the following custom events, which are listened t
 
 | Event name    | Type of event `.detail` | Description                                     |
 | ------------- | ----------------------- | ----------------------------------------------- |
-| `beforeEnter` | `null`                  | Dispatched before we start the enter transition |
-| `afterEnter`  | `null`                  | Dispatched after we finish the enter transition |
-| `beforeLeave` | `null`                  | Dispatched before we start the leave transition |
-| `afterLeave`  | `null`                  | Dispatched after we finish the leave transition |
+| `introstart` | `null`                  | Dispatched before we start the enter transition |
+| `introend`  | `null`                  | Dispatched after we finish the enter transition |
+| `outrostart` | `null`                  | Dispatched before we start the leave transition |
+| `outroend`  | `null`                  | Dispatched after we finish the leave transition |
+
+These event names have been changed to match the names that Svelte uses for transitions, starting in version 2.0 of this library.
 
 ### TransitionChild
 

@@ -76,17 +76,17 @@
 
   /***** Events *****/
   const dispatch = createEventDispatcher<{
-    afterEnter: null;
-    afterLeave: null;
-    beforeEnter: null;
-    beforeLeave: null;
+    introstart: null;
+    introend: null;
+    outrostart: null;
+    outroend: null;
   }>();
 
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "beforeEnter",
-    "beforeLeave",
-    "afterEnter",
-    "afterLeave",
+    "introstart",
+    "introend",
+    "outrostart",
+    "outroend",
   ]);
 
   /***** Component *****/
@@ -112,7 +112,7 @@
       if (!isTransitioning) {
         state = TreeStates.Hidden;
         $nestingContext.unregister(id);
-        dispatch("afterLeave");
+        dispatch("outroend");
       }
     })
   );
@@ -167,8 +167,8 @@
 
     isTransitioning = true;
 
-    if (show) dispatch("beforeEnter");
-    if (!show) dispatch("beforeLeave");
+    if (show) dispatch("introstart");
+    if (!show) dispatch("outrostart");
 
     return show
       ? transition(
@@ -179,7 +179,7 @@
           enteredClasses,
           (reason) => {
             isTransitioning = false;
-            if (reason === Reason.Finished) dispatch("afterEnter");
+            if (reason === Reason.Finished) dispatch("introend");
           }
         )
       : transition(
@@ -198,7 +198,7 @@
             if (!hasChildren($nesting)) {
               state = TreeStates.Hidden;
               $nestingContext.unregister(id);
-              dispatch("afterLeave");
+              dispatch("outroend");
             }
           }
         );

@@ -42,19 +42,19 @@
   <Transition
     show={isOpen}
     class="fixed inset-0 z-10 overflow-y-auto"
-    on:beforeEnter={() => {
+    on:introstart={() => {
       addEvent("Before enter");
     }}
-    on:afterEnter={() => {
+    on:introend={() => {
       inputRef?.focus();
       addEvent("After enter");
     }}
-    on:beforeLeave={() => {
+    on:outrostart={() => {
       addEvent("Before leave (before confirm)");
       window.confirm("Are you sure?");
       addEvent("Before leave (after confirm)");
     }}
-    on:afterLeave={(event) => {
+    on:outroend={(event) => {
       addEvent(`After leave (before alert)`);
       window.alert("Consider it done!");
       addEvent(`After leave (after alert)`);

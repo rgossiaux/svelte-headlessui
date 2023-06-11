@@ -33,10 +33,10 @@
   } from "./common.svelte";
   import type { TRestProps } from "$lib/types";
   const forwardEvents = forwardEventsBuilder(get_current_component(), [
-    "beforeEnter",
-    "beforeLeave",
-    "afterEnter",
-    "afterLeave",
+    "introstart",
+    "introend",
+    "outrostart",
+    "outroend",
   ]);
 
   /***** Props *****/
@@ -121,10 +121,10 @@
     {...$$restProps}
     {as}
     use={[...use, forwardEvents]}
-    on:afterEnter
-    on:afterLeave
-    on:beforeEnter
-    on:beforeLeave
+    on:introstart
+    on:introend
+    on:outrostart
+    on:outroend
   >
     <slot />
   </TransitionChild>
