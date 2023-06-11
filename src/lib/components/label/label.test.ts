@@ -64,6 +64,7 @@ it("should be possible to use a LabelProvider and a single Label, and have them 
       </label>
       
       
+      
        
       <span>
         Contents
@@ -93,6 +94,7 @@ it("should be possible to use a LabelProvider and multiple Label components, and
       </label>
       
       
+      
        
       <span>
         Contents
@@ -103,6 +105,7 @@ it("should be possible to use a LabelProvider and multiple Label components, and
       >
         I am also a label
       </label>
+      
       
       
     </div>
@@ -127,6 +130,7 @@ it("should be possible to render a Label with an `as` prop", async () => {
       >
         I am a label
       </p>
+      
       
       
        
@@ -159,6 +163,7 @@ it("should be possible to change the props of a Label", async () => {
       </label>
       
       
+      
        
       <span>
         Contents
@@ -179,6 +184,7 @@ it("should be possible to change the props of a Label", async () => {
       >
         I am a label
       </label>
+      
       
       
        
@@ -207,6 +213,7 @@ it("should be possible to use a LabelProvider with slot props", async () => {
       >
         12345
       </label>
+      
       
       
        
