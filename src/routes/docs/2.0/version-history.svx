@@ -1,7 +1,68 @@
+## Migration from 1.0 to 2.0
+
+The 2.0 release introduced a few breaking changes; see below.
+
+### Switch to `bind:` for Listbox, RadioGroup, and Switch
+
+These three components previously required you to use a `on:change` event listener to update their values. These have been changed to use two-way binding with the `bind:` directive.
+
+#### Listbox
+
+```svelte
+<!-- Old -->
+<Listbox value={foo} on:change={(e) => foo = e.detail}>
+  ...
+</Listbox>
+
+<!-- New -->
+<Listbox bind:value={foo}>
+  ...
+</Listbox>
+```
+
+#### RadioGroup
+
+```svelte
+<!-- Old -->
+<RadioGroup value={foo} on:change={(e) => foo = e.detail}>
+  ...
+</RadioGroup>
+
+<!-- New -->
+<RadioGroup bind:value={foo}>
+  ...
+</RadioGroup>
+```
+
+#### Switch
+
+```svelte
+<!-- Old -->
+<Switch checked={foo} on:change={(e) => foo = e.detail}>
+  ...
+</Switch>
+
+<!-- New -->
+<Switch bind:checked={foo}>
+  ...
+</Switch>
+```
+
+### Renamed transition events
+
+Events emitted by the `Transition` components have been renamed for better consistency with the event names used natively in Svelte. Specifically,
+* `beforeEnter` is now `introstart`
+* `afterEnter` is now `introend`
+* `beforeLeave` is now `outrostart`
+* `afterLeave` is now `outroend`
+
+## Full version history
+
 This is the release history of Svelte Headless UI and the correspondence with versions of Headless UI. Click on a version number to see the documentation for that version.
 
 | Svelte Headless UI version | Date released | Headless UI version | Notes |
 | -------------------------- | ------------- | ------------------- | ----- |
+| [2.0.0](../2.0)            | 2023-??-??    | 1.4.2               | Switches to `bind:` for three components; renames transition events; uses `<svelte:element>` internally |
 | [1.0.2](../1.0)            | 2022-05-25    | 1.4.2               | Fixes TypeScript errors with some attributes |
 | [1.0.1](../1.0)            | 2022-05-16    | 1.4.2               | Fixes a SSR error when using the `as` prop on buttons |
 | [1.0.0](../1.0)            | 2022-05-06    | 1.4.2               | Much improved TypeScript support; much smaller bundle size |
