@@ -1,5 +1,5 @@
 <script>
-  import "../../../app.css";
+  import "../../../../app.css";
 </script>
 
 <div class="flex flex-col items-center justify-center">
