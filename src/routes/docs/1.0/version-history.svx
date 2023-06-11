@@ -2,6 +2,7 @@ This is the release history of Svelte Headless UI and the correspondence with ve
 
 | Svelte Headless UI version | Date released | Headless UI version | Notes |
 | -------------------------- | ------------- | ------------------- | ----- |
+| [2.0.0](../2.0)            | 2023-06-11    | 1.4.2               | Switches to `bind:` for three components; renames transition events; uses `<svelte:element>` internally |
 | [1.0.2](../1.0)            | 2022-05-25    | 1.4.2               | Fixes TypeScript errors with some attributes |
 | [1.0.1](../1.0)            | 2022-05-16    | 1.4.2               | Fixes a SSR error when using the `as` prop on buttons |
 | [1.0.0](../1.0)            | 2022-05-06    | 1.4.2               | Much improved TypeScript support; much smaller bundle size |
