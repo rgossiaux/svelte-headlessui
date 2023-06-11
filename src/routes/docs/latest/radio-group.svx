@@ -185,12 +185,6 @@ The main Radio Group component.
 | `disabled` | `false` | `boolean`          | Whether the `RadioGroup` and all of its `RadioGroupOption`s are disabled |
 | `value`    | --      | `T` \| `undefined` | The currently selected value in the `RadioGroup`                         |
 
-This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
-
-| Event name | Type of event `.detail` | Description                                                                                                      |
-| ---------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `change`   | `T`                     | Dispatched when a `RadioGroupOption` is selected; the event `detail` contains the `value` of the selected option |
-
 ### RadioGroupOption
 
 The wrapper component for each selectable option.
