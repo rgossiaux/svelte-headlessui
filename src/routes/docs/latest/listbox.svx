@@ -492,11 +492,6 @@ The main listbox component.
 | `disabled` | `boolean` | Whether or not the listbox is disabled |
 | `open`     | `boolean` | Whether or not the listbox is open     |
 
-This component also dispatches a custom event, which is listened to using the Svelte `on:` directive:
-
-| Event name | Type of event `.detail` | Description                                                                                                   |
-| ---------- | ----------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `change`   | `T`                     | Dispatched when a `ListboxOption` is selected; the event `detail` contains the `value` of the selected option |
 
 ### ListboxButton
 
