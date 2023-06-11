@@ -1,11 +1,11 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
-  $: isHome = $page.path.endsWith("docs");
-  $: base = isHome ? "docs/" : "";
+  $: isHome = $page.path.endsWith("docs/1.0");
+  $: base = isHome ? "1.0/" : "";
 
   $: pages = [
-    { url: "../docs", text: "Home" },
+    { url: "../1.0", text: "Home" },
     { url: `${base}general-concepts`, text: "General concepts" },
     { url: `${base}tailwind-ui`, text: "Use with Tailwind UI" },
     { url: `${base}version-history`, text: "Version history" },
