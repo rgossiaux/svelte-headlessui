@@ -58,6 +58,7 @@ it("should be possible to use a DescriptionProvider and a single Description, an
       </p>
       
       
+      
        
       <span>
         Contents
@@ -87,6 +88,7 @@ it("should be possible to use a DescriptionProvider and multiple Description com
       </p>
       
       
+      
        
       <span>
         Contents
@@ -97,6 +99,7 @@ it("should be possible to use a DescriptionProvider and multiple Description com
       >
         I am also a description
       </p>
+      
       
       
     </div>
@@ -122,6 +125,7 @@ it("should be possible to use a DescriptionProvider with slot props", async () =
       >
         12345
       </p>
+      
       
       
        
