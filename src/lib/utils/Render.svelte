@@ -21,6 +21,9 @@
   export let name: string;
   export let as: TAsProp;
   export let slotProps: TSlotProps;
+  // A workaround for passing name="" to the element since name is already used
+  // Will not be need when <Render> is replaced with <svelte:element>
+  export let elementName:string | null = null;
 
   export let el: HTMLElement | null = null;
   export let use: HTMLActionArray = [];
@@ -64,12 +67,16 @@
     !unmount;
 
   $: propsWeControl = {
+    name:elementName || undefined,
     class: computedClass,
     style:
       `${computedStyle ?? ""}${hidden ? " display: none" : ""}` || undefined,
   };
   $: if (propsWeControl.style === undefined) {
     delete propsWeControl.style;
+  }
+  $: if (propsWeControl.name === undefined) {
+    delete propsWeControl.name;
   }
 </script>
 

@@ -244,6 +244,58 @@ Because switches are always rendered to the DOM (rather than being mounted/unmou
 </style>
 ```
 
+## Using with HTML forms
+
+If you add the `name` prop to your switch, a hidden `input` element will be rendered and kept in sync with the switch state.
+
+```svelte
+<script>
+  import {
+    Switch,
+    SwitchLabel,
+    SwitchGroup,
+  } from "@rgossiaux/svelte-headlessui";
+
+  let enabled = false;
+</script>
+
+<Switch checked={enabled} on:change={(e) => (enabled = e.detail)} name="notifications">  
+    <!-- ... -->
+</Switch>
+```
+
+This lets you use a radio group inside a native HTML `<form>` and make traditional form submissions as if your radio group was a native HTML form control.
+
+By default, the value will be `'on'` when the switch is checked, and not present when the switch is unchecked.
+
+```svelte
+<input type="hidden" name="notifications" value="on" />
+```
+
+You can customize the value if needed by using the value prop:
+
+```svelte
+<script>
+  import {
+    Switch,
+    SwitchLabel,
+    SwitchGroup,
+  } from "@rgossiaux/svelte-headlessui";
+
+  let enabled = false;
+</script>
+
+<Switch checked={enabled} on:change={(e) => (enabled = e.detail)} name="terms" value="accept">  
+    <!-- ... -->
+</Switch>
+```
+
+The hidden input will then use your custom value when the switch is checked:
+
+```svelte
+<input type="hidden" name="terms" value="accept" />
+```
+
 ## Accessibility notes
 
 ### Labels
@@ -274,10 +326,13 @@ For a full reference on all accessibility features implemented in `Switch`, see 
 
 The main switch component.
 
-| Prop      | Default  | Type      | Description                               |
-| --------- | -------- | --------- | ----------------------------------------- |
-| `as`      | `button` | `string`  | The element the `Switch` should render as |
-| `checked` | `false`  | `boolean` | Whether the switch is checked             |
+| Prop      | Default  | Type      | Description                                                               |
+| --------- | -------- | --------- | --------------------------------------------------------------------------|
+| `as`      | `button` | `string`  | The element the `Switch` should render as                                 |
+| `checked` | `false`  | `boolean` | Whether the switch is checked                                             |
+| `name`    | --       | `string`  | The name used when using this component inside a form.                    |
+| `value`   | --       | `string`  | The value used when using this component inside a form, if it is checked. |
+
 
 | Slot prop | Type      | Description                   |
 | --------- | --------- | ----------------------------- |

@@ -3692,3 +3692,157 @@ describe('Mouse interactions', () => {
     })
   )
 })
+
+describe('Form compatibility', () => {
+  it('should be possible to submit a form with a value', async () => {
+    let submitFn = jest.fn();
+    
+    render(svelte`
+      <script>
+        let value = null
+      </script>         
+
+      <form on:submit={(event) => {
+        event.preventDefault()
+        submitFn([...new FormData(event.currentTarget).entries()])
+      }}>        
+        <Listbox value={value} on:change={(e) => (value = e.detail)} name="delivery">
+          <ListboxButton>Trigger</ListboxButton>
+          <ListboxOptions>
+            <ListboxOption value="pickup">Pickup</ListboxOption>
+            <ListboxOption value="home-delivery">Home delivery</ListboxOption>
+            <ListboxOption value="dine-in">Dine in</ListboxOption>            
+          </ListboxOptions>
+        </Listbox>
+        <button type="submit">Submit</button>
+      </form>
+    `);    
+
+    // Open listbox
+    await click(getListboxButton())
+
+    // Submit the form
+    await click(getByText('Submit'))
+
+    // Verify that the form has been submitted
+    expect(submitFn).lastCalledWith([]) // no data
+
+    // Open listbox again
+    await click(getListboxButton())
+
+    // Choose home delivery
+    await click(getByText('Home delivery'))
+
+    // Submit the form again
+    await click(getByText('Submit'))
+
+    // Verify that the form has been submitted
+    expect(submitFn).lastCalledWith([['delivery', 'home-delivery']])
+
+    // Open listbox again
+    await click(getListboxButton())
+
+    // Choose pickup
+    await click(getByText('Pickup'))
+
+    // Submit the form again
+    await click(getByText('Submit'))
+
+    // Verify that the form has been submitted
+    expect(submitFn).lastCalledWith([['delivery', 'pickup']])
+  })
+
+  it('should be possible to submit a form with a complex value object', async () => {
+    let submitFn = jest.fn();
+    
+    render(svelte`
+      <script>
+        let options = [
+          {
+            id: 1,
+            value: 'pickup',
+            label: 'Pickup',
+            extra: { info: 'Some extra info' },
+          },
+          {
+            id: 2,
+            value: 'home-delivery',
+            label: 'Home delivery',
+            extra: { info: 'Some extra info' },
+          },
+          {
+            id: 3,
+            value: 'dine-in',
+            label: 'Dine in',
+            extra: { info: 'Some extra info' },
+          },
+        ]
+
+        let value = options[0]
+      </script>         
+
+      <form on:submit={(event) => {
+        event.preventDefault()
+        submitFn([...new FormData(event.currentTarget).entries()])
+      }}>        
+        <Listbox value={value} on:change={(e) => (value = e.detail)} name="delivery">
+          <ListboxButton>Trigger</ListboxButton>
+          <ListboxOptions>
+            {#each options as option}
+              <ListboxOption value={option}>{option.label}</ListboxOption>              
+            {/each}
+          </ListboxOptions>
+        </Listbox>
+        <button type="submit">Submit</button>
+      </form>
+    `);        
+
+    // Open listbox
+    await click(getListboxButton())
+
+    // Submit the form
+    await click(getByText('Submit'))
+
+    // Verify that the form has been submitted
+    expect(submitFn).lastCalledWith([
+      ['delivery[id]', '1'],
+      ['delivery[value]', 'pickup'],
+      ['delivery[label]', 'Pickup'],
+      ['delivery[extra][info]', 'Some extra info'],
+    ])
+
+    // Open listbox
+    await click(getListboxButton())
+
+    // Choose home delivery
+    await click(getByText('Home delivery'))
+
+    // Submit the form again
+    await click(getByText('Submit'))
+
+    // Verify that the form has been submitted
+    expect(submitFn).lastCalledWith([
+      ['delivery[id]', '2'],
+      ['delivery[value]', 'home-delivery'],
+      ['delivery[label]', 'Home delivery'],
+      ['delivery[extra][info]', 'Some extra info'],
+    ])
+
+    // Open listbox
+    await click(getListboxButton())
+
+    // Choose pickup
+    await click(getByText('Pickup'))
+
+    // Submit the form again
+    await click(getByText('Submit'))
+
+    // Verify that the form has been submitted
+    expect(submitFn).lastCalledWith([
+      ['delivery[id]', '1'],
+      ['delivery[value]', 'pickup'],
+      ['delivery[label]', 'Pickup'],
+      ['delivery[extra][info]', 'Some extra info'],
+    ])
+  })
+})
