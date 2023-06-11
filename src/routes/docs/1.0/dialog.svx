@@ -190,7 +190,7 @@ Because of these accessibility concerns, Svelte Headless UI's `Dialog` actually 
 
 ## Transitions
 
-To animate the opening and closing of your dialog, you can use [this library's Transition component](/docs/transition) or Svelte's built-in transition engine. See that page for a comparison.
+To animate the opening and closing of your dialog, you can use [this library's Transition component](/docs/1.0/transition) or Svelte's built-in transition engine. See that page for a comparison.
 
 ### Using the `Transition` component
 

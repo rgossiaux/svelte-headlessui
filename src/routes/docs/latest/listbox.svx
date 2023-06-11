@@ -260,7 +260,7 @@ Use the `disabled` prop to disable a `ListboxOption`. This will make it unselect
 
 ## Transitions
 
-To animate the opening and closing of the listbox, you can use [this library's Transition component](/docs/transition) or Svelte's built-in transition engine. See that page for a comparison.
+To animate the opening and closing of the listbox, you can use [this library's Transition component](/docs/latest/transition) or Svelte's built-in transition engine. See that page for a comparison.
 
 ### Using the `Transition` component
 
