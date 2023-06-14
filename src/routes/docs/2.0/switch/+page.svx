@@ -1,7 +1,7 @@
 # Switch
 
 <script>
-  import Preview from "./_Preview.svelte";
+  import Preview from "../_Preview.svelte";
 </script>
 
 <Preview url="examples/switch" code="" class="h-[180px] bg-teal-300"/>

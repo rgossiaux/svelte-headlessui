@@ -371,7 +371,7 @@ You can use [actions](https://svelte.dev/tutorial/actions) with this library as 
 ```svelte
 <script>
   import { Switch } from "@rgossiaux/svelte-headlessui";
-  import { action1, action2, action3 } from "./my-library";
+  import { action1, action2, action3 } from "../my-library";
   let action1options = {};
   let action3options = { foo: true };
 
