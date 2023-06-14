@@ -17,7 +17,7 @@
   "repository": "github:rgossiaux/svelte-headlessui",
   "version": "2.0.0",
   "scripts": {
-    "dev": "svelte-kit dev",
+    "dev": "vite dev",
     "build": "svelte-kit build",
     "package": "svelte-kit package && find package/ -type f -exec sed -i '' -e 's/process.env.NODE_ENV/\"production\"/' {} \\;",
     "preview": "svelte-kit preview",
@@ -35,7 +35,7 @@
     "@babel/preset-env": "^7.16.5",
     "@rgossiaux/svelte-heroicons": "^0.1.2",
     "@sveltejs/adapter-auto": "next",
-    "@sveltejs/kit": "^1.0.0-next.299",
+    "@sveltejs/kit": "^1.0.0-next.405",
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/typography": "^0.5.0",
     "@testing-library/jest-dom": "^5.16.1",
@@ -67,10 +67,8 @@
     "tailwindcss": "^3.0.0",
     "ts-jest": "^27.1.2",
     "tslib": "^2.3.1",
-    "typescript": "^4.4.3"
-  },
-  "overrides": {
-    "@sveltejs/vite-plugin-svelte": "1.0.0-next.32"
+    "typescript": "^4.4.3",
+    "vite": "^3.2.7"
   },
   "type": "module"
 }
