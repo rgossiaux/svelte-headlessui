@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
-  $: isHome = $page.path.endsWith("docs/1.0");
+  $: isHome = $page.url.pathname.endsWith("docs/1.0");
   $: base = isHome ? "1.0/" : "";
   $: homeUrl = isHome ? "" : "../1.0";
 
@@ -29,7 +29,7 @@
   {#each pages as p (p.url)}
     <a
       href={p.url}
-      class:font-bold={$page.path.includes(p.url)}
+      class:font-bold={$page.url.pathname.includes(p.url)}
       class="py-2 hover:decoration-stone-400 hover:underline"
     >
       {p.text}
@@ -39,7 +39,7 @@
   {#each components as component (component.url)}
     <a
       href={component.url}
-      class:font-bold={$page.path.includes(component.url)}
+      class:font-bold={$page.url.pathname.includes(component.url)}
       class="py-2 hover:decoration-stone-400 hover:underline"
     >
       {component.text}
