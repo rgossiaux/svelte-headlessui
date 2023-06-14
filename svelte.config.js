@@ -18,13 +18,13 @@ const config = {
 
   kit: {
     adapter: adapter(),
-    package: {
-      exports: (filepath) => {
-        return filepath.endsWith("index.js");
-      },
-      files: (filepath) => {
-        return !filepath.endsWith(".test.ts");
-      },
+  },
+  package: {
+    exports: (filepath) => {
+      return filepath.endsWith("index.js");
+    },
+    files: (filepath) => {
+      return !filepath.endsWith(".test.ts");
     },
   },
 };
