@@ -34,7 +34,7 @@
     "@babel/cli": "^7.16.0",
     "@babel/preset-env": "^7.16.5",
     "@rgossiaux/svelte-heroicons": "^0.1.2",
-    "@sveltejs/adapter-auto": "next",
+    "@sveltejs/adapter-auto": "^2.1.0",
     "@sveltejs/kit": "^1.20.2",
     "@sveltejs/package": "1.0",
     "@tailwindcss/forms": "^0.4.0",
