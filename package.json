@@ -18,9 +18,9 @@
   "version": "2.0.0",
   "scripts": {
     "dev": "vite dev",
-    "build": "svelte-kit build",
+    "build": "vite build",
     "package": "svelte-package && find package/ -type f -exec sed -i '' -e 's/process.env.NODE_ENV/\"production\"/' {} \\;",
-    "preview": "svelte-kit preview",
+    "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
