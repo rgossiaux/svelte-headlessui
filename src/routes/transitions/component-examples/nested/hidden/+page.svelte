@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Transition } from "$lib";
-  import Box from "./_Box.svelte";
+  import Box from "../_Box.svelte";
 
   let isOpen = false;
 </script>
