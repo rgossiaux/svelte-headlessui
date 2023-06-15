@@ -19,7 +19,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "package": "svelte-package && find package/ -type f -exec sed -i '' -e 's/process.env.NODE_ENV/\"production\"/' {} \\;",
+    "package": "svelte-kit sync && svelte-package && find package/ -type f -exec sed -i '' -e 's/process.env.NODE_ENV/\"production\"/' {} \\; && publint",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
@@ -56,6 +56,7 @@
     "postcss-load-config": "^3.1.0",
     "prettier": "^2.4.1",
     "prettier-plugin-svelte": "^2.4.0",
+    "publint": "^0.1.12",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-slug": "^5.0.1",
     "svelte": "^3.47.0",
