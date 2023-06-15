@@ -1,8 +1,8 @@
 <script lang="ts">
-  import TableOfContents from "./_TableOfContents.svelte";
+  import TableOfContents from "./TableOfContents.svelte";
   import { page } from "$app/stores";
-  import Sidebar from "./_Sidebar.svelte";
-  import MobileSidebar from "./_MobileSidebar.svelte";
+  import Sidebar from "./Sidebar.svelte";
+  import MobileSidebar from "./MobileSidebar.svelte";
   import { MenuAlt2Icon } from "@rgossiaux/svelte-heroicons/outline";
 
   let sidebarOpen = false;
