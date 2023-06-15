@@ -1,7 +1,7 @@
 # Menu
 
 <script>
-  import Preview from "../_Preview.svelte";
+  import Preview from "../Preview.svelte";
 </script>
 
 <Preview url="examples/menu" code="" class="h-[410px] bg-violet-300"/>

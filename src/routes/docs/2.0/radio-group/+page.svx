@@ -1,7 +1,7 @@
 # Radio Group
 
 <script>
-  import Preview from "../_Preview.svelte";
+  import Preview from "../Preview.svelte";
 </script>
 
 <Preview url="examples/radio-group" code="" class="h-[380px] bg-cyan-300"/>
