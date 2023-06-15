@@ -16,7 +16,7 @@ There are a few reasons you may choose to use `Transition`:
 
 - You want to use CSS class-based transitions (perhaps via Tailwind CSS classes, perhaps not) instead of using Svelte's transition engine. In that case this component can help, especially by helping coordinate multiple transitions (one of the main features of the component).
 
-Since this component works is based on CSS class, we'll be using Tailwind CSS transition classes for the examples. However, you are free to use your own transition classes, as long as they are globally available.
+Since the way this component works is based on CSS classes, we'll be using Tailwind CSS transition classes for the examples. However, you are free to use your own transition classes, as long as they are globally available.
 
 ## Basic example
 
