@@ -288,7 +288,7 @@ it('should be possible to force the Portal into a specific element using PortalG
 
   // The random whitespace in here is a little annoying but whatever
   expect(document.body.innerHTML).toMatchInlineSnapshot(
-    `"<div><main><aside id=\\"group-1\\">A<div>Next to A</div></aside> <section id=\\"group-2\\"><span>B</span></section>  </main></div><div id=\\"headlessui-portal-root\\"><div>I am in the portal root</div></div>"`
+    `"<div><main><aside id=\"group-1\">A<div>Next to A</div></aside> <section id=\"group-2\"><span>B</span></section>  </main></div><div id=\"headlessui-portal-root\"><div>I am in the portal root</div></div>"`
   )
 })
 
