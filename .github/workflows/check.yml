@@ -15,5 +15,5 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run svelte-check
-        run: npm run check -- --use-new-transformation
+        run: npm run check
 
