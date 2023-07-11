@@ -4,6 +4,7 @@
   viewBox="0 0 48 48"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
+  {...$$props}
 >
   <rect width="48" height="48" rx="8" fill="#FFEDD5" />
   <rect x="13" y="32" width="2" height="4" fill="#FDBA74" />

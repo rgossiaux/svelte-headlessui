@@ -60,7 +60,7 @@
     /** Whether the entire `Listbox` should be oriented horizontally instead of vertically */
     horizontal?: boolean;
     /** The selected value */
-    value?: StateDefinition["value"];
+    value: StateDefinition["value"];
   };
 </script>
 

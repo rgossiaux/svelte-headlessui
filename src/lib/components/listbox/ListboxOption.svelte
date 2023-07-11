@@ -1,8 +1,9 @@
 <script lang="ts" context="module">
+  // The HTML typings include `value` so we must ignore it
   type TListboxOptionProps<
     TSlotProps extends {},
     TAsProp extends SupportedAs
-  > = TPassThroughProps<TSlotProps, TAsProp, "li"> & {
+  > = Omit<TPassThroughProps<TSlotProps, TAsProp, "li">, "value"> & {
     /** The option value */
     value: unknown;
     /** Whether the option should be disabled for keyboard navigation and ARIA purposes */
