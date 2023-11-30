@@ -16,4 +16,4 @@ The original Headless UI library was written by Tailwind Labs and is maintained 
 
 Headless UI was written originally to support the paid component library called [Tailwind UI](https://tailwindui.com/). This port was done with this use case in mind, and you can [use this with Tailwind UI](docs/tailwind-ui).
 
-This library works very well with [Tailwind CSS](https://tailwindcss.com/) as a styling system, but it is not a requirement & there is nothing Tailwind-specific in the library. [See here](docs/general-concepts#component-styling) for different methods to style these components with Svelte.
+This library works very well with [Tailwind CSS](https://tailwindcss.com/) as a styling system, but it is not a requirement & there is nothing Tailwind-specific in the library. [See here](docs/2.0/general-concepts#component-styling) for different methods to style these components with Svelte.
